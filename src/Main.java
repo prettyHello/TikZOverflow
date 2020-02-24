@@ -19,7 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("business/view/sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/sample.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
@@ -79,7 +79,7 @@ public class Main extends Application {
         user.setRegister_date(LocalDateTime.now().toString());
 
 
-        // then we send that DTO to our Use Case business.view.Controller which will take care of all the logic
+        // then we send that DTO to our Use Case view.Controller which will take care of all the logic
         userUcc.register(user);
         if(user.isAuthorized()){
             System.out.println("ok");
