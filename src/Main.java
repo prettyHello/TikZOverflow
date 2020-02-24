@@ -9,7 +9,22 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 
-public class Main {
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("business/view/sample.fxml"));
+        primaryStage.setTitle("Hello World");
+        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
 
         //Load the configuration file (if 'dev' is given in argument load the src/config/dev.properties), load the production configuration otherwise
@@ -41,6 +56,7 @@ public class Main {
 
         test(dalServices,userUcc,userFactory);
 
+        launch(args);
     }
 
     //in this test I show how it will be used in the front end
@@ -63,7 +79,7 @@ public class Main {
         user.setRegister_date(LocalDateTime.now().toString());
 
 
-        // then we send that DTO to our Use Case Controller which will take care of all the logic
+        // then we send that DTO to our Use Case business.view.Controller which will take care of all the logic
         userUcc.register(user);
         if(user.isAuthorized()){
             System.out.println("ok");
