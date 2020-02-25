@@ -1,6 +1,8 @@
 package view.registration;
 
 import business.DTO.UserDTO;
+import business.UCC.UserUCC;
+import business.UCC.UserUCCImpl;
 import utilities.Utility;
 import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
@@ -47,10 +49,12 @@ public class RegisterController {
 
 
         UserFactoryImpl dto = new UserFactoryImpl();
-        UserDTO user = dto.createUser(0,"firstname","lastname","email","ring ring","password","random salt",Utility.getTimeStamp());
+        UserDTO user = dto.createUser(0,"firstname","lastname","email2","ring ring2","password","random blob",Utility.getTimeStamp());
         DALServices dal = new DALServicesImpl();
         UserDAOImpl dao = new UserDAOImpl(dal,dto);
-        dao.create(user);
+        UserUCC userUcc = new UserUCCImpl(dal,dao);
+        userUcc.register(user);
+
         System.out.println("Register");
 
         this.checkFirstName();
