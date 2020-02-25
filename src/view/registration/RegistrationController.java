@@ -1,9 +1,20 @@
 package view.registration;
 
+import business.DTO.UserDTO;
+import business.UCC.UserUCC;
+import business.UCC.UserUCCImpl;
+import utilities.Utility;
+import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import view.ViewSwitcher;
+import persistence.DALServices;
+import persistence.DALServicesImpl;
+import persistence.UserDAOImpl;
+
+import java.time.Clock;
+import java.util.regex.Pattern;
 
 public class RegistrationController {
 
@@ -23,19 +34,57 @@ public class RegistrationController {
     PasswordField passwordTF;
 
     private ViewSwitcher viewSwitcher;
+    String firstnameText;
 
-    @FXML
+    String lastnameText;
+
+    String emailText;
+
+    String phoneText;
+
+    String passwordText;
+
+    private String unallowedCharactersPattern = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
+    private String whitespacesPattern = "^[\\s]+|[\\s]+$";
+
     public void registerBtn(){
-        System.out.println(firstnameTF.getText());
-        System.out.println(lastnameTF.getText());
-        System.out.println(emailTF.getText());
-        System.out.println(phoneTF.getText());
-        System.out.println(passwordTF.getText());
+
+
+        UserFactoryImpl dto = new UserFactoryImpl();
+        UserDTO user = dto.createUser(0,"firstname","lastname","email2","ring ring2","password","random blob",Utility.getTimeStamp());
+        DALServices dal = new DALServicesImpl();
+        UserDAOImpl dao = new UserDAOImpl(dal,dto);
+        UserUCC userUcc = new UserUCCImpl(dal,dao);
+        userUcc.register(user);
+
+        System.out.println("Register");
+
+        this.checkFirstName();
+        this.checkLastName();
     }
 
-    public boolean checkFirstName() { System.out.println("Register"); return false; }
+    public boolean checkFirstName() {
 
-    public boolean checkLastName() { System.out.println("Register"); return false; }
+        if (firstnameTF.getText().matches(this.unallowedCharactersPattern))
+            return false;
+        else
+            // Remove whitespaces at the beginning and at the end
+            this.firstnameText = this.firstnameTF.getText().replaceAll(this.whitespacesPattern, "");
+
+        return true;
+
+    }
+
+    public boolean checkLastName() {
+
+        if (lastnameTF.getText().matches(this.unallowedCharactersPattern))
+            return false;
+        else
+            // Remove whitespaces at the beginning and at the end
+            this.lastnameText = this.lastnameTF.getText().replaceAll(this.whitespacesPattern, "");
+
+        return true;
+    }
 
     public boolean checkEmail() { System.out.println("Register"); return false; }
 

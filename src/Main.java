@@ -22,10 +22,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage);
-        viewSwitcher.switchView(ViewName.LOGIN);
-
-        primaryStage.setTitle("Tikz Overflow");
+        Parent root = FXMLLoader.load(getClass().getResource("view/login/login.fxml"));
+        primaryStage.setTitle("Hello World");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
