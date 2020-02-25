@@ -7,5 +7,5 @@ import business.DTO.UserDTO;
  * Such as find user by email
  */
 public interface UserDAO extends DAO<UserDTO> {
-
+    public UserDTO getUser(UserDTO usrAuth);
 }

@@ -4,6 +4,11 @@ import business.DTO.UserDTO;
 import persistence.DALServices;
 import persistence.DAO;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import business.User;
+
 public class UserUCCImpl implements UserUCC {
 
     private final DALServices dalServices;
@@ -15,9 +20,27 @@ public class UserUCCImpl implements UserUCC {
     }
 
 
-    @Override
-    public UserDTO login(UserDTO userDTO) {
-        return null;
+    public boolean login(UserDTO user) {
+        User usr = (User) user;
+        try {
+            this.dalServices.startTransaction();
+            User userDb = (User) userDAO.getUser(user);
+            /**
+             * @TODO Implement the password verification
+             **/
+            /*
+            if (userDb == null || !userDb.checkPassword(user.getPassword())) {
+                Map<String, Object> errorsLog = new HashMap<String, Object>();
+                errorsLog.put("password", "Le pseudo et le mot de passe ne correspondent pas.");
+                throw new BizzException(UtilResponse.errorResponseMap(errorsLog));
+            }
+            */
+
+            this.dalServices.commit();
+        } finally {
+            this.dalServices.rollback();
+            return true;
+        }
     }
 
     @Override

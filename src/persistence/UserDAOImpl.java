@@ -13,6 +13,7 @@ public class UserDAOImpl implements UserDAO {
 
 
     private static final String SQL_INSERT_USER = "INSERT INTO users(first_name, last_name, email, phone, password, salt, register_date ) VALUES (?, ?, ?, ?, ?, ?,?)";
+    private static final String SQL_LOGIN_USER = "SELECT * FROM user WHERE email=?";
 
     public UserDAOImpl(DALServices dalServices, UserFactory userFactory) {
         this.dalServices = dalServices;
@@ -20,7 +21,34 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public UserDTO find(UserDTO userDTO) {
+    public UserDTO getUser(UserDTO usrAuth){
+        PreparedStatement pr;
+        ResultSet rs;
+        UserDTO usr;
+        try {
+            pr = ((DALBackEndServices) this.dalServices).prepareStatement(SQL_LOGIN_USER);
+            pr.setString(1, usrAuth.getEmail());
+            rs = pr.executeQuery();
+            usr = (UserDTO) this.userFactory.createUser();
+            if (rs.next()) {
+                usr.setEmail(rs.getString("email"));
+                usr.setFirst_name(rs.getString("first_name"));
+                usr.setLast_name(rs.getString("last_name"));
+                usr.setPassword(rs.getString("password"));
+                usr.setPhone(rs.getString("phone"));
+                usr.setSalt(rs.getString("salt"));
+                usr.setRegister_date(rs.getString("register_date"));
+                usr.setUser_id(rs.getInt("user_id"));
+                return usr;
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public UserDTO find(UserDTO obj) {
         return null;
     }
 
@@ -47,6 +75,7 @@ public class UserDAOImpl implements UserDAO {
                 try {
                     ps.close();
                 } catch (SQLException exc) {
+                    exc.printStackTrace();
                 }
             }
         }
