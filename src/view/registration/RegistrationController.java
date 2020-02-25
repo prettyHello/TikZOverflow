@@ -11,6 +11,7 @@ import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import view.ViewSwitcher;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
 import persistence.UserDAOImpl;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
-public class RegisterController {
+public class RegistrationController {
 
     @FXML
     TextField firstnameTF;
@@ -37,8 +38,12 @@ public class RegisterController {
     @FXML
     PasswordField passwordTF;
 
+
     @FXML
     PasswordField secondPasswordTF;
+
+
+    private ViewSwitcher viewSwitcher;
 
     String firstnameText;
 
@@ -52,16 +57,23 @@ public class RegisterController {
 
 
     private String unallowedCharactersPattern = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
+
     private String whitespacesPattern = "^[\\s]+|[\\s]+$";
+
+
+    //TODO Change capital letters
+    private String emailPattern = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 
     public void registerBtn() {
 
+
         if (this.executeValidation()) {
             UserFactoryImpl dto = new UserFactoryImpl();
-            UserDTO user = dto.createUser(0, "firstname", "lastname", "email3", "ring ring3", "password", "random blob2", Utility.getTimeStamp());
+            UserDTO user = dto.createUser(0, firstnameText, lastnameText, emailText, phoneText, passwordText, "random blob6", Utility.getTimeStamp());
             DALServices dal = new DALServicesImpl();
             UserDAOImpl dao = new UserDAOImpl(dal, dto);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
+
             userUcc.register(user);
 
             System.out.println("Register");
@@ -78,9 +90,15 @@ public class RegisterController {
         validations.add(this.checkLastName());
         validations.add(this.checkEmail());
         validations.add(this.comparePasswords());
+        validations.add(this.checkPhone());
+
+        for (Boolean x:validations) {
+            System.out.println(x);
+        }
 
         if (validations.contains(false)) return false;
         else return true;
+
 
     }
 
@@ -105,8 +123,8 @@ public class RegisterController {
 
 
     public boolean checkFirstName() {
-
-        if (firstnameTF.getText().matches(this.unallowedCharactersPattern))
+        System.out.println("Checking firstname");
+        if (this.firstnameTF.getText().isEmpty() || this.firstnameTF.getText().matches(this.unallowedCharactersPattern))
             return false;
         else
             // Remove whitespaces at the beginning and at the end
@@ -116,27 +134,63 @@ public class RegisterController {
 
     }
 
+
     private boolean checkLastName() {
 
-        if (lastnameTF.getText().matches(this.unallowedCharactersPattern))
+
+        System.out.println("Checking lastname");
+        if (this.lastnameTF.getText().isEmpty() || this.lastnameTF.getText().matches(this.unallowedCharactersPattern))
+
             return false;
         else
             // Remove whitespaces at the beginning and at the end
             this.lastnameText = this.lastnameTF.getText().replaceAll(this.whitespacesPattern, "");
 
         return true;
+
     }
 
+
     private boolean comparePasswords() {
-        if (passwordTF.getText().equals(secondPasswordTF.getText()))
+        System.out.println("Checking password");
+        if (passwordTF.getText().equals(secondPasswordTF.getText())){
+            passwordText = passwordTF.getText();
             return true;
+        }
         else
             return false;
     }
 
-    private boolean checkEmail() {
-        System.out.println("Register");
+
+    public boolean checkEmail() {
+        System.out.println("Checking email");
+        if (this.emailTF.getText().matches(this.emailPattern)) {
+            this.emailText = this.emailTF.getText();
+            return true;
+        }
+
         return false;
+
+    }
+
+    private boolean checkPhone(){
+        System.out.println("Checking phone");
+        System.out.println(phoneTF.getText().length());
+        if((phoneTF.getText().length() > 9) && (phoneTF.getText().length() < 11)){
+            phoneText = phoneTF.getText();
+            System.out.println(phoneText);
+            return true;
+        }
+        else return false;
+    }
+
+
+
+
+    public void setViewSwitcher(ViewSwitcher viewSwitcher) {
+        this.viewSwitcher = viewSwitcher;
     }
 
 }
+
+

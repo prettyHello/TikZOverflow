@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import view.ViewName;
+import view.ViewSwitcher;
 
 public class LoginController {
     @FXML
@@ -17,6 +19,7 @@ public class LoginController {
 
     @FXML
     public Button bt_createAccount;
+    private ViewSwitcher viewSwitcher;
 
     @FXML
     public void handleLoginButton(ActionEvent event) {
@@ -25,6 +28,10 @@ public class LoginController {
 
     @FXML
     public void handleCreateAccountButton(ActionEvent event){
-        //TODO implement
+        viewSwitcher.switchView(ViewName.REGISTRATION);
+    }
+
+    public void setViewSwitcher(ViewSwitcher viewSwitcher) {
+        this.viewSwitcher = viewSwitcher;
     }
 }
