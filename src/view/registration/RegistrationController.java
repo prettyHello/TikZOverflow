@@ -53,12 +53,12 @@ public class RegistrationController {
     public void registerBtn(){
 
 
-        /*UserFactoryImpl dto = new UserFactoryImpl();
+        UserFactoryImpl dto = new UserFactoryImpl();
         UserDTO user = dto.createUser(0,"firstname","lastname","email2","ring ring2","password","random blob",Utility.getTimeStamp());
         DALServices dal = new DALServicesImpl();
         UserDAOImpl dao = new UserDAOImpl(dal,dto);
         UserUCC userUcc = new UserUCCImpl(dal,dao);
-        userUcc.register(user);*/
+        userUcc.register(user);
 
         System.out.println("Register");
 
