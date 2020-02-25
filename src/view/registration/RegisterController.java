@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.time.Clock;
+import java.util.regex.Pattern;
+
 public class RegisterController {
 
     @FXML
@@ -21,20 +24,45 @@ public class RegisterController {
     @FXML
     PasswordField passwordTF;
 
+    String firstnameText;
 
+    String lastnameText;
 
-    @FXML
+    String emailText;
+
+    String phoneText;
+
+    String passwordText;
+
+    private String unallowedCharactersPattern = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
+    private String whitespacesPattern = "^[\\s]+|[\\s]+$";
+
     public void registerBtn(){
-        System.out.println(firstnameTF.getText());
-        System.out.println(lastnameTF.getText());
-        System.out.println(emailTF.getText());
-        System.out.println(phoneTF.getText());
-        System.out.println(passwordTF.getText());
+        this.checkFirstName();
+        this.checkLastName();
     }
 
-    public boolean checkFirstName() { System.out.println("Register"); return false; }
+    public boolean checkFirstName() {
 
-    public boolean checkLastName() { System.out.println("Register"); return false; }
+        if (firstnameTF.getText().matches(this.unallowedCharactersPattern))
+            return false;
+        else
+            // Remove whitespaces at the beginning and at the end
+            this.firstnameText = this.firstnameTF.getText().replaceAll(this.whitespacesPattern, "");
+
+        return true;
+    }
+
+    public boolean checkLastName() {
+
+        if (lastnameTF.getText().matches(this.unallowedCharactersPattern))
+            return false;
+        else
+            // Remove whitespaces at the beginning and at the end
+            this.lastnameText = this.lastnameTF.getText().replaceAll(this.whitespacesPattern, "");
+
+        return true;
+    }
 
     public boolean checkEmail() { System.out.println("Register"); return false; }
 
