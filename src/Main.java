@@ -16,15 +16,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.ViewName;
 import view.ViewSwitcher;
-import view.login.LoginController;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("view/login/login.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage);
+        viewSwitcher.switchView(ViewName.LOGIN);
+
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
@@ -57,13 +57,13 @@ public class Main extends Application {
             System.exit(1);
         }
 
-        test(dalServices,userUcc,userFactory);
+        test(dalServices, userUcc, userFactory);
 
         launch(args);
     }
 
     //in this test I show how it will be used in the front end
-    private static void test(DALServices dalServices, UserUCC userUcc, UserFactory userFactory){
+    private static void test(DALServices dalServices, UserUCC userUcc, UserFactory userFactory) {
         System.out.println("Test");
         try {
             dalServices.createTables();
@@ -84,9 +84,9 @@ public class Main extends Application {
 
         // then we send that DTO to our Use Case view.Controller which will take care of all the logic
         userUcc.register(user);
-        if(user.isAuthorized()){
+        if (user.isAuthorized()) {
             System.out.println("ok");
-        }else{
+        } else {
         }
 
     }
