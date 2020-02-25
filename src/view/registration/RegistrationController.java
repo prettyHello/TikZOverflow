@@ -8,6 +8,7 @@ import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import view.ViewSwitcher;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
 import persistence.UserDAOImpl;
@@ -15,7 +16,7 @@ import persistence.UserDAOImpl;
 import java.time.Clock;
 import java.util.regex.Pattern;
 
-public class RegisterController {
+public class RegistrationController {
 
     @FXML
     TextField firstnameTF;
@@ -32,6 +33,7 @@ public class RegisterController {
     @FXML
     PasswordField passwordTF;
 
+    private ViewSwitcher viewSwitcher;
     String firstnameText;
 
     String lastnameText;
@@ -100,4 +102,8 @@ public class RegisterController {
     }
 
     public boolean checkPhone() { System.out.println("Register"); return false; }
+
+    public void setViewSwitcher(ViewSwitcher viewSwitcher) {
+        this.viewSwitcher = viewSwitcher;
+    }
 }
