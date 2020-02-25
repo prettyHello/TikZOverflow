@@ -3,6 +3,9 @@ package view.registration;
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.TextFormatter;
 import utilities.Utility;
 import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
@@ -13,6 +16,8 @@ import persistence.DALServicesImpl;
 import persistence.UserDAOImpl;
 
 import java.time.Clock;
+import java.util.ArrayList;
+import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class RegisterController {
@@ -32,6 +37,9 @@ public class RegisterController {
     @FXML
     PasswordField passwordTF;
 
+    @FXML
+    PasswordField secondPasswordTF;
+
     String firstnameText;
 
     String lastnameText;
@@ -42,24 +50,59 @@ public class RegisterController {
 
     String passwordText;
 
+
     private String unallowedCharactersPattern = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
     private String whitespacesPattern = "^[\\s]+|[\\s]+$";
 
-    public void registerBtn(){
+    public void registerBtn() {
 
+        if (this.executeValidation()) {
+            UserFactoryImpl dto = new UserFactoryImpl();
+            UserDTO user = dto.createUser(0, "firstname", "lastname", "email3", "ring ring3", "password", "random blob2", Utility.getTimeStamp());
+            DALServices dal = new DALServicesImpl();
+            UserDAOImpl dao = new UserDAOImpl(dal, dto);
+            UserUCC userUcc = new UserUCCImpl(dal, dao);
+            userUcc.register(user);
 
-        UserFactoryImpl dto = new UserFactoryImpl();
-        UserDTO user = dto.createUser(0,"firstname","lastname","email2","ring ring2","password","random blob",Utility.getTimeStamp());
-        DALServices dal = new DALServicesImpl();
-        UserDAOImpl dao = new UserDAOImpl(dal,dto);
-        UserUCC userUcc = new UserUCCImpl(dal,dao);
-        userUcc.register(user);
+            System.out.println("Register");
+        } else {
+            System.out.println("User has not been registred");
+        }
 
-        System.out.println("Register");
-
-        this.checkFirstName();
-        this.checkLastName();
     }
+
+    private boolean executeValidation() {
+        ArrayList<Boolean> validations = new ArrayList<Boolean>();
+
+        validations.add(this.checkFirstName());
+        validations.add(this.checkLastName());
+        validations.add(this.checkEmail());
+        validations.add(this.comparePasswords());
+
+        if (validations.contains(false)) return false;
+        else return true;
+
+    }
+
+    //test
+    // Only allows the user to type numbers on phone textfield
+    public void allowIntegersOnly() {
+
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String text = change.getText();
+
+            if (text.matches("[0-9]*")) {
+                return change;
+            }
+
+            return null;
+        };
+        TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+        phoneTF.setTextFormatter(textFormatter);
+
+    }
+    //endtest
+
 
     public boolean checkFirstName() {
 
@@ -73,7 +116,7 @@ public class RegisterController {
 
     }
 
-    public boolean checkLastName() {
+    private boolean checkLastName() {
 
         if (lastnameTF.getText().matches(this.unallowedCharactersPattern))
             return false;
@@ -84,7 +127,16 @@ public class RegisterController {
         return true;
     }
 
-    public boolean checkEmail() { System.out.println("Register"); return false; }
+    private boolean comparePasswords() {
+        if (passwordTF.getText().equals(secondPasswordTF.getText()))
+            return true;
+        else
+            return false;
+    }
 
-    public boolean checkPhone() { System.out.println("Register"); return false; }
+    private boolean checkEmail() {
+        System.out.println("Register");
+        return false;
+    }
+
 }

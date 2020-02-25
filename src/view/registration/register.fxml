@@ -6,15 +6,14 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.registration.RegisterController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="651.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.registration.RegisterController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField promptText="First name" fx:id="firstnameTF">
+            <TextField fx:id="firstnameTF" promptText="First name">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -22,7 +21,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </TextField>
-            <TextField layoutX="20.0" layoutY="20.0" promptText="Last name" fx:id="lastnameTF">
+            <TextField fx:id="lastnameTF" layoutX="20.0" layoutY="20.0" promptText="Last name">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -30,7 +29,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </TextField>
-            <TextField layoutX="20.0" layoutY="66.0" promptText="Email" fx:id="emailTF">
+            <TextField fx:id="emailTF" layoutX="20.0" layoutY="66.0" promptText="Email">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -38,7 +37,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </TextField>
-            <TextField layoutX="20.0" layoutY="112.0" promptText="Phone" fx:id="phoneTF">
+            <TextField fx:id="phoneTF" layoutX="20.0" layoutY="112.0" onKeyPressed="#allowIntegersOnly" promptText="Phone">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -46,7 +45,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </TextField>
-            <PasswordField promptText="Password" fx:id="passwordTF">
+            <PasswordField fx:id="passwordTF" promptText="Password">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -54,12 +53,19 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </PasswordField>
-            <Region prefHeight="200.0" prefWidth="200.0" />
+            <PasswordField fx:id="secondPasswordTF" promptText="Confirm password">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </PasswordField>
          </children>
       </VBox>
    </center>
    <bottom>
-      <VBox alignment="CENTER" prefHeight="111.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="21.0" prefWidth="604.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" onAction="#registerBtn" text="Register" textAlignment="CENTER">
                <VBox.margin>
