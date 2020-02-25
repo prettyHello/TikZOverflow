@@ -14,14 +14,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import view.ViewName;
+import view.ViewSwitcher;
+import view.login.LoginController;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("view/login/login.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root));
+        ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage);
+        viewSwitcher.switchView(ViewName.LOGIN);
+
+        primaryStage.setTitle("Tikz Overflow");
         primaryStage.show();
     }
 
