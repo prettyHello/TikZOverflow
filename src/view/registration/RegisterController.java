@@ -10,6 +10,9 @@ import persistence.DALServices;
 import persistence.DALServicesImpl;
 import persistence.UserDAOImpl;
 
+import java.time.Clock;
+import java.util.regex.Pattern;
+
 public class RegisterController {
 
     @FXML
@@ -27,10 +30,21 @@ public class RegisterController {
     @FXML
     PasswordField passwordTF;
 
+    String firstnameText;
 
+    String lastnameText;
 
+    String emailText;
+
+    String phoneText;
+
+    String passwordText;
+
+    private String unallowedCharactersPattern = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
+    private String whitespacesPattern = "^[\\s]+|[\\s]+$";
 
     public void registerBtn(){
+
 
         UserFactoryImpl dto = new UserFactoryImpl();
         UserDTO user = dto.createUser(0,"firstname","lastname","email","ring ring","password","random salt",Utility.getTimeStamp());
@@ -38,5 +52,35 @@ public class RegisterController {
         UserDAOImpl dao = new UserDAOImpl(dal,dto);
         dao.create(user);
         System.out.println("Register");
+
+        this.checkFirstName();
+        this.checkLastName();
     }
+
+    public boolean checkFirstName() {
+
+        if (firstnameTF.getText().matches(this.unallowedCharactersPattern))
+            return false;
+        else
+            // Remove whitespaces at the beginning and at the end
+            this.firstnameText = this.firstnameTF.getText().replaceAll(this.whitespacesPattern, "");
+
+        return true;
+
+    }
+
+    public boolean checkLastName() {
+
+        if (lastnameTF.getText().matches(this.unallowedCharactersPattern))
+            return false;
+        else
+            // Remove whitespaces at the beginning and at the end
+            this.lastnameText = this.lastnameTF.getText().replaceAll(this.whitespacesPattern, "");
+
+        return true;
+    }
+
+    public boolean checkEmail() { System.out.println("Register"); return false; }
+
+    public boolean checkPhone() { System.out.println("Register"); return false; }
 }
