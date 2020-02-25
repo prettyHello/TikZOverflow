@@ -22,7 +22,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage);
-        viewSwitcher.switchView(ViewName.LOGIN);
+        viewSwitcher.switchView(ViewName.DASHBOARD);
 
         primaryStage.setTitle("Hello World");
         primaryStage.show();
