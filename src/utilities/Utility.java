@@ -1,4 +1,6 @@
-package view.registration;
+package utilities;
+
+import javafx.scene.Scene;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,4 +16,6 @@ public final class Utility {
         return formatter.format(date);
 
     }
+
+
 }
