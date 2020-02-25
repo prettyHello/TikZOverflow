@@ -23,8 +23,20 @@ public class RegisterController {
 
 
 
-
+    @FXML
     public void registerBtn(){
-        System.out.println("Register");
+        System.out.println(firstnameTF.getText());
+        System.out.println(lastnameTF.getText());
+        System.out.println(emailTF.getText());
+        System.out.println(phoneTF.getText());
+        System.out.println(passwordTF.getText());
     }
+
+    public boolean checkFirstName() { System.out.println("Register"); return false; }
+
+    public boolean checkLastName() { System.out.println("Register"); return false; }
+
+    public boolean checkEmail() { System.out.println("Register"); return false; }
+
+    public boolean checkPhone() { System.out.println("Register"); return false; }
 }
