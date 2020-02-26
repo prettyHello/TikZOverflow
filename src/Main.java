@@ -1,36 +1,36 @@
-import be.ac.ulb.infof307.g09.model.business.DTO.UserDTO;
-import be.ac.ulb.infof307.g09.model.business.UCC.UserUCC;
-import be.ac.ulb.infof307.g09.model.business.factories.UserFactory;
-import be.ac.ulb.infof307.g09.model.config.Configuration;
-import be.ac.ulb.infof307.g09.model.persistence.DALServices;
-import be.ac.ulb.infof307.g09.model.persistence.DAO;
+import business.DTO.UserDTO;
+import business.UCC.UserUCC;
+import business.factories.UserFactory;
+import config.Configuration;
+import persistence.DALServices;
+import persistence.DAO;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-import be.ac.ulb.infof307.g09.controller.ViewName;
-import be.ac.ulb.infof307.g09.controller.ViewSwitcher;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage);
-        viewSwitcher.switchView(ViewName.DASHBOARD);
-
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("business/view/sample.fxml"));
         primaryStage.setTitle("Hello World");
+        primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
     }
 
     public static void main(String[] args) {
 
-        //Load the configuration file (if 'dev' is given in argument load the src/be.ac.ulb.infof307.g09.model.config/dev.properties), load the production configuration otherwise
+        //Load the configuration file (if 'dev' is given in argument load the src/config/dev.properties), load the production configuration otherwise
         Configuration configuration = null;
         try {
-            configuration = (Configuration) Class.forName("be.ac.ulb.infof307.g09.model.config.Configuration").getDeclaredConstructor().newInstance();
+            configuration = (Configuration) Class.forName("config.Configuration").getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
             //logger.fatal("Unexpected error", exc);
             System.exit(1);
@@ -54,13 +54,13 @@ public class Main extends Application {
             System.exit(1);
         }
 
-        test(dalServices, userUcc, userFactory);
+        test(dalServices,userUcc,userFactory);
 
         launch(args);
     }
 
     //in this test I show how it will be used in the front end
-    private static void test(DALServices dalServices, UserUCC userUcc, UserFactory userFactory) {
+    private static void test(DALServices dalServices, UserUCC userUcc, UserFactory userFactory){
         System.out.println("Test");
         try {
             dalServices.createTables();
@@ -79,11 +79,11 @@ public class Main extends Application {
         user.setRegister_date(LocalDateTime.now().toString());
 
 
-        // then we send that DTO to our Use Case be.ac.ulb.infof307.g09.view.Controller which will take care of all the logic
+        // then we send that DTO to our Use Case business.view.Controller which will take care of all the logic
         userUcc.register(user);
-        if (user.isAuthorized()) {
+        if(user.isAuthorized()){
             System.out.println("ok");
-        } else {
+        }else{
         }
 
     }
