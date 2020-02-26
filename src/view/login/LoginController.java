@@ -23,7 +23,7 @@ public class LoginController {
 
     @FXML
     public void handleLoginButton(ActionEvent event) {
-        tf_username.setText("blabla"); //TODO remove + implement
+        viewSwitcher.switchView(ViewName.DASHBOARD);
     }
 
     @FXML
