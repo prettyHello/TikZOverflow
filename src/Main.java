@@ -1,21 +1,18 @@
-import business.DTO.UserDTO;
-import business.UCC.UserUCC;
-import business.factories.UserFactory;
-import config.Configuration;
-import persistence.DALServices;
-import persistence.DAO;
+import be.ac.ulb.infof307.g09.model.business.DTO.UserDTO;
+import be.ac.ulb.infof307.g09.model.business.UCC.UserUCC;
+import be.ac.ulb.infof307.g09.model.business.factories.UserFactory;
+import be.ac.ulb.infof307.g09.model.config.Configuration;
+import be.ac.ulb.infof307.g09.model.persistence.DALServices;
+import be.ac.ulb.infof307.g09.model.persistence.DAO;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import view.ViewName;
-import view.ViewSwitcher;
+import be.ac.ulb.infof307.g09.controller.ViewName;
+import be.ac.ulb.infof307.g09.controller.ViewSwitcher;
 
 public class Main extends Application {
 
@@ -30,10 +27,10 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-        //Load the configuration file (if 'dev' is given in argument load the src/config/dev.properties), load the production configuration otherwise
+        //Load the configuration file (if 'dev' is given in argument load the src/be.ac.ulb.infof307.g09.model.config/dev.properties), load the production configuration otherwise
         Configuration configuration = null;
         try {
-            configuration = (Configuration) Class.forName("config.Configuration").getDeclaredConstructor().newInstance();
+            configuration = (Configuration) Class.forName("be.ac.ulb.infof307.g09.model.config.Configuration").getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
             //logger.fatal("Unexpected error", exc);
             System.exit(1);
@@ -82,7 +79,7 @@ public class Main extends Application {
         user.setRegister_date(LocalDateTime.now().toString());
 
 
-        // then we send that DTO to our Use Case view.Controller which will take care of all the logic
+        // then we send that DTO to our Use Case be.ac.ulb.infof307.g09.view.Controller which will take care of all the logic
         userUcc.register(user);
         if (user.isAuthorized()) {
             System.out.println("ok");
