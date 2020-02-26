@@ -18,6 +18,7 @@ import persistence.UserDAOImpl;
 
 import java.time.Clock;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
@@ -66,10 +67,9 @@ public class RegistrationController {
 
     public void registerBtn() {
 
-
         if (this.executeValidation()) {
             UserFactoryImpl dto = new UserFactoryImpl();
-            UserDTO user = dto.createUser(0, firstnameText, lastnameText, emailText, phoneText, passwordText, "random blob6", Utility.getTimeStamp());
+            UserDTO user = dto.createUser(0, firstnameText, lastnameText, emailText, phoneText, passwordText, generateSalt(), Utility.getTimeStamp());
             DALServices dal = new DALServicesImpl();
             UserDAOImpl dao = new UserDAOImpl(dal, dto);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
@@ -120,6 +120,30 @@ public class RegistrationController {
 
     }
     //endtest
+
+    //TODO change function for salting passwords
+    //temporary function for generating random salts
+    private String generateSalt(){
+        String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
+        String CHAR_UPPER = CHAR_LOWER.toUpperCase();
+        String NUMBER = "0123456789";
+
+        String salt = "";
+        Random rnd = new Random();
+        int saltLength = rnd.nextInt(15) + 5;
+        for (int i = 0; i <= saltLength ; i++) {
+
+            int alphabet = rnd.nextInt(3);
+            switch (alphabet){
+                case 0: salt += CHAR_LOWER.charAt(rnd.nextInt(CHAR_LOWER.length()));
+                case 1: salt += CHAR_UPPER.charAt(rnd.nextInt(CHAR_UPPER.length()));
+                case 2: salt += NUMBER.charAt(rnd.nextInt(NUMBER.length()));
+            }
+
+        }
+        System.out.println("My salt" + salt);
+        return salt;
+    }
 
 
     public boolean checkFirstName() {
