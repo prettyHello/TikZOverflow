@@ -79,7 +79,6 @@ public class RegistrationController {
 
     @FXML
     public void initialize() {
-        System.out.println("eeeeee");
         borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -88,7 +87,6 @@ public class RegistrationController {
                 }
             }
         });
-        System.out.println("eeeeee");
     }
 
     public void handleCancelButton(){

@@ -13,7 +13,7 @@ public class UserDAOImpl implements UserDAO {
 
 
     private static final String SQL_INSERT_USER = "INSERT INTO users(first_name, last_name, email, phone, password, salt, register_date ) VALUES (?, ?, ?, ?, ?, ?,?)";
-    private static final String SQL_LOGIN_USER = "SELECT * FROM user WHERE email=?";
+    private static final String SQL_LOGIN_USER = "SELECT * FROM users WHERE email=?";
 
     public UserDAOImpl(DALServices dalServices, UserFactory userFactory) {
         this.dalServices = dalServices;
