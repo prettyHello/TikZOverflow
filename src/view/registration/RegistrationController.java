@@ -5,7 +5,12 @@ import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import utilities.Utility;
 import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
@@ -47,6 +52,9 @@ public class RegistrationController {
     @FXML
     Button bt_cancel;
 
+    @FXML
+    BorderPane borderpane;
+
 
     private ViewSwitcher viewSwitcher;
 
@@ -68,6 +76,20 @@ public class RegistrationController {
 
     //TODO Change capital letters
     private String emailPattern = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+
+    @FXML
+    public void initialize() {
+        System.out.println("eeeeee");
+        borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    registerBtn();
+                }
+            }
+        });
+        System.out.println("eeeeee");
+    }
 
     public void handleCancelButton(){
         viewSwitcher.switchView(ViewName.LOGIN);
