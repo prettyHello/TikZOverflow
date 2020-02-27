@@ -1,13 +1,10 @@
 package view.dashboard;
 
 import business.DTO.ProjectDTO;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
@@ -102,7 +99,7 @@ public class DashboardController {
                     String projectNameHash = null; //call function that will compute the hash
                     projectDTO.setProjectName(projectName)
                             .setProjectReference(projectNameHash)
-                            .setProjectPath(selectedFile.getPath())
+                            .setProjectPath(folderDestination.toString()+"/"+projectName)
                             .setCreateDate(new Date())
                             .setModificationDate(new Date()); //syntatic sugar
 
