@@ -1,7 +1,9 @@
 package persistence;
 
 import business.DTO.ProjectDTO;
+import utilities.Utility;
 
+import javax.rmi.CORBA.Util;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -27,8 +29,8 @@ public class ProjectDAO {
            prstmt.setInt(2, 37);
            prstmt.setString(3, project.getProjectName());
            prstmt.setString(4, project.getProjectPath());
-           prstmt.setTimestamp(5, new Timestamp(project.getCreateDate().getTime()));
-           prstmt.setTimestamp(6, new Timestamp(project.getModificationDate().getTime()));
+           prstmt.setString(5, Utility.getTimeStamp());
+           prstmt.setString(6, Utility.getTimeStamp());
            prstmt.executeUpdate();
         } catch (SQLException e) {
             //e.printStackTrace();
