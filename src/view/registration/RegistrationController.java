@@ -22,6 +22,8 @@ import java.util.Random;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 public class RegistrationController {
 
     @FXML
@@ -69,7 +71,9 @@ public class RegistrationController {
 
         if (this.executeValidation()) {
             UserFactoryImpl dto = new UserFactoryImpl();
-            UserDTO user = dto.createUser(0, firstnameText, lastnameText, emailText, phoneText, passwordText, generateSalt(), Utility.getTimeStamp());
+            String salt = BCrypt.gensalt(12);
+            String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
+            UserDTO user = dto.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
             DALServices dal = new DALServicesImpl();
             UserDAOImpl dao = new UserDAOImpl(dal, dto);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
@@ -92,7 +96,7 @@ public class RegistrationController {
         validations.add(this.comparePasswords());
         validations.add(this.checkPhone());
 
-        for (Boolean x:validations) {
+        for (Boolean x : validations) {
             System.out.println(x);
         }
 
@@ -120,31 +124,6 @@ public class RegistrationController {
 
     }
     //endtest
-
-    //TODO change function for salting passwords
-    //temporary function for generating random salts
-    private String generateSalt(){
-        String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
-        String CHAR_UPPER = CHAR_LOWER.toUpperCase();
-        String NUMBER = "0123456789";
-
-        String salt = "";
-        Random rnd = new Random();
-        int saltLength = rnd.nextInt(15) + 5;
-        for (int i = 0; i <= saltLength ; i++) {
-
-            int alphabet = rnd.nextInt(3);
-            switch (alphabet){
-                case 0: salt += CHAR_LOWER.charAt(rnd.nextInt(CHAR_LOWER.length()));
-                case 1: salt += CHAR_UPPER.charAt(rnd.nextInt(CHAR_UPPER.length()));
-                case 2: salt += NUMBER.charAt(rnd.nextInt(NUMBER.length()));
-            }
-
-        }
-        System.out.println("My salt" + salt);
-        return salt;
-    }
-
 
     public boolean checkFirstName() {
         System.out.println("Checking firstname");
@@ -177,11 +156,10 @@ public class RegistrationController {
 
     private boolean comparePasswords() {
         System.out.println("Checking password");
-        if (passwordTF.getText().equals(secondPasswordTF.getText())){
+        if (passwordTF.getText().equals(secondPasswordTF.getText())) {
             passwordText = passwordTF.getText();
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -197,18 +175,15 @@ public class RegistrationController {
 
     }
 
-    private boolean checkPhone(){
+    private boolean checkPhone() {
         System.out.println("Checking phone");
         System.out.println(phoneTF.getText().length());
-        if((phoneTF.getText().length() > 9) && (phoneTF.getText().length() < 11)){
+        if ((phoneTF.getText().length() > 9) && (phoneTF.getText().length() < 11)) {
             phoneText = phoneTF.getText();
             System.out.println(phoneText);
             return true;
-        }
-        else return false;
+        } else return false;
     }
-
-
 
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
