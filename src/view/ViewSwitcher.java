@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import view.dashboard.DashboardController;
 import view.login.LoginController;
 import view.registration.RegistrationController;
 
@@ -27,6 +28,7 @@ public class ViewSwitcher {
                     toRegistration();
                     break;
                 case DASHBOARD:
+                    toDashboard();
                     break;
                 case EDITOR:
                     break;
@@ -54,6 +56,15 @@ public class ViewSwitcher {
         Parent root = loader.load();
         RegistrationController registrationController = loader.getController();
         registrationController.setViewSwitcher(this);
+
+        this.stage.setScene(new Scene(root));
+    }
+
+    public void toDashboard() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dashboard/dashboard.fxml"));
+        Parent root = loader.load();
+        DashboardController dashboardController = loader.getController();
+        dashboardController.setViewSwitcher(this);
 
         this.stage.setScene(new Scene(root));
     }

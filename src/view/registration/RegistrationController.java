@@ -5,12 +5,16 @@ import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TextFormatter;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import utilities.Utility;
 import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import view.ViewName;
 import view.ViewSwitcher;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
@@ -41,9 +45,17 @@ public class RegistrationController {
     @FXML
     PasswordField passwordTF;
 
-
     @FXML
     PasswordField secondPasswordTF;
+
+    @FXML
+    Button bt_register;
+
+    @FXML
+    Button bt_cancel;
+
+    @FXML
+    BorderPane borderpane;
 
 
     private ViewSwitcher viewSwitcher;
@@ -67,6 +79,22 @@ public class RegistrationController {
     //TODO Change capital letters
     private String emailPattern = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 
+    @FXML
+    public void initialize() {
+        borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    registerBtn();
+                }
+            }
+        });
+    }
+
+    public void handleCancelButton(){
+        viewSwitcher.switchView(ViewName.LOGIN);
+    }
+
     public void registerBtn() {
 
         if (this.executeValidation()) {
@@ -81,14 +109,20 @@ public class RegistrationController {
             userUcc.register(user);
 
             System.out.println("Register");
+            viewSwitcher.switchView(ViewName.LOGIN);
         } else {
-            System.out.println("User has not been registred");
-        }
+            System.out.println("User has not been registered");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Account registration");
+            alert.setHeaderText("Invalid input");
+            alert.setContentText("Please fill in all the fields correctly and try again");
 
+            alert.showAndWait();
+        }
     }
 
     private boolean executeValidation() {
-        ArrayList<Boolean> validations = new ArrayList<Boolean>();
+        ArrayList<Boolean> validations = new ArrayList<>();
 
         validations.add(this.checkFirstName());
         validations.add(this.checkLastName());
@@ -100,10 +134,7 @@ public class RegistrationController {
             System.out.println(x);
         }
 
-        if (validations.contains(false)) return false;
-        else return true;
-
-
+        return !validations.contains(false);
     }
 
     //test
