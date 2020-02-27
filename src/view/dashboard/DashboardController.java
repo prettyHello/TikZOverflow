@@ -1,5 +1,6 @@
 package view.dashboard;
 
+import business.DTO.ProjectDTO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -7,8 +8,19 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.stage.FileChooser;
+import persistence.ProjectDAO;
+import utilities.Utility;
 import view.ViewSwitcher;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
 
 public class DashboardController {
 
@@ -55,7 +67,56 @@ public class DashboardController {
         itemList.add("Shared with you");
 
         optionList.setItems(itemList);
+
+        optionList.setItems(itemList);
+        projectList.setCellFactory(cell -> new ListCell<String>(){
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty){
+                    setGraphic(null);
+                } else {
+                    setGraphic(new ViewOptionController().setProjectName(item).setExportIcon("view/images/exportIcon.png").getProjectRowHbox());
+                }
+            }
+        });
+
     }
+
+
+    @FXML
+    public void importd(){
+        FileChooser fc = new FileChooser();
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".tar.gz", ".tar.gz"));
+        File selectedFile= fc.showOpenDialog(null);
+        if (selectedFile != null) {
+            String projectName = selectedFile.getName().replace(".tar.gz", "");
+            File newfoldel = new File(System.getProperty("user.home") + "/ProjectTikZ");
+            Path folderDestination = Paths.get(newfoldel + "/") ;
+            try {
+                if ( ! Files.exists(folderDestination.resolve(projectName))) {
+                    Files.createDirectories(folderDestination);
+                    Utility.unTarFile(selectedFile, folderDestination);
+
+                    ProjectDTO projectDTO =  new ProjectDTO();
+                    String projectNameHash = null; //call function that will compute the hash
+                    projectDTO.setProjectName(projectName)
+                            .setProjectReference(projectNameHash)
+                            .setProjectPath(selectedFile.getPath())
+                            .setCreateDate(new Date())
+                            .setModificationDate(new Date()); //syntatic sugar
+
+                    ProjectDAO.getInstance().saveProject(projectDTO);
+                    projectList.getItems().add(projectName);
+
+                }else  {
+                    PopupController.projectExists("Error import", "impossible to import, this project already exists in: "+ folderDestination);
+                }
+            }catch (IOException e) { e.printStackTrace(); }
+        }
+
+    }
+
 
 
 

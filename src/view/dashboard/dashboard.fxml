@@ -21,6 +21,7 @@
                                 <Menu mnemonicParsing="false" text="File">
                                     <items>
                                         <MenuItem mnemonicParsing="false" text="Close" />
+                                        <MenuItem fx:id="import_project" onAction="#importd" mnemonicParsing="false"  text="Import Project" />
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="Edit">
