@@ -9,7 +9,12 @@ public class DashboardController {
     @FXML
     public Button bt_disconnect;
 
+    @FXML
+    public Button bt_profile;
+
     ViewSwitcher viewSwitcher;
+
+    public void handleProfileButton(){viewSwitcher.switchView(ViewName.PROFILE);}
 
     public void handleDisconnectButton(){
         viewSwitcher.switchView(ViewName.LOGIN);

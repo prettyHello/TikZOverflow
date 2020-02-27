@@ -1,6 +1,7 @@
 package business.UCC;
 
 import business.DTO.UserDTO;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
 import persistence.DAO;
 
@@ -27,7 +28,11 @@ public class UserUCCImpl implements UserUCC {
             User userDb = (User) userDAO.getUser(user);
 
             //TODO check password immediately ? 'Real' password management with security story ?
-            if (userDb == null || !userDb.getPassword().equals(user.getPassword())) {
+
+            /*
+            * The salt is incorporated into the hash (encoded in a base64-style format).
+            * That's why the salt shouldn't actually be saved */
+            if (userDb == null || !BCrypt.checkpw(user.getPassword(), userDb.getPassword())) {
                 Map<String, Object> errorsLog = new HashMap<String, Object>();
                 errorsLog.put("password", "Le pseudo et le mot de passe ne correspondent pas.");
                 throw new Exception();
