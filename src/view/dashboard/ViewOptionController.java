@@ -10,9 +10,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
+import persistence.ProjectDAO;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.zip.GZIPOutputStream;
 
 public class ViewOptionController extends HBox {
     @FXML
@@ -41,6 +45,7 @@ public class ViewOptionController extends HBox {
             public void handle(ActionEvent event) {
                 FileChooser fc = new FileChooser();
                 File selectedFile= fc.showSaveDialog(null);
+                ProjectDAO.getInstance().getProjectPath(projectName.getText());
             }
         });
     }
@@ -59,8 +64,37 @@ public class ViewOptionController extends HBox {
         return projectRowHbox;
     }
 
-    public void Export(){
+    public void Export(String folderSource) throws IOException{
+        createTarGz(folderSource);
 
+    }
+
+    public void createTarGz(String folderProject) throws IOException {
+        File root = new File(folderProject);
+        // create tar archive
+        String fileTarDestination = System.getProperty("user.home").concat("/ProjectTikZ/") + "archive.tar.gz";
+        FileOutputStream fileOutputStream = new FileOutputStream(new File(fileTarDestination));
+        GZIPOutputStream gzIpoutput = new GZIPOutputStream(new BufferedOutputStream(fileOutputStream));
+        TarArchiveOutputStream archiveTarGz = new TarArchiveOutputStream(gzIpoutput);
+        addFileToArchiveTarGz(folderProject, "", archiveTarGz);
+        archiveTarGz.close();
+    }
+
+    public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) throws IOException {
+        File file = new File(folderProject);
+        String entryName = parent + file.getName();
+        // add tar ArchiveEntry
+        archiveTarGz.putArchiveEntry(new TarArchiveEntry(file, entryName));
+        if(file.isFile()){
+            BufferedInputStream fileSelected = new BufferedInputStream(new FileInputStream(file));
+            IOUtils.copy(fileSelected, archiveTarGz);  // copy file in archive
+            archiveTarGz.closeArchiveEntry();
+            fileSelected.close();
+        }else
+            if(file.isDirectory()){
+            archiveTarGz.closeArchiveEntry();
+            for(File fileInSubFolder : file.listFiles()){ addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName+File.separator, archiveTarGz); }
+            }
     }
 
 
