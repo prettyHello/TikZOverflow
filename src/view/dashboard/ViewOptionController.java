@@ -41,20 +41,24 @@ public class ViewOptionController extends HBox {
     }
 
     public  void  initialize() {
+        ProjectDTO AllProject = ProjectDAO.getInstance().getProject();
+
         exportBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 FileChooser fc = new FileChooser();
                 File selectedFile= fc.showSaveDialog(null);
-                ProjectDTO queryProject = ProjectDAO.getInstance().getProjectPath(projectName.getText());
+                int index = 0 ;
+                index= AllProject.getProjectName().indexOf(projectName.getText()) ;
+                File dir = new File( AllProject.getProjectPath().get(index) );
                 try {
-                    createTarGz(queryProject.getProjectPath().toString()) ;
-                    
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                    if (dir.exists()) {
+                        createTarGz(dir.toString());
+                    } else {
+                        DashboardController popup = new DashboardController();
+                        popup.ifProjectExists(dir.toPath(),"Error Export","this project does not exist on the path: ");
+                    }
+                } catch (IOException e) { e.printStackTrace(); }
             }
         });
     }

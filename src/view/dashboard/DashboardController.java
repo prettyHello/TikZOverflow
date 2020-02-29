@@ -99,7 +99,7 @@ public class DashboardController {
                     saveProjectInDB (projectDTO, projectName, projectNameHash, folderDestination);
                     projectList.getItems().add(projectName);
                 }else  {
-                     ifProjectExists(folderDestination) ;
+                     ifProjectExists(folderDestination, "Error import","impossible to import, this project already exists in: " ) ;
                 }
             }catch (IOException e) { e.printStackTrace(); }
         }
@@ -107,11 +107,11 @@ public class DashboardController {
     }
 
 
-    public void ifProjectExists(Path folderDestination) {
+    public void ifProjectExists(Path folderDestination, String title, String ContentText) {
         Alert alertMessage = new Alert(Alert.AlertType.NONE);
         alertMessage.setAlertType(Alert.AlertType.INFORMATION);
-        alertMessage.setTitle("Error import");
-        alertMessage.setContentText("impossible to import, this project already exists in: "+ folderDestination);
+        alertMessage.setTitle(title);
+        alertMessage.setContentText(ContentText + folderDestination);
         alertMessage.show();
     }
 
