@@ -49,6 +49,7 @@ public class ViewOptionController extends HBox {
                 ProjectDTO queryProject = ProjectDAO.getInstance().getProjectPath(projectName.getText());
                 try {
                     createTarGz(queryProject.getProjectPath().toString()) ;
+                    
 
                 } catch (IOException e) {
                     e.printStackTrace();
