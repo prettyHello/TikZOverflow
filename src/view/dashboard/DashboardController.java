@@ -80,31 +80,23 @@ public class DashboardController {
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".tar.gz", ".tar.gz"));
         File selectedFile= fc.showOpenDialog(null);
+        String popupMessage = "Please enter the name of your Project" ;
+        String projectName = setProjectName(popupMessage);
+        Path folderDestination = Paths.get(System.getProperty("user.home") + "/ProjectTikZ/") ;
+        String folderNameUntar = selectedFile.getName().replace(".tar.gz", "");
+
         if (selectedFile != null) {
-            String popupMessage = "Entre le nom du project " ;
-            String projectName = setProjectName(popupMessage);
-            Path folderDestination = Paths.get(System.getProperty("user.home") + "/ProjectTikZ/") ;
-            String folderNameUntar = selectedFile.getName().replace(".tar.gz", "");
+
             try {
                 if ( ! Files.exists(folderDestination.resolve(projectName))) {
                     Files.createDirectories(folderDestination);
                     Utility.unTarFile(selectedFile, folderDestination);
                     renameFolderProject( new File(folderDestination.resolve(folderNameUntar).toString()), new File(folderDestination.toString() +"/"+ projectName) );
-
-
                     ProjectDTO projectDTO =  new ProjectDTO();
                     String projectNameHash = null; //call function that will compute the hash
-                    projectDTO.setProjectName(projectName)
-                            .setProjectReference(projectNameHash)
-                            .setProjectPath(folderDestination.toString()+"/"+projectName)
-                            .setCreateDate(new Date())
-                            .setModificationDate(new Date()); //syntatic sugar
-
-                    ProjectDAO.getInstance().saveProject(projectDTO);
+                    saveProjectInDB (projectDTO, projectName, projectNameHash, folderDestination);
                     projectList.getItems().add(projectName);
-
                 }else  {
-                   // PopupController.projectExists("Error import", "impossible to import, this project already exists in: "+ folderDestination);
                      ifProjectExists(folderDestination) ;
                 }
             }catch (IOException e) { e.printStackTrace(); }
@@ -123,32 +115,27 @@ public class DashboardController {
 
     public void renameFolderProject(File projectName, File NewProjectName){
         projectName.renameTo(NewProjectName);
-
-
     }
 
     public String setProjectName (String popupMessage){
-
         TextInputDialog enterProjectName = new TextInputDialog();
         enterProjectName.setTitle("Project name");
         enterProjectName.setHeaderText(popupMessage);
         enterProjectName.setContentText("Name :");
         Optional<String> projectName = enterProjectName.showAndWait();
 
-        if (projectName.isPresent()) {
-            return projectName.get() ;
-        }
-        else {
-            enterProjectName.close();
-            Alert alertMessage = new Alert(Alert.AlertType.NONE);
-            alertMessage.setAlertType(Alert.AlertType.WARNING);
-            alertMessage.setTitle("Error Name");
-            alertMessage.setContentText("Veillez svp entre un nom ");
-            alertMessage.show();
-        }
+        if (projectName.isPresent()) return projectName.get() ;
+       return null;
+    }
 
+    public void saveProjectInDB (ProjectDTO projectDTO,String projectName,String projectNameHash ,Path folderDestination){
+        projectDTO.setProjectName(projectName)
+                .setProjectReference(projectNameHash)
+                .setProjectPath(folderDestination.toString()+"/"+projectName)
+                .setCreateDate(new Date().toString())
+                .setModificationDate(new Date().toString()); //syntatic sugar
 
-       return projectName.get();
+        ProjectDAO.getInstance().saveProject(projectDTO);
     }
 
 
