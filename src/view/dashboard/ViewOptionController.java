@@ -82,7 +82,6 @@ public class ViewOptionController extends HBox {
 
     public void Export(File dir, File selectedFile) {
         if ( selectedFile != null ) {
-            System.out.println(selectedFile.getAbsolutePath());
             try {
                 if (dir.exists()) {
                     createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") );

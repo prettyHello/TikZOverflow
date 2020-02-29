@@ -79,31 +79,36 @@ public class DashboardController {
 
 
     @FXML
-    public void importd(){
+    public void importd() {
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".tar.gz", ".tar.gz"));
-        File selectedFile= fc.showOpenDialog(null);
-        String projectName = setProjectName(popupMessage);
-        Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject) ;
-        String folderNameUntar = selectedFile.getName().replace(".tar.gz", "");
+        File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
+            String projectName = setProjectName(popupMessage);
 
-            try {
-                if ( ! Files.exists(folderDestination.resolve(projectName))) {
-                    Files.createDirectories(folderDestination);
+            if (projectName != null){
+                Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
+                String folderNameUnbar = selectedFile.getName().replace(".tar.gz", "");
+
+                if (!Files.exists(folderDestination.resolve(projectName))) {
+                    try {
+                        Files.createDirectories(folderDestination);
+                    } catch (IOException e) {
+                        System.out.println("EXXePTION CODE");
+                        e.printStackTrace();
+                    }
                     Utility.unTarFile(selectedFile, folderDestination);
-                    renameFolderProject( new File(folderDestination.resolve(folderNameUntar).toString()), new File(folderDestination.toString() +"/"+ projectName) );
-                    ProjectDTO projectDTO =  new ProjectDTO();
+                    renameFolderProject(new File(folderDestination.resolve(folderNameUnbar).toString()), new File(folderDestination.toString() + "/" + projectName));
+                    ProjectDTO projectDTO = new ProjectDTO();
                     String projectNameHash = null; //call function that will compute the hash
-                    saveProjectInDB (projectDTO, projectName, projectNameHash, folderDestination);
+                    saveProjectInDB(projectDTO, projectName, projectNameHash, folderDestination);
                     projectList.getItems().add(projectName);
-                }else  {
-                     ifProjectExists(folderDestination, "Error import",ContentTextImport ) ;
+                } else {
+                    ifProjectExists(folderDestination, "Error import", ContentTextImport);
                 }
-            }catch (IOException e) { e.printStackTrace(); }
+            }
         }
-
     }
 
 
@@ -126,8 +131,10 @@ public class DashboardController {
         enterProjectName.setContentText("Name :");
         Optional<String> projectName = enterProjectName.showAndWait();
 
-        if (projectName.isPresent()) return projectName.get() ;
-       return null;
+        if (projectName.isPresent()){ return projectName.get();}
+        return null;
+
+        //return projectName.orElseGet(projectName::get);
     }
 
     public void saveProjectInDB (ProjectDTO projectDTO,String projectName,String projectNameHash ,Path folderDestination){
