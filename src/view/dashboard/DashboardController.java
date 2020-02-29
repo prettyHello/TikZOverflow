@@ -15,10 +15,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.Optional;
 
 public class DashboardController {
+
+    private String popupMessage = "Please enter the name of your Project" ;
+    private String rootProject = "/ProjectTikZ/";
+    private String ContentTextImport = "impossible to import, this project already exists in: ";
+
 
     private ViewSwitcher viewSwitcher;
 
@@ -51,11 +55,7 @@ public class DashboardController {
 
         itemList = FXCollections.observableArrayList();
 
-        for (String s : AllProject.getProjectName()) {
-            itemList.add(s);
-
-        }
-
+        for (String s : AllProject.getProjectName()) { itemList.add(s); }
 
         projectList.setItems(itemList);
 
@@ -68,6 +68,7 @@ public class DashboardController {
         optionList.setItems(itemList);
 
         optionList.setItems(itemList);
+
         projectList.setCellFactory(cell -> new ListCell<String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -82,9 +83,8 @@ public class DashboardController {
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".tar.gz", ".tar.gz"));
         File selectedFile= fc.showOpenDialog(null);
-        String popupMessage = "Please enter the name of your Project" ;
         String projectName = setProjectName(popupMessage);
-        Path folderDestination = Paths.get(System.getProperty("user.home") + "/ProjectTikZ/") ;
+        Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject) ;
         String folderNameUntar = selectedFile.getName().replace(".tar.gz", "");
 
         if (selectedFile != null) {
@@ -99,7 +99,7 @@ public class DashboardController {
                     saveProjectInDB (projectDTO, projectName, projectNameHash, folderDestination);
                     projectList.getItems().add(projectName);
                 }else  {
-                     ifProjectExists(folderDestination, "Error import","impossible to import, this project already exists in: " ) ;
+                     ifProjectExists(folderDestination, "Error import",ContentTextImport ) ;
                 }
             }catch (IOException e) { e.printStackTrace(); }
         }

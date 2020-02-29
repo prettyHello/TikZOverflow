@@ -20,6 +20,10 @@ import java.io.*;
 import java.util.zip.GZIPOutputStream;
 
 public class ViewOptionController extends HBox {
+
+    private String rootProject = "/ProjectTikZ/";
+    private String ContentTextExport = "this project does not exist on the path: ";
+
     @FXML
     private  Label projectName = null ;
     @FXML
@@ -47,18 +51,15 @@ public class ViewOptionController extends HBox {
             @Override
             public void handle(ActionEvent event) {
                 FileChooser fc = new FileChooser();
+                fc.setTitle("Save project as...");
+                fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
+                fc.setInitialDirectory(new File(System.getProperty("user.home") + rootProject));
+                fc.setInitialFileName(projectName.getText() );
                 File selectedFile= fc.showSaveDialog(null);
                 int index = 0 ;
                 index= AllProject.getProjectName().indexOf(projectName.getText()) ;
                 File dir = new File( AllProject.getProjectPath().get(index) );
-                try {
-                    if (dir.exists()) {
-                        createTarGz(dir.toString());
-                    } else {
-                        DashboardController popup = new DashboardController();
-                        popup.ifProjectExists(dir.toPath(),"Error Export","this project does not exist on the path: ");
-                    }
-                } catch (IOException e) { e.printStackTrace(); }
+                Export(dir, selectedFile);
             }
         });
     }
@@ -77,15 +78,27 @@ public class ViewOptionController extends HBox {
         return projectRowHbox;
     }
 
-    public void Export(String folderSource) throws IOException{
-        createTarGz(folderSource);
 
+
+    public void Export(File dir, File selectedFile) {
+        if ( selectedFile != null ) {
+            System.out.println(selectedFile.getAbsolutePath());
+            try {
+                if (dir.exists()) {
+                    createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") );
+                } else {
+                    DashboardController popup = new DashboardController();
+                    popup.ifProjectExists(dir.toPath(), "Error Export", ContentTextExport);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void createTarGz(String folderProject) throws IOException {
+    public void createTarGz(String folderProject, String fileTarDestination) throws IOException {
         File root = new File(folderProject);
         // create tar archive
-        String fileTarDestination = System.getProperty("user.home").concat("/ProjectTikZ/") + "archive.tar.gz";
         FileOutputStream fileOutputStream = new FileOutputStream(new File(fileTarDestination));
         GZIPOutputStream gzIpoutput = new GZIPOutputStream(new BufferedOutputStream(fileOutputStream));
         TarArchiveOutputStream archiveTarGz = new TarArchiveOutputStream(gzIpoutput);
@@ -109,6 +122,5 @@ public class ViewOptionController extends HBox {
             for(File fileInSubFolder : file.listFiles()){ addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName+File.separator, archiveTarGz); }
             }
     }
-
 
 }
