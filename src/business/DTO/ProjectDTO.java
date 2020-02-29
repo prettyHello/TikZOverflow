@@ -6,8 +6,8 @@ public class ProjectDTO {
     private String projectName;
     private String projectReference;
     private String projectPath;
-    private Date createDate;
-    private Date modificationDate;
+    private String createDate;
+    private String modificationDate;
 
     public String getProjectName() {
         return projectName;
@@ -27,20 +27,20 @@ public class ProjectDTO {
         return  this;
     }
 
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public ProjectDTO setCreateDate(Date createDate) {
+    public ProjectDTO setCreateDate(String createDate) {
         this.createDate = createDate;
         return this;
     }
 
-    public Date getModificationDate() {
+    public String getModificationDate() {
         return modificationDate;
     }
 
-    public ProjectDTO setModificationDate(Date modificationDate) {
+    public ProjectDTO setModificationDate(String modificationDate) {
         this.modificationDate = modificationDate;
         return  this;
     }
