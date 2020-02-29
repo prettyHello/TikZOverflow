@@ -1,5 +1,6 @@
 package view.dashboard;
 
+import business.DTO.ProjectDTO;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,13 +40,20 @@ public class ViewOptionController extends HBox {
         }
     }
 
-    public  void  initialize(){
+    public  void  initialize() {
         exportBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 FileChooser fc = new FileChooser();
                 File selectedFile= fc.showSaveDialog(null);
-                ProjectDAO.getInstance().getProjectPath(projectName.getText());
+                ProjectDTO queryProject = ProjectDAO.getInstance().getProjectPath(projectName.getText());
+                try {
+                    createTarGz(queryProject.getProjectPath().toString()) ;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
     }
