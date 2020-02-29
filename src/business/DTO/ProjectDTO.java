@@ -1,56 +1,57 @@
 package business.DTO;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ProjectDTO {
-    private String projectName;
-    private String projectReference;
-    private String projectPath;
-    private String createDate;
-    private String modificationDate;
+    private ArrayList<String> projectName = new ArrayList<String>();
+    private ArrayList<String> projectReference = new ArrayList<String>() ;
+    private ArrayList<String> projectPath = new ArrayList<String>();
+    private ArrayList<String> createDate = new ArrayList<String>();
+    private ArrayList<String> modificationDate = new ArrayList<String>();
 
-    public String getProjectName() {
+    public ArrayList<String> getProjectName() {
         return projectName;
     }
 
     public ProjectDTO setProjectName(String projectName) {
-        this.projectName = projectName;
+        this.projectName.add(projectName) ;
         return  this;
     }
 
-    public String getProjectPath() {
+    public ArrayList<String> getProjectPath() {
         return projectPath;
     }
 
     public ProjectDTO setProjectPath(String projectPath) {
-        this.projectPath = projectPath;
+        this.projectPath.add(projectPath);
         return  this;
     }
 
-    public String getCreateDate() {
+    public ArrayList<String> getCreateDate() {
         return createDate;
     }
 
     public ProjectDTO setCreateDate(String createDate) {
-        this.createDate = createDate;
+        this.createDate.add(createDate);
         return this;
     }
 
-    public String getModificationDate() {
+    public ArrayList<String> getModificationDate() {
         return modificationDate;
     }
 
     public ProjectDTO setModificationDate(String modificationDate) {
-        this.modificationDate = modificationDate;
+        this.modificationDate.add(modificationDate);
         return  this;
     }
 
-    public String getProjectReference() {
+    public ArrayList<String> getProjectReference() {
         return projectReference;
     }
 
     public ProjectDTO setProjectReference(String projectReference) {
-        this.projectReference = projectReference;
+        this.projectReference.add(projectReference);
         return  this;
     }
 }

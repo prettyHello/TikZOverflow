@@ -33,8 +33,6 @@ public class DashboardController {
 
     private ObservableList<String> itemList;
 
-
-
     public DashboardController(){
         projectList = new ListView<>();
     }
@@ -49,11 +47,15 @@ public class DashboardController {
 
     public void initialize(){
 
+        ProjectDTO AllProject = ProjectDAO.getInstance().getProject();
+
         itemList = FXCollections.observableArrayList();
 
-        itemList.add("project");
-        itemList.add("project 2");
-        itemList.add("project 3");
+        for (String s : AllProject.getProjectName()) {
+            itemList.add(s);
+
+        }
+
 
         projectList.setItems(itemList);
 
@@ -132,8 +134,8 @@ public class DashboardController {
         projectDTO.setProjectName(projectName)
                 .setProjectReference(projectNameHash)
                 .setProjectPath(folderDestination.toString()+"/"+projectName)
-                .setCreateDate(new Date().toString())
-                .setModificationDate(new Date().toString()); //syntatic sugar
+                .setCreateDate(Utility.getTimeStamp())
+                .setModificationDate(Utility.getTimeStamp()); //syntatic sugar
 
         ProjectDAO.getInstance().saveProject(projectDTO);
     }

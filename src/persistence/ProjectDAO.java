@@ -1,19 +1,15 @@
 package persistence;
 
 import business.DTO.ProjectDTO;
-import utilities.Utility;
-
-import javax.rmi.CORBA.Util;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 
 public class ProjectDAO {
     PreparedStatement prstmt;
-    private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_id, project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SQL_SELECT__PROJECT = "SELECT * FROM projects WHERE name= ? ";
+    private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?)";
+    private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects";
 
     DALServicesImpl querry = new DALServicesImpl() ;
 
@@ -25,12 +21,12 @@ public class ProjectDAO {
     public void saveProject(ProjectDTO project){
         try {
            prstmt = querry.prepareStatement(SQL_INSERT_PROJECT);
-           prstmt.setInt(1, 29);
-           prstmt.setInt(2, 37);
-           prstmt.setString(3, project.getProjectName());
-           prstmt.setString(4, project.getProjectPath());
-           prstmt.setString(5, Utility.getTimeStamp());
-           prstmt.setString(6, Utility.getTimeStamp());
+           //prstmt.setInt(1, 29);
+           //prstmt.setInt(2, 37);
+           prstmt.setString(1, project.getProjectName().get(0));
+           prstmt.setString(2, project.getProjectPath().get(0));
+           prstmt.setString(3, project.getCreateDate().get(0));
+           prstmt.setString(4, project.getModificationDate().get(0));
            prstmt.executeUpdate();
         } catch (SQLException e) {
             //e.printStackTrace();
@@ -38,21 +34,18 @@ public class ProjectDAO {
         }
     }
 
-
-    public ProjectDTO getProjectPath(String filter){
+    public ProjectDTO getProject(){
         PreparedStatement pr;
         ResultSet rs;
         ProjectDTO project =new ProjectDTO();
         try {
-            pr = ((DALBackEndServices) this.querry).prepareStatement(SQL_SELECT__PROJECT);
-            pr.setString(1, filter);
+            pr = ((DALBackEndServices) this.querry).prepareStatement(SQL_SELECT_PROJECT);
             rs = pr.executeQuery();
             while (rs.next()) {
                 project.setProjectName(rs.getString("name"));
                 project.setCreateDate(rs.getString("creation_date"));
                 project.setModificationDate(rs.getString("modification_date"));
                 project.setProjectPath(rs.getString("path"));
-                //project.setProjectReference(rs.getString(" "));
             }
             return project;
         } catch (Exception exception) {
