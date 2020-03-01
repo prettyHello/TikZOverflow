@@ -18,6 +18,7 @@ TO DO: Informations sur la façon d'éxecuter votre projet
 1) On the menu above, click on "file" and then select "projectstructure":
 <ul>
 	<li>In Modules-> groupe09-> select the "sources" tab and mark the folder "src" as Sources.</li>
+	<li>In Modules-> groupe09-> select the "tests" tab and mark the folder "test" as Test.</li>
 	<li>In Project-> project set JDK (choose the jdk of your choice)</li>
 	<li>In Project-> fill the field "project compiler output" with the path to the folder where you want the output to be generated. We recommand creating a folder name "out" in the root folder for that </li>
 	<li>In Libraries -> press "+" -> then add the folder "src/lib" as a java library. Once done it is necessary to click on "change version" and to confirm in order to load most libraries.</li>

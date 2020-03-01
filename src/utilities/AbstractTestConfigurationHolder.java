@@ -1,3 +1,5 @@
+package utilities;
+
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
 import business.factories.UserFactory;
@@ -8,10 +10,12 @@ import persistence.DAO;
 import java.lang.reflect.InvocationTargetException;
 
 //----TO DO:: check if the singleton is correct once we see how to it in class
+
 /**
  * This class is meant to be used by the tests, in order to instanciate the configuration and Mocks only once
- * This is done through a pattern singleton (done from memory, check if it fits the one presented in class when that happens)
+ * This is done through a pattern singleton
  */
+//TODO the pattern was done from memory, check if it fits the one presented in class when that happens
 public abstract class AbstractTestConfigurationHolder {
     protected static  ConfigurationSingleton conf;
 

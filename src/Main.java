@@ -57,38 +57,13 @@ public class Main extends Application {
             System.exit(1);
         }
 
-        test(dalServices, userUcc, userFactory);
-
-        launch(args);
-    }
-
-    //in this test I show how it will be used in the front end
-    private static void test(DALServices dalServices, UserUCC userUcc, UserFactory userFactory) {
-        System.out.println("Test");
         try {
             dalServices.createTables();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //upon receiving the form data we create a DTO
-        UserDTO user = userFactory.createUser();
-        user.setFirst_name("bob");
-        user.setPassword("clear for now");
-        user.setSalt("123");
-        user.setEmail("b@b.b");
-        user.setLast_name("art");
-        user.setPhone("xx");
-        user.setRegister_date(LocalDateTime.now().toString());
-
-
-        // then we send that DTO to our Use Case view.Controller which will take care of all the logic
-        userUcc.register(user);
-        if (user.isAuthorized()) {
-            System.out.println("ok");
-        } else {
-        }
-
+        launch(args);
     }
 }
 
