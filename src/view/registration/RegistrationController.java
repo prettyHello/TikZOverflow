@@ -70,15 +70,6 @@ public class RegistrationController {
 
     String passwordText;
 
-
-    private String unallowedCharactersPattern = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
-
-    private String whitespacesPattern = "^[\\s]+|[\\s]+$";
-
-
-    //TODO Change capital letters
-    private String emailPattern = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
-
     @FXML
     public void initialize() {
         borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -98,12 +89,12 @@ public class RegistrationController {
     public void registerBtn() {
 
         if (this.executeValidation()) {
-            UserFactoryImpl dto = new UserFactoryImpl();
+            UserFactoryImpl userFactory = new UserFactoryImpl();
             String salt = BCrypt.gensalt(12);
             String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
-            UserDTO user = dto.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
+            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
             DALServices dal = new DALServicesImpl();
-            UserDAOImpl dao = new UserDAOImpl(dal, dto);
+            UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
 
             userUcc.register(user);
@@ -124,17 +115,24 @@ public class RegistrationController {
     private boolean executeValidation() {
         ArrayList<Boolean> validations = new ArrayList<>();
 
-        validations.add(this.checkFirstName());
-        validations.add(this.checkLastName());
-        validations.add(this.checkEmail());
-        validations.add(this.comparePasswords());
-        validations.add(this.checkPhone());
+        validations.add(Utility.checkFirstName(firstnameTF.getText()));
+        validations.add(Utility.checkLastName(lastnameTF.getText()));
+        validations.add(Utility.checkEmail(emailTF.getText()));
+        validations.add(Utility.comparePasswords(passwordTF.getText(),secondPasswordTF.getText()));
+        validations.add(Utility.checkPhone(phoneTF.getText()));
 
         for (Boolean x : validations) {
             System.out.println(x);
         }
-
-        return !validations.contains(false);
+        if(!validations.contains(false)){
+            this.phoneText = this.phoneTF.getText();
+            this.emailText = this.emailTF.getText();
+            this.passwordText = this.passwordTF.getText();
+            this.lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            this.firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            return true;
+        }
+        return false;
     }
 
     //test
@@ -155,66 +153,6 @@ public class RegistrationController {
 
     }
     //endtest
-
-    public boolean checkFirstName() {
-        System.out.println("Checking firstname");
-        if (this.firstnameTF.getText().isEmpty() || this.firstnameTF.getText().matches(this.unallowedCharactersPattern))
-            return false;
-        else
-            // Remove whitespaces at the beginning and at the end
-            this.firstnameText = this.firstnameTF.getText().replaceAll(this.whitespacesPattern, "");
-
-        return true;
-
-    }
-
-
-    private boolean checkLastName() {
-
-
-        System.out.println("Checking lastname");
-        if (this.lastnameTF.getText().isEmpty() || this.lastnameTF.getText().matches(this.unallowedCharactersPattern))
-
-            return false;
-        else
-            // Remove whitespaces at the beginning and at the end
-            this.lastnameText = this.lastnameTF.getText().replaceAll(this.whitespacesPattern, "");
-
-        return true;
-
-    }
-
-
-    private boolean comparePasswords() {
-        System.out.println("Checking password");
-        if (passwordTF.getText().equals(secondPasswordTF.getText())) {
-            passwordText = passwordTF.getText();
-            return true;
-        } else
-            return false;
-    }
-
-
-    public boolean checkEmail() {
-        System.out.println("Checking email");
-        if (this.emailTF.getText().matches(this.emailPattern)) {
-            this.emailText = this.emailTF.getText();
-            return true;
-        }
-
-        return false;
-
-    }
-
-    private boolean checkPhone() {
-        System.out.println("Checking phone");
-        System.out.println(phoneTF.getText().length());
-        if ((phoneTF.getText().length() > 9) && (phoneTF.getText().length() < 11)) {
-            phoneText = phoneTF.getText();
-            System.out.println(phoneText);
-            return true;
-        } else return false;
-    }
 
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {

@@ -8,4 +8,6 @@ public interface UserUCC {
     boolean login(UserDTO userDTO);
 
     UserDTO register(UserDTO userDTO);
+
+     boolean updateUserInfo(UserDTO userDTO);
 }
