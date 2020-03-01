@@ -78,16 +78,16 @@ public class UserUCCImpl implements UserUCC {
     public UserDTO register(UserDTO userDTO) {
         //add to DTO/UserImpl a method that check if fields are valid (or do that in javafx, as u wish)
         dalServices.startTransaction(); //we could start the transaction later since it's desktop, but if it was a website we would nee to do it before the checks to avoid race conditions
-        //check if email already exists
-        //userDTO.setPassword(       hash(userDTO.getPassword())         );
-        int id = userDAO.create(userDTO);
-        // if error
-        // dalServices.rollback();
-        //else
-        dalServices.commit();
+            //check if email already exists
+            //userDTO.setPassword(       hash(userDTO.getPassword())         );
+            int id = userDAO.create(userDTO);
+            // if error
+                // dalServices.rollback();
+            //else
+                dalServices.commit();
         userDTO.setUser_id(id);
         userDTO.setAuthorized(true);
 
-        return userDTO;
+        return  userDTO;
     }
 }
