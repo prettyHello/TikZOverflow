@@ -8,7 +8,7 @@ package persistence;
  * @param <T> a generic object representing an entry in the database.
  */
 public interface DAO<T> {
-
+//TODO overkill for now
     /**
      * Finds an object in the database by its id.
      *
@@ -42,4 +42,5 @@ public interface DAO<T> {
 
 
     T getUser(T user);
+    boolean updateUser(T user);
 }

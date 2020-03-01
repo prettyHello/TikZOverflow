@@ -43,8 +43,35 @@ public class UserUCCImpl implements UserUCC {
             this.dalServices.rollback();
             return false;
         }
-
         return true;
+    }
+
+    public boolean updateUserInfo(UserDTO userDTO) {
+        boolean success = false;
+        try {
+            this.dalServices.startTransaction();
+            success = userDAO.updateUser(userDTO);
+            this.dalServices.commit();
+        } catch (Exception e) {
+            this.dalServices.rollback();
+            return false;
+        }
+        return success;
+        //TODO really bad implementation, need to add exceptions and not use return null,will change it later, probably.
+    }
+
+    public UserDTO getUserInfo(UserDTO user){
+        User usr = (User) user;
+        User userDb = null;
+        try {
+            this.dalServices.startTransaction();
+            userDb = (User) userDAO.getUser(user);
+            this.dalServices.commit();
+        } catch (Exception e) {
+            this.dalServices.rollback();
+        }
+        return (UserDTO) userDb;
+        //TODO really bad implementation, need to add exceptions and not use return null,will change it later, probably.
     }
 
     @Override
