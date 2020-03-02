@@ -13,13 +13,15 @@ public class UserDAOImpl implements UserDAO {
 
 
     private static final String SQL_INSERT_USER = "INSERT INTO users(first_name, last_name, email, phone, password, salt, register_date ) VALUES (?, ?, ?, ?, ?, ?,?)";
-    private static final String SQL_LOGIN_USER = "SELECT * FROM user WHERE email=?";
+    private static final String SQL_LOGIN_USER = "SELECT * FROM users WHERE email=?";
+    private static final String SQL_UPDATE_USER = "UPDATE users SET first_name=?, last_name=?, email=?, phone=?, password=?, salt=?  WHERE email=?";
 
     public UserDAOImpl(DALServices dalServices, UserFactory userFactory) {
         this.dalServices = dalServices;
         this.userFactory = userFactory;
     }
 
+    //TODO return null should be an exception.
     @Override
     public UserDTO getUser(UserDTO usrAuth){
         PreparedStatement pr;
@@ -47,6 +49,37 @@ public class UserDAOImpl implements UserDAO {
         return null;
     }
 
+    public boolean updateUser(UserDTO userDTO) {
+        this.getUser(userDTO);
+        PreparedStatement ps = null;
+        try {
+            ps = ((DALBackEndServices) this.dalServices).prepareStatement(SQL_UPDATE_USER);
+            ps.setString(1, userDTO.getFirst_name());
+            ps.setString(2, userDTO.getLast_name());
+            ps.setString(3, userDTO.getEmail());
+            ps.setString(4, userDTO.getPhone());
+            ps.setString(5, userDTO.getPassword());
+            ps.setString(6, userDTO.getSalt());
+            ps.setString(7, userDTO.getEmail());
+            ps.executeUpdate();
+
+        } catch (SQLException exc) {
+            System.out.println(exc);
+            System.out.println("error in the DAO update user");
+            return false;
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                    return true;
+                } catch (SQLException exc) {
+                    exc.printStackTrace();
+                }
+            }
+        }
+        return true;
+    }
+
     @Override
     public UserDTO find(UserDTO obj) {
         return null;
@@ -54,6 +87,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public int create(UserDTO userDTO) {
+        //TODO insertedID not used ?
         int insertedID = 0;
         PreparedStatement ps = null;
         try {
@@ -83,7 +117,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public Long update(UserDTO userDTO) {
+    public Long update(UserDTO obj) {
         return null;
     }
 

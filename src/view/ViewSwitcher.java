@@ -27,6 +27,9 @@ public class ViewSwitcher {
                 case REGISTRATION:
                     toRegistration();
                     break;
+                case PROFILE:
+                    toProfile();
+                    break;
                 case DASHBOARD:
                     toDashboard();
                     break;
@@ -60,11 +63,20 @@ public class ViewSwitcher {
         this.stage.setScene(new Scene(root));
     }
 
-    private void toDashboard() throws IOException {
+    private void toProfile() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/profile/profile.fxml"));
+        Parent root = loader.load();
+        RegistrationController registrationController = loader.getController();
+        registrationController.setViewSwitcher(this);
+
+        this.stage.setScene(new Scene(root));
+    }
+
+    public void toDashboard() throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dashboard/dashboard.fxml"));
         Parent root = loader.load();
-        DashboardController registrationController = loader.getController();
-        registrationController.setViewSwitcher(this);
+        DashboardController dashboardController = loader.getController();
+        dashboardController.setViewSwitcher(this);
 
         this.stage.setScene(new Scene(root));
     }

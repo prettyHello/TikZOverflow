@@ -34,6 +34,13 @@
                                         <MenuItem mnemonicParsing="false" text="About" />
                                     </items>
                                 </Menu>
+
+                                <Menu mnemonicParsing="false" text="User">
+                                    <items>
+                                        <MenuItem fx:id="bt_profile" mnemonicParsing="false" onAction="#handleProfileButton" text="Profile" />
+                                        <MenuItem fx:id="bt_disconnect" mnemonicParsing="false" onAction="#handleDisconnectButton" text="Disconnect" />
+                                    </items>
+                                </Menu>
                             </menus>
                         </MenuBar>
                     </children>

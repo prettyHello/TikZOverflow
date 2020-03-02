@@ -8,4 +8,5 @@ import business.DTO.UserDTO;
  */
 public interface UserDAO extends DAO<UserDTO> {
     public UserDTO getUser(UserDTO usrAuth);
+    public boolean updateUser(UserDTO userDTO);
 }

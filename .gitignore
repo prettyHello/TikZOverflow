@@ -1,3 +1,5 @@
-/out/
-/.idea/
-/test
+out/*
+.idea/misc.xml
+.idea/workspace.xml
+.idea/uiDesigner.xml
+

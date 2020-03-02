@@ -1,5 +1,6 @@
 package view.dashboard;
 
+<<<<<<< HEAD
 import business.DTO.ProjectDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +9,11 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import persistence.ProjectDAO;
 import utilities.Utility;
+=======
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import view.ViewName;
+>>>>>>> 8755af8b21b625e66ee37bcd6010a0a41d9fa7c0
 import view.ViewSwitcher;
 
 import java.io.File;
@@ -18,6 +24,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 public class DashboardController {
+<<<<<<< HEAD
 
     private String popupMessage = "Please enter the name of your Project" ;
     private String rootProject = "/ProjectTikZ/";
@@ -26,24 +33,31 @@ public class DashboardController {
 
     private ViewSwitcher viewSwitcher;
 
+=======
+>>>>>>> 8755af8b21b625e66ee37bcd6010a0a41d9fa7c0
     @FXML
-    private ListView<String> projectList;
+    public Button bt_disconnect;
 
     @FXML
-    private ListView<String> optionList;
+    public Button bt_profile;
 
-    @FXML
-    public Button button;
-
-    private ObservableList<String> itemList;
-
+<<<<<<< HEAD
     public DashboardController(){
         projectList = new ListView<>();
+=======
+    ViewSwitcher viewSwitcher;
+
+    public void handleProfileButton(){viewSwitcher.switchView(ViewName.PROFILE);}
+
+    public void handleDisconnectButton(){
+        viewSwitcher.switchView(ViewName.LOGIN);
+>>>>>>> 8755af8b21b625e66ee37bcd6010a0a41d9fa7c0
     }
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
     }
+<<<<<<< HEAD
 
     public void printGarbage(){
 
@@ -151,4 +165,6 @@ public class DashboardController {
 
 
 
+=======
+>>>>>>> 8755af8b21b625e66ee37bcd6010a0a41d9fa7c0
 }

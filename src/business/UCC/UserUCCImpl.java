@@ -1,6 +1,7 @@
 package business.UCC;
 
 import business.DTO.UserDTO;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
 import persistence.DAO;
 
@@ -25,22 +26,52 @@ public class UserUCCImpl implements UserUCC {
         try {
             this.dalServices.startTransaction();
             User userDb = (User) userDAO.getUser(user);
-            /**
-             * @TODO Implement the password verification
-             **/
+
+            //TODO check password immediately ? 'Real' password management with security story ?
+
             /*
-            if (userDb == null || !userDb.checkPassword(user.getPassword())) {
+            * The salt is incorporated into the hash (encoded in a base64-style format).
+            * That's why the salt shouldn't actually be saved */
+            if (userDb == null || !BCrypt.checkpw(user.getPassword(), userDb.getPassword())) {
                 Map<String, Object> errorsLog = new HashMap<String, Object>();
                 errorsLog.put("password", "Le pseudo et le mot de passe ne correspondent pas.");
-                throw new BizzException(UtilResponse.errorResponseMap(errorsLog));
+                throw new Exception();
             }
-            */
-
             this.dalServices.commit();
-        } finally {
+
+        } catch (Exception e) {
             this.dalServices.rollback();
-            return true;
+            return false;
         }
+        return true;
+    }
+
+    public boolean updateUserInfo(UserDTO userDTO) {
+        boolean success = false;
+        try {
+            this.dalServices.startTransaction();
+            success = userDAO.updateUser(userDTO);
+            this.dalServices.commit();
+        } catch (Exception e) {
+            this.dalServices.rollback();
+            return false;
+        }
+        return success;
+        //TODO really bad implementation, need to add exceptions and not use return null,will change it later, probably.
+    }
+
+    public UserDTO getUserInfo(UserDTO user){
+        User usr = (User) user;
+        User userDb = null;
+        try {
+            this.dalServices.startTransaction();
+            userDb = (User) userDAO.getUser(user);
+            this.dalServices.commit();
+        } catch (Exception e) {
+            this.dalServices.rollback();
+        }
+        return (UserDTO) userDb;
+        //TODO really bad implementation, need to add exceptions and not use return null,will change it later, probably.
     }
 
     @Override
