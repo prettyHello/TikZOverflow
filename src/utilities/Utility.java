@@ -31,7 +31,6 @@ public final class Utility {
 
     }
 
-<<<<<<< HEAD
     public static void unTarFile(File tarFile, Path destFile)
     {
         TarArchiveInputStream tis = null;
@@ -62,7 +61,6 @@ public final class Utility {
         return name ;
     }
 
-=======
     public static boolean checkPhone(String phone) {
         System.out.println("Checking phone");
         System.out.println(phone.length());
@@ -102,6 +100,5 @@ public final class Utility {
         } else
             return false;
     }
->>>>>>> 8755af8b21b625e66ee37bcd6010a0a41d9fa7c0
 
 }

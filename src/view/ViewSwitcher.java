@@ -1,5 +1,6 @@
 package view;
 
+import business.DTO.UserDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +14,13 @@ import java.io.IOException;
 
 public class ViewSwitcher {
     private Stage stage;
+    private  UserDTO user;
+
+    public ViewSwitcher setUser(UserDTO user) {
+        this.user = user;
+        return this;
+    }
+
 
     public ViewSwitcher(Stage stage) {
         this.stage = stage;
@@ -39,6 +47,7 @@ public class ViewSwitcher {
                     throw new IllegalArgumentException("Unhandled view");
             }
         } catch (IOException e) {
+            System.out.println(e);
             System.err.println("couldn't change view");
             //TODO popup to warn user ?
             Platform.exit();
@@ -76,8 +85,7 @@ public class ViewSwitcher {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dashboard/dashboard.fxml"));
         Parent root = loader.load();
         DashboardController dashboardController = loader.getController();
-        dashboardController.setViewSwitcher(this);
-
+        dashboardController.setViewSwitcher(this).setUserProjectView(user);
         this.stage.setScene(new Scene(root));
     }
 }

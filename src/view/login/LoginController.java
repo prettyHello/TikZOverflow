@@ -17,7 +17,6 @@ import javafx.scene.layout.AnchorPane;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
 import persistence.UserDAOImpl;
-import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -63,9 +62,12 @@ public class LoginController {
             UserDAOImpl dao = new UserDAOImpl(dal, dto);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
 
+            System.out.println(user);
+
             if (userUcc.login(user)) {
                 System.out.println(username + " logged in");
-                viewSwitcher.switchView(ViewName.DASHBOARD);
+                viewSwitcher.setUser(userUcc.getUserInfo(user))
+                        .switchView(ViewName.DASHBOARD);
             } else {
                 signalBadCredentials();
             }

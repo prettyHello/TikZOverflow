@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="view.dashboard.DashboardController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.dashboard.DashboardController">
 
     <children>
         <SplitPane dividerPositions="0.12060301507537688" focusTraversable="true" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                     <children>
-                        <MenuBar>
+                        <MenuBar prefHeight="29.0" prefWidth="598.0">
                             <menus>
                                 <Menu mnemonicParsing="false" text="File">
                                     <items>
                                         <MenuItem mnemonicParsing="false" text="Close" />
-                                        <MenuItem fx:id="import_project" onAction="#importd" mnemonicParsing="false"  text="Import Project" />
+                                        <MenuItem fx:id="import_project" mnemonicParsing="false" onAction="#importd" text="Import Project" />
                                     </items>
                                 </Menu>
                                 <Menu mnemonicParsing="false" text="Edit">
@@ -35,7 +29,7 @@
                                     </items>
                                 </Menu>
 
-                                <Menu mnemonicParsing="false" text="User">
+                                <Menu fx:id="userSetting" mnemonicParsing="false">
                                     <items>
                                         <MenuItem fx:id="bt_profile" mnemonicParsing="false" onAction="#handleProfileButton" text="Profile" />
                                         <MenuItem fx:id="bt_disconnect" mnemonicParsing="false" onAction="#handleDisconnectButton" text="Disconnect" />

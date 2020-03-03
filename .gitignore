@@ -3,3 +3,6 @@ out/*
 .idea/workspace.xml
 .idea/uiDesigner.xml
 
+.idea/dataSources.xml
+.idea/libraries/
+

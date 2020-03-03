@@ -1,57 +1,67 @@
 package business.DTO;
 
-import java.util.ArrayList;
+
 import java.util.Date;
 
 public class ProjectDTO {
-    private ArrayList<String> projectName = new ArrayList<String>();
-    private ArrayList<String> projectReference = new ArrayList<String>() ;
-    private ArrayList<String> projectPath = new ArrayList<String>();
-    private ArrayList<String> createDate = new ArrayList<String>();
-    private ArrayList<String> modificationDate = new ArrayList<String>();
+    private int projectOwnerId  ;
+    private String projectName ;
+    private String projectReference  ;
+    private String projectPath ;
+    private String createDate ;
+    private String modificationDate ;
 
-    public ArrayList<String> getProjectName() {
+    public String getProjectName() {
         return projectName;
     }
 
     public ProjectDTO setProjectName(String projectName) {
-        this.projectName.add(projectName) ;
+        this.projectName=projectName ;
         return  this;
     }
 
-    public ArrayList<String> getProjectPath() {
+    public Integer getProjectOwnerId() {
+        return projectOwnerId;
+    }
+
+    public ProjectDTO setProjectOwnerId(int projectOwnerId) {
+        this.projectOwnerId=projectOwnerId;
+        return  this;
+    }
+
+    public String getProjectPath() {
         return projectPath;
     }
 
     public ProjectDTO setProjectPath(String projectPath) {
-        this.projectPath.add(projectPath);
+        this.projectPath=projectPath;
         return  this;
     }
 
-    public ArrayList<String> getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
     public ProjectDTO setCreateDate(String createDate) {
-        this.createDate.add(createDate);
+        this.createDate = createDate;
         return this;
     }
 
-    public ArrayList<String> getModificationDate() {
+    public String getModificationDate() {
         return modificationDate;
     }
 
     public ProjectDTO setModificationDate(String modificationDate) {
-        this.modificationDate.add(modificationDate);
+        this.modificationDate = modificationDate;
         return  this;
     }
 
-    public ArrayList<String> getProjectReference() {
+    public String getProjectReference() {
         return projectReference;
     }
 
     public ProjectDTO setProjectReference(String projectReference) {
-        this.projectReference.add(projectReference);
+        this.projectReference = projectReference;
         return  this;
     }
 }
