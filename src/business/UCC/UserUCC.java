@@ -1,13 +1,15 @@
 package business.UCC;
 
 import business.DTO.UserDTO;
+import exceptions.BizzException;
+import exceptions.FatalException;
 
 public interface UserUCC {
-    UserDTO getUserInfo(UserDTO user);
+    UserDTO getUserInfo(UserDTO user) throws BizzException, FatalException;
 
-    boolean login(UserDTO userDTO);
+    void login(UserDTO userDTO) throws BizzException, FatalException;
 
-    UserDTO register(UserDTO userDTO);
+    void register(UserDTO userDTO) throws BizzException, FatalException;
 
-     boolean updateUserInfo(UserDTO userDTO);
+    void updateUserInfo(UserDTO userDTO) throws BizzException, FatalException;
 }

@@ -4,6 +4,8 @@ import business.DTO.UserDTO;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
+import exceptions.BizzException;
+import exceptions.FatalException;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -22,6 +24,8 @@ import utilities.Utility;
 import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
+
+import static utilities.Utility.showAlert;
 
 public class profileController {
 
@@ -55,14 +59,11 @@ public class profileController {
     String phoneText;
 
     String passwordText;
-
-    private ViewSwitcher viewSwitcher;
-
     @FXML
     Button bt_modify;
-
     @FXML
     Button bt_cancel;
+    private ViewSwitcher viewSwitcher;
 
     @FXML
     public void initialize() {
@@ -73,8 +74,6 @@ public class profileController {
         UserUCC userUcc = new UserUCCImpl(dal, dao);
         //TODO We need a way to know wich user we are talking about
         //userUcc.getUserInfo()
-
-
 
 
         borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -88,13 +87,15 @@ public class profileController {
     }
 
     //TODO INSERT LOGIC
-    public void handleCancelButton(){
+    public void handleCancelButton() {
         System.out.println("INSERT LOGIC HERE");
         viewSwitcher.switchView(ViewName.DASHBOARD);
     }
 
-    public void handleModifyButton(){
-        if (this.executeValidation()) {
+    @FXML
+    public void handleModifyButton() {
+        try {
+            Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""),this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""),this.emailTF.getText(),this.passwordTF.getText(),this.secondPasswordTF.getText(),this.phoneTF.getText());
             UserFactoryImpl userFactory = new UserFactoryImpl();
             String salt = BCrypt.gensalt(12);
             String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
@@ -102,51 +103,25 @@ public class profileController {
             DALServices dal = new DALServicesImpl();
             UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
-
-            if(userUcc.updateUserInfo(user)){
-                System.out.println("Update");
-                viewSwitcher.switchView(ViewName.LOGIN);
-            }
-            //Update failed on dao lvl
-            System.out.println("Update Failed on dao lvl");
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Account update");
-            alert.setHeaderText("Undetermined error");
-            alert.setContentText("Please fill in all the fields correctly and try again");
-
-            alert.showAndWait();
-        } else {
-            System.out.println("User has not been updated");
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Account update");
-            alert.setHeaderText("Invalid input");
-            alert.setContentText("Please fill in all the fields correctly and try again");
-
-            alert.showAndWait();
-        }
-    }
-
-    private boolean executeValidation() {
-        ArrayList<Boolean> validations = new ArrayList<>();
-
-        validations.add(Utility.checkFirstName(firstnameTF.getText()));
-        validations.add(Utility.checkLastName(lastnameTF.getText()));
-        validations.add(Utility.checkEmail(emailTF.getText()));
-        validations.add(Utility.comparePasswords(passwordTF.getText(),secondPasswordTF.getText()));
-        validations.add(Utility.checkPhone(phoneTF.getText()));
-
-        for (Boolean x : validations) {
-            System.out.println(x);
-        }
-        if(!validations.contains(false)){
+            userUcc.updateUserInfo(user);
             this.phoneText = this.phoneTF.getText();
             this.emailText = this.emailTF.getText();
             this.passwordText = this.passwordTF.getText();
             this.lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             this.firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            return true;
+            showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Sucess", "Informations succesfully updated");
+        } catch (BizzException e) {
+            //Update failed on dao lvl
+            System.out.println("Update Failed on buisness lvl");
+            showAlert(Alert.AlertType.WARNING, "Account update", "Business Error", e.getMessage());
+        } catch (FatalException e) {
+            //Update failed on dao lvl
+            System.out.println("Update Failed on DAL/DAO lvl");
+            e.printStackTrace();
+            showAlert(Alert.AlertType.WARNING, "Account update", "Unexpected Error", e.getMessage());
+        } finally {
+            viewSwitcher.switchView(ViewName.DASHBOARD);
         }
-        return false;
     }
 
     //test

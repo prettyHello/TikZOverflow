@@ -45,6 +45,8 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
 
     @Override
     public void rollback() {
+        if(this.connection == null)
+            return;
         try {
             this.connection.rollback();
             this.connection.setAutoCommit(true);

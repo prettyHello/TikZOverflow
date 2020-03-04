@@ -1,6 +1,9 @@
 package utilities;
 
+import exceptions.BizzException;
+import exceptions.FatalException;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.utils.IOUtils;
@@ -8,27 +11,48 @@ import org.apache.commons.compress.utils.IOUtils;
 import java.io.*;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.GZIPInputStream;
 
-public final class Utility {
+public class Utility {
 
-    public static final String  UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
+    public static String  UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
 
-    public static final String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
+    public static String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
 
     //TODO Change capital letters
-    public static final String EMAIL_PATTERN = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    public static String EMAIL_PATTERN = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 
 
     private Utility(){}
 
-    public static final String getTimeStamp(){
+    public static String getTimeStamp(){
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         /*System.out.println(formatter.format(date));*/
         return formatter.format(date);
 
+    }
+
+    public static void showAlert(Alert.AlertType type , String title, String headerText, String contentText){
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    };
+
+    public static void checkObject(Object obj) throws FatalException {
+        if (obj == null) {
+            throw new FatalException("Object is null");
+        }
+    }
+
+    public static void checkString(String chaine,String varName) throws BizzException {
+        if (chaine == null || chaine.equals("")) {
+            throw new BizzException(varName+" is empty");
+        }
     }
 
     public static void unTarFile(File tarFile, Path destFile)
@@ -57,48 +81,49 @@ public final class Utility {
 
 
     public static String HachFonction (String name) {
-
         return name ;
     }
 
-    public static boolean checkPhone(String phone) {
+    public static void checkUserData(String firstname, String lastname, String email, String firstPassword, String secondPassword, String phone) throws BizzException {
+        checkFirstName(firstname);
+        checkLastName(lastname);
+        checkEmail(email);
+        comparePasswords(firstPassword, secondPassword);
+        checkPhone(phone);
+    }
+
+    public static void checkPhone(String phone) throws BizzException {
         System.out.println("Checking phone");
         System.out.println(phone.length());
-        if ((phone.length() > 9) && (phone.length() < 11)) {
-            System.out.println(phone);
-            return true;
-        } else return false;
+        if (phone.length() < 9)
+            throw new BizzException("The PhoneNumber is too short");
+        if (phone.length() > 11)
+            throw new BizzException("The PhoneNumber is too long");
     }
 
-    public static boolean checkEmail(String email) {
+    public static void checkEmail(String email) throws BizzException {
         System.out.println("Checking email");
-        if (email.matches(Utility.EMAIL_PATTERN)) {
-            return true;
-        }
-        return false;
+        if (!email.matches(Utility.EMAIL_PATTERN))
+            throw new BizzException("The email is wrong");
     }
 
-    public static boolean checkFirstName(String firstname) {
+    public static void checkFirstName(String firstname) throws BizzException {
         System.out.println("Checking firstname");
         if (firstname.isEmpty() || firstname.matches(Utility.UNALLOWED_CHARACTERS_PATTERN))
-            return false;
-        return true;
+            throw new BizzException("The firstname has unallowed characters");
     }
 
 
-    public static boolean checkLastName(String lastname) {
+    public static void checkLastName(String lastname) throws BizzException {
         System.out.println("Checking lastname");
         if (lastname.isEmpty() || lastname.matches(Utility.UNALLOWED_CHARACTERS_PATTERN))
-            return false;
-        return true;
+            throw new BizzException("The lastname has unallowed characters");
     }
 
-    public static boolean comparePasswords(String password1, String password2) {
+    public static void comparePasswords(String password1, String password2) throws BizzException {
         System.out.println("Checking password");
-        if (password1.equals(password2)) {
-            return true;
-        } else
-            return false;
+        if (!password1.equals(password2))
+            throw new BizzException("The passwords are not the sames");
     }
 
 }

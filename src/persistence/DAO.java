@@ -1,5 +1,7 @@
 package persistence;
 
+import exceptions.FatalException;
+
 /**
  * This interface exposes the basic CRUD operations performed on the database that are shared by all
  * the DAOs (Data Access Objects). It is intended to by extended by more specific DAOs if those
@@ -8,7 +10,6 @@ package persistence;
  * @param <T> a generic object representing an entry in the database.
  */
 public interface DAO<T> {
-//TODO overkill for now
     /**
      * Finds an object in the database by its id.
      *
@@ -21,9 +22,8 @@ public interface DAO<T> {
      * Creates an entry in the database.
      *
      * @param obj a generic type object defined in children interfaces (a DTO).
-     * @return the ID of the new entry.
      */
-    int create(T obj);
+    void create(T obj)throws FatalException;
 
     /**
      * Updates an entry in the database.
@@ -40,7 +40,7 @@ public interface DAO<T> {
      */
     void delete(T obj);
 
-
     T getUser(T user);
-    boolean updateUser(T user);
+    void updateUser(T user);
+
 }

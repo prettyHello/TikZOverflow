@@ -53,7 +53,7 @@ public class Main extends Application {
             userUcc = (UserUCC) configuration.getClassFor("UserUCC").getConstructor(DALServices.class, DAO.class).newInstance(dalServices, userDAO);
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
-            System.out.println("oups");
+            exc.printStackTrace();
             System.exit(1);
         }
 

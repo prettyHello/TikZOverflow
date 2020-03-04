@@ -4,6 +4,8 @@ import business.DTO.UserDTO;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
+import exceptions.BizzException;
+import exceptions.FatalException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,8 +19,11 @@ import javafx.scene.layout.AnchorPane;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
 import persistence.UserDAOImpl;
+import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
+
+import static utilities.Utility.showAlert;
 
 public class LoginController {
     @FXML
@@ -55,24 +60,26 @@ public class LoginController {
         String username = tf_username.getText();
         String password = tf_password.getText();
 
-        if (!username.isEmpty() && !password.isEmpty()) {
+        try {
+            Utility.checkString(tf_username.getText(),"username");
+            Utility.checkString(tf_password.getText(),"password");
             UserFactoryImpl dto = new UserFactoryImpl();
             UserDTO user = dto.createUser(username, password);
             DALServices dal = new DALServicesImpl();
             UserDAOImpl dao = new UserDAOImpl(dal, dto);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
-
-            System.out.println(user);
-
-            if (userUcc.login(user)) {
-                System.out.println(username + " logged in");
-                viewSwitcher.setUser(userUcc.getUserInfo(user))
-                        .switchView(ViewName.DASHBOARD);
-            } else {
-                signalBadCredentials();
-            }
-        } else {
-            signalInvalidFields();
+            userUcc.login(user);
+            viewSwitcher.setUser(userUcc.getUserInfo(user))
+                    .switchView(ViewName.DASHBOARD);
+        }catch (BizzException e) {
+            //Update failed on dao lvl
+            System.out.println("Login Failed on buisness lvl");
+            showAlert(Alert.AlertType.WARNING, "Login", "Business Error", e.getMessage());
+        } catch (FatalException e) {
+            //Update failed on dao lvl
+            System.out.println("Login Failed on DAL/DAO lvl");
+            e.printStackTrace();
+            showAlert(Alert.AlertType.WARNING, "Login", "Unexpected Error", e.getMessage());
         }
     }
 
@@ -85,19 +92,4 @@ public class LoginController {
         this.viewSwitcher = viewSwitcher;
     }
 
-    private void signalBadCredentials() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Login");
-        alert.setHeaderText("Incorrect credentials");
-        alert.setContentText("No match for given username and password combination");
-        alert.showAndWait();
-    }
-
-    private void signalInvalidFields() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Login");
-        alert.setHeaderText("Invalid fields");
-        alert.setContentText("Please fill in all fields correctly and try again");
-        alert.showAndWait();
-    }
 }

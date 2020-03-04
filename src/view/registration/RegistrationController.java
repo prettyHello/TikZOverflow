@@ -3,6 +3,8 @@ package view.registration;
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
+import exceptions.BizzException;
+import exceptions.FatalException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -27,6 +29,8 @@ import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import static utilities.Utility.showAlert;
 
 public class RegistrationController {
 
@@ -87,8 +91,8 @@ public class RegistrationController {
     }
 
     public void registerBtn() {
-
-        if (this.executeValidation()) {
+        try {
+            Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""),this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""),this.emailTF.getText(),this.passwordTF.getText(),this.secondPasswordTF.getText(),this.phoneTF.getText());
             UserFactoryImpl userFactory = new UserFactoryImpl();
             String salt = BCrypt.gensalt(12);
             String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
@@ -96,43 +100,25 @@ public class RegistrationController {
             DALServices dal = new DALServicesImpl();
             UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
-
             userUcc.register(user);
-
-            System.out.println("Register");
-            viewSwitcher.switchView(ViewName.LOGIN);
-        } else {
-            System.out.println("User has not been registered");
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Account registration");
-            alert.setHeaderText("Invalid input");
-            alert.setContentText("Please fill in all the fields correctly and try again");
-
-            alert.showAndWait();
-        }
-    }
-
-    private boolean executeValidation() {
-        ArrayList<Boolean> validations = new ArrayList<>();
-
-        validations.add(Utility.checkFirstName(firstnameTF.getText()));
-        validations.add(Utility.checkLastName(lastnameTF.getText()));
-        validations.add(Utility.checkEmail(emailTF.getText()));
-        validations.add(Utility.comparePasswords(passwordTF.getText(),secondPasswordTF.getText()));
-        validations.add(Utility.checkPhone(phoneTF.getText()));
-
-        for (Boolean x : validations) {
-            System.out.println(x);
-        }
-        if(!validations.contains(false)){
             this.phoneText = this.phoneTF.getText();
             this.emailText = this.emailTF.getText();
             this.passwordText = this.passwordTF.getText();
             this.lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             this.firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            return true;
+            showAlert(Alert.AlertType.CONFIRMATION, "Account registration", "Sucess", "Account succesfully created");
+        } catch (BizzException e) {
+            //Update failed on dao lvl
+            System.out.println("Registration Failed on buisness lvl");
+            showAlert(Alert.AlertType.WARNING, "Account registration", "Business Error", e.getMessage());
+        } catch (FatalException e) {
+            //Update failed on dao lvl
+            System.out.println("Update Failed on DAL/DAO lvl");
+            e.printStackTrace();
+            showAlert(Alert.AlertType.WARNING, "Account registration", "Unexpected Error", e.getMessage());
+        } finally {
+            viewSwitcher.switchView(ViewName.LOGIN);
         }
-        return false;
     }
 
     //test

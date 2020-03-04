@@ -9,8 +9,7 @@ public class UserDAOMock implements  UserDAO {
     }
 
     @Override
-    public int create(UserDTO obj) {
-        return 0;
+    public void create(UserDTO obj) {
     }
 
     @Override
@@ -29,7 +28,5 @@ public class UserDAOMock implements  UserDAO {
     }
 
     @Override
-    public boolean updateUser(UserDTO userDTO) {
-        return false;
-    }
+    public void updateUser(UserDTO userDTO){};
 }

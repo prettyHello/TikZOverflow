@@ -2,13 +2,15 @@ package persistence;
 
 import business.DTO.UserDTO;
 import business.factories.UserFactory;
+import exceptions.BizzException;
+import exceptions.FatalException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAOImpl implements UserDAO {
-    private DALServices dalServices;
+    private DALBackEndServices dal;
     private UserFactory userFactory;
 
 
@@ -17,18 +19,17 @@ public class UserDAOImpl implements UserDAO {
     private static final String SQL_UPDATE_USER = "UPDATE users SET first_name=?, last_name=?, email=?, phone=?, password=?, salt=?  WHERE email=?";
 
     public UserDAOImpl(DALServices dalServices, UserFactory userFactory) {
-        this.dalServices = dalServices;
+        this.dal = (DALBackEndServices) dalServices;
         this.userFactory = userFactory;
     }
 
-    //TODO return null should be an exception.
     @Override
-    public UserDTO getUser(UserDTO usrAuth){
+    public UserDTO getUser(UserDTO usrAuth) throws FatalException, BizzException{
         PreparedStatement pr;
         ResultSet rs;
-        UserDTO usr;
+        UserDTO usr = null;
         try {
-            pr = ((DALBackEndServices) this.dalServices).prepareStatement(SQL_LOGIN_USER);
+            pr = dal.prepareStatement(SQL_LOGIN_USER);
             pr.setString(1, usrAuth.getEmail());
             rs = pr.executeQuery();
             usr = (UserDTO) this.userFactory.createUser();
@@ -41,19 +42,21 @@ public class UserDAOImpl implements UserDAO {
                 usr.setSalt(rs.getString("salt"));
                 usr.setRegister_date(rs.getString("register_date"));
                 usr.setUser_id(rs.getInt("user_id"));
-                return usr;
+            }else{
+                throw new BizzException("User : "+usrAuth.getEmail()+" does not exist");
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException exc) {
+            exc.printStackTrace();
+            throw new FatalException("An error ocured in getUser");
         }
-        return null;
+        return usr;
+
     }
 
-    public boolean updateUser(UserDTO userDTO) {
-        this.getUser(userDTO);
+    public void updateUser(UserDTO userDTO) throws FatalException {
         PreparedStatement ps = null;
         try {
-            ps = ((DALBackEndServices) this.dalServices).prepareStatement(SQL_UPDATE_USER);
+            ps = dal.prepareStatement(SQL_UPDATE_USER);
             ps.setString(1, userDTO.getFirst_name());
             ps.setString(2, userDTO.getLast_name());
             ps.setString(3, userDTO.getEmail());
@@ -62,22 +65,10 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(6, userDTO.getSalt());
             ps.setString(7, userDTO.getEmail());
             ps.executeUpdate();
-
         } catch (SQLException exc) {
-            System.out.println(exc);
-            System.out.println("error in the DAO update user");
-            return false;
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                    return true;
-                } catch (SQLException exc) {
-                    exc.printStackTrace();
-                }
-            }
+            exc.printStackTrace();
+            throw new FatalException("An error ocured in updateUser");
         }
-        return true;
     }
 
     @Override
@@ -86,12 +77,10 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public int create(UserDTO userDTO) {
-        //TODO insertedID not used ?
-        int insertedID = 0;
+    public void create(UserDTO userDTO) throws FatalException{
         PreparedStatement ps = null;
         try {
-            ps = ((DALBackEndServices) this.dalServices).prepareStatement(SQL_INSERT_USER);
+            ps = dal.prepareStatement(SQL_INSERT_USER);
             ps.setString(1, userDTO.getFirst_name());
             ps.setString(2, userDTO.getLast_name());
             ps.setString(3, userDTO.getEmail());
@@ -102,18 +91,9 @@ public class UserDAOImpl implements UserDAO {
             ps.executeUpdate();
 
         } catch (SQLException exc) {
-            System.out.println(exc);
-            System.out.println("error in the DAO create user");
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException exc) {
-                    exc.printStackTrace();
-                }
-            }
+            exc.printStackTrace();
+            throw new FatalException("An error ocured in create of UserDAO");
         }
-        return insertedID;
     }
 
     @Override
