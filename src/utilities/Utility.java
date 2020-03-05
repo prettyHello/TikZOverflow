@@ -17,6 +17,8 @@ import java.util.zip.GZIPInputStream;
 
 public class Utility {
 
+    public static String ALLOWED_CHARACTERS_PATTERN = "^[_,A-Z|a-z|0-9]+";
+
     public static String  UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
 
     public static String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";

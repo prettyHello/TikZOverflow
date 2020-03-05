@@ -1,6 +1,8 @@
 package view.dashboard;
+
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
+import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,6 +12,7 @@ import persistence.ProjectDAO;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -86,15 +89,22 @@ public class DashboardController {
     }
 
     @FXML
-    public void importd() {
+    public void importd() throws BizzException{
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".tar.gz", ".tar.gz"));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
+            // lever une exception pour le type de caractères a saisir concernant le nom du dossier contenant le projet
+            // recuperer dans utility les exceptions permettant de controller
+
             String projectName = setProjectName(popupMessage);
 
-            if (projectName != null){
+            if (projectName.isEmpty() || !(projectName.matches(Utility.ALLOWED_CHARACTERS_PATTERN))){
+
+                throw new BizzException("Unallowed characters OR Empty Name");
+            }
+            else {
                 Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
                 String folderNameUnbar = selectedFile.getName().replace(".tar.gz", "");
 
@@ -102,21 +112,22 @@ public class DashboardController {
                     try {
                         Files.createDirectories(folderDestination);
                         Utility.unTarFile(selectedFile, folderDestination);
+
                         renameFolderProject(new File(folderDestination.resolve(folderNameUnbar).toString()), new File(folderDestination.toString() + "/" + projectName));
                         String projectNameHash = null; //call function that will compute the hash
                         ProjectDTO newProjectImport = getProjectDTO(projectName, folderDestination, user.getUser_id());
                         projectObsList.add(newProjectImport);
                         ProjectDAO.getInstance().saveProject(newProjectImport);
-                    } catch (IOException e) {
-                        System.out.println("EXXePTION CODE");
-                        e.printStackTrace();
+                    } catch (BizzException | IOException e) {
+                        e.getMessage();
                     }
                 } else {
-                    new Alert(Alert.AlertType.ERROR, ContentTextImport + folderDestination).showAndWait();
+                    throw new BizzException("Existing Project");
                 }
             }
         }
     }
+
 
     private ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId) {
         return  new ProjectDTO().

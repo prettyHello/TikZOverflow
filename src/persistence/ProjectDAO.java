@@ -6,19 +6,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+// creer une interface pour projetDAO, ensuite modifier la classe ProjectDAO en ProjectDAOImpl
 
 public class ProjectDAO {
     PreparedStatement prstmt;
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
     private static final String SQL_SELECT_PROJECT_OF_USER = "SELECT * FROM projects WHERE project_owner_id = ?  AND name = ?";
-
+    // gerer les connections en s'appuyant sur l'implementation dans UserUCCImpl pour les fermetures et Exceptions
     DALServicesImpl querry = new DALServicesImpl() ;
 
     private ProjectDAO(){}
     public static ProjectDAO getInstance() {
-       return  new ProjectDAO();
+        return  new ProjectDAO();
     }
+
+    // lever des exceptions de type FATAL...
 
     public void saveProject(ProjectDTO project){
         try {
@@ -35,6 +38,7 @@ public class ProjectDAO {
             System.out.println("Error dans la BD. UNIQUE constraint failed: projects.project_id doit etre unique ");
         }
     }
+
 
     public ArrayList<ProjectDTO> getProjects(int userID){
         PreparedStatement pr;
@@ -53,11 +57,12 @@ public class ProjectDAO {
                 projects.add(project);
             }
             return projects;
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
+
 
     public ArrayList<ProjectDTO> getSelectedProject(int userID, String projectName){
         PreparedStatement pr;
@@ -77,8 +82,8 @@ public class ProjectDAO {
                 projects.add(project);
             }
             return projects;
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
