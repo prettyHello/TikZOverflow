@@ -2,12 +2,12 @@ package persistence;
 
 import business.DTO.UserDTO;
 import business.factories.UserFactory;
-import business.factories.UserFactoryImpl;
 import exceptions.BizzException;
 import exceptions.FatalException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import utilities.DAOConfigurationSingleton;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -25,12 +25,10 @@ class UserDAOImplTest {
 
     @BeforeEach
     void setUp() {
-        /*this.dalServices =  DAOTestConfigurationHolder.getDalServices();
-        this.userFactory = DAOTestConfigurationHolder.getUserFactory();
-        this.userDAO = DAOTestConfigurationHolder.getUserDAO();*/
-        dalServices = new DALServicesImpl();
-        userFactory = new UserFactoryImpl();
-        userDAO = new UserDAOImpl(dalServices, userFactory);
+        DAOConfigurationSingleton holder = DAOConfigurationSingleton.getInstance();
+        this.dalServices =  DAOConfigurationSingleton.getDalServices();
+        this.userFactory = DAOConfigurationSingleton.getUserFactory();
+        this.userDAO = DAOConfigurationSingleton.getUserDAO();
         try {
             dalServices.createTables("dao_test");
         } catch (IOException e) {
