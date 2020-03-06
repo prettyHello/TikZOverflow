@@ -3,18 +3,23 @@ package persistence;
 import business.DTO.UserDTO;
 import business.factories.UserFactory;
 import business.factories.UserFactoryImpl;
+import exceptions.FatalException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.sqlite.SQLiteException;
 import utilities.DAOTestConfigurationHolder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //@ContextConfiguration(locations = "classpath:application-context-test.xml")
 class UserDAOImplTest {
@@ -68,26 +73,46 @@ class UserDAOImplTest {
         assertEquals(user.getRegister_date(), user.getRegister_date(), "Date does not match");
         assertEquals(user.getSalt(), user.getSalt(), "Salt does not match");
 
-
         // Test2: error same email
+        UserDTO user2 = userFactory.createUser();
+        user2.setFirst_name("mat");
+        user2.setPassword("pass2");
+        user2.setSalt("salt2");
+        user2.setEmail("mail@mail.be");
+        user2.setLast_name("han");
+        user2.setPhone("049");
+        user2.setRegister_date(LocalDateTime.now().toString());
+
+        assertThrows(FatalException.class, () -> {
+            userDAO.create(user2);
+        });
 
         // Test3: error same salt
+        user2.setFirst_name("mat");
+        user2.setPassword("pass2");
+        user2.setSalt("salt");
+        user2.setEmail("mail2@mail.be");
+        user2.setLast_name("han");
+        user2.setPhone("049");
+        user2.setRegister_date(LocalDateTime.now().toString());
+
+        assertThrows(FatalException.class, () -> {
+            userDAO.create(user2);
+        });
 
         // Test4: error same phone number
+        user2.setFirst_name("mat");
+        user2.setPassword("pass2");
+        user2.setSalt("salt2");
+        user2.setEmail("mail2@mail.be");
+        user2.setLast_name("han");
+        user2.setPhone("0032");
+        user2.setRegister_date(LocalDateTime.now().toString());
 
+        assertThrows(FatalException.class, () -> {
+            userDAO.create(user2);
+        });
 
-
-
-        /*
-        List<DepartmentEntity> departments = departmentDAO.getAllDepartments();
-        List<EmployeeEntity> employees = employeeDAO.getAllEmployees();
-
-        Assert.assertEquals(1, departments.size());
-        Assert.assertEquals(1, employees.size());
-
-        Assert.assertEquals(department.getName(), departments.get(0).getName());
-        Assert.assertEquals(employee.getEmail(), employees.get(0).getEmail());
-        */
 
     }
 
