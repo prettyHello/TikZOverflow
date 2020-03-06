@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 // creer une interface pour projetDAO, ensuite modifier la classe ProjectDAO en ProjectDAOImpl
 
-public class ProjectDAO {
+public class ProjectDAOImpl implements ProjectDAO {
     PreparedStatement prstmt;
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
@@ -16,13 +16,11 @@ public class ProjectDAO {
     // gerer les connections en s'appuyant sur l'implementation dans UserUCCImpl pour les fermetures et Exceptions
     DALServicesImpl querry = new DALServicesImpl() ;
 
-    private ProjectDAO(){}
-    public static ProjectDAO getInstance() {
-        return  new ProjectDAO();
-    }
+    ProjectDAOImpl(){}
 
     // lever des exceptions de type FATAL...
 
+    @Override
     public void saveProject(ProjectDTO project){
         try {
            prstmt = querry.prepareStatement(SQL_INSERT_PROJECT);
@@ -40,6 +38,7 @@ public class ProjectDAO {
     }
 
 
+    @Override
     public ArrayList<ProjectDTO> getProjects(int userID){
         PreparedStatement pr;
         ResultSet rs;
@@ -64,24 +63,25 @@ public class ProjectDAO {
     }
 
 
-    public ArrayList<ProjectDTO> getSelectedProject(int userID, String projectName){
+    @Override
+    public ProjectDTO getSelectedProject(int userID, String projectName){
         PreparedStatement pr;
         ResultSet rs;
-        ArrayList<ProjectDTO> projects =new ArrayList<>();
+        ProjectDTO project =  new ProjectDTO();
         try {
             pr = ((DALBackEndServices) this.querry).prepareStatement(SQL_SELECT_PROJECT_OF_USER);
             pr.setInt(1, userID);
             pr.setString(2, projectName);
             rs = pr.executeQuery();
             while (rs.next()) {
-                ProjectDTO project =  new ProjectDTO();
+
                 project.setProjectName(rs.getString("name"));
                 project.setCreateDate(rs.getString("creation_date"));
                 project.setModificationDate(rs.getString("modification_date"));
                 project.setProjectPath(rs.getString("path"));
-                projects.add(project);
+
             }
-            return projects;
+            return project;
         } catch (Exception e) {
             e.printStackTrace();
         }

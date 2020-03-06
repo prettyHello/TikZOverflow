@@ -2,6 +2,8 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
+import business.UCC.ProjectUCC;
+import business.UCC.ProjectUCCImpl;
 import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import persistence.ProjectDAO;
+import persistence.ProjectDAOImpl;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -20,12 +23,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
+import business.UCC.ProjectUCCImpl;
 
 public class DashboardController {
 
     private String popupMessage = "Please enter the name of your Project" ;
     private String rootProject = "/ProjectTikZ/";
     private String ContentTextImport = "impossible to import, this project already exists in: ";
+
+    ProjectUCCImpl projectUCC = new ProjectUCCImpl();
 
     private ViewSwitcher viewSwitcher;
     @FXML
@@ -95,61 +101,27 @@ public class DashboardController {
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
-            // lever une exception pour le type de caractères a saisir concernant le nom du dossier contenant le projet
-            // recuperer dans utility les exceptions permettant de controller
-
-            String projectName = setProjectName(popupMessage);
-
-            if (projectName.isEmpty() || !(projectName.matches(Utility.ALLOWED_CHARACTERS_PATTERN))){
-
-                throw new BizzException("Unallowed characters OR Empty Name");
-            }
-            else {
+            try {
+                String projectName = projectUCC.setProjectName(popupMessage);
                 Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
                 String folderNameUnbar = selectedFile.getName().replace(".tar.gz", "");
 
                 if (!Files.exists(folderDestination.resolve(projectName))) {
-                    try {
                         Files.createDirectories(folderDestination);
                         Utility.unTarFile(selectedFile, folderDestination);
-
-                        renameFolderProject(new File(folderDestination.resolve(folderNameUnbar).toString()), new File(folderDestination.toString() + "/" + projectName));
-                        String projectNameHash = null; //call function that will compute the hash
-                        ProjectDTO newProjectImport = getProjectDTO(projectName, folderDestination, user.getUser_id());
+                        projectUCC.renameFolderProject(new File(folderDestination.resolve(folderNameUnbar).toString()), new File(folderDestination.toString() + "/" + projectName));
+                        ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
                         projectObsList.add(newProjectImport);
                         ProjectDAO.getInstance().saveProject(newProjectImport);
-                    } catch (BizzException | IOException e) {
-                        e.getMessage();
-                    }
                 } else {
+                    new Alert(Alert.AlertType.ERROR, ContentTextImport + folderDestination).showAndWait();
                     throw new BizzException("Existing Project");
                 }
+            }
+            catch(IOException e){
+                e.getMessage();
             }
         }
     }
 
-
-    private ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId) {
-        return  new ProjectDTO().
-                setProjectOwnerId(userId)
-                .setProjectName(projectName)
-                .setProjectPath(folderDestination.toString()+"/"+projectName)
-                .setCreateDate(Utility.getTimeStamp())
-                .setModificationDate(Utility.getTimeStamp());
-    }
-
-    public void renameFolderProject(File projectName, File NewProjectName){
-        projectName.renameTo(NewProjectName);
-    }
-
-    public String setProjectName (String popupMessage){
-        TextInputDialog enterProjectName = new TextInputDialog();
-        enterProjectName.setTitle("Project name");
-        enterProjectName.setHeaderText(popupMessage);
-        enterProjectName.setContentText("Name :");
-        Optional<String> projectName = enterProjectName.showAndWait();
-        if (projectName.isPresent()){
-            return projectName.get();}
-        return null;
-    }
 }

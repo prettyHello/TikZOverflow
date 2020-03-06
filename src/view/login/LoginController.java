@@ -84,8 +84,7 @@ public class LoginController {
     }
 
     @FXML
-    public void handleCreateAccountButton(ActionEvent event) {
-        viewSwitcher.switchView(ViewName.REGISTRATION);
+    public void handleCreateAccountButton(ActionEvent event) {viewSwitcher.switchView(ViewName.REGISTRATION);
     }
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
