@@ -101,6 +101,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
 
     @Override
     public void deleteDB(String name) {
+        this.closeConnection();
         try
         {
             File f= new File("./"+this.db_name+".db");

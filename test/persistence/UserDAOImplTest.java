@@ -42,15 +42,17 @@ class UserDAOImplTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println("in");
     }
 
     @AfterEach
     void tearDown() {
         dalServices.deleteDB("dao_test");
+        System.out.println("out");
     }
 
     @Test
-    @Rollback
     void create() {
 
         // Test1: simple, working insert
@@ -118,17 +120,33 @@ class UserDAOImplTest {
     }
 
     @Test
-    @Rollback
     void getUser() {
+        UserDTO user = userFactory.createUser();
+        user.setFirst_name("ben");
+        user.setPassword("pass");
+        user.setSalt("salt");
+        user.setEmail("mail@mail.be");
+        user.setLast_name("ber");
+        user.setPhone("0032");
+        user.setRegister_date(LocalDateTime.now().toString());
+
+        userDAO.create(user);
+        UserDTO result = userDAO.getUser(user);
+
+        assertEquals(user.getFirst_name(), result.getFirst_name(), "First name does not match");
+        assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
+        assertEquals(user.getPassword(),user.getPassword(), "Password does not match");
+        assertEquals(user.getPhone(),user.getPhone(), "Phone does not match");
+        assertEquals(user.getLast_name(), user.getLast_name(), "LastName does not match");
+        assertEquals(user.getRegister_date(), user.getRegister_date(), "Date does not match");
+        assertEquals(user.getSalt(), user.getSalt(), "Salt does not match");
     }
 
     @Test
-    @Rollback
     void find() {
     }
 
     @Test
-    @Rollback
     void update() {
         UserDTO user = userFactory.createUser();
         user.setFirst_name("ben");
@@ -173,7 +191,6 @@ class UserDAOImplTest {
     }
 
     @Test
-    @Rollback
     void delete() {
     }
 }
