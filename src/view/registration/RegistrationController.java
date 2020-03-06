@@ -96,10 +96,41 @@ public class RegistrationController {
                 }
             }
         });
+        checkbox_eula.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    if (checkbox_eula.isSelected()){
+                        checkbox_eula.setSelected(false);
+                    }else{
+                        checkbox_eula.setSelected(true);
+                    }
+                    event.consume();
+                }
+            }
+        });
+        bt_cancel.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    handleCancelButton();
+                    event.consume();
+                }
+            }
+        });
+        bt_eula.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    handleReadEulaButton();
+                    event.consume();
+                }
+            }
+        });
     }
 
     public void handleReadEulaButton() {
-Utility.showEula();
+        Utility.showEula();
     }
 
     public void handleCancelButton() {

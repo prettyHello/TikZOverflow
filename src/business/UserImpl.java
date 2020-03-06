@@ -12,7 +12,6 @@ public class UserImpl implements User {
     private boolean isAuthorized; //this is not in the db
 
     public UserImpl() {
-
     }
 
     public UserImpl(String email, String password) {
