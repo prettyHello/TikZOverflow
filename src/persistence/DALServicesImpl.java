@@ -1,8 +1,11 @@
 package persistence;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.sql.SQLException;
 
@@ -11,6 +14,8 @@ import java.sql.SQLException;
  */
 public class DALServicesImpl implements DALServices, DALBackEndServices {
     private static Connection connection;
+    private static String db_name  = "database";
+    private static String db_path;
 
     public DALServicesImpl() {
 
@@ -57,7 +62,9 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     }
 
     @Override
-    public void createTables() throws IOException {
+    public void createTables(String name) throws IOException {
+        this.db_name = name;
+        this.db_path="jdbc:sqlite:"+this.db_name+".db";
         String scriptFilePath = "script.sql";
         BufferedReader reader = null;
         Statement statement = null;
@@ -88,6 +95,35 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
         }
     }
 
+    @Override
+    public void createTables() throws IOException {
+        createTables(this.db_name);
+
+    }
+
+    @Override
+    public void deleteDB(String name) {
+        //Path currentDir = Paths.get(".");
+        //System.out.println(currentDir.toAbsolutePath());
+        try
+        {
+            File f= new File("./"+this.db_name+".db");           //file to be delete
+            if(f.delete())                      //returns Boolean value
+            {
+                System.out.println(f.getName() + " deleted");   //getting and printing the file name
+            }
+            else
+            {
+                System.out.println("./"+this.db_name+".db can't be deleted");
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * This private method open a connexion with the database
      * Note that if the file doesn't exist, SQLite will create one
@@ -95,7 +131,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     private void openConnection(){
         if(this.connection == null){
             try {
-                this.connection = DriverManager.getConnection("jdbc:sqlite:test.db");
+                this.connection = DriverManager.getConnection(this.db_path);
             } catch ( Exception e ) {
                 System.err.println( e.getClass().getName() + ": " + e.getMessage() );
                 System.exit(0);

@@ -38,7 +38,7 @@ class UserDAOImplTest {
         userFactory = new UserFactoryImpl();
         userDAO = new UserDAOImpl(dalServices, userFactory);
         try {
-            dalServices.createTables();
+            dalServices.createTables("dao_test");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,6 +46,7 @@ class UserDAOImplTest {
 
     @AfterEach
     void tearDown() {
+        dalServices.deleteDB("dao_test");
     }
 
     @Test
