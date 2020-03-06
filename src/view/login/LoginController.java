@@ -53,6 +53,15 @@ public class LoginController {
                 }
             }
         });
+        bt_createAccount.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    handleCreateAccountButton();
+                    event.consume();
+                }
+            }
+        });
     }
 
     @FXML
@@ -73,7 +82,7 @@ public class LoginController {
                     .switchView(ViewName.DASHBOARD);
         }catch (BizzException e) {
             //Update failed on dao lvl
-            System.out.println("Login Failed on buisness lvl");
+            System.out.println("Login Failed on business lvl");
             showAlert(Alert.AlertType.WARNING, "Login", "Business Error", e.getMessage());
         } catch (FatalException e) {
             //Update failed on dao lvl
@@ -84,12 +93,11 @@ public class LoginController {
     }
 
     @FXML
-    public void handleCreateAccountButton(ActionEvent event) {
+    public void handleCreateAccountButton() {
         viewSwitcher.switchView(ViewName.REGISTRATION);
     }
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
     }
-
 }
