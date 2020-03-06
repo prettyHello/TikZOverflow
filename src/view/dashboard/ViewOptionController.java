@@ -1,6 +1,11 @@
 package view.dashboard;
+
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
+import business.UCC.ConnectedUser;
+import business.UCC.UserUCC;
+import business.UCC.UserUCCImpl;
+import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -13,7 +18,10 @@ import javafx.stage.FileChooser;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
+import persistence.DALServices;
+import persistence.DALServicesImpl;
 import persistence.ProjectDAO;
+import persistence.UserDAOImpl;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -25,20 +33,15 @@ public class ViewOptionController extends HBox {
     private String ContentTextExport = "this project does not exist on the path: ";
 
     @FXML
-    private  Label projectName = null ;
+    private Label projectName = null;
     @FXML
-    private Button exportBtn = null ;
+    private Button exportBtn;
     @FXML
     private ImageView exportIcon = null;
     @FXML
-    private HBox projectRowHbox  = null;
+    private HBox projectRowHbox = null;
 
-    private UserDTO user;
-
-
-    public ViewOptionController(UserDTO userDTO)  {
-        this.user = userDTO ;
-        System.out.println("UserId = " + userDTO.getUser_id());
+    public ViewOptionController(UserDTO userDTO) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("view/dashboard/viewOption.fxml"));
             fxmlLoader.setController(this);
@@ -49,19 +52,24 @@ public class ViewOptionController extends HBox {
         }
     }
 
-    public  void  initialize() {
+    public void initialize() {
 
         exportBtn.setOnAction(event -> {
-            ArrayList<ProjectDTO>  chooserProject = ProjectDAO.getInstance().getSelectedProject(user.getUser_id(), projectName.getText());
+            UserFactoryImpl userFactory = new UserFactoryImpl();
+            DALServices dal = new DALServicesImpl();
+            UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
+            UserUCC userUcc = new UserUCCImpl(dal, dao);
+            UserDTO user = userUcc.getConnectedUser();
+            ArrayList<ProjectDTO> chooserProject = ProjectDAO.getInstance().getSelectedProject(user.getUser_id(), projectName.getText());
 
             FileChooser fc = new FileChooser();
             fc.setTitle("Save project as...");
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
             fc.setInitialDirectory(new File(System.getProperty("user.home") + rootProject));
-            fc.setInitialFileName(projectName.getText() );
-            File selectedFile= fc.showSaveDialog(null);
-            File dir = new File( chooserProject.get(0).getProjectPath() );
-                Export(dir, selectedFile);
+            fc.setInitialFileName(projectName.getText());
+            File selectedFile = fc.showSaveDialog(null);
+            File dir = new File(chooserProject.get(0).getProjectPath());
+            Export(dir, selectedFile);
         });
     }
 
@@ -81,14 +89,14 @@ public class ViewOptionController extends HBox {
 
     public void Export(File dir, File selectedFile) {
         try {
-            if ( selectedFile != null ) {
+            if (selectedFile != null) {
                 if (dir.exists()) {
-                    createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") );
+                    createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz"));
                 } else {
                     new Alert(Alert.AlertType.ERROR, "Error Export " + ContentTextExport).showAndWait();
                 }
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -108,7 +116,7 @@ public class ViewOptionController extends HBox {
         String entryName = parent + file.getName();
         // add tar ArchiveEntry
         try {
-        archiveTarGz.putArchiveEntry(new TarArchiveEntry(file, entryName));
+            archiveTarGz.putArchiveEntry(new TarArchiveEntry(file, entryName));
 
             if (file.isFile()) {
                 BufferedInputStream fileSelected = new BufferedInputStream(new FileInputStream(file));
@@ -121,7 +129,7 @@ public class ViewOptionController extends HBox {
                     addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName + File.separator, archiveTarGz);
                 }
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             new Alert(Alert.AlertType.ERROR, "Impossible to export your project").showAndWait();
         }
     }

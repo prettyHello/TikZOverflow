@@ -3,7 +3,7 @@ package view.registration;
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
-import com.sun.javafx.runtime.eula.Eula;
+
 import exceptions.BizzException;
 import exceptions.FatalException;
 import javafx.beans.value.ChangeListener;

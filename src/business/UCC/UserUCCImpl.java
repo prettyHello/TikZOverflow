@@ -10,40 +10,40 @@ import persistence.DALServices;
 import persistence.DAO;
 
 import business.User;
-import persistence.UserDAO;
 
 public class UserUCCImpl implements UserUCC {
 
     private final DALServices dal;
     private final DAO<UserDTO> userDAO;
 
-    public UserUCCImpl(DALServices dalServices,  DAO<UserDTO> userDAO) {
+    public UserUCCImpl(DALServices dalServices, DAO<UserDTO> userDAO) {
         this.dal = dalServices;
         this.userDAO = userDAO;
     }
 
 
-    public void login(UserDTO user) throws BizzException, FatalException{
+    public void login(UserDTO user) throws BizzException, FatalException {
         utilities.Utility.checkObject(user);
         User usr = (User) user;
         try {
             dal.startTransaction();
             User userDb = (User) userDAO.getUser(user);
-            //TODO check password immediately ? 'Real' password management with security story ?
             /*
-            * The salt is incorporated into the hash (encoded in a base64-style format).
-            * That's why the salt shouldn't actually be saved */
+             * The salt is incorporated into the hash (encoded in a base64-style format).
+             * That's why the salt shouldn't actually be saved */
             if (userDb == null || !BCrypt.checkpw(user.getPassword(), userDb.getPassword())) {
                 //dal.rollback();
                 throw new BizzException("Wrong Password");
             }
             dal.commit();
-        }finally {
+            UserDTO connectedUser = getUserInfo(userDb);
+            ConnectedUser.setConnectedUser(connectedUser);
+        } finally {
             dal.rollback();
         }
     }
 
-    public void updateUserInfo(UserDTO userDTO)throws BizzException, FatalException {
+    public void updateUserInfo(UserDTO userDTO) throws BizzException, FatalException {
         //TODO need to check userDTO with utils
         //good implementation, a little bit empty
         utilities.Utility.checkObject(userDTO);
@@ -51,12 +51,27 @@ public class UserUCCImpl implements UserUCC {
             dal.startTransaction();
             userDAO.updateUser(userDTO);
             dal.commit();
-        }finally{
+        } finally {
             dal.rollback();
         }
     }
 
-    public UserDTO getUserInfo(UserDTO user) throws BizzException, FatalException{
+    @Override
+    public void setConnectedUser(UserDTO user) {
+        ConnectedUser.setConnectedUser(user);
+    }
+
+    @Override
+    public void deleteConnectedUser() {
+        ConnectedUser.deleteConnectedUser();
+    }
+
+    @Override
+    public UserDTO getConnectedUser() {
+        return ConnectedUser.getConnectedUser();
+    }
+
+    public UserDTO getUserInfo(UserDTO user) throws BizzException, FatalException {
         utilities.Utility.checkObject(user);
         User usr = (User) user;
         User userDb = null;
@@ -71,7 +86,7 @@ public class UserUCCImpl implements UserUCC {
     }
 
     @Override
-    public void register(UserDTO userDTO) throws BizzException, FatalException{
+    public void register(UserDTO userDTO) throws BizzException, FatalException {
         utilities.Utility.checkObject(userDTO);
         try {
             dal.startTransaction();

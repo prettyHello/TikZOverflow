@@ -8,19 +8,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import view.dashboard.DashboardController;
 import view.login.LoginController;
+import view.profile.ProfileController;
 import view.registration.RegistrationController;
 
 import java.io.IOException;
 
 public class ViewSwitcher {
     private Stage stage;
-    private  UserDTO user;
-
-    public ViewSwitcher setUser(UserDTO user) {
-        this.user = user;
-        return this;
-    }
-
 
     public ViewSwitcher(Stage stage) {
         this.stage = stage;
@@ -75,17 +69,18 @@ public class ViewSwitcher {
     private void toProfile() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/profile/profile.fxml"));
         Parent root = loader.load();
-        RegistrationController registrationController = loader.getController();
-        registrationController.setViewSwitcher(this);
+        ProfileController profileController = loader.getController();
+        profileController.setViewSwitcher(this);
 
         this.stage.setScene(new Scene(root));
     }
 
-    public void toDashboard() throws IOException{
+    public void toDashboard() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dashboard/dashboard.fxml"));
         Parent root = loader.load();
         DashboardController dashboardController = loader.getController();
-        dashboardController.setViewSwitcher(this).setUserProjectView(user);
+
+        dashboardController.setViewSwitcher(this);
         this.stage.setScene(new Scene(root));
     }
 }

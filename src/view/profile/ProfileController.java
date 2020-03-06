@@ -21,13 +21,13 @@ import view.ViewName;
 import view.ViewSwitcher;
 import utilities.Utility;
 
-import javax.rmi.CORBA.Util;
+//import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
 import static utilities.Utility.showAlert;
 
-public class profileController {
+public class ProfileController {
 
     @FXML
     TextField firstnameTF;
@@ -82,6 +82,7 @@ public class profileController {
         //userUcc.getUserInfo()
 
 
+
         borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -98,7 +99,7 @@ public class profileController {
         viewSwitcher.switchView(ViewName.DASHBOARD);
     }
 
-    public void handleReadEulaButton(){
+    public void handleReadEulaButton() {
         Utility.showEula();
     }
 
@@ -106,6 +107,11 @@ public class profileController {
     public void handleModifyButton() {
         try {
             Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.emailTF.getText(), this.passwordTF.getText(), this.secondPasswordTF.getText(), this.phoneTF.getText());
+            this.phoneText = this.phoneTF.getText();
+            this.emailText = this.emailTF.getText();
+            this.passwordText = this.passwordTF.getText();
+            this.lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            this.firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             UserFactoryImpl userFactory = new UserFactoryImpl();
             String salt = BCrypt.gensalt(12);
             String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
@@ -114,11 +120,6 @@ public class profileController {
             UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
             userUcc.updateUserInfo(user);
-            this.phoneText = this.phoneTF.getText();
-            this.emailText = this.emailTF.getText();
-            this.passwordText = this.passwordTF.getText();
-            this.lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            this.firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Sucess", "Informations succesfully updated");
         } catch (BizzException e) {
             //Update failed on dao lvl

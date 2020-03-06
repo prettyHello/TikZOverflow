@@ -61,16 +61,17 @@ public class LoginController {
         String password = tf_password.getText();
 
         try {
-            Utility.checkString(tf_username.getText(),"username");
-            Utility.checkString(tf_password.getText(),"password");
+            Utility.checkString(tf_username.getText(), "username");
+            Utility.checkString(tf_password.getText(), "password");
             UserFactoryImpl dto = new UserFactoryImpl();
             UserDTO user = dto.createUser(username, password);
             DALServices dal = new DALServicesImpl();
             UserDAOImpl dao = new UserDAOImpl(dal, dto);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
             userUcc.login(user);
-            viewSwitcher.setUser(userUcc.getUserInfo(user))
-                    .switchView(ViewName.DASHBOARD);
+
+            viewSwitcher.switchView(ViewName.DASHBOARD);
+
         }catch (BizzException e) {
             //Update failed on dao lvl
             System.out.println("Login Failed on buisness lvl");
