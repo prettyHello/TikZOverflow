@@ -53,6 +53,12 @@ public class profileController {
     @FXML
     Button bt_eula;
 
+    @FXML
+    Button bt_modify;
+
+    @FXML
+    Button bt_cancel;
+
     String firstnameText;
 
     String lastnameText;
@@ -62,10 +68,7 @@ public class profileController {
     String phoneText;
 
     String passwordText;
-    @FXML
-    Button bt_modify;
-    @FXML
-    Button bt_cancel;
+
     private ViewSwitcher viewSwitcher;
 
     @FXML
