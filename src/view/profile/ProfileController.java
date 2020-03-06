@@ -21,7 +21,7 @@ import view.ViewName;
 import view.ViewSwitcher;
 import utilities.Utility;
 
-//import javax.rmi.CORBA.Util;
+import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
@@ -80,7 +80,6 @@ public class ProfileController {
         UserUCC userUcc = new UserUCCImpl(dal, dao);
         //TODO We need a way to know wich user we are talking about
         //userUcc.getUserInfo()
-
 
 
         borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
