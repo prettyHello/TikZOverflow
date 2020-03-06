@@ -93,7 +93,7 @@ public class UserDAOImpl implements UserDAO {
             ps = dal.prepareStatement(SQL_UPDATE_USER);
             ps.setString(1, userDTO.getFirst_name());
             ps.setString(2, userDTO.getLast_name());
-            ps.setString(3, userDTO.getEmail());
+            ps.setString(3, userDTO.getNewEmail());
             ps.setString(4, userDTO.getPhone());
             ps.setString(5, userDTO.getPassword());
             ps.setString(6, userDTO.getSalt());
@@ -101,7 +101,7 @@ public class UserDAOImpl implements UserDAO {
             ps.executeUpdate();
         } catch (SQLException exc) {
             exc.printStackTrace();
-            throw new FatalException("An error ocured in updateUser");
+            throw new FatalException("An error occured in updateUser");
         }
     }
 

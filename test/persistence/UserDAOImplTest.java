@@ -51,7 +51,7 @@ class UserDAOImplTest {
     @Test
     @Rollback
     void create() {
-
+/*
         // Test1: simple, working insert
         UserDTO user = userFactory.createUser();
         user.setFirst_name("ben");
@@ -113,7 +113,7 @@ class UserDAOImplTest {
             userDAO.create(user2);
         });
 
-
+*/
     }
 
     @Test
@@ -129,6 +129,46 @@ class UserDAOImplTest {
     @Test
     @Rollback
     void update() {
+        UserDTO user = userFactory.createUser();
+        user.setFirst_name("ben");
+        user.setPassword("pass");
+        user.setSalt("salt");
+        user.setEmail("mail@mail.be");
+        user.setLast_name("ber");
+        user.setPhone("123");
+        user.setRegister_date(LocalDateTime.now().toString());
+        userDAO.create(user);
+
+        UserDTO user2 = userFactory.createUser();
+        user2.setFirst_name("ben");
+        user2.setPassword("pass");
+        user2.setSalt("salt2");
+        user2.setEmail("mail2@mail.be");
+        user2.setLast_name("ber");
+        user2.setPhone("1234");
+        user2.setRegister_date(LocalDateTime.now().toString());
+        userDAO.create(user2);
+
+        // Test2: error same email
+        assertThrows(FatalException.class, () -> {
+            user.setEmail("mail2@mail.be");
+
+            userDAO.update(user);
+        });
+
+        // Test3: error same salt
+        assertThrows(FatalException.class, () -> {
+            user.setSalt("salt2");
+
+            userDAO.update(user);
+        });
+        // Test4: error same phone number
+
+        assertThrows(FatalException.class, () -> {
+            user.setPhone("123");
+            userDAO.update(user);
+        },"test 4 update fail");
+
     }
 
     @Test
