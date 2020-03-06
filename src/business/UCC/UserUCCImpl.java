@@ -49,7 +49,7 @@ public class UserUCCImpl implements UserUCC {
         utilities.Utility.checkObject(userDTO);
         try {
             dal.startTransaction();
-            userDAO.updateUser(userDTO);
+            userDAO.update(userDTO);
             dal.commit();
         } finally {
             dal.rollback();

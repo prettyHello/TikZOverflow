@@ -10,5 +10,4 @@ import exceptions.FatalException;
  */
 public interface UserDAO extends DAO<UserDTO> {
     public UserDTO getUser(UserDTO usrAuth)throws FatalException, BizzException;
-    public void updateUser(UserDTO userDTO) throws FatalException;
 }
