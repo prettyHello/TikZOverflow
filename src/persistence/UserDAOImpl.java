@@ -92,7 +92,13 @@ public class UserDAOImpl implements UserDAO {
 
         } catch (SQLException exc) {
             exc.printStackTrace();
-            throw new FatalException("An error occurred in create of UserDAO");
+            switch (exc.getErrorCode()){
+                case 19:
+                    throw new FatalException("Email address or telephone number already in use.");
+                default:
+                    throw new FatalException("An error occurred in create of UserDAO");
+            }
+
         }
     }
 
