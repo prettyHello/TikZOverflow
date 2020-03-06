@@ -24,18 +24,3 @@ CREATE TABLE IF NOT EXISTS  projects (
                                                  ON UPDATE NO ACTION
 
 );
-
-
--- CREATE TABLE IF NOT EXISTS  user_projects(
---                                              user_id INTEGER,
---                                              project_id INTEGER,
---                                              PRIMARY KEY (user_id, project_id),
---                                              FOREIGN KEY (user_id)
---                                                  REFERENCES users (user_id)
---                                                  ON DELETE CASCADE
---                                                  ON UPDATE NO ACTION,
---                                              FOREIGN KEY (project_id)
---                                                  REFERENCES projects (project_id)
---                                                  ON DELETE CASCADE
---                                                  ON UPDATE NO ACTION
--- );

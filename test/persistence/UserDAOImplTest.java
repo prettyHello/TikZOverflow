@@ -52,7 +52,7 @@ class UserDAOImplTest {
     @Test
     @Rollback
     void create() {
-/*
+
         // Test1: simple, working insert
         UserDTO user = userFactory.createUser();
         user.setFirst_name("ben");
@@ -114,7 +114,7 @@ class UserDAOImplTest {
             userDAO.create(user2);
         });
 
-*/
+
     }
 
     @Test
@@ -155,20 +155,20 @@ class UserDAOImplTest {
             user.setEmail("mail2@mail.be");
 
             userDAO.update(user);
-        });
+        }, "update same email doesn't raise an exception");
 
         // Test3: error same salt
         assertThrows(FatalException.class, () -> {
             user.setSalt("salt2");
 
             userDAO.update(user);
-        });
+        }, "update same salt doesn't raise an exception");
         // Test4: error same phone number
 
         assertThrows(FatalException.class, () -> {
             user.setPhone("123");
             userDAO.update(user);
-        },"test 4 update fail");
+        },"update same phone number doesn't raise an exception");
 
     }
 

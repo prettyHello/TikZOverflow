@@ -80,10 +80,8 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
                 // execute query
                 text+=line;
                 text+='\n';
-
             }
-            //System.out.println(text);
-            statement.execute(text);
+            statement.executeUpdate(text);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -103,16 +101,10 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
 
     @Override
     public void deleteDB(String name) {
-        //Path currentDir = Paths.get(".");
-        //System.out.println(currentDir.toAbsolutePath());
         try
         {
-            File f= new File("./"+this.db_name+".db");           //file to be delete
-            if(f.delete())                      //returns Boolean value
-            {
-                System.out.println(f.getName() + " deleted");   //getting and printing the file name
-            }
-            else
+            File f= new File("./"+this.db_name+".db");
+            if(!f.delete())
             {
                 System.out.println("./"+this.db_name+".db can't be deleted");
             }
@@ -121,7 +113,6 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
         {
             e.printStackTrace();
         }
-
     }
 
     /**
