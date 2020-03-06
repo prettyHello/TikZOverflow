@@ -4,6 +4,7 @@ import exceptions.BizzException;
 import exceptions.FatalException;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.utils.IOUtils;
@@ -13,11 +14,12 @@ import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 public class Utility {
 
-    public static String  UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
+    public static String UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
 
     public static String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
 
@@ -25,9 +27,10 @@ public class Utility {
     public static String EMAIL_PATTERN = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 
 
-    private Utility(){}
+    private Utility() {
+    }
 
-    public static String getTimeStamp(){
+    public static String getTimeStamp() {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         /*System.out.println(formatter.format(date));*/
@@ -35,13 +38,38 @@ public class Utility {
 
     }
 
-    public static void showAlert(Alert.AlertType type , String title, String headerText, String contentText){
+    public static void showAlert(Alert.AlertType type, String title, String headerText, String contentText) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         alert.showAndWait();
-    };
+    }
+
+    public static void showEula() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("End-User license agreement");
+        alert.setHeaderText("EULA");
+
+        TextArea ta = new TextArea();
+        ta.setWrapText(true);
+        ta.setEditable(false);
+        try {
+            ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+            InputStream is = classloader.getResourceAsStream("eula.txt");
+            if (is == null) {
+                throw new IOException("file not found");
+            }
+            String eula = new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n"));
+            ta.setText(eula);
+        } catch (IOException e) {
+            alert.setAlertType(Alert.AlertType.ERROR);
+            ta.setText("An error occurred. Unable to find eula.txt file.");
+        }
+
+        alert.getDialogPane().setContent(ta);
+        alert.showAndWait();
+    }
 
     public static void checkObject(Object obj) throws FatalException {
         if (obj == null) {
@@ -49,39 +77,44 @@ public class Utility {
         }
     }
 
-    public static void checkString(String chaine,String varName) throws BizzException {
+    public static void checkString(String chaine, String varName) throws BizzException {
         if (chaine == null || chaine.equals("")) {
-            throw new BizzException(varName+" is empty");
+            throw new BizzException(varName + " is empty");
         }
     }
 
-    public static void unTarFile(File tarFile, Path destFile)
-    {
+    public static void unTarFile(File tarFile, Path destFile) {
         TarArchiveInputStream tis = null;
         try {
             FileInputStream fis = new FileInputStream(tarFile);
             GZIPInputStream gzipInputStream = new GZIPInputStream(new BufferedInputStream(fis));
             tis = new TarArchiveInputStream(gzipInputStream);
             TarArchiveEntry tarEntry = null;
-            while ((tarEntry = tis.getNextTarEntry()) != null)
-            {
-                if(tarEntry.isDirectory())
-                {
+            while ((tarEntry = tis.getNextTarEntry()) != null) {
+                if (tarEntry.isDirectory()) {
                     continue;
-                }else {
+                } else {
                     File outputFile = new File(destFile.toString() + File.separator + tarEntry.getName());
                     outputFile.getParentFile().mkdirs();
                     IOUtils.copy(tis, new FileOutputStream(outputFile));
                 }
             }
-        }catch(IOException ex) {
+        } catch (IOException ex) {
             System.out.println("Error while untarring a file- " + ex.getMessage());
-        }finally { if(tis != null) { try { tis.close(); } catch (IOException e) { e.printStackTrace(); } } }
+        } finally {
+            if (tis != null) {
+                try {
+                    tis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 
-    public static String HachFonction (String name) {
-        return name ;
+    public static String HachFonction(String name) {
+        return name;
     }
 
     public static void checkUserData(String firstname, String lastname, String email, String firstPassword, String secondPassword, String phone) throws BizzException {

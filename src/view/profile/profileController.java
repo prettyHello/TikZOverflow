@@ -50,6 +50,9 @@ public class profileController {
     @FXML
     BorderPane borderpane;
 
+    @FXML
+    Button bt_eula;
+
     String firstnameText;
 
     String lastnameText;
@@ -92,10 +95,14 @@ public class profileController {
         viewSwitcher.switchView(ViewName.DASHBOARD);
     }
 
+    public void handleReadEulaButton(){
+        Utility.showEula();
+    }
+
     @FXML
     public void handleModifyButton() {
         try {
-            Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""),this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""),this.emailTF.getText(),this.passwordTF.getText(),this.secondPasswordTF.getText(),this.phoneTF.getText());
+            Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.emailTF.getText(), this.passwordTF.getText(), this.secondPasswordTF.getText(), this.phoneTF.getText());
             UserFactoryImpl userFactory = new UserFactoryImpl();
             String salt = BCrypt.gensalt(12);
             String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());

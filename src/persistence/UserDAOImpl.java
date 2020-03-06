@@ -92,7 +92,7 @@ public class UserDAOImpl implements UserDAO {
 
         } catch (SQLException exc) {
             exc.printStackTrace();
-            throw new FatalException("An error ocured in create of UserDAO");
+            throw new FatalException("An error occurred in create of UserDAO");
         }
     }
 

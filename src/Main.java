@@ -2,20 +2,15 @@ import business.DTO.UserDTO;
 import business.UCC.UserUCC;
 import business.factories.UserFactory;
 import config.Configuration;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import persistence.DALServices;
 import persistence.DAO;
+import view.ViewName;
+import view.ViewSwitcher;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
-
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import view.ViewName;
-import view.ViewSwitcher;
 
 public class Main extends Application {
 
