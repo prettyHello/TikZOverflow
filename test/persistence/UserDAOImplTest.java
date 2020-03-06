@@ -7,12 +7,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import utilities.DAOTestConfigurationHolder;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+//@ContextConfiguration(locations = "classpath:application-context-test.xml")
 class UserDAOImplTest {
 
     DALServices dalServices;
@@ -28,6 +32,11 @@ class UserDAOImplTest {
         dalServices = new DALServicesImpl();
         userFactory = new UserFactoryImpl();
         userDAO = new UserDAOImpl(dalServices, userFactory);
+        try {
+            dalServices.createTables();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @AfterEach
@@ -51,11 +60,13 @@ class UserDAOImplTest {
         userDAO.create(user);
         UserDTO result = userDAO.getUser(user);
 
-        assertEquals(user.getFirst_name(), result.getFirst_name(), "First name different");
-        assertEquals(user.getEmail(), result.getEmail(), "Email different");
-        assertEquals(user.getPassword(),user.getPassword(), "Password different");
-
-
+        assertEquals(user.getFirst_name(), result.getFirst_name(), "First name does not match");
+        assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
+        assertEquals(user.getPassword(),user.getPassword(), "Password does not match");
+        assertEquals(user.getPhone(),user.getPhone(), "Phone does not match");
+        assertEquals(user.getLast_name(), user.getLast_name(), "LastName does not match");
+        assertEquals(user.getRegister_date(), user.getRegister_date(), "Date does not match");
+        assertEquals(user.getSalt(), user.getSalt(), "Salt does not match");
 
 
         // Test2: error same email
