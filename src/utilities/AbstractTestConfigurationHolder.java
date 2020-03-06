@@ -17,14 +17,13 @@ import java.lang.reflect.InvocationTargetException;
  */
 //TODO the pattern was done from memory, check if it fits the one presented in class when that happens
 public abstract class AbstractTestConfigurationHolder {
-    protected static  ConfigurationSingleton conf;
+    protected static   ConfigurationSingleton conf;
 
     //this method is called the first time the class is loaded
     // fill it when extending this class
     static  {
         //example: this.conf= new ConfigurationSingleton("TestBusiness");
     }
-
 
     public static String getConf_name() {
         return conf.conf_name;
@@ -50,7 +49,7 @@ public abstract class AbstractTestConfigurationHolder {
         return conf.userUcc;
     }
 
-    protected class ConfigurationSingleton {
+    protected static class ConfigurationSingleton {
         String conf_name;
         private Configuration configuration;
         private DALServices dalServices;
@@ -62,11 +61,6 @@ public abstract class AbstractTestConfigurationHolder {
 
             this.conf_name = conf_name;
             String[] args = {conf_name};
-
-            this.dalServices = dalServices;
-            this.userFactory = userFactory;
-            this.userDAO = userDAO;
-            this.userUcc = userUcc;
 
             //Load the configuration file (if 'dev' is given in argument load the src/config/dev.properties), load the production configuration otherwise
             try {

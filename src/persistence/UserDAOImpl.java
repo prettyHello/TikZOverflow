@@ -53,24 +53,6 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
-    public void updateUser(UserDTO userDTO) throws FatalException {
-        PreparedStatement ps = null;
-        try {
-            ps = dal.prepareStatement(SQL_UPDATE_USER);
-            ps.setString(1, userDTO.getFirst_name());
-            ps.setString(2, userDTO.getLast_name());
-            ps.setString(3, userDTO.getEmail());
-            ps.setString(4, userDTO.getPhone());
-            ps.setString(5, userDTO.getPassword());
-            ps.setString(6, userDTO.getSalt());
-            ps.setString(7, userDTO.getEmail());
-            ps.executeUpdate();
-        } catch (SQLException exc) {
-            exc.printStackTrace();
-            throw new FatalException("An error ocured in updateUser");
-        }
-    }
-
     @Override
     public UserDTO find(UserDTO obj) {
         return null;
@@ -103,8 +85,24 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public Long update(UserDTO obj) {
-        return null;
+    public void update(UserDTO obj) throws FatalException  {
+        UserDTO userDTO = obj;
+
+        PreparedStatement ps = null;
+        try {
+            ps = dal.prepareStatement(SQL_UPDATE_USER);
+            ps.setString(1, userDTO.getFirst_name());
+            ps.setString(2, userDTO.getLast_name());
+            ps.setString(3, userDTO.getEmail());
+            ps.setString(4, userDTO.getPhone());
+            ps.setString(5, userDTO.getPassword());
+            ps.setString(6, userDTO.getSalt());
+            ps.setString(7, userDTO.getEmail());
+            ps.executeUpdate();
+        } catch (SQLException exc) {
+            exc.printStackTrace();
+            throw new FatalException("An error ocured in updateUser");
+        }
     }
 
     @Override
