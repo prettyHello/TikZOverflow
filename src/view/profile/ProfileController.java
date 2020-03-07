@@ -1,6 +1,7 @@
 package view.profile;
 
 import business.DTO.UserDTO;
+import business.UCC.ConnectedUser;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
@@ -73,14 +74,11 @@ public class ProfileController {
 
     @FXML
     public void initialize() {
-        //populating the fields
-        UserFactoryImpl userFactory = new UserFactoryImpl();
-        DALServices dal = new DALServicesImpl();
-        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
-        UserUCC userUcc = new UserUCCImpl(dal, dao);
-        //TODO We need a way to know wich user we are talking about
-        //userUcc.getUserInfo()
-
+        UserDTO user = ConnectedUser.getConnectedUser();
+        this.firstnameTF.setText(user.getFirst_name());
+        this.lastnameTF.setText(user.getLast_name());
+        this.phoneTF.setText(user.getPhone());
+        this.emailTF.setText(user.getEmail());
 
         borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
