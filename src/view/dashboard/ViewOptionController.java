@@ -39,7 +39,6 @@ public class ViewOptionController extends HBox {
 
     public ViewOptionController(UserDTO userDTO)  {
         this.user = userDTO ;
-        System.out.println("UserId = " + userDTO.getUser_id());
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("view/dashboard/viewOption.fxml"));
             fxmlLoader.setController(this);

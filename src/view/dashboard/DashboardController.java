@@ -103,10 +103,26 @@ public class DashboardController {
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".tar.gz", ".tar.gz"));
         File selectedFile = fc.showOpenDialog(null);
+//        String extention = selectedFile.getName().substring(selectedFile.getName().length() -7, selectedFile.getName().length() ) ;
+
+//        while(!extention.equals(".tar.gz")){
+//             new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extention ").showAndWait();
+//             selectedFile = fc.showOpenDialog(null);
+//             extention = selectedFile.getName().substring(selectedFile.getName().length() -7, selectedFile.getName().length() ) ;
+//
+//        }
+
+        //String folderNameUnbar = selectedFile.getName().replace(".tar.gz", "");
 
         if (selectedFile != null) {
             try {
                 String projectName = projectUCC.setProjectName(popupMessage);
+
+                System.out.println(projectName);
+                if (projectName.equals("null")) {
+                    System.out.println("VIDE");
+                }
+
                 Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
                 String folderNameUnbar = selectedFile.getName().replace(".tar.gz", "");
 
