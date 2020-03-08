@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
-import java.sql.SQLException;
 
 /**
  * This implementation of DALServices and DALBackEndServices is meant to be used in the production environment
