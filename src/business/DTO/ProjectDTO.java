@@ -1,8 +1,6 @@
 package business.DTO;
 
 
-import java.util.Date;
-
 public class ProjectDTO {
     private int projectOwnerId  ;
     private String projectName ;

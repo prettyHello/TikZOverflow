@@ -20,10 +20,7 @@ import persistence.UserDAOImpl;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
-import utilities.Utility;
 
-import javax.rmi.CORBA.Util;
-import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
 import static utilities.Utility.showAlert;

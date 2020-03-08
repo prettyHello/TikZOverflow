@@ -2,17 +2,18 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
-import business.UCC.ConnectedUser;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
-import business.User;
 import business.factories.UserFactoryImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-import persistence.*;
+import persistence.DALServices;
+import persistence.DALServicesImpl;
+import persistence.ProjectDAO;
+import persistence.UserDAOImpl;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -22,7 +23,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class DashboardController {

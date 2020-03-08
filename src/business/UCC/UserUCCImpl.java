@@ -1,15 +1,12 @@
 package business.UCC;
 
 import business.DTO.UserDTO;
+import business.User;
 import exceptions.BizzException;
 import exceptions.FatalException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-
-
 import persistence.DALServices;
 import persistence.DAO;
-
-import business.User;
 
 public class UserUCCImpl implements UserUCC {
 

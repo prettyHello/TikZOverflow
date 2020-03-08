@@ -2,7 +2,6 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
-import business.UCC.ConnectedUser;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
