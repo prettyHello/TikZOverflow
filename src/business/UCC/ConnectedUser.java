@@ -20,7 +20,7 @@ public class ConnectedUser {
         connectedUser = null;
     }
 
-    static UserDTO getConnectedUser() {
+    public static UserDTO getConnectedUser() {
         return connectedUser;
     }
 

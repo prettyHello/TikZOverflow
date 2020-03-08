@@ -25,5 +25,13 @@ public interface DALServices {
     /**
      * This method creates all the necessary tables if they don't exist
      */
+    void createTables(String name) throws IOException;
+
     void createTables() throws IOException;
+
+    /**
+     * This method delete the database
+     * Usefull for tests
+     **/
+    void deleteDB(String name);
 }

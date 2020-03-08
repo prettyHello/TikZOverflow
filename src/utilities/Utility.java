@@ -2,7 +2,6 @@ package utilities;
 
 import exceptions.BizzException;
 import exceptions.FatalException;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -12,7 +11,6 @@ import org.apache.commons.compress.utils.IOUtils;
 import java.io.*;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
@@ -126,6 +124,7 @@ public class Utility {
     }
 
     public static void checkPhone(String phone) throws BizzException {
+        checkString(phone, "phone");
         System.out.println("Checking phone");
         System.out.println(phone.length());
         if (phone.length() < 9)
@@ -135,12 +134,14 @@ public class Utility {
     }
 
     public static void checkEmail(String email) throws BizzException {
+        checkString(email, "email");
         System.out.println("Checking email");
         if (!email.matches(Utility.EMAIL_PATTERN))
             throw new BizzException("The email is wrong");
     }
 
     public static void checkFirstName(String firstname) throws BizzException {
+        checkString(firstname, "firstname");
         System.out.println("Checking firstname");
         if (firstname.isEmpty() || firstname.matches(Utility.UNALLOWED_CHARACTERS_PATTERN))
             throw new BizzException("The firstname has unallowed characters");
@@ -148,6 +149,7 @@ public class Utility {
 
 
     public static void checkLastName(String lastname) throws BizzException {
+        checkString(lastname, "lastname");
         System.out.println("Checking lastname");
         if (lastname.isEmpty() || lastname.matches(Utility.UNALLOWED_CHARACTERS_PATTERN))
             throw new BizzException("The lastname has unallowed characters");
@@ -157,6 +159,8 @@ public class Utility {
         System.out.println("Checking password");
         if (!password1.equals(password2))
             throw new BizzException("The passwords are not the sames");
+        checkString(password1, "password");
+        checkString(password2, "password");
     }
 
 }

@@ -1,15 +1,12 @@
 package business.UCC;
 
 import business.DTO.UserDTO;
+import business.User;
 import exceptions.BizzException;
 import exceptions.FatalException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-
-
 import persistence.DALServices;
 import persistence.DAO;
-
-import business.User;
 
 public class UserUCCImpl implements UserUCC {
 
@@ -49,7 +46,7 @@ public class UserUCCImpl implements UserUCC {
         utilities.Utility.checkObject(userDTO);
         try {
             dal.startTransaction();
-            userDAO.updateUser(userDTO);
+            userDAO.update(userDTO);
             dal.commit();
         } finally {
             dal.rollback();

@@ -3,39 +3,24 @@ package view.registration;
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
-
+import business.factories.UserFactoryImpl;
 import exceptions.BizzException;
 import exceptions.FatalException;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
-import org.apache.commons.compress.utils.IOUtils;
-import utilities.Utility;
-import business.factories.UserFactoryImpl;
-import javafx.fxml.FXML;
-import view.ViewName;
-import view.ViewSwitcher;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
 import persistence.UserDAOImpl;
+import utilities.Utility;
+import view.ViewName;
+import view.ViewSwitcher;
 
-import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.time.Clock;
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import static utilities.Utility.showAlert;
 
