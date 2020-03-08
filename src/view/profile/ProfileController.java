@@ -73,15 +73,14 @@ public class ProfileController {
 
     @FXML
     public void initialize() {
-        //populating the fields
+
+        //TODO We need a way to know wich user we are talking about
         UserFactoryImpl userFactory = new UserFactoryImpl();
         DALServices dal = new DALServicesImpl();
         UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
         UserUCC userUcc = new UserUCCImpl(dal, dao);
-        //TODO We need a way to know wich user we are talking about
-        //userUcc.getUserInfo()
-
-
+        UserDTO user = userUcc.getConnectedUser();
+        prefillFields(user);
 
         borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -91,6 +90,14 @@ public class ProfileController {
                 }
             }
         });
+    }
+
+    private void prefillFields(UserDTO user) {
+        firstnameTF.setText(user.getFirst_name());
+        lastnameTF.setText(user.getLast_name());
+        emailTF.setText(user.getEmail());
+        phoneTF.setText(user.getPhone());
+        emailTF.setDisable(true);
     }
 
     //TODO INSERT LOGIC
@@ -120,7 +127,7 @@ public class ProfileController {
             UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
             userUcc.updateUserInfo(user);
-            showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Sucess", "Informations succesfully updated");
+            showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information succesfully updated");
         } catch (BizzException e) {
             //Update failed on dao lvl
             System.out.println("Update Failed on buisness lvl");
