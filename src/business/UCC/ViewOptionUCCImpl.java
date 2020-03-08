@@ -14,6 +14,10 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
 
     private String ContentTextExport = "this project does not exist on the path: ";
 
+
+    /**
+     * {@inheritDoc}
+     */
     public void Export(File dir, File selectedFile) {
         try {
             if ( selectedFile != null ) {
@@ -31,7 +35,9 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createTarGz(String folderProject, String fileTarDestination) throws IOException, BizzException {
         File root = new File(folderProject);
@@ -43,6 +49,9 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
         archiveTarGz.close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) {
         File file = new File(folderProject);

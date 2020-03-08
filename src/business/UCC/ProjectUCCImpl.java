@@ -17,12 +17,18 @@ public class ProjectUCCImpl implements ProjectUCC {
     private String ContentTextImport = "impossible to import, this project already exists in: ";
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void renameFolderProject(File projectName, File NewProjectName) {
         projectName.renameTo(NewProjectName);
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String setProjectName(String popupMessage) throws BizzException {
         Optional<String> projectName;
@@ -45,6 +51,9 @@ public class ProjectUCCImpl implements ProjectUCC {
         return projectName.get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId) {
         return  new ProjectDTO().

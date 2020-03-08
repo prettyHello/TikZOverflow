@@ -94,6 +94,10 @@ public class DashboardController {
                     setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("view/images/exportIcon.png").getProjectRowHbox()); } } });
     }
 
+    /**
+     * Untar a choose file to user home, show to the dashboard and save into the database
+     * @throws BizzException
+     */
     @FXML
     public void importd() throws BizzException{
         FileChooser fc = new FileChooser();

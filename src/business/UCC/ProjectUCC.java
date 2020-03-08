@@ -26,7 +26,7 @@ public interface ProjectUCC {
     public String setProjectName (String popupMessage) throws BizzException;
 
     /**
-     *  retrieve information for a given project and user
+     *  retrieve information for a given project & user
      * @param projectName  project name
      * @param folderDestination path to the project folder
      * @param userId  project owner
