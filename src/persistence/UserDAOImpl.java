@@ -17,6 +17,7 @@ public class UserDAOImpl implements UserDAO {
     private static final String SQL_INSERT_USER = "INSERT INTO users(first_name, last_name, email, phone, password, salt, register_date ) VALUES (?, ?, ?, ?, ?, ?,?)";
     private static final String SQL_LOGIN_USER = "SELECT * FROM users WHERE email=?";
     private static final String SQL_UPDATE_USER = "UPDATE users SET first_name=?, last_name=?, email=?, phone=?, password=?, salt=?  WHERE email=?";
+    private static final String SQL_DELETE_USER = "DELETE FROM users WHERE email=?";
 
     public UserDAOImpl(DALServices dalServices, UserFactory userFactory) {
         this.dal = (DALBackEndServices) dalServices;
@@ -107,6 +108,14 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void delete(UserDTO userDTO) {
-
+        PreparedStatement ps = null;
+        try {
+            ps = dal.prepareStatement(SQL_DELETE_USER);
+            ps.setString(1, userDTO.getEmail());
+            ps.executeUpdate();
+        } catch (SQLException exc) {
+            exc.printStackTrace();
+            throw new FatalException("An error occured in deleteUSer");
+        }
     }
 }
