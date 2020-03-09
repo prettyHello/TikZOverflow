@@ -99,49 +99,40 @@ public class DashboardController {
      * @throws BizzException
      */
     @FXML
-    public void importd() throws BizzException{
+    public void importd() throws BizzException {
         FileChooser fc = new FileChooser();
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(".tar.gz", ".tar.gz"));
         File selectedFile = fc.showOpenDialog(null);
-//        String extention = selectedFile.getName().substring(selectedFile.getName().length() -7, selectedFile.getName().length() ) ;
-
-//        while(!extention.equals(".tar.gz")){
-//             new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extention ").showAndWait();
-//             selectedFile = fc.showOpenDialog(null);
-//             extention = selectedFile.getName().substring(selectedFile.getName().length() -7, selectedFile.getName().length() ) ;
-//
-//        }
-
-        //String folderNameUnbar = selectedFile.getName().replace(".tar.gz", "");
 
         if (selectedFile != null) {
-            try {
+            String extention = selectedFile.getName().substring(selectedFile.getName().length() - 7, selectedFile.getName().length());
+
+            if(extention.equals(".tar.gz")){
                 String projectName = projectUCC.setProjectName(popupMessage);
 
-                System.out.println(projectName);
-                if (projectName.equals("null")) {
-                    System.out.println("VIDE");
-                }
+                if (projectName != null) {
+                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
+                    String folderNameUnbar = selectedFile.getName().replace(".tar.gz", "");
 
-                Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
-                String folderNameUnbar = selectedFile.getName().replace(".tar.gz", "");
-
-                if (!Files.exists(folderDestination.resolve(projectName))) {
-                        Files.createDirectories(folderDestination);
-                        Utility.unTarFile(selectedFile, folderDestination);
-                        projectUCC.renameFolderProject(new File(folderDestination.resolve(folderNameUnbar).toString()), new File(folderDestination.toString() + "/" + projectName));
-                        ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
-                        projectObsList.add(newProjectImport);
-                        ProjectDAO.getInstance().saveProject(newProjectImport);
-                } else {
-                    new Alert(Alert.AlertType.ERROR, ContentTextImport + folderDestination).showAndWait();
-                    throw new BizzException("Existing Project");
+                    if (!Files.exists(folderDestination.resolve(projectName))) {
+                        try {
+                            Files.createDirectories(folderDestination);
+                            Utility.unTarFile(selectedFile, folderDestination);
+                            projectUCC.renameFolderProject(new File(folderDestination.resolve(folderNameUnbar).toString()), new File(folderDestination.toString() + "/" + projectName));
+                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
+                            projectObsList.add(newProjectImport);
+                            ProjectDAO.getInstance().saveProject(newProjectImport);
+                        } catch (IOException e) {
+                            e.getMessage();
+                        }
+                    }
+                    else {
+                        new Alert(Alert.AlertType.ERROR, ContentTextImport + folderDestination).showAndWait();
+                        throw new BizzException("Existing Project");
+                    }
                 }
-            }
-            catch(IOException e){
-                e.getMessage();
+            }else {
+                new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extention ").showAndWait();
             }
         }
     }
-
 }

@@ -14,7 +14,7 @@ public class ProjectUCCImpl implements ProjectUCC {
 
     private String popupMessage = "Please enter the name of your Project" ;
     private String rootProject = "/ProjectTikZ/";
-    private String ContentTextImport = "impossible to import, this project already exists in: ";
+    private String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
 
 
     /**
@@ -38,24 +38,14 @@ public class ProjectUCCImpl implements ProjectUCC {
         enterProjectName.setHeaderText(popupMessage);
         enterProjectName.setContentText("Name :");
         projectName = enterProjectName.showAndWait();
-        System.out.println("!!!!!!!!!!!!!!!!!!!!");
-        while(projectName.isPresent() && !projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)){
-            new Alert(Alert.AlertType.ERROR, ContentTextImport  ).showAndWait();
-            enterProjectName.setTitle("Project name");
-            enterProjectName.setHeaderText(popupMessage);
-            enterProjectName.setContentText("Name :");
-            projectName = enterProjectName.showAndWait();
+        if (projectName.isPresent() ) {
+            if (projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN ) ) {
+                return projectName.get();
+            }else {
+                new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
+            }
         }
-
-        System.out.println("projectName.get()!!!!");
-
-        if(projectName.isPresent()){
-            System.out.println("not empty");
-            return projectName.get();
-        }
-        else {
-            System.out.println(projectName.get());
-            return "null";}
+        return null ;
     }
 
     /**
