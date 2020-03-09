@@ -157,6 +157,11 @@ public class Utility {
         checkPhone(phone);
     }
 
+    /**
+     * Check if the phone number length is correct.
+     * @param phone
+     * @throws BizzException
+     */
     public static void checkPhone(String phone) throws BizzException {
         checkString(phone, "phone");
         System.out.println("Checking phone");
@@ -167,6 +172,11 @@ public class Utility {
             throw new BizzException("The PhoneNumber is too long");
     }
 
+    /**
+     * Check if the email's structure is correct.
+     * @param email
+     * @throws BizzException
+     */
     public static void checkEmail(String email) throws BizzException {
         checkString(email, "email");
         System.out.println("Checking email");
@@ -174,6 +184,11 @@ public class Utility {
             throw new BizzException("The email is wrong");
     }
 
+    /**
+     * Check if the firstname has no special characters or numbers.
+     * @param firstname
+     * @throws BizzException
+     */
     public static void checkFirstName(String firstname) throws BizzException {
         checkString(firstname, "firstname");
         System.out.println("Checking firstname");
@@ -181,7 +196,11 @@ public class Utility {
             throw new BizzException("The firstname has unallowed characters");
     }
 
-
+    /**
+     * Check if the lastname has no special characters or numbers.
+     * @param lastname
+     * @throws BizzException
+     */
     public static void checkLastName(String lastname) throws BizzException {
         checkString(lastname, "lastname");
         System.out.println("Checking lastname");
@@ -189,6 +208,12 @@ public class Utility {
             throw new BizzException("The lastname has unallowed characters");
     }
 
+    /**
+     * Check if the passwords introduced are the same.
+     * @param password1
+     * @param password2
+     * @throws BizzException
+     */
     public static void comparePasswords(String password1, String password2) throws BizzException {
         System.out.println("Checking password");
         if (!password1.equals(password2))
