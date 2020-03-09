@@ -29,6 +29,7 @@ public class DashboardController {
 
     private String popupMessage = "Please enter the name of your Project" ;
     private String rootProject = "/ProjectTikZ/";
+    private String dirSeparator = "/";
     private String ContentTextImport = "impossible to import, this project already exists in: ";
 
     ProjectUCCImpl projectUCC = new ProjectUCCImpl();
@@ -78,7 +79,11 @@ public class DashboardController {
         return  this;
     }
 
+
+
     public void initialize(){
+        System.out.println("O.S = " + System.getProperty("os.name"));
+
 
         itemList = FXCollections.observableArrayList();
         itemList.add("create new project");
@@ -100,6 +105,15 @@ public class DashboardController {
      */
     @FXML
     public void importd() throws BizzException {
+//File Src = new File("C:\\Users\\prettyallo\\ProjectTikZ\\commons-compress-1.20-src");
+//File Des = new File("C:\\Users\\prettyallo\\ProjectTikZ\\Bonjoursdfasdfsdf") ;
+//Src.renameTo(Des);
+
+
+
+
+
+
         FileChooser fc = new FileChooser();
         File selectedFile = fc.showOpenDialog(null);
 
@@ -107,18 +121,28 @@ public class DashboardController {
             String extention = selectedFile.getName().substring(selectedFile.getName().length() - 7, selectedFile.getName().length());
 
             if(extention.equals(".tar.gz")){
+                String folderNameUntar = selectedFile.getName().replace(".tar.gz", "");
                 String projectName = projectUCC.setProjectName(popupMessage);
+                Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
+                File pathToProject = new File(folderDestination.toString() + dirSeparator + projectName);
+                File pathToUntar = new File(folderDestination.resolve(folderNameUntar).toString());
+
+                if (System.getProperty("os.name").contains("Windows") ){
+                    rootProject = "\\ProjectTikZ\\" ;
+                    dirSeparator = "\\";
+                    pathToProject = new File(folderDestination.toString() + dirSeparator + projectName);
+                    pathToUntar = new File(folderDestination.toString()+dirSeparator+folderNameUntar);
+                    folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
+                }
 
                 if (projectName != null) {
-                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
-                    String folderNameUnbar = selectedFile.getName().replace(".tar.gz", "");
 
                     if (!Files.exists(folderDestination.resolve(projectName))) {
                         try {
                             Files.createDirectories(folderDestination);
                             Utility.unTarFile(selectedFile, folderDestination);
-                            projectUCC.renameFolderProject(new File(folderDestination.resolve(folderNameUnbar).toString()), new File(folderDestination.toString() + "/" + projectName));
-                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
+                            projectUCC.renameFolderProject(pathToUntar, pathToProject);
+                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, pathToProject.toPath(), user.getUser_id());
                             projectObsList.add(newProjectImport);
                             ProjectDAO.getInstance().saveProject(newProjectImport);
                         } catch (IOException e) {

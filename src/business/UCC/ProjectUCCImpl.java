@@ -22,7 +22,12 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public void renameFolderProject(File projectName, File NewProjectName) {
+
         projectName.renameTo(NewProjectName);
+
+        System.out.println("source =" + projectName);
+        System.out.println("Destination = "+ NewProjectName);
+        System.out.println("Is rename . is ok");
 
     }
 
@@ -56,7 +61,7 @@ public class ProjectUCCImpl implements ProjectUCC {
         return  new ProjectDTO().
                 setProjectOwnerId(userId)
                 .setProjectName(projectName)
-                .setProjectPath(folderDestination.toString()+"/"+projectName)
+                .setProjectPath(folderDestination.toString())
                 .setCreateDate(Utility.getTimeStamp())
                 .setModificationDate(Utility.getTimeStamp());
     }
