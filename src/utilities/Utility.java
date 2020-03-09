@@ -32,7 +32,6 @@ public class Utility {
     public static String getTimeStamp(){
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        /*System.out.println(formatter.format(date));*/
         return formatter.format(date);
 
     }
@@ -57,13 +56,15 @@ public class Utility {
         }
     }
 
-    public static void unTarFile(File tarFile, Path destFile)
+    public static String unTarFile(File tarFile, Path destFile)
     {
         TarArchiveInputStream tis = null;
         try {
             FileInputStream fis = new FileInputStream(tarFile);
+            FileOutputStream fos = null ;
             GZIPInputStream gzipInputStream = new GZIPInputStream(new BufferedInputStream(fis));
             tis = new TarArchiveInputStream(gzipInputStream);
+            String untarNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"))  ;
             TarArchiveEntry tarEntry = null;
             while ((tarEntry = tis.getNextTarEntry()) != null)
             {
@@ -73,12 +74,19 @@ public class Utility {
                 }else {
                     File outputFile = new File(destFile.toString() + File.separator + tarEntry.getName());
                     outputFile.getParentFile().mkdirs();
-                    IOUtils.copy(tis, new FileOutputStream(outputFile));
+                    fos = new FileOutputStream(outputFile) ;
+                    IOUtils.copy(tis,fos);
+                    fos.close();
                 }
             }
+
+            return untarNameFolder ;
         }catch(IOException ex) {
             System.out.println("Error while untarring a file- " + ex.getMessage());
-        }finally { if(tis != null) { try { tis.close(); } catch (IOException e) { e.printStackTrace(); } } }
+        }finally { if(tis != null) { try {
+            System.out.println("FERME FICHIER");
+            tis.close(); } catch (IOException e) { e.printStackTrace(); } } }
+        return  null ;
     }
 
 

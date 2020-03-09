@@ -1,34 +1,26 @@
 package business.UCC;
-
 import business.DTO.ProjectDTO;
 import exceptions.BizzException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import utilities.Utility;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
 
+
 public class ProjectUCCImpl implements ProjectUCC {
 
-    private String popupMessage = "Please enter the name of your Project" ;
-    private String rootProject = "/ProjectTikZ/";
     private String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
-
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void renameFolderProject(File projectName, File NewProjectName) {
-
+        System.out.println("Src =" + projectName);
+        System.out.println("Dst = "+ NewProjectName);
         projectName.renameTo(NewProjectName);
-
-        System.out.println("source =" + projectName);
-        System.out.println("Destination = "+ NewProjectName);
-        System.out.println("Is rename . is ok");
-
     }
 
     /**
@@ -61,7 +53,7 @@ public class ProjectUCCImpl implements ProjectUCC {
         return  new ProjectDTO().
                 setProjectOwnerId(userId)
                 .setProjectName(projectName)
-                .setProjectPath(folderDestination.toString())
+                .setProjectPath(folderDestination.toString()+ File.separator +projectName)
                 .setCreateDate(Utility.getTimeStamp())
                 .setModificationDate(Utility.getTimeStamp());
     }

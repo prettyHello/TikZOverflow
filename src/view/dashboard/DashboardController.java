@@ -2,7 +2,6 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
-import business.UCC.ProjectUCC;
 import business.UCC.ProjectUCCImpl;
 import exceptions.BizzException;
 import javafx.collections.FXCollections;
@@ -11,7 +10,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import persistence.ProjectDAO;
-import persistence.ProjectDAOImpl;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -22,14 +20,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Optional;
-import business.UCC.ProjectUCCImpl;
+
 
 public class DashboardController {
 
     private String popupMessage = "Please enter the name of your Project" ;
-    private String rootProject = "/ProjectTikZ/";
-    private String dirSeparator = "/";
+    private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     private String ContentTextImport = "impossible to import, this project already exists in: ";
 
     ProjectUCCImpl projectUCC = new ProjectUCCImpl();
@@ -82,8 +78,6 @@ public class DashboardController {
 
 
     public void initialize(){
-        System.out.println("O.S = " + System.getProperty("os.name"));
-
 
         itemList = FXCollections.observableArrayList();
         itemList.add("create new project");
@@ -105,15 +99,6 @@ public class DashboardController {
      */
     @FXML
     public void importd() throws BizzException {
-//File Src = new File("C:\\Users\\prettyallo\\ProjectTikZ\\commons-compress-1.20-src");
-//File Des = new File("C:\\Users\\prettyallo\\ProjectTikZ\\Bonjoursdfasdfsdf") ;
-//Src.renameTo(Des);
-
-
-
-
-
-
         FileChooser fc = new FileChooser();
         File selectedFile = fc.showOpenDialog(null);
 
@@ -121,28 +106,17 @@ public class DashboardController {
             String extention = selectedFile.getName().substring(selectedFile.getName().length() - 7, selectedFile.getName().length());
 
             if(extention.equals(".tar.gz")){
-                String folderNameUntar = selectedFile.getName().replace(".tar.gz", "");
                 String projectName = projectUCC.setProjectName(popupMessage);
-                Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
-                File pathToProject = new File(folderDestination.toString() + dirSeparator + projectName);
-                File pathToUntar = new File(folderDestination.resolve(folderNameUntar).toString());
-
-                if (System.getProperty("os.name").contains("Windows") ){
-                    rootProject = "\\ProjectTikZ\\" ;
-                    dirSeparator = "\\";
-                    pathToProject = new File(folderDestination.toString() + dirSeparator + projectName);
-                    pathToUntar = new File(folderDestination.toString()+dirSeparator+folderNameUntar);
-                    folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
-                }
 
                 if (projectName != null) {
+                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
 
                     if (!Files.exists(folderDestination.resolve(projectName))) {
                         try {
                             Files.createDirectories(folderDestination);
-                            Utility.unTarFile(selectedFile, folderDestination);
-                            projectUCC.renameFolderProject(pathToUntar, pathToProject);
-                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, pathToProject.toPath(), user.getUser_id());
+                            String Dst = Utility.unTarFile(selectedFile, folderDestination);
+                            projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
+                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
                             projectObsList.add(newProjectImport);
                             ProjectDAO.getInstance().saveProject(newProjectImport);
                         } catch (IOException e) {
