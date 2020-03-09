@@ -4,17 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
-import java.sql.SQLException;
 
 /**
  * This implementation of DALServices and DALBackEndServices is meant to be used in the production environment
  */
 public class DALServicesImpl implements DALServices, DALBackEndServices {
     private static Connection connection;
-    private static String db_name  = "database";
+    private static String db_name = "database";
     private static String db_path;
 
     public DALServicesImpl() {
@@ -64,7 +61,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     @Override
     public void createTables(String name) throws IOException {
         this.db_name = name;
-        this.db_path="jdbc:sqlite:"+this.db_name+".db";
+        this.db_path = "jdbc:sqlite:" + this.db_name + ".db";
         String scriptFilePath = "script.sql";
         BufferedReader reader = null;
         Statement statement = null;
@@ -102,16 +99,12 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     @Override
     public void deleteDB(String name) {
         this.closeConnection();
-        try
-        {
-            File f= new File("./"+this.db_name+".db");
-            if(!f.delete())
-            {
-                System.out.println("./"+this.db_name+".db can't be deleted");
+        try {
+            File f = new File("./" + this.db_name + ".db");
+            if (!f.delete()) {
+                System.out.println("./" + this.db_name + ".db can't be deleted");
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -120,12 +113,12 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      * This private method open a connexion with the database
      * Note that if the file doesn't exist, SQLite will create one
      */
-    private void openConnection(){
-        if(this.connection == null){
+    private void openConnection() {
+        if (this.connection == null) {
             try {
                 this.connection = DriverManager.getConnection(this.db_path);
-            } catch ( Exception e ) {
-                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            } catch (Exception e) {
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
                 System.exit(0);
             }
 

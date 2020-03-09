@@ -1,7 +1,6 @@
 package view.profile;
 
 import business.DTO.UserDTO;
-import business.UCC.ConnectedUser;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
@@ -22,7 +21,7 @@ import view.ViewName;
 import view.ViewSwitcher;
 import utilities.Utility;
 
-import javax.rmi.CORBA.Util;
+//import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
@@ -72,13 +71,18 @@ public class ProfileController {
 
     private ViewSwitcher viewSwitcher;
 
+    UserDTO connectedUser;
+
     @FXML
     public void initialize() {
-        UserDTO user = ConnectedUser.getConnectedUser();
-        this.firstnameTF.setText(user.getFirst_name());
-        this.lastnameTF.setText(user.getLast_name());
-        this.phoneTF.setText(user.getPhone());
-        this.emailTF.setText(user.getEmail());
+
+        //TODO We need a way to know wich user we are talking about
+        UserFactoryImpl userFactory = new UserFactoryImpl();
+        DALServices dal = new DALServicesImpl();
+        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
+        UserUCC userUcc = new UserUCCImpl(dal, dao);
+        connectedUser = userUcc.getConnectedUser();
+        prefillFields(connectedUser);
 
         borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -88,6 +92,14 @@ public class ProfileController {
                 }
             }
         });
+    }
+
+    private void prefillFields(UserDTO user) {
+        firstnameTF.setText(user.getFirst_name());
+        lastnameTF.setText(user.getLast_name());
+        emailTF.setText(user.getEmail());
+        phoneTF.setText(user.getPhone());
+        emailTF.setDisable(true);
     }
 
     //TODO INSERT LOGIC
@@ -103,21 +115,33 @@ public class ProfileController {
     @FXML
     public void handleModifyButton() {
         try {
-            Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.emailTF.getText(), this.passwordTF.getText(), this.secondPasswordTF.getText(), this.phoneTF.getText());
-            this.phoneText = this.phoneTF.getText();
-            this.emailText = this.emailTF.getText();
-            this.passwordText = this.passwordTF.getText();
-            this.lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            this.firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            String salt;
+            String pw_hash;
+            if (passwordTF.getText() != null && !passwordTF.getText().trim().isEmpty()) {
+                passwordText = passwordTF.getText();
+                salt = BCrypt.gensalt(12);
+                pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
+            } else {
+                salt = connectedUser.getSalt();
+                pw_hash = connectedUser.getPassword();
+                //add temp password to fields for user data check
+                passwordTF.setText("random");
+                secondPasswordTF.setText("random");
+            }
+            Utility.checkUserData(firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), emailTF.getText(), passwordTF.getText(), secondPasswordTF.getText(), phoneTF.getText());
+            phoneText = phoneTF.getText();
+            emailText = emailTF.getText();
+
+            lastnameText = lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            firstnameText = firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             UserFactoryImpl userFactory = new UserFactoryImpl();
-            String salt = BCrypt.gensalt(12);
-            String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
+
             UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
             DALServices dal = new DALServicesImpl();
             UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
             userUcc.updateUserInfo(user);
-            showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Sucess", "Informations succesfully updated");
+            showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information succesfully updated");
         } catch (BizzException e) {
             //Update failed on dao lvl
             System.out.println("Update Failed on buisness lvl");

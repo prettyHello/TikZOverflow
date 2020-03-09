@@ -6,7 +6,6 @@ import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
 import exceptions.BizzException;
 import exceptions.FatalException;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

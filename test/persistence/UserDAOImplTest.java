@@ -26,7 +26,7 @@ class UserDAOImplTest {
     @BeforeEach
     void setUp() {
         DAOConfigurationSingleton holder = DAOConfigurationSingleton.getInstance();
-        this.dalServices =  DAOConfigurationSingleton.getDalServices();
+        this.dalServices = DAOConfigurationSingleton.getDalServices();
         this.userFactory = DAOConfigurationSingleton.getUserFactory();
         this.userDAO = DAOConfigurationSingleton.getUserDAO();
         try {
@@ -51,8 +51,8 @@ class UserDAOImplTest {
 
         assertEquals(user.getFirst_name(), result.getFirst_name(), "First name does not match");
         assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
-        assertEquals(user.getPassword(),user.getPassword(), "Password does not match");
-        assertEquals(user.getPhone(),user.getPhone(), "Phone does not match");
+        assertEquals(user.getPassword(), user.getPassword(), "Password does not match");
+        assertEquals(user.getPhone(), user.getPhone(), "Phone does not match");
         assertEquals(user.getLast_name(), user.getLast_name(), "LastName does not match");
         assertEquals(user.getRegister_date(), user.getRegister_date(), "Date does not match");
         assertEquals(user.getSalt(), user.getSalt(), "Salt does not match");
@@ -88,8 +88,8 @@ class UserDAOImplTest {
         UserDTO result = userDAO.getUser(user);
         assertEquals(user.getFirst_name(), result.getFirst_name(), "First name does not match");
         assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
-        assertEquals(user.getPassword(),user.getPassword(), "Password does not match");
-        assertEquals(user.getPhone(),user.getPhone(), "Phone does not match");
+        assertEquals(user.getPassword(), user.getPassword(), "Password does not match");
+        assertEquals(user.getPhone(), user.getPhone(), "Phone does not match");
         assertEquals(user.getLast_name(), user.getLast_name(), "LastName does not match");
         assertEquals(user.getRegister_date(), user.getRegister_date(), "Date does not match");
         assertEquals(user.getSalt(), user.getSalt(), "Salt does not match");
@@ -128,7 +128,7 @@ class UserDAOImplTest {
         assertThrows(FatalException.class, () -> {
             user.setPhone("123");
             userDAO.update(user);
-        },"update phone number to an existing one doesn't raise an exception");
+        }, "update phone number to an existing one doesn't raise an exception");
 
     }
 
@@ -141,7 +141,7 @@ class UserDAOImplTest {
             userDAO.create(user);
             userDAO.delete(user);
             userDAO.getUser(user);
-        },"getUser still return a user after delete was called");
+        }, "getUser still return a user after delete was called");
 
         // test 2: throw fatal exception if not exists
         assertThrows(FatalException.class, () -> {

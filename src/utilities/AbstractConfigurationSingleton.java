@@ -32,7 +32,9 @@ public abstract class AbstractConfigurationSingleton {
         return configuration;
     }
 
-    public static DALServices getDalServices() { return dalServices; }
+    public static DALServices getDalServices() {
+        return dalServices;
+    }
 
     public static UserFactory getUserFactory() {
         return userFactory;
@@ -46,7 +48,7 @@ public abstract class AbstractConfigurationSingleton {
         return userUcc;
     }
 
-    protected void loadConfiguration(String conf_name){
+    protected void loadConfiguration(String conf_name) {
         this.conf_name = conf_name;
         String[] args = {this.conf_name};
 
