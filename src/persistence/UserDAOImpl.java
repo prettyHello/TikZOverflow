@@ -48,7 +48,7 @@ public class UserDAOImpl implements UserDAO {
             }
         } catch (SQLException exc) {
             exc.printStackTrace();
-            throw new FatalException("An error ocured in getUser");
+            throw new FatalException("An error occurred in getUser");
         }
         return usr;
 
@@ -101,7 +101,7 @@ public class UserDAOImpl implements UserDAO {
             ps.executeUpdate();
         } catch (SQLException exc) {
             exc.printStackTrace();
-            throw new FatalException("An error occured in updateUser");
+            throw new FatalException("An error occurred in updateUser");
         }
     }
 
@@ -114,7 +114,7 @@ public class UserDAOImpl implements UserDAO {
             ps.executeUpdate();
         } catch (SQLException exc) {
             exc.printStackTrace();
-            throw new FatalException("An error occured in deleteUSer");
+            throw new FatalException("An error occurred in deleteUSer");
         }
     }
 }

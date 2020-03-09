@@ -1,7 +1,7 @@
 package exceptions;
 
 /**
- * RuntimeException used in case of a buisness error.
+ * RuntimeException used in case of a business error.
  */
 public class BizzException extends RuntimeException {
   public BizzException() {

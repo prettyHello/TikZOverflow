@@ -136,7 +136,7 @@ public class ProfileController {
             showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information succesfully updated");
         } catch (BizzException e) {
             //Update failed on dao lvl
-            System.out.println("Update Failed on buisness lvl");
+            System.out.println("Update Failed on business lvl");
             showAlert(Alert.AlertType.WARNING, "Account update", "Business Error", e.getMessage());
         } catch (FatalException e) {
             //Update failed on dao lvl
