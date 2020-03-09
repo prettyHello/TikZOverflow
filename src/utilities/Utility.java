@@ -36,6 +36,14 @@ public class Utility {
 
     }
 
+    /**
+     * Show an alert to the user.
+     *
+     * @param type Type of alert (warning, etc).
+     * @param title Title of the alert.
+     * @param headerText Header of the alert box.
+     * @param contentText Content of the alert box.
+     */
     public static void showAlert(Alert.AlertType type, String title, String headerText, String contentText) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -44,6 +52,9 @@ public class Utility {
         alert.showAndWait();
     }
 
+    /**
+     * Show the eula in a pop-up box.
+     */
     public static void showEula() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("End-User license agreement");
@@ -69,18 +80,34 @@ public class Utility {
         alert.showAndWait();
     }
 
+    /**
+     * Check if an object is null.
+     * @param obj
+     * @throws FatalException If the object is null.
+     */
     public static void checkObject(Object obj) throws FatalException {
         if (obj == null) {
             throw new FatalException("Object is null");
         }
     }
 
+    /**
+     * Check if a String is empty.
+     * @param chaine String to check.
+     * @param varName Name of the variable, to be used in case a BizzException is thrown.
+     * @throws BizzException In case the String is empty.
+     */
     public static void checkString(String chaine, String varName) throws BizzException {
         if (chaine == null || chaine.equals("")) {
             throw new BizzException(varName + " is empty");
         }
     }
 
+    /**
+     *
+     * @param tarFile
+     * @param destFile
+     */
     public static void unTarFile(File tarFile, Path destFile) {
         TarArchiveInputStream tis = null;
         try {
@@ -110,11 +137,16 @@ public class Utility {
         }
     }
 
-
-    public static String HachFonction(String name) {
-        return name;
-    }
-
+    /**
+     * Check the data the users enter while registering of modifying theirs information.
+     * @param firstname
+     * @param lastname
+     * @param email
+     * @param firstPassword
+     * @param secondPassword
+     * @param phone
+     * @throws BizzException
+     */
     public static void checkUserData(String firstname, String lastname, String email, String firstPassword, String secondPassword, String phone) throws BizzException {
         checkFirstName(firstname);
         checkLastName(lastname);
