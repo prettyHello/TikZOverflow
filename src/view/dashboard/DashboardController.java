@@ -136,19 +136,15 @@ public class DashboardController {
                 String projectName = projectUCC.setProjectName(popupMessage);
 
                 if (projectName != null) {
-                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
+                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject +projectName +File.separator +"touch.txt");
+                    Path folderDestination2 = Paths.get(System.getProperty("user.home") + rootProject +projectName );
 
                     if (!Files.exists(folderDestination.resolve(projectName))) {
-                        try {
-                            Files.createDirectories(folderDestination);
-                            String Dst = Utility.unTarFile(selectedFile, folderDestination);
-                            projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
-                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
-                            projectObsList.add(newProjectImport);
-                            ProjectDAO.getInstance().saveProject(newProjectImport);
-                        } catch (IOException e) {
-                            e.getMessage();
-                        }
+                        String Dst = Utility.unTarFile(selectedFile, folderDestination2);
+                        projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
+                        ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
+                        projectObsList.add(newProjectImport);
+                        ProjectDAO.getInstance().saveProject(newProjectImport);
                     }
                     else {
                         new Alert(Alert.AlertType.ERROR, ContentTextImport + folderDestination).showAndWait();
