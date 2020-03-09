@@ -86,8 +86,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void update(UserDTO obj) throws FatalException {
-        UserDTO userDTO = obj;
+    public void update(UserDTO userDTO) throws FatalException {
 
         PreparedStatement ps = null;
         try {

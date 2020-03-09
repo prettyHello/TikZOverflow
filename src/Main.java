@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage);
         viewSwitcher.switchView(ViewName.LOGIN);
 

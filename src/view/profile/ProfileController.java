@@ -6,11 +6,9 @@ import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
 import exceptions.BizzException;
 import exceptions.FatalException;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
@@ -19,13 +17,12 @@ import persistence.UserDAOImpl;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
-import utilities.Utility;
 
-//import javax.rmi.CORBA.Util;
-import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
 import static utilities.Utility.showAlert;
+
+//import javax.rmi.CORBA.Util;
 
 public class ProfileController {
 
@@ -84,12 +81,9 @@ public class ProfileController {
         connectedUser = userUcc.getConnectedUser();
         prefillFields(connectedUser);
 
-        borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    handleModifyButton();
-                }
+        borderpane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleModifyButton();
             }
         });
     }
@@ -102,9 +96,7 @@ public class ProfileController {
         emailTF.setDisable(true);
     }
 
-    //TODO INSERT LOGIC
     public void handleCancelButton() {
-        System.out.println("INSERT LOGIC HERE");
         viewSwitcher.switchView(ViewName.DASHBOARD);
     }
 

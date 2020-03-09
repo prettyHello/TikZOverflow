@@ -6,11 +6,9 @@ import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
 import exceptions.BizzException;
 import exceptions.FatalException;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
@@ -73,43 +71,31 @@ public class RegistrationController {
 
     @FXML
     public void initialize() {
-        borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    registerBtn();
-                }
+        borderpane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                registerBtn();
             }
         });
-        checkbox_eula.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    if (checkbox_eula.isSelected()){
-                        checkbox_eula.setSelected(false);
-                    }else{
-                        checkbox_eula.setSelected(true);
-                    }
-                    event.consume();
+        checkbox_eula.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                if (checkbox_eula.isSelected()) {
+                    checkbox_eula.setSelected(false);
+                } else {
+                    checkbox_eula.setSelected(true);
                 }
+                event.consume();
             }
         });
-        bt_cancel.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    handleCancelButton();
-                    event.consume();
-                }
+        bt_cancel.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleCancelButton();
+                event.consume();
             }
         });
-        bt_eula.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    handleReadEulaButton();
-                    event.consume();
-                }
+        bt_eula.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleReadEulaButton();
+                event.consume();
             }
         });
     }
