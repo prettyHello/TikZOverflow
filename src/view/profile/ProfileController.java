@@ -6,11 +6,9 @@ import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
 import exceptions.BizzException;
 import exceptions.FatalException;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
@@ -19,15 +17,14 @@ import persistence.UserDAOImpl;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
-import utilities.Utility;
 
-import javax.rmi.CORBA.Util;
-import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
 import static utilities.Utility.showAlert;
 
-public class profileController {
+//import javax.rmi.CORBA.Util;
+
+public class ProfileController {
 
     @FXML
     TextField firstnameTF;
@@ -50,6 +47,15 @@ public class profileController {
     @FXML
     BorderPane borderpane;
 
+    @FXML
+    Button bt_eula;
+
+    @FXML
+    Button bt_modify;
+
+    @FXML
+    Button bt_cancel;
+
     String firstnameText;
 
     String lastnameText;
@@ -59,57 +65,75 @@ public class profileController {
     String phoneText;
 
     String passwordText;
-    @FXML
-    Button bt_modify;
-    @FXML
-    Button bt_cancel;
+
     private ViewSwitcher viewSwitcher;
+
+    UserDTO connectedUser;
 
     @FXML
     public void initialize() {
-        //populating the fields
+
+        //TODO We need a way to know wich user we are talking about
         UserFactoryImpl userFactory = new UserFactoryImpl();
         DALServices dal = new DALServicesImpl();
         UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
         UserUCC userUcc = new UserUCCImpl(dal, dao);
-        //TODO We need a way to know wich user we are talking about
-        //userUcc.getUserInfo()
+        connectedUser = userUcc.getConnectedUser();
+        prefillFields(connectedUser);
 
-
-        borderpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    handleModifyButton();
-                }
+        borderpane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleModifyButton();
             }
         });
     }
 
-    //TODO INSERT LOGIC
+    private void prefillFields(UserDTO user) {
+        firstnameTF.setText(user.getFirst_name());
+        lastnameTF.setText(user.getLast_name());
+        emailTF.setText(user.getEmail());
+        phoneTF.setText(user.getPhone());
+        emailTF.setDisable(true);
+    }
+
     public void handleCancelButton() {
-        System.out.println("INSERT LOGIC HERE");
         viewSwitcher.switchView(ViewName.DASHBOARD);
+    }
+
+    public void handleReadEulaButton() {
+        Utility.showEula();
     }
 
     @FXML
     public void handleModifyButton() {
         try {
-            Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""),this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""),this.emailTF.getText(),this.passwordTF.getText(),this.secondPasswordTF.getText(),this.phoneTF.getText());
+            String salt;
+            String pw_hash;
+            if (passwordTF.getText() != null && !passwordTF.getText().trim().isEmpty()) {
+                passwordText = passwordTF.getText();
+                salt = BCrypt.gensalt(12);
+                pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
+            } else {
+                salt = connectedUser.getSalt();
+                pw_hash = connectedUser.getPassword();
+                //add temp password to fields for user data check
+                passwordTF.setText("random");
+                secondPasswordTF.setText("random");
+            }
+            Utility.checkUserData(firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), emailTF.getText(), passwordTF.getText(), secondPasswordTF.getText(), phoneTF.getText());
+            phoneText = phoneTF.getText();
+            emailText = emailTF.getText();
+
+            lastnameText = lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            firstnameText = firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             UserFactoryImpl userFactory = new UserFactoryImpl();
-            String salt = BCrypt.gensalt(12);
-            String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
+
             UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
             DALServices dal = new DALServicesImpl();
             UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
             UserUCC userUcc = new UserUCCImpl(dal, dao);
             userUcc.updateUserInfo(user);
-            this.phoneText = this.phoneTF.getText();
-            this.emailText = this.emailTF.getText();
-            this.passwordText = this.passwordTF.getText();
-            this.lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            this.firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Sucess", "Informations succesfully updated");
+            showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information succesfully updated");
         } catch (BizzException e) {
             //Update failed on dao lvl
             System.out.println("Update Failed on buisness lvl");

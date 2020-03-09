@@ -9,38 +9,52 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 ## Pondération
 
-| Priorité/3 | N° | Description | Difficulté/3 | Risque/3 | Heures/? | Points |
-| ------ | ------ | ------ | ------ | ------ | ------ | ------ |
-| 1 | [1](#Histoire-A) | Histoire A | 7 | 2 | 49 | / |
-|   | 5 | Histoire D | 6 | 1 | 42 |  |
-| 2 | 2 | Histoire B | 5 | 1 | 40 |  |
-|   | 3 | Histoire F | 5 | 2 | 35 |  |
-| 3 | 4 | Histoire C | 5 | 3 | 50 | / |
-|   | 7 | Histoire E | 7 | 1 | 30 |  |
+| Priority/3 | N° | Description | Risk/3 | Hours/? | Points |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| 1 | [1](#create-a-user-login-and-password) | Create a user, login and password | 2 | -- | 24 |
+|   | - | Story X | - | - | -- |  |
+| 2 | [3](#importation-and-exportation-of-files) | Importation and exportation of files | 3 | -- | 10 |
+|   | - | Story X | - | -- |  |
+| 3 | - | Story X | - | -- |  |
+|   | - | Story X | - | -- |  |
 
 ----------------------
 
 
 ## Description
 
-### Histoire A
+### Create a user, login and password
 
-**Instructions originales:**           
-- Afficher des "épingle" montrant la position des P.
-- Sélectionner une épingle pour afficher la date et l'heure où ce P. a été repéré.
-- Ajouter un P. sur la carte (via point-and-clic)
-- Possibilité de changer la date et heure de repérage du P. lors de l'ajout (ci-dessus)
-- Possibilité de Zoom/Dezoom
-- Les épingles les plus proches (qui se superposent) devront être fusionnée et n'indiquer que le
-nombre de P. représenté par cette épingle (fusionnée)
+**Original instructions:**
 
-**Tâches en plus:**          
-- Système permettant de stoquer les P. sur la carte
+- When starting the program, a visitor can create a new account. To do so, the visitor must first accept the terms of service defined by the system administrator.
+- Subsequently, the visitor indicates his personal information (e.g. last name, first name, user name, e-mail address and desired password). The account will be created upon confirmation of the validity of the data entered.
+-After confirmation, the visitor becomes a user who can log in to the system and modify his profile information. Any changes made to his profile require "confirmation of the validity of the new data", a procedure that must be triggered before the changes take effect.
+- Only one user can be logged in at any time. 
+
+**Tasks:**   
+
+- Set up of project and database to save user information.
+- Registration.
+- Login.
+- Modification of user info.
+
+**Extra Tasks:**
+- Creation of dashboard.
 
 :question: **Question:**       
-- Que se passe t'il lorsqu'on clic sur une épingle "fusionnée" (qui regroupe d'autres épingle) ?
-    - On affiche tous les pokemons de cette épingle (possiblement grand :confused:)
-    - On ne fait rien (comme s'il n'y avait rien)
-    - On zoom pour montrer les différentes épingles
-    - Autre ?
+    
+### Importation and exportation of files
 
+**Original instructions:**
+
+- The user can import several files at once or a directory or a compressed archive (.tar.gz ) from his computer. Files already loaded by the user via the directory should not be loaded a second time.
+
+**Tasks:** 
+
+- Importation.
+- Exportation.
+
+**Extra Tasks:**
+
+:question: **Question:** 

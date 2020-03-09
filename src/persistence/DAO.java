@@ -29,9 +29,8 @@ public interface DAO<T> {
      * Updates an entry in the database.
      *
      * @param obj a generic type object defined in children interfaces (a DTO).
-     * @return the ID of the entry that was updated.
      */
-    Long update(T obj);
+    void update(T obj);
 
     /**
      * Deletes an entry in the database.
@@ -41,6 +40,5 @@ public interface DAO<T> {
     void delete(T obj);
 
     T getUser(T user);
-    void updateUser(T user);
 
 }

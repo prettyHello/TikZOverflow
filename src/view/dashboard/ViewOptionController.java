@@ -61,7 +61,7 @@ public class ViewOptionController extends HBox {
             fc.setInitialFileName(projectName.getText() );
             File selectedFile= fc.showSaveDialog(null);
             File dir = new File( chooserProject.getProjectPath() );
-                viewOptionUCC.Export(dir, selectedFile);
+            viewOptionUCC.Export(dir, selectedFile);
         });
     }
 

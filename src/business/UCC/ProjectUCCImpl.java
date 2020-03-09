@@ -18,8 +18,6 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public void renameFolderProject(File projectName, File NewProjectName) {
-        System.out.println("Src =" + projectName);
-        System.out.println("Dst = "+ NewProjectName);
         projectName.renameTo(NewProjectName);
     }
 
@@ -57,5 +55,4 @@ public class ProjectUCCImpl implements ProjectUCC {
                 .setCreateDate(Utility.getTimeStamp())
                 .setModificationDate(Utility.getTimeStamp());
     }
-
 }

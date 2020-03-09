@@ -2,14 +2,23 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
+
 import business.UCC.ProjectUCCImpl;
 import exceptions.BizzException;
+
+import business.UCC.UserUCC;
+import business.UCC.UserUCCImpl;
+import business.factories.UserFactoryImpl;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+import persistence.DALServices;
+import persistence.DALServicesImpl;
 import persistence.ProjectDAO;
+import persistence.UserDAOImpl;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -20,7 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-
 
 public class DashboardController {
 
@@ -55,10 +63,7 @@ public class DashboardController {
         viewSwitcher.switchView(ViewName.PROFILE);
     }
 
-    public void handleDisconnectButton(){
-        viewSwitcher.switchView(ViewName.LOGIN);
 
-    }
 
     public DashboardController setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
@@ -77,20 +82,42 @@ public class DashboardController {
 
 
 
-    public void initialize(){
+    public void handleDisconnectButton() {
+        viewSwitcher.switchView(ViewName.LOGIN);
+        UserFactoryImpl userFactory = new UserFactoryImpl();
+        DALServices dal = new DALServicesImpl();
+        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
+        UserUCC userUcc = new UserUCCImpl(dal, dao);
+        userUcc.deleteConnectedUser();
+    }
 
+
+    public void initialize(){
         itemList = FXCollections.observableArrayList();
         itemList.add("create new project");
         itemList.add("Your projects");
         itemList.add("Shared with you");
         optionList.setItems(itemList);
 
+        UserFactoryImpl userFactory = new UserFactoryImpl();
+        DALServices dal = new DALServicesImpl();
+        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
+        UserUCC userUcc = new UserUCCImpl(dal, dao);
+        UserDTO user = userUcc.getConnectedUser();
+
+        userSetting.setText(user.getFirst_name());
+
         projectList.setCellFactory(cell -> new ListCell<ProjectDTO>() {
             @Override
             protected void updateItem(ProjectDTO item, boolean empty) {
                 super.updateItem(item, empty);
-                if(empty){ setGraphic(null); } else {
-                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("view/images/exportIcon.png").getProjectRowHbox()); } } });
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("view/images/exportIcon.png").getProjectRowHbox());
+                }
+            }
+        });
     }
 
     /**

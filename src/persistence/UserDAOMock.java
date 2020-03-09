@@ -13,8 +13,7 @@ public class UserDAOMock implements  UserDAO {
     }
 
     @Override
-    public Long update(UserDTO obj) {
-        return null;
+    public void update(UserDTO obj) {
     }
 
     @Override
@@ -27,6 +26,5 @@ public class UserDAOMock implements  UserDAO {
         return null;
     }
 
-    @Override
-    public void updateUser(UserDTO userDTO){};
+
 }

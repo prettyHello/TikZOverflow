@@ -4,7 +4,7 @@ import business.DTO.UserDTO;
 import business.factories.UserFactory;
 import persistence.DALServices;
 import persistence.DAO;
-import utilities.BusinessTestConfigurationHolder;
+import utilities.BusinessConfigurationSingleton;
 
 
 class UserUCCImplTest {
@@ -15,10 +15,10 @@ class UserUCCImplTest {
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-       this.dalServices =  BusinessTestConfigurationHolder.getDalServices();
-       this.userDAO = BusinessTestConfigurationHolder.getUserDAO();
-       this.userFactory = BusinessTestConfigurationHolder.getUserFactory();
-       //this.userUcc = BusinessTestConfigurationHolder.getUserUcc();
+        this.dalServices = BusinessConfigurationSingleton.getDalServices();
+        this.userDAO = BusinessConfigurationSingleton.getUserDAO();
+        this.userFactory = BusinessConfigurationSingleton.getUserFactory();
+        //this.userUcc = BusinessTestConfigurationHolder.getUserUcc();
     }
 
     @org.junit.jupiter.api.AfterEach

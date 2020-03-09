@@ -24,7 +24,6 @@ public class ProjectDAOImpl implements ProjectDAO {
     public void saveProject(ProjectDTO project){
         try {
            prstmt = querry.prepareStatement(SQL_INSERT_PROJECT);
-           //prstmt.setInt(1, 29);
            prstmt.setInt(1, project.getProjectOwnerId());
            prstmt.setString(2, project.getProjectName());
            prstmt.setString(3, project.getProjectPath());
@@ -32,7 +31,6 @@ public class ProjectDAOImpl implements ProjectDAO {
            prstmt.setString(5, project.getModificationDate());
            prstmt.executeUpdate();
         } catch (SQLException e) {
-            //e.printStackTrace();
             System.out.println("Error dans la BD. UNIQUE constraint failed: projects.project_id doit etre unique ");
         }
     }
