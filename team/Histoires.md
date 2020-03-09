@@ -11,9 +11,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 | Priority/3 | N° | Description | Risk/3 | Hours/? | Points |
 | ------ | ------ | ------ | ------ | ------ | ------ |
-| 1 | [1](#create-a-user-login-and-password) | Create a user, login and password | 2 | -- | 24 |
+| 1 | [1](#create-a-user-login-and-password) | Create a user, login and password | 2 | 38 | 24 |
 |   | - | Story X | - | - | -- |  |
-| 2 | [3](#importation-and-exportation-of-files) | Importation and exportation of files | 3 | -- | 10 |
+| 2 | [3](#importation-and-exportation-of-files) | Importation and exportation of files | 3 | 17 | 10 |
 |   | - | Story X | - | -- |  |
 | 3 | - | Story X | - | -- |  |
 |   | - | Story X | - | -- |  |
