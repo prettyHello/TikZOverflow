@@ -9,8 +9,12 @@ public class Configuration {
     public static Properties properties;
     public static final String DEV = "dev";
     public static final String PROD = "prod";
+    public static final String TestDAO = "TestDAO";
+    public static final String TestBusiness = "TestBusiness";
     public static final String DEV_PATH = "src/config/dev.properties";
     public static final String PROD_PATH = "src/config/prod.properties";
+    public static final String TestDAO_PATH = "src/config/TestDAO.properties";
+    public static final String TestBusiness_PATH = "src/config/TestBusiness.properties";
 
     /**
      * Initializes the properties loaded from a file.
@@ -51,8 +55,15 @@ public class Configuration {
      */
     public void initProperties(String[] args) {
         String path = Configuration.PROD_PATH;
-        if (args.length == 1 && args[0].equals(Configuration.DEV)) {
-            path = Configuration.DEV_PATH;
+        if (args.length == 1) {
+            if(args[0].equals(Configuration.DEV)){
+                path = Configuration.DEV_PATH;
+            }else if(args[0].equals(Configuration.TestBusiness)){
+                path = Configuration.TestBusiness_PATH;
+            }else if(args[0].equals(Configuration.TestDAO)){
+                path = Configuration.TestDAO_PATH;
+            }
+
         }
         loadProperties(path);
     }

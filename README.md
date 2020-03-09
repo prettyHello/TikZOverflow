@@ -1,18 +1,26 @@
 # FeedBuzz : Projet de génie logiciel et gestion de projet (INFO-F-307)
 
-TO DO: Description du projet
+This program will be a diagram editor compatible with LATEX.
+Diagrams can be created iether using TikZ instructions, or through a graphical interface.
+Switching between the two will be seamless.
+In addition, multiple users will be able to work on a same project.
 
 # Utilisation
 
-TO DO: Informations sur le système de build et la version du Java/Librairies utilisés dans l'implementation.
+### Libraries
+
+| Name | Version | Description | Link 
+| ------ | ------ | ------ | ------ |
+| commons-compress | 1.2 | For zipping and unzipping | [Compress](https://commons.apache.org/proper/commons-compress/)
+| sqlite-jdbc | 3.30.1 | To access the database | [SQLite](https://www.sqlitetutorial.net/sqlite-java/)
+| opentest4j | 1.1.1 | Testing framework | [Opentest4j](https://github.com/ota4j-team/opentest4j)
+| spring | 5.2.3 | Spring framework | [Spring](https://spring.io/)
+| junit-jupiter | 5.42 | junit testing 
+| javaFX | 
+
+This java program has been tested and worked on with the SDK versions 8,11 and 13.
 
 ## Compilation
-
-TO DO: Informations sur la façon de compiler votre projet 
-
-## Démarrage 
-
-TO DO: Informations sur la façon d'éxecuter votre projet
 
 <p>
 1) On the menu above, click on "file" and then select "projectstructure":
@@ -24,6 +32,7 @@ TO DO: Informations sur la façon d'éxecuter votre projet
 	<li>In Libraries -> press "+" -> then add the folder "src/lib" as a java library. Once done it is necessary to click on "change version" and to confirm in order to load most libraries.</li>
 	<li>In Libraries -> press "+" -> in lib, select "sqlite-jdbc-3.30.1.jar" and add it as java.</li>
 	<li>In Libraries -> press "+" -> in lib, select "spring-secuity-crypto/5.2.1.RELEASE/spring-security-crypto-5.2.1.RELEASE.jar" and add it as java.</li>
+	<li>In the same way, the following libraries need to be added: "commons-compress-1.2.jar", all "junit-jupiter", "opentest4j" </li>
 </ul>
 
 <p>
@@ -31,25 +40,30 @@ TO DO: Informations sur la façon d'éxecuter votre projet
 </p>
 
 <p>
-3) Since JavaFX is not included in SDK since the version 10, it is necessary to download the appropriate version for the host OS on the JavaFX website.
+Fin) You will now be able to build the project by clicking on the green hammer in the menu above and then to run the software by clicking on the green arrow.
+</p>
+
+<p><u>For Java SDK versions >= 10 additional steps are required: </u></p>
+<p>
+1) Since JavaFX is not included in SDK since the version 10, it is necessary to download the appropriate version for the host OS on the JavaFX website.
 The javaFX SDK can be downloaded from here https://gluonhq.com/products/javafx/, and unziped anywhere on the desktop.
 </p>
 <p>
-4) On the menu above, click on "file", select "projectstructure"  and then the "Libraries" tab. There you will be able to press "+" to add the JavaFX as a java library (just give the path to the lib folder of the SDK).
+2) On the menu above, click on "file", select "projectstructure"  and then the "Libraries" tab. There you will be able to press "+" to add the JavaFX as a java library (just give the path to the lib folder of the SDK).
 </p>
 <p>
-5) Finally (for SDK > 11), still on the menu above, select "run" -> "edit configuartion" and add the following line in "VM option" (put your own path):<br>
+3) Finally (for SDK > 11), still on the menu above, select "run" -> "edit configuartion" and add the following line in "VM option" (put your own path):<br>
 	&nbsp;&nbsp;&nbsp;&nbsp; --module-path %PATH_TO_FX%/lib --add-modules=javafx.controls,javafx.fxml
 </p>
-<p>
-Fin) You will now be able to build the project by clicking on the green hammer in the menu above and then to run the software by clicking on the green arrow.
-</p>
+
+## Démarrage 
+
 
 # Configuration :
 
 ## Serveur 
 
-TO DO: Informations sur la configuration du serveur
+This program being a desktop application, there is no server configuration required.
 
 ## Client
 
