@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Collection of utility functions used in the view
@@ -114,6 +116,7 @@ public class Utility {
      * @param destFile
      */
 
+
     public static String unTarFile(File tarFile, Path destFile)
     {
         TarArchiveInputStream tis = null;
@@ -122,7 +125,7 @@ public class Utility {
             FileOutputStream fos = null ;
             GZIPInputStream gzipInputStream = new GZIPInputStream(new BufferedInputStream(fis));
             tis = new TarArchiveInputStream(gzipInputStream);
-            String untarNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"))  ;
+           // String untarNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"))  ;
             TarArchiveEntry tarEntry = null;
             while ((tarEntry = tis.getNextTarEntry()) != null) {
                 if (tarEntry.isDirectory()) {
@@ -136,7 +139,7 @@ public class Utility {
                 }
             }
 
-            return untarNameFolder ;
+         //   return untarNameFolder ;
         }catch(IOException ex) {
             System.out.println("Error while untarring a file- " + ex.getMessage());
         }finally { if(tis != null) { try {

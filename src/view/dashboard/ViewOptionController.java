@@ -34,7 +34,7 @@ public class ViewOptionController extends HBox {
     private HBox projectRowHbox  = null;
 
     private UserDTO user;
-    private String rootProject = "/ProjectTikZ/";
+    private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     ViewOptionUCCImpl viewOptionUCC = new ViewOptionUCCImpl();
 
     public ViewOptionController(UserDTO userDTO)  {
@@ -59,9 +59,11 @@ public class ViewOptionController extends HBox {
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
             fc.setInitialDirectory(new File(System.getProperty("user.home") + rootProject));
             fc.setInitialFileName(projectName.getText() );
-            File selectedFile= fc.showSaveDialog(null);
+            File exportDirectory= fc.showSaveDialog(null);
             File dir = new File( chooserProject.getProjectPath() );
-            viewOptionUCC.Export(dir, selectedFile);
+            System.out.println("ok: "+dir);
+
+            viewOptionUCC.Export(dir, exportDirectory);
         });
     }
 
