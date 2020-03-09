@@ -7,7 +7,14 @@ In addition, multiple users will be able to work on a same project.
 
 # Utilisation
 
-TO DO: Informations sur le système de build et la version du Java/Librairies utilisés dans l'implementation.
+### Libraries
+
+| Name | Version | Description | Link 
+| ------ | ------ | ------ | ------ |
+| commons-compress | 1.2 | For zipping and unzipping | [Compress](https://commons.apache.org/proper/commons-compress/)
+| sqlite-jdbc | 3.30.1 | To access the database | [SQLite](https://www.sqlitetutorial.net/sqlite-java/)
+| opentest4j | 1.1.1 | Testing framework | [Opentest4j](https://github.com/ota4j-team/opentest4j)
+| spring | 5.2.3 | Spring framework | [Spring](https://spring.io/)
 
 This java program has been tested and worked on with the SDK versions 8,11 and 13.
 
