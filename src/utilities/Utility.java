@@ -20,7 +20,10 @@ import java.util.zip.GZIPInputStream;
  */
 public class Utility {
 
+    public static String ALLOWED_CHARACTERS_PATTERN = "^[_,A-Z|a-z|0-9]+";
+
     public static final String UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
+
 
     public static final String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
 
@@ -110,12 +113,16 @@ public class Utility {
      * @param tarFile
      * @param destFile
      */
-    public static void unTarFile(File tarFile, Path destFile) {
+
+    public static String unTarFile(File tarFile, Path destFile)
+    {
         TarArchiveInputStream tis = null;
         try {
             FileInputStream fis = new FileInputStream(tarFile);
+            FileOutputStream fos = null ;
             GZIPInputStream gzipInputStream = new GZIPInputStream(new BufferedInputStream(fis));
             tis = new TarArchiveInputStream(gzipInputStream);
+            String untarNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"))  ;
             TarArchiveEntry tarEntry = null;
             while ((tarEntry = tis.getNextTarEntry()) != null) {
                 if (tarEntry.isDirectory()) {
@@ -123,21 +130,20 @@ public class Utility {
                 } else {
                     File outputFile = new File(destFile.toString() + File.separator + tarEntry.getName());
                     outputFile.getParentFile().mkdirs();
-                    IOUtils.copy(tis, new FileOutputStream(outputFile));
+                    fos = new FileOutputStream(outputFile) ;
+                    IOUtils.copy(tis,fos);
+                    fos.close();
                 }
             }
-        } catch (IOException ex) {
+
+            return untarNameFolder ;
+        }catch(IOException ex) {
             System.out.println("Error while untarring a file- " + ex.getMessage());
-        } finally {
-            if (tis != null) {
-                try {
-                    tis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        }finally { if(tis != null) { try {
+            tis.close(); } catch (IOException e) { e.printStackTrace(); } } }
+        return  null ;
     }
+
 
     /**
      * Check the data the users enter while registering of modifying theirs information.

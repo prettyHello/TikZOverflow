@@ -1,5 +1,6 @@
 package view;
 
+import business.DTO.UserDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +23,12 @@ public class ViewSwitcher {
      * The stage containing the different scenes
      */
     private final Stage stage;
+    private UserDTO user ;
+
+    public ViewSwitcher setUser (UserDTO user) {
+        this.user = user ;
+        return this ;
+    }
 
     public ViewSwitcher(Stage stage) {
         this.stage = stage;
@@ -107,12 +114,14 @@ public class ViewSwitcher {
      *
      * @throws IOException if the associated .fxml file can't be loaded
      */
-    public void toDashboard() throws IOException {
+    public void toDashboard() throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dashboard/dashboard.fxml"));
         Parent root = loader.load();
         DashboardController dashboardController = loader.getController();
-
-        dashboardController.setViewSwitcher(this);
+        dashboardController.setViewSwitcher(this).setUserProjectView(user);
         this.stage.setScene(new Scene(root));
     }
 }
+
+
+

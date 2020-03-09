@@ -6,6 +6,7 @@ import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
 import exceptions.BizzException;
 import exceptions.FatalException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -55,6 +56,9 @@ public class LoginController {
         });
     }
 
+    private void handleCreateAccountButton() {
+    }
+
     @FXML
     public void handleLoginButton() {
         String username = tf_username.getText();
@@ -70,7 +74,8 @@ public class LoginController {
             UserUCC userUcc = new UserUCCImpl(dal, dao);
             userUcc.login(user);
 
-            viewSwitcher.switchView(ViewName.DASHBOARD);
+            viewSwitcher.setUser(userUcc.getUserInfo(user)).switchView(ViewName.DASHBOARD);
+            //viewSwitcher.switchView(ViewName.DASHBOARD);
 
         }catch (BizzException e) {
             //Update failed on dao lvl
@@ -85,8 +90,10 @@ public class LoginController {
     }
 
     @FXML
-    public void handleCreateAccountButton() {
+
+    public void handleCreateAccountButton(ActionEvent event) {
         viewSwitcher.switchView(ViewName.REGISTRATION);
+
     }
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
