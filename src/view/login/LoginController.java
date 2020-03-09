@@ -6,14 +6,12 @@ import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
 import exceptions.BizzException;
 import exceptions.FatalException;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
@@ -44,21 +42,15 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        anchorpane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    handleLoginButton();
-                }
+        anchorpane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLoginButton();
             }
         });
-        bt_createAccount.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    handleCreateAccountButton();
-                    event.consume();
-                }
+        bt_createAccount.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleCreateAccountButton();
+                event.consume();
             }
         });
     }

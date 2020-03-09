@@ -15,14 +15,17 @@ import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
+/**
+ * Collection of utility functions used in the view
+ */
 public class Utility {
 
-    public static String UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
+    public static final String UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
 
-    public static String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
+    public static final String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
 
     //TODO Change capital letters
-    public static String EMAIL_PATTERN = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+    public static final String EMAIL_PATTERN = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 
 
     private Utility() {
@@ -31,11 +34,18 @@ public class Utility {
     public static String getTimeStamp() {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        /*System.out.println(formatter.format(date));*/
         return formatter.format(date);
 
     }
 
+    /**
+     * Show an alert to the user.
+     *
+     * @param type Type of alert (warning, etc).
+     * @param title Title of the alert.
+     * @param headerText Header of the alert box.
+     * @param contentText Content of the alert box.
+     */
     public static void showAlert(Alert.AlertType type, String title, String headerText, String contentText) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -44,6 +54,9 @@ public class Utility {
         alert.showAndWait();
     }
 
+    /**
+     * Show the eula in a pop-up box.
+     */
     public static void showEula() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("End-User license agreement");
@@ -69,18 +82,34 @@ public class Utility {
         alert.showAndWait();
     }
 
+    /**
+     * Check if an object is null.
+     * @param obj
+     * @throws FatalException If the object is null.
+     */
     public static void checkObject(Object obj) throws FatalException {
         if (obj == null) {
             throw new FatalException("Object is null");
         }
     }
 
+    /**
+     * Check if a String is empty.
+     * @param chaine String to check.
+     * @param varName Name of the variable, to be used in case a BizzException is thrown.
+     * @throws BizzException In case the String is empty.
+     */
     public static void checkString(String chaine, String varName) throws BizzException {
         if (chaine == null || chaine.equals("")) {
             throw new BizzException(varName + " is empty");
         }
     }
 
+    /**
+     *
+     * @param tarFile
+     * @param destFile
+     */
     public static void unTarFile(File tarFile, Path destFile) {
         TarArchiveInputStream tis = null;
         try {
@@ -110,11 +139,16 @@ public class Utility {
         }
     }
 
-
-    public static String HachFonction(String name) {
-        return name;
-    }
-
+    /**
+     * Check the data the users enter while registering of modifying theirs information.
+     * @param firstname
+     * @param lastname
+     * @param email
+     * @param firstPassword
+     * @param secondPassword
+     * @param phone
+     * @throws BizzException
+     */
     public static void checkUserData(String firstname, String lastname, String email, String firstPassword, String secondPassword, String phone) throws BizzException {
         checkFirstName(firstname);
         checkLastName(lastname);
@@ -124,7 +158,7 @@ public class Utility {
     }
 
     public static void checkPhone(String phone) throws BizzException {
-        checkString(phone,"phone");
+        checkString(phone, "phone");
         System.out.println("Checking phone");
         System.out.println(phone.length());
         if (phone.length() < 9)
@@ -134,14 +168,14 @@ public class Utility {
     }
 
     public static void checkEmail(String email) throws BizzException {
-        checkString(email,"email");
+        checkString(email, "email");
         System.out.println("Checking email");
         if (!email.matches(Utility.EMAIL_PATTERN))
             throw new BizzException("The email is wrong");
     }
 
     public static void checkFirstName(String firstname) throws BizzException {
-        checkString(firstname,"firstname");
+        checkString(firstname, "firstname");
         System.out.println("Checking firstname");
         if (firstname.isEmpty() || firstname.matches(Utility.UNALLOWED_CHARACTERS_PATTERN))
             throw new BizzException("The firstname has unallowed characters");
@@ -149,7 +183,7 @@ public class Utility {
 
 
     public static void checkLastName(String lastname) throws BizzException {
-        checkString(lastname,"lastname");
+        checkString(lastname, "lastname");
         System.out.println("Checking lastname");
         if (lastname.isEmpty() || lastname.matches(Utility.UNALLOWED_CHARACTERS_PATTERN))
             throw new BizzException("The lastname has unallowed characters");
@@ -159,8 +193,8 @@ public class Utility {
         System.out.println("Checking password");
         if (!password1.equals(password2))
             throw new BizzException("The passwords are not the sames");
-        checkString(password1,"password");
-        checkString(password2,"password");
+        checkString(password1, "password");
+        checkString(password2, "password");
     }
 
 }

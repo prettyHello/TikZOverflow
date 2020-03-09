@@ -15,10 +15,10 @@ class UserUCCImplTest {
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-       this.dalServices =  BusinessConfigurationSingleton.getDalServices();
-       this.userDAO = BusinessConfigurationSingleton.getUserDAO();
-       this.userFactory = BusinessConfigurationSingleton.getUserFactory();
-       //this.userUcc = BusinessTestConfigurationHolder.getUserUcc();
+        this.dalServices = BusinessConfigurationSingleton.getDalServices();
+        this.userDAO = BusinessConfigurationSingleton.getUserDAO();
+        this.userFactory = BusinessConfigurationSingleton.getUserFactory();
+        //this.userUcc = BusinessTestConfigurationHolder.getUserUcc();
     }
 
     @org.junit.jupiter.api.AfterEach

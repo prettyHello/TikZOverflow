@@ -66,17 +66,6 @@ public class DashboardController {
         this.viewSwitcher = viewSwitcher;
     }
 
-    //TODO
- /*   public DashboardController setUserProjectView(UserDTO user) {
-        this.user = user;
-        userSetting.setText(user.getFirst_name());
-        ArrayList<ProjectDTO>  listOfProject = ProjectDAO.getInstance().getProjects(user.getUser_id());
-        projectObsList = FXCollections.observableArrayList(listOfProject);
-        projectList.setItems(projectObsList);
-
-        return  this;
-    }*/
-
     public void initialize() {
 
         itemList = FXCollections.observableArrayList();

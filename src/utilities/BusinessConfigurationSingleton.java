@@ -7,13 +7,20 @@ package utilities;
 public class BusinessConfigurationSingleton extends AbstractConfigurationSingleton {
     private static BusinessConfigurationSingleton INSTANCE = new BusinessConfigurationSingleton("TestBusiness");
 
-    /** Constructeur privé */
+    /**
+     * Constructeur privé
+     */
     private BusinessConfigurationSingleton(String conf_name) {
 
         this.loadConfiguration(conf_name);
     }
 
-    /** Point d'accès pour l'instance unique du singleton
-     * @return*/
-    public static BusinessConfigurationSingleton getInstance() {  return INSTANCE; }
+    /**
+     * Point d'accès pour l'instance unique du singleton
+     *
+     * @return
+     */
+    public static BusinessConfigurationSingleton getInstance() {
+        return INSTANCE;
+    }
 }
