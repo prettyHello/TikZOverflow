@@ -1,7 +1,7 @@
 # FeedBuzz : Projet de génie logiciel et gestion de projet (INFO-F-307)
 
 This program will be a diagram editor compatible with LATEX.
-Diagrams can be created iether using TikZ instructions, or through a graphical interface.
+Diagrams can be created either using TikZ instructions, or through a graphical interface.
 Switching between the two will be seamless.
 In addition, multiple users will be able to work on a same project.
 
@@ -39,6 +39,9 @@ This java program has been tested and worked on with the SDK versions 8,11 and 1
 2) On the menu above, click on "Add Configuration" -> "+" -> "Application". On the form, fill the field "Main class" with the path to the main file from /src (i.e. the value is "Main"). 
 </p>
 
+<p>
+3) Make sure to mark the /resources folder as such in Intellij
+</p>
 <p>
 Fin) You will now be able to build the project by clicking on the green hammer in the menu above and then to run the software by clicking on the green arrow.
 </p>
