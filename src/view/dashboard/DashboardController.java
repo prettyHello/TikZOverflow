@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class DashboardController {
 
@@ -41,6 +42,9 @@ public class DashboardController {
     private ViewSwitcher viewSwitcher;
     @FXML
     private  MenuItem userSetting;
+
+    @FXML
+    private  MenuItem newProject;
 
     @FXML
     private ListView<ProjectDTO> projectList;
@@ -94,7 +98,6 @@ public class DashboardController {
 
     public void initialize(){
         itemList = FXCollections.observableArrayList();
-        itemList.add("create new project");
         itemList.add("Your projects");
         itemList.add("Shared with you");
         optionList.setItems(itemList);
@@ -156,4 +159,23 @@ public class DashboardController {
             }
         }
     }
+
+    @FXML
+    public void newProject() {
+        Optional<String> projectName;
+        TextInputDialog enterProjectName = new TextInputDialog();
+        enterProjectName.setTitle("Project name");
+        enterProjectName.setHeaderText(popupMessage);
+        enterProjectName.setContentText("Name :");
+        projectName = enterProjectName.showAndWait();
+        if (projectName.isPresent() ) {
+            if (projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN ) ) {
+                System.out.println(projectName.get());
+
+            }else {
+                new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
+            }
+        }
+    }
+
 }
