@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,7 +30,11 @@ public class ViewOptionController extends HBox {
     @FXML
     private Button exportBtn = null ;
     @FXML
+    private Button editBtn = null;
+    @FXML
     private ImageView exportIcon = null;
+    @FXML
+    private ImageView editIcon = null;
     @FXML
     private HBox projectRowHbox  = null;
 
@@ -65,6 +70,10 @@ public class ViewOptionController extends HBox {
 
             viewOptionUCC.Export(dir, exportDirectory);
         });
+
+        editBtn.setOnAction(event -> {
+            System.out.println("edit!");
+        });
     }
 
     public ViewOptionController setProjectName(String projectName) {
@@ -74,6 +83,11 @@ public class ViewOptionController extends HBox {
 
     public ViewOptionController setExportIcon(String iconUrl) {
         this.exportIcon.setImage(new Image(iconUrl));
+        return this;
+    }
+
+    public ViewOptionController setEditIcon() {
+        this.editIcon.setImage(new Image("view/images/edit.png"));
         return this;
     }
 

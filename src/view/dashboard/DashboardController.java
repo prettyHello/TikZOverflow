@@ -114,7 +114,7 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("view/images/exportIcon.png").getProjectRowHbox());
+                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("view/images/exportIcon.png").setEditIcon().getProjectRowHbox());
                 }
             }
         });
