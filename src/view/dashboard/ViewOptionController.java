@@ -4,23 +4,15 @@ import business.DTO.UserDTO;
 import business.UCC.ViewOptionUCCImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
-import org.apache.commons.compress.utils.IOUtils;
 import persistence.ProjectDAO;
-import persistence.ProjectDAOImpl;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.zip.GZIPOutputStream;
 
 public class ViewOptionController extends HBox {
 
@@ -87,7 +79,7 @@ public class ViewOptionController extends HBox {
     }
 
     public ViewOptionController setEditIcon() {
-        this.editIcon.setImage(new Image("view/images/edit.png"));
+        this.editIcon.setImage(new Image("images/edit.png"));
         return this;
     }
 

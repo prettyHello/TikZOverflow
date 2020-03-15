@@ -24,7 +24,6 @@ import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -114,7 +113,7 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("view/images/exportIcon.png").setEditIcon().getProjectRowHbox());
+                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("images/exportIcon.png").setEditIcon().getProjectRowHbox());
                 }
             }
         });

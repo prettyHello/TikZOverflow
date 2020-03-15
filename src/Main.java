@@ -21,7 +21,7 @@ public class Main extends Application {
 
         primaryStage.setMinHeight(500.0);
         primaryStage.setMinWidth(500.0);
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Groupe9");
         primaryStage.show();
     }
 
