@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
@@ -43,10 +44,10 @@ public class DashboardController {
     private  MenuItem userSetting;
 
     @FXML
-    private  MenuItem newProject;
+    private ListView<ProjectDTO> projectList;
 
     @FXML
-    private ListView<ProjectDTO> projectList;
+    private HBox editView;
 
     @FXML
     private ListView<String> optionList;
@@ -161,6 +162,7 @@ public class DashboardController {
 
     @FXML
     public void newProject() {
+        toggleView();
         Optional<String> projectName;
         TextInputDialog enterProjectName = new TextInputDialog();
         enterProjectName.setTitle("Project name");
@@ -175,6 +177,12 @@ public class DashboardController {
                 new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
             }
         }
+    }
+
+    private void toggleView(){
+        //TODO FIND SOMETHING NEAT TO DO THIS
+        projectList.setVisible(false);
+        editView.setVisible(true);
     }
 
 }
