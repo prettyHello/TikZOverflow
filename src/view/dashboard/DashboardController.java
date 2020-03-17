@@ -162,7 +162,7 @@ public class DashboardController {
 
     @FXML
     public void newProject() {
-        toggleView();
+
         Optional<String> projectName;
         TextInputDialog enterProjectName = new TextInputDialog();
         enterProjectName.setTitle("Project name");
@@ -172,6 +172,7 @@ public class DashboardController {
         if (projectName.isPresent() ) {
             if (projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN ) ) {
                 System.out.println(projectName.get());
+                toEditorView();
 
             }else {
                 new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
@@ -179,10 +180,8 @@ public class DashboardController {
         }
     }
 
-    private void toggleView(){
-        //TODO FIND SOMETHING NEAT TO DO THIS
-        projectList.setVisible(false);
-        editView.setVisible(true);
+    private void toEditorView(){
+        viewSwitcher.switchView(ViewName.EDITOR);
     }
 
 }
