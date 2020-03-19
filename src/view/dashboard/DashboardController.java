@@ -143,6 +143,7 @@ public class DashboardController {
                         try {
                             Files.createDirectories(folderDestination);
                             String Dst = Utility.unTarFile(selectedFile, folderDestination);
+                            System.out.println(Dst);
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
                             ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
                             projectObsList.add(newProjectImport);
