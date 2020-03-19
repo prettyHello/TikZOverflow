@@ -21,8 +21,9 @@ public interface ViewOptionUCC {
      * @param fileTarDestination path to destination of the compressed file
      * @throws IOException
      * @throws BizzException
+     * @return
      */
-    public void createTarGz(String folderProject, String fileTarDestination) throws IOException, BizzException;
+    public Boolean createTarGz(String folderProject, String fileTarDestination) throws IOException, BizzException;
 
     /**
      * Add a file into an existing ".tar.gz" file
@@ -30,5 +31,5 @@ public interface ViewOptionUCC {
      * @param parent parent folder of the file to be added
      * @param archiveTarGz destination of the file
      */
-    public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz);
+    public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) throws RuntimeException ;
 }
