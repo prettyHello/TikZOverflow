@@ -51,8 +51,9 @@ public class ProjectUCCImpl implements ProjectUCC {
         return  new ProjectDTO().
                 setProjectOwnerId(userId)
                 .setProjectName(projectName)
-                .setProjectPath(folderDestination.toString())
+                .setProjectPath(folderDestination.toString()+ File.separator +projectName)
                 .setCreateDate(Utility.getTimeStamp())
                 .setModificationDate(Utility.getTimeStamp());
     }
 }
+

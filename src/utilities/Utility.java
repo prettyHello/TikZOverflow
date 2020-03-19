@@ -125,7 +125,8 @@ public class Utility {
             FileOutputStream fos = null ;
             GZIPInputStream gzipInputStream = new GZIPInputStream(new BufferedInputStream(fis));
             tis = new TarArchiveInputStream(gzipInputStream);
-           // String untarNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"))  ;
+            String untarNameFolder  = tis.getNextTarEntry().getName()  ;
+            untarNameFolder = untarNameFolder.substring(0, untarNameFolder.length()-1);
             TarArchiveEntry tarEntry = null;
             while ((tarEntry = tis.getNextTarEntry()) != null) {
                 if (tarEntry.isDirectory()) {
@@ -139,13 +140,15 @@ public class Utility {
                 }
             }
 
-         //   return untarNameFolder ;
+            return untarNameFolder ;
         }catch(IOException ex) {
             System.out.println("Error while untarring a file- " + ex.getMessage());
         }finally { if(tis != null) { try {
             tis.close(); } catch (IOException e) { e.printStackTrace(); } } }
         return  null ;
     }
+
+
 
 
     /**

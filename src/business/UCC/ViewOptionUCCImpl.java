@@ -21,7 +21,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
     public void Export(File dir, File selectedFile) {
         try {
             if ( selectedFile != null ) {
-                if (dir.getAbsoluteFile().exists()) {
+                if (dir.exists()) {
                     createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") );
                     new Alert(Alert.AlertType.CONFIRMATION, "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz")).showAndWait();
                 } else {
