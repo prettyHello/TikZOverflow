@@ -15,6 +15,10 @@ import java.util.Iterator;
 public class EditorController {
 
 
+    /**
+     * We need to divide teh fxml so that we have separate controller for this one and the other view
+     */
+
     private static final String SQUARE = "SQUARE";
     private static final String TRIANGLE = "TRIANGLE";
     private static final String TRIANGLE_POINT2 = "TRIANGLE2";
@@ -60,19 +64,13 @@ public class EditorController {
 
         pane.setOnMouseClicked((MouseEvent event) ->
         {
-            if(selectedShapes.isEmpty() && selected_shape != ""){
+            if(selectedShapes.isEmpty() && selected_shape != "") { // don't forget
                 selected_x = event.getX();
                 selected_y = event.getY();
                 draw();
             }
         });
-
-
-
     }
-
-
-
 
     @FXML
      void drawLine() {
@@ -172,13 +170,13 @@ public class EditorController {
                 waiting_for_more_coordinate = false;
                 break;
             case SQUARE:
-                shape = new Rectangle(selected_x, selected_y,120, 75);
+                shape = new Rectangle(selected_x, selected_y,75, 75);
                 break;
         }
         if(waiting_for_more_coordinate){
             return;
         }else if(shape == null){ //No shape was previously selected
-            alertNoShapeSelected();
+            alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
         }else{
             pane.getChildren().add(shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED,  e -> onShapeSelected(e)); //add a listener allowing us to know if a shape was selected
@@ -202,14 +200,6 @@ public class EditorController {
 
     }
 
-    private void alertNoShapeSelected(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Select a shape");
-        alert.setHeaderText("You need to select a shape");
-        alert.setContentText("You need to select a shape first!");
-        alert.showAndWait();
-    }
-
     private  void disableButtonOverlay(){
         square.setStyle("-fx-focus-color: transparent;");
         circle.setStyle("-fx-focus-color: transparent;");
@@ -220,11 +210,7 @@ public class EditorController {
 
     private boolean checkIfMoreCoordinateRequired(){
         if(waiting_for_more_coordinate){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Finish your action");
-            alert.setHeaderText("You need to select a second point");
-            alert.setContentText("You need to select a second point to finish the last shape!");
-            alert.showAndWait();
+            alert("Finish your action", "You need to select a second point", "You need to select a second point to finish the last shape!");
             disableButtonOverlay();
             return true;
         }
@@ -275,6 +261,14 @@ public class EditorController {
         Line line2 = new Line(previously_selected_x, previously_selected_y, third_selected_x, third_selected_y);
         Line line3 = new Line(selected_x, selected_y, third_selected_x, third_selected_y);
         return Shape.union(line1,Shape.union(line2,line3));
+    }
+
+    private void alert(String title, String header, String Content){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(Content);
+        alert.showAndWait();
     }
 
 }
