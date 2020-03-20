@@ -1,35 +1,34 @@
 package view.editor;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 import view.ViewSwitcher;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+import java.util.Iterator;
 
 public class EditorController {
 
 
     private static final String SQUARE = "SQUARE";
     private static final String TRIANGLE = "TRIANGLE";
+    private static final String TRIANGLE_POINT2 = "TRIANGLE2";
+    private static final String TRIANGLE_POINT3 = "TRIANGLE3";
     private static final String CIRCLE = "CIRCLE";
     private static final String LINE = "LINE";
+    private static final String LINE_POINT2 = "LINE_POINT2";
     private static final String ARROW = "ARROW";
+    private static final String ARROW_POINT2 = "ARROW_POINT2";
 
     private ViewSwitcher viewSwitcher;
+
     @FXML
-    private Canvas canvas;
+    private Pane pane;
     @FXML
     Button square;
     @FXML
@@ -44,10 +43,12 @@ public class EditorController {
     Button delete;
 
     private  GraphicsContext gc;
-    private List<Shape> selectedShapes = new ArrayList<>();
-    private double selected_x = 30;
-    private double selected_y = 30;
+    private ArrayList<Shape> selectedShapes = new ArrayList<>();
+    private double selected_x,selected_y;
+    private double previously_selected_x, previously_selected_y; //a line need 2 points so last choice is saved
+    private double third_selected_x, third_selected_y;//since a triangle need three points
     private String selected_shape = "";
+    private  boolean waiting_for_more_coordinate = false;
 
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
@@ -56,85 +57,225 @@ public class EditorController {
 
     @FXML
     public void initialize() {
-        gc = canvas.getGraphicsContext2D();
-        canvas.setOnMouseClicked((MouseEvent event) ->
+
+        pane.setOnMouseClicked((MouseEvent event) ->
         {
-            selected_x = event.getX();
-            selected_y = event.getY();
-            draw();
+            if(selectedShapes.isEmpty() && selected_shape != ""){
+                selected_x = event.getX();
+                selected_y = event.getY();
+                draw();
+            }
         });
 
 
 
     }
 
+
+
+
     @FXML
      void drawLine() {
-        this.selected_shape = LINE;
+        if(!checkIfMoreCoordinateRequired()){
+            this.selected_shape = LINE;
+        }
+
     }
 
     @FXML
      void drawSquare() {
-        this.selected_shape = SQUARE;
+        if(!checkIfMoreCoordinateRequired()) {
+            this.selected_shape = SQUARE;
+        }
     }
 
     @FXML
      void drawCircle() {
-        this.selected_shape = CIRCLE;
+        if(!checkIfMoreCoordinateRequired()) {
+            this.selected_shape = CIRCLE;
+        }
     }
 
     @FXML
     void drawTriangle() {
-        this.selected_shape = TRIANGLE;
-
+        if(!checkIfMoreCoordinateRequired()) {
+            this.selected_shape = TRIANGLE;
+        }
     }
 
     @FXML
     void drawArrow() {
-        this.selected_shape = ARROW;
+        if(!checkIfMoreCoordinateRequired()) {
+                this.selected_shape = ARROW;
+        }
     }
 
     @FXML
     void delete() {
-        System.out.println("no del");
-    }
-
-    private  void draw(){
-        switch (selected_shape){
-            case TRIANGLE:
-                gc.lineTo(150.5, 30.5);
-                gc.lineTo(150.5, 150.5);
-                gc.lineTo(30.5, 30.5);
-                break;
-            case CIRCLE:
-                gc.fillOval(selected_x, selected_y, 50, 50);
-                break;
-            case ARROW:
-                System.out.println("no arro");
-                break;
-            case LINE:
-                Line line = new Line(selected_x, selected_y, 150, 50);
-                break;
-            case SQUARE:
-                //gc.fillRect(selected_x, selected_y, 50, 50);
-                Rectangle rect = new Rectangle(120, 75);
-                break;
-            default:
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Select a shape");
-                alert.setHeaderText("You need to select a shape");
-                alert.setContentText("You need to select a shape first!");
-                alert.showAndWait();
-
+        if(!checkIfMoreCoordinateRequired()){
+            if(!selectedShapes.isEmpty()){
+                Iterator<Shape> it = selectedShapes.iterator();
+                while (it.hasNext()) {
+                    Shape s = it.next();
+                    pane.getChildren().remove(s);
+                    it.remove();
+                }
+            }
+            delete.setStyle("-fx-focus-color: transparent;");
         }
     }
 
+    private  void draw(){
+        Shape shape = null;
+        switch (selected_shape){
+            case TRIANGLE:
+                third_selected_x = selected_x;
+                third_selected_y = selected_y;
+                selected_shape = TRIANGLE_POINT2;
+                waiting_for_more_coordinate = true;
+                break;
+            case TRIANGLE_POINT2:
+                previously_selected_x = selected_x;
+                previously_selected_y = selected_y;
+                selected_shape = TRIANGLE_POINT3;
+                waiting_for_more_coordinate = true;
+                break;
+            case TRIANGLE_POINT3:
+                shape = constructTriangle();
+                waiting_for_more_coordinate = false;
+                break;
+            case CIRCLE:
+                Circle circle = new Circle();
+                circle.setCenterX(selected_x);
+                circle.setCenterY(selected_y);
+                circle.setRadius(50.0f);
+                shape = circle;
+                break;
+            case ARROW:
+                previously_selected_x = selected_x;
+                previously_selected_y = selected_y;
+                selected_shape = ARROW_POINT2;
+                waiting_for_more_coordinate = true;
+                break;
+            case ARROW_POINT2:
+                shape = constructArrow();
+                waiting_for_more_coordinate = false;
+                break;
+            case LINE:
+                previously_selected_x = selected_x;
+                previously_selected_y = selected_y;
+                selected_shape = LINE_POINT2;
+                waiting_for_more_coordinate = true;
+                break;
+            case LINE_POINT2:
+                shape = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
+                waiting_for_more_coordinate = false;
+                break;
+            case SQUARE:
+                shape = new Rectangle(selected_x, selected_y,120, 75);
+                break;
+        }
+        if(waiting_for_more_coordinate){
+            return;
+        }else if(shape == null){ //No shape was previously selected
+            alertNoShapeSelected();
+        }else{
+            pane.getChildren().add(shape);
+            shape.addEventHandler(MouseEvent.MOUSE_CLICKED,  e -> onShapeSelected(e)); //add a listener allowing us to know if a shape was selected
+            selected_shape = "";
+        }
+        disableButtonOverlay();
 
+    }
 
-//gc.beginPath();
-// gc.moveTo(selected_x, selected_y);
-//gc.stroke();
+    private void onShapeSelected(MouseEvent e) {
+        Shape shape = (Shape) e.getSource();
+        if (selectedShapes.contains(shape)) { //if already selected => unselect
+            shape.setStroke(Color.TRANSPARENT);
+            selectedShapes.remove(shape);
+            System.out.println("unselected");
+        }else{                                 //if not selected => add to the list
+            shape.setStroke(Color.GREEN);
+            selectedShapes.add(shape);
+            System.out.println("selected");
+        }
 
+    }
+
+    private void alertNoShapeSelected(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Select a shape");
+        alert.setHeaderText("You need to select a shape");
+        alert.setContentText("You need to select a shape first!");
+        alert.showAndWait();
+    }
+
+    private  void disableButtonOverlay(){
+        square.setStyle("-fx-focus-color: transparent;");
+        circle.setStyle("-fx-focus-color: transparent;");
+        line.setStyle("-fx-focus-color: transparent;");
+        arrow.setStyle("-fx-focus-color: transparent;");
+        triangle.setStyle("-fx-focus-color: transparent;");
+    }
+
+    private boolean checkIfMoreCoordinateRequired(){
+        if(waiting_for_more_coordinate){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Finish your action");
+            alert.setHeaderText("You need to select a second point");
+            alert.setContentText("You need to select a second point to finish the last shape!");
+            alert.showAndWait();
+            disableButtonOverlay();
+            return true;
+        }
+        return  false;
+    }
+
+    private Shape constructArrow() {
+        double arrowLength = 5;
+        double arrowWidth = 3;
+        Line main_line = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
+        Line arrow1 = new Line();
+        Line arrow2 = new Line();
+
+        arrow1.setEndX(selected_x);
+        arrow1.setEndY(selected_y);
+        arrow2.setEndX(selected_x);
+        arrow2.setEndY(selected_y);
+
+        if (selected_x == previously_selected_x && selected_y == previously_selected_y) {
+            // arrow parts of length 0
+            arrow1.setStartX(selected_x);
+            arrow1.setStartY(selected_y);
+            arrow2.setStartX(selected_x);
+            arrow2.setStartY(selected_y);
+        } else {
+            double factor = arrowLength / Math.hypot(previously_selected_x - selected_x, previously_selected_y - selected_y);
+            double factorO = arrowWidth / Math.hypot(previously_selected_x - selected_x, previously_selected_y - selected_y);
+
+            // part in direction of main line
+            double dx = (previously_selected_x - selected_x) * factor;
+            double dy = (previously_selected_y - selected_y) * factor;
+
+            // part ortogonal to main line
+            double ox = (previously_selected_x - selected_x) * factorO;
+            double oy = (previously_selected_y - selected_y) * factorO;
+
+            arrow1.setStartX(selected_x + dx - oy);
+            arrow1.setStartY(selected_y + dy + ox);
+            arrow2.setStartX(selected_x + dx + oy);
+            arrow2.setStartY(selected_y + dy - ox);
+        }
+
+        return Shape.union(main_line,Shape.union(arrow1,arrow2));
+    }
+
+    private Shape constructTriangle() {
+        Line line1 = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
+        Line line2 = new Line(previously_selected_x, previously_selected_y, third_selected_x, third_selected_y);
+        Line line3 = new Line(selected_x, selected_y, third_selected_x, third_selected_y);
+        return Shape.union(line1,Shape.union(line2,line3));
+    }
 
 }
 
