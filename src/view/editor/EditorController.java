@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -45,6 +46,8 @@ public class EditorController {
     Button triangle;
     @FXML
     Button delete;
+    @FXML
+    ColorPicker colour;
 
     private  GraphicsContext gc;
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
@@ -125,6 +128,7 @@ public class EditorController {
 
     private  void draw(){
         Shape shape = null;
+
         switch (selected_shape){
             case TRIANGLE:
                 third_selected_x = selected_x;
@@ -167,6 +171,7 @@ public class EditorController {
                 break;
             case LINE_POINT2:
                 shape = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
+                shape.setStroke(colour.getValue());
                 waiting_for_more_coordinate = false;
                 break;
             case SQUARE:
@@ -178,6 +183,7 @@ public class EditorController {
         }else if(shape == null){ //No shape was previously selected
             alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
         }else{
+            shape.setFill(colour.getValue());
             pane.getChildren().add(shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED,  e -> onShapeSelected(e)); //add a listener allowing us to know if a shape was selected
             selected_shape = "";
