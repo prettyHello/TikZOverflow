@@ -4,41 +4,51 @@ import exceptions.FatalException;
 import utilities.Utility;
 
 /**
- * Coordinate of a rectangle are is bottom left corner.
+ * eg : \draw (0,0) rectangle (1,1);
+ * 0,0 is the origin coordinate, 1,1 is the end coordinate.
  */
 public class Rectangle extends Shape{
-    private float height = 1;
-    private float width = 1;
-    private Coordinates coordinates = null;
+    private Coordinates orginCoordinates = null;
+    private Coordinates endCoordinates = null;
 
-    public Rectangle(float height, float width, Coordinates coordinates) throws FatalException {
-        this.height = height;
-        this.width = width;
-        Utility.checkObject(coordinates);
-        this.coordinates = coordinates;
+    /**
+     * Default rectangle, drawn with a black line.
+     * @param orginCoordinates
+     * @param endCoordinates
+     * @throws FatalException
+     */
+    public Rectangle(Coordinates orginCoordinates,Coordinates endCoordinates) throws FatalException {
+        super(true,false);
+        Utility.checkObject(orginCoordinates);
+        Utility.checkObject(endCoordinates);
+        this.orginCoordinates = orginCoordinates;
+        this.endCoordinates = endCoordinates;
     }
 
-    public float getHeight() {
-        return height;
+    /**
+     * Personalised rectangle.
+     * @param orginCoordinates
+     * @param endCoordinates
+     * @param draw      Is the shape have a outer line, can be combined with fill.
+     * @param fill      Is the shape filled with a color, can be combined with draw.
+     * @param fillColor Color to fill the shape with, color list in Color enum.
+     * @param drawColor Outer line color, color list in Color enum.
+     */
+    public Rectangle(boolean draw, boolean fill, Color fillColor, Color drawColor, Coordinates orginCoordinates, Coordinates endCoordinates) throws FatalException {
+        super(draw, fill, fillColor, drawColor);
+        Utility.checkObject(orginCoordinates);
+        Utility.checkObject(endCoordinates);
+        this.orginCoordinates = orginCoordinates;
+        this.endCoordinates = endCoordinates;
     }
 
-    public void setHeight(float height) {
-        this.height = height;
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    public void setWidth(float width){
-        this.width = width;
-    }
-
-    public Coordinates getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
+    /**
+     * @return The line of Tikz code representing this object.
+     * /!\ Print always add an exta " " empty character at the end, no need to add one if concatenating multiple Print result.
+     */
+    public String print(){
+        String returnValue = super.print();
+        returnValue += this.orginCoordinates.print()+" rectangle "+this.endCoordinates.print()+";";
+        return returnValue;
     }
 }

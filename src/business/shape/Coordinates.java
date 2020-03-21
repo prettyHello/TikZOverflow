@@ -30,4 +30,8 @@ public class Coordinates {
     public void setY(float y) {
         this.y = y;
     }
+
+    public String print(){
+        return "("+this.x+","+this.y+") ";
+    }
 }
