@@ -22,7 +22,7 @@
                <children>
                   <SplitPane dividerPositions="0.14285714285714285" orientation="VERTICAL" prefHeight="373.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" maxHeight="50">
+                      <AnchorPane fx:id="toolbar" maxHeight="50" minHeight="0.0" minWidth="0.0">
                            <children>
                               <Button fx:id="circle" ellipsisString="" layoutX="9.0" layoutY="8.0" mnemonicParsing="false" onAction="#drawCircle" prefHeight="30.0" prefWidth="42.0">
                                  <graphic>
@@ -47,7 +47,7 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="315.0" prefWidth="307.0">
                            <children>
-                              <Pane fx:id="pane" prefHeight="316.0" prefWidth="297.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                              <Pane fx:id="pane" prefHeight="316.0" prefWidth="297.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                     </items>

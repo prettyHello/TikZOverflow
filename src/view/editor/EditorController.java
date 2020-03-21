@@ -1,6 +1,7 @@
 package view.editor;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -32,6 +33,8 @@ public class EditorController {
 
     private ViewSwitcher viewSwitcher;
 
+    @FXML
+    Pane toolbar;
     @FXML
     private Pane pane;
     @FXML
@@ -120,6 +123,7 @@ public class EditorController {
                     Shape s = it.next();
                     pane.getChildren().remove(s);
                     it.remove();
+                    disableToolbar(false);
                 }
             }
             delete.setStyle("-fx-focus-color: transparent;");
@@ -193,17 +197,32 @@ public class EditorController {
     }
 
     private void onShapeSelected(MouseEvent e) {
+
         Shape shape = (Shape) e.getSource();
         if (selectedShapes.contains(shape)) { //if already selected => unselect
+            disableToolbar(false);
             shape.setStroke(Color.TRANSPARENT);
             selectedShapes.remove(shape);
             System.out.println("unselected");
         }else{                                 //if not selected => add to the list
+            disableToolbar(true);
             shape.setStroke(Color.GREEN);
             selectedShapes.add(shape);
             System.out.println("selected");
         }
 
+    }
+
+    /**
+     * Disables all the buttons except the delete button when a shape is selected
+     * Gets all children in case new buttons are added
+     * @param isDisabled disables the buttons when true
+     */
+    private void disableToolbar(boolean isDisabled){
+        for (Node node: toolbar.getChildren()) {
+            node.setDisable(isDisabled);
+        }
+        delete.setDisable(false);
     }
 
     private  void disableButtonOverlay(){
