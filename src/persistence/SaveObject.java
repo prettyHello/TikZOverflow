@@ -25,7 +25,9 @@ public class SaveObject {
     }
     public List <Shape> open(String nameOfTheFile) throws IOException, ClassNotFoundException {
         List myList = null;
-        // We still
+        // We still need to work here
+        // Adding the object read into the list
+        // But we need to make sure the save method is working first
 
         ObjectInputStream objectInputStream =
                 new ObjectInputStream(new FileInputStream(nameOfTheFile));
