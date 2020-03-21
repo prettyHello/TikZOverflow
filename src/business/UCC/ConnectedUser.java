@@ -23,6 +23,4 @@ public class ConnectedUser {
     public static UserDTO getConnectedUser() {
         return connectedUser;
     }
-
-
 }
