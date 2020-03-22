@@ -1,8 +1,20 @@
 package business.Canvas;
 
+import business.shape.Shape;
+
 import java.util.List;
 
 public interface Canvas {
+
+    /**
+     * Getter for the width of the canvas
+     */
+    int getWidth();
+
+    /**
+     * Getter for the height of the canvas
+     */
+    int getHeight();
 
     /**
      * Getter for the shapes on the canvas
