@@ -34,8 +34,8 @@ public class Rectangle extends Shape{
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public Rectangle(boolean draw, boolean fill, Color fillColor, Color drawColor, Coordinates orginCoordinates, Coordinates endCoordinates) throws FatalException {
-        super(draw, fill, fillColor, drawColor);
+    public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates orginCoordinates, Coordinates endCoordinates) throws FatalException {
+        super(draw, fill, drawColor, fillColor);
         Utility.checkObject(orginCoordinates);
         Utility.checkObject(endCoordinates);
         this.orginCoordinates = orginCoordinates;
@@ -48,7 +48,7 @@ public class Rectangle extends Shape{
      */
     public String print(){
         String returnValue = super.print();
-        returnValue += this.orginCoordinates.print()+" rectangle "+this.endCoordinates.print()+";";
+        returnValue += this.orginCoordinates.print()+"rectangle "+this.endCoordinates.print()+";";
         return returnValue;
     }
 }

@@ -1,5 +1,10 @@
 package business.shape;
 
+import exceptions.FatalException;
+import utilities.Utility;
+
+import java.io.Serializable;
+
 /**
  * Shape is the representation of a line of tikz code, eg :
  * \draw[thick,rounded corners=8pt] (0,0) -- (0,2) -- (1,3.25)
@@ -10,7 +15,7 @@ package business.shape;
  * Since it's an abstract class it's only intended to extend actual shape class, like Path.java,
  * that should be used to represent the code line above.
  */
-public abstract class Shape {
+public abstract class Shape implements Serializable {
 
     private boolean draw = true;
     private boolean fill = false;
@@ -36,13 +41,17 @@ public abstract class Shape {
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public Shape(boolean draw, boolean fill, Color fillColor, Color drawColor) {
+    public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor) throws FatalException {
         this.draw = draw;
         this.fill = fill;
-        if(draw)
+        if(draw){
+            Utility.checkObject(fillColor);
             this.fillColor = fillColor;
-        if(fill)
+        }
+        if(fill){
+            Utility.checkObject(drawColor);
             this.drawColor = drawColor;
+        }
     }
 
     public boolean isDraw() {

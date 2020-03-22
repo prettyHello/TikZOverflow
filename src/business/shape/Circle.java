@@ -1,5 +1,6 @@
 package business.shape;
 
+import exceptions.BizzException;
 import exceptions.FatalException;
 import utilities.Utility;
 
@@ -17,8 +18,11 @@ public class Circle extends Shape{
      * @param coordinates
      * @param radius
      */
-    public Circle(Coordinates coordinates, float radius) {
+    public Circle(Coordinates coordinates, float radius) throws FatalException {
         super(true,false);
+        if(radius <= 0){
+            throw new BizzException("Radius is negative or null");
+        }
         this.coordinates = coordinates;
         this.radius = radius;
     }
@@ -32,8 +36,12 @@ public class Circle extends Shape{
      * @param coordinates
      * @param radius
      */
-    public Circle(boolean draw, boolean fill, Color fillColor, Color drawColor, Coordinates coordinates, float radius) {
-        super(draw, fill, fillColor, drawColor);
+    public Circle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates coordinates, float radius)  throws FatalException, BizzException {
+        super(draw, fill, drawColor, fillColor);
+        Utility.checkObject(coordinates);
+        if(radius <= 0){
+            throw new BizzException("Radius is negative or null");
+        }
         this.coordinates = coordinates;
         this.radius = radius;
     }
@@ -61,8 +69,10 @@ public class Circle extends Shape{
         return radius;
     }
 
-    public void setRadius(float radius) throws FatalException {
-        Utility.checkObject(coordinates);
+    public void setRadius(float radius) throws BizzException {
+        if(radius <= 0){
+            throw new BizzException("Radius is negative or null");
+        }
         this.radius = radius;
     }
 }
