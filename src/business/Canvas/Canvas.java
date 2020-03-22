@@ -2,9 +2,10 @@ package business.Canvas;
 
 import business.shape.Shape;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface Canvas {
+public interface Canvas extends Serializable {
 
     /**
      * Getter for the width of the canvas
