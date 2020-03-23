@@ -50,7 +50,9 @@ public class EditorController {
     @FXML
     Button delete;
     @FXML
-    ColorPicker colour;
+    ColorPicker fillColour;
+    @FXML
+    ColorPicker strokeColour;
 
     private  GraphicsContext gc;
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
@@ -175,7 +177,7 @@ public class EditorController {
                 break;
             case LINE_POINT2:
                 shape = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
-                shape.setStroke(colour.getValue());
+                shape.setStroke(fillColour.getValue());
                 waiting_for_more_coordinate = false;
                 break;
             case SQUARE:
@@ -187,7 +189,8 @@ public class EditorController {
         }else if(shape == null){ //No shape was previously selected
             alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
         }else{
-            shape.setFill(colour.getValue());
+            shape.setStroke(strokeColour.getValue());
+            shape.setFill(fillColour.getValue());
             pane.getChildren().add(shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED,  e -> onShapeSelected(e)); //add a listener allowing us to know if a shape was selected
             selected_shape = "";
