@@ -1,6 +1,6 @@
 package persistence;
 
-import business.Canvas.Shape;
+import business.shape.Shape;
 import business.DTO.ProjectDTO;
 import business.UCC.ProjectUCCImpl;
 
