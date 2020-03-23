@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
@@ -24,11 +25,11 @@ import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class DashboardController {
 
@@ -44,6 +45,9 @@ public class DashboardController {
 
     @FXML
     private ListView<ProjectDTO> projectList;
+
+    @FXML
+    private HBox editView;
 
     @FXML
     private ListView<String> optionList;
@@ -94,7 +98,6 @@ public class DashboardController {
 
     public void initialize(){
         itemList = FXCollections.observableArrayList();
-        itemList.add("create new project");
         itemList.add("Your projects");
         itemList.add("Shared with you");
         optionList.setItems(itemList);
@@ -114,7 +117,7 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("view/images/exportIcon.png").getProjectRowHbox());
+                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("images/exportIcon.png").setEditIcon().getProjectRowHbox());
                 }
             }
         });
@@ -156,4 +159,29 @@ public class DashboardController {
             }
         }
     }
+
+    @FXML
+    public void newProject() {
+
+        Optional<String> projectName;
+        TextInputDialog enterProjectName = new TextInputDialog();
+        enterProjectName.setTitle("Project name");
+        enterProjectName.setHeaderText(popupMessage);
+        enterProjectName.setContentText("Name :");
+        projectName = enterProjectName.showAndWait();
+        if (projectName.isPresent() ) {
+            if (projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN ) ) {
+                System.out.println(projectName.get());
+                toEditorView();
+
+            }else {
+                new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
+            }
+        }
+    }
+
+    private void toEditorView(){
+        viewSwitcher.switchView(ViewName.EDITOR);
+    }
+
 }
