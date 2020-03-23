@@ -1,17 +1,32 @@
 package business.Canvas;
 
+import business.shape.Shape;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasImpl implements Canvas {
-
+    final int width;
+    final int height;
     final List<Shape> shapes;
 
     /**
      * package visibility constructor. Should use the singleton to get an instance of this class.
      */
-    CanvasImpl() {
+    CanvasImpl(int width, int height) {
+        this.width = width;
+        this.height = height;
         shapes = new ArrayList<>();
+    }
+
+    @Override
+    public int getWidth() {
+        return this.width;
+    }
+
+    @Override
+    public int getHeight() {
+        return this.height;
     }
 
     /**
@@ -50,6 +65,10 @@ public class CanvasImpl implements Canvas {
 
     @Override
     public String toTikZ() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        StringBuilder tikz = new StringBuilder();
+        for (Shape shape : shapes) {
+            tikz.append(shape.print());
+        }
+        return tikz.toString();
     }
 }
