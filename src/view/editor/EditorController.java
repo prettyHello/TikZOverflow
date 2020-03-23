@@ -3,16 +3,17 @@ package view.editor;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import view.ViewName;
 import view.ViewSwitcher;
+
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
 
 public class EditorController {
 
@@ -54,13 +55,14 @@ public class EditorController {
     @FXML
     ColorPicker strokeColour;
 
-    private  GraphicsContext gc;
+
+    private GraphicsContext gc;
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
-    private double selected_x,selected_y;
+    private double selected_x, selected_y;
     private double previously_selected_x, previously_selected_y; //a line need 2 points so last choice is saved
     private double third_selected_x, third_selected_y;//since a triangle need three points
     private String selected_shape = "";
-    private  boolean waiting_for_more_coordinate = false;
+    private boolean waiting_for_more_coordinate = false;
 
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
@@ -72,7 +74,7 @@ public class EditorController {
 
         pane.setOnMouseClicked((MouseEvent event) ->
         {
-            if(selectedShapes.isEmpty() && selected_shape != "") { // don't forget
+            if (selectedShapes.isEmpty() && selected_shape != "") { // don't forget
                 selected_x = event.getX();
                 selected_y = event.getY();
                 draw();
@@ -80,46 +82,59 @@ public class EditorController {
         });
     }
 
+    //menuBar
+
+    /**
+     * Handles the menu item when the user wants to quit. Does not save progress
+     */
     @FXML
-     void drawLine() {
-        if(!checkIfMoreCoordinateRequired()){
+    void close() {
+        String title = "Quit without saving?";
+        String header = "All progress will be lost";
+        String content = "Are you ok with this?";
+        alert(title, header, content, Alert.AlertType.CONFIRMATION);
+    }
+
+    @FXML
+    void drawLine() {
+        if (!checkIfMoreCoordinateRequired()) {
             this.selected_shape = LINE;
         }
 
     }
 
     @FXML
-     void drawSquare() {
-        if(!checkIfMoreCoordinateRequired()) {
+    void drawSquare() {
+        if (!checkIfMoreCoordinateRequired()) {
             this.selected_shape = SQUARE;
         }
     }
 
     @FXML
-     void drawCircle() {
-        if(!checkIfMoreCoordinateRequired()) {
+    void drawCircle() {
+        if (!checkIfMoreCoordinateRequired()) {
             this.selected_shape = CIRCLE;
         }
     }
 
     @FXML
     void drawTriangle() {
-        if(!checkIfMoreCoordinateRequired()) {
+        if (!checkIfMoreCoordinateRequired()) {
             this.selected_shape = TRIANGLE;
         }
     }
 
     @FXML
     void drawArrow() {
-        if(!checkIfMoreCoordinateRequired()) {
-                this.selected_shape = ARROW;
+        if (!checkIfMoreCoordinateRequired()) {
+            this.selected_shape = ARROW;
         }
     }
 
     @FXML
     void delete() {
-        if(!checkIfMoreCoordinateRequired()){
-            if(!selectedShapes.isEmpty()){
+        if (!checkIfMoreCoordinateRequired()) {
+            if (!selectedShapes.isEmpty()) {
                 Iterator<Shape> it = selectedShapes.iterator();
                 while (it.hasNext()) {
                     Shape s = it.next();
@@ -132,10 +147,10 @@ public class EditorController {
         }
     }
 
-    private  void draw(){
+    private void draw() {
         Shape shape = null;
 
-        switch (selected_shape){
+        switch (selected_shape) {
             case TRIANGLE:
                 third_selected_x = selected_x;
                 third_selected_y = selected_y;
@@ -181,18 +196,18 @@ public class EditorController {
                 waiting_for_more_coordinate = false;
                 break;
             case SQUARE:
-                shape = new Rectangle(selected_x, selected_y,75, 75);
+                shape = new Rectangle(selected_x, selected_y, 75, 75);
                 break;
         }
-        if(waiting_for_more_coordinate){
+        if (waiting_for_more_coordinate) {
             return;
-        }else if(shape == null){ //No shape was previously selected
-            alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
-        }else{
+        } else if (shape == null) { //No shape was previously selected
+            alert("Select a shape", "You need to select a shape", "You need to select a shape first!", Alert.AlertType.INFORMATION);
+        } else {
             shape.setStroke(strokeColour.getValue());
             shape.setFill(fillColour.getValue());
             pane.getChildren().add(shape);
-            shape.addEventHandler(MouseEvent.MOUSE_CLICKED,  e -> onShapeSelected(e)); //add a listener allowing us to know if a shape was selected
+            shape.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> onShapeSelected(e)); //add a listener allowing us to know if a shape was selected
             selected_shape = "";
         }
         disableButtonOverlay();
@@ -207,7 +222,7 @@ public class EditorController {
             shape.setStroke(Color.TRANSPARENT);
             selectedShapes.remove(shape);
             System.out.println("unselected");
-        }else{                                 //if not selected => add to the list
+        } else {                                 //if not selected => add to the list
             disableToolbar(true);
             shape.setStroke(Color.GREEN);
             selectedShapes.add(shape);
@@ -219,16 +234,17 @@ public class EditorController {
     /**
      * Disables all the buttons except the delete button when a shape is selected
      * Gets all children in case new buttons are added
+     *
      * @param isDisabled disables the buttons when true
      */
-    private void disableToolbar(boolean isDisabled){
-        for (Node node: toolbar.getChildren()) {
+    private void disableToolbar(boolean isDisabled) {
+        for (Node node : toolbar.getChildren()) {
             node.setDisable(isDisabled);
         }
         delete.setDisable(false);
     }
 
-    private  void disableButtonOverlay(){
+    private void disableButtonOverlay() {
         square.setStyle("-fx-focus-color: transparent;");
         circle.setStyle("-fx-focus-color: transparent;");
         line.setStyle("-fx-focus-color: transparent;");
@@ -236,13 +252,13 @@ public class EditorController {
         triangle.setStyle("-fx-focus-color: transparent;");
     }
 
-    private boolean checkIfMoreCoordinateRequired(){
-        if(waiting_for_more_coordinate){
-            alert("Finish your action", "You need to select a second point", "You need to select a second point to finish the last shape!");
+    private boolean checkIfMoreCoordinateRequired() {
+        if (waiting_for_more_coordinate) {
+            alert("Finish your action", "You need to select a second point", "You need to select a second point to finish the last shape!", Alert.AlertType.INFORMATION);
             disableButtonOverlay();
             return true;
         }
-        return  false;
+        return false;
     }
 
     private Shape constructArrow() {
@@ -281,23 +297,28 @@ public class EditorController {
             arrow2.setStartY(selected_y + dy - ox);
         }
 
-        return Shape.union(main_line,Shape.union(arrow1,arrow2));
+        return Shape.union(main_line, Shape.union(arrow1, arrow2));
     }
 
     private Shape constructTriangle() {
         Line line1 = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
         Line line2 = new Line(previously_selected_x, previously_selected_y, third_selected_x, third_selected_y);
         Line line3 = new Line(selected_x, selected_y, third_selected_x, third_selected_y);
-        return Shape.union(line1,Shape.union(line2,line3));
+        return Shape.union(line1, Shape.union(line2, line3));
     }
 
-    private void alert(String title, String header, String Content){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void alert(String title, String header, String Content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(Content);
-        alert.showAndWait();
-    }
+        Optional<ButtonType> result = alert.showAndWait();
+        if (type == Alert.AlertType.CONFIRMATION) {
+            if (result.get() == ButtonType.OK) {
+                viewSwitcher.switchView(ViewName.DASHBOARD);
+            }
+        }
 
+    }
 }
 
