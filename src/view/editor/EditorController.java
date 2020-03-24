@@ -3,6 +3,7 @@ package view.editor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.canvas.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -12,11 +13,12 @@ import javafx.scene.shape.*;
 import persistence.SaveObject;
 import view.ViewName;
 import view.ViewSwitcher;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
+
+import static java.awt.Color.white;
 
 public class EditorController {
 
@@ -325,13 +327,13 @@ public class EditorController {
     }
 
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+        business.Canvas.CanvasImpl canvas = new business.Canvas.CanvasImpl(200,200);
+        business.shape.Coordinates coord = new business.shape.Coordinates(20,4);
         System.out.println("Save Function");
         SaveObject saveObject = new SaveObject();
-        //saveObject.save(selectedShapes, "myfile");
-        for (Shape shape : selectedShapes) {
-            //Creating an object to save into the file
-            System.out.println("Test");
-         }
+        business.shape.Circle circle = new business.shape.Circle(true,true,business.shape.Color.GREEN,business.shape.Color.RED,coord,5);
+        canvas.addShape(circle);
+        saveObject.save(canvas,"myfile");
     }
 }
 

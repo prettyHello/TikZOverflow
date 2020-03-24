@@ -13,7 +13,7 @@ public class CanvasImpl implements Canvas {
     /**
      * package visibility constructor. Should use the singleton to get an instance of this class.
      */
-    CanvasImpl(int width, int height) {
+    public CanvasImpl(int width, int height) {
         this.width = width;
         this.height = height;
         shapes = new ArrayList<>();
