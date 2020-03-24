@@ -1,5 +1,6 @@
 package view.editor;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,9 +9,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import persistence.SaveObject;
 import view.ViewName;
 import view.ViewSwitcher;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
@@ -319,6 +322,16 @@ public class EditorController {
             }
         }
 
+    }
+
+    public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+        System.out.println("Save Function");
+        SaveObject saveObject = new SaveObject();
+        //saveObject.save(selectedShapes, "myfile");
+        for (Shape shape : selectedShapes) {
+            //Creating an object to save into the file
+            System.out.println("Test");
+         }
     }
 }
 
