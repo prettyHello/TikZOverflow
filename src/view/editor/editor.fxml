@@ -5,6 +5,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.shape.SVGPath?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="931.0"
             prefWidth="1267.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="view.editor.EditorController">
@@ -36,7 +37,17 @@
                                             </graphic>
                                         </Button>
                                         <Button fx:id="triangle" layoutX="109.0" layoutY="8.0" mnemonicParsing="false"
-                                                onAction="#drawTriangle" prefHeight="30.0" prefWidth="42.0" text="/_\"/>
+                                                onAction="#drawTriangle" prefHeight="30.0" prefWidth="42.0">
+                                            <graphic>
+
+                                                <SVGPath content="M10,0L0, 10 L20, 10 Z" layoutX="18.0" layoutY="2.0"
+                                                         stroke="BLACK"
+                                                         strokeWidth="0.8" fill="TRANSPARENT" scaleX="1.5"
+                                                         scaleY="1.5"/>
+                                            </graphic>
+
+
+                                        </Button>
                                         <Button fx:id="line" ellipsisString="" layoutX="160.0" layoutY="8.0"
                                                 mnemonicParsing="false" onAction="#drawLine" prefHeight="30.0"
                                                 prefWidth="42.0">
@@ -45,7 +56,16 @@
                                             </graphic>
                                         </Button>
                                         <Button fx:id="arrow" layoutX="207.0" layoutY="8.0" mnemonicParsing="false"
-                                                onAction="#drawArrow" prefHeight="30.0" prefWidth="42.0" text="-&gt;"/>
+                                                onAction="#drawArrow" prefHeight="30.0" prefWidth="42.0">
+                                            <graphic>
+
+                                                <SVGPath content="M3 0 l18 0 l-0.4 0 l-3 -1 m3 1 l-3 1" layoutX="18.0"
+                                                         layoutY="2.0"
+                                                         stroke="BLACK"
+                                                         strokeWidth="0.8" fill="TRANSPARENT"
+                                                />
+                                            </graphic>
+                                        </Button>
                                         <Button fx:id="delete" layoutX="254.0" layoutY="8.0" mnemonicParsing="false"
                                                 onAction="#delete" prefHeight="30.0" prefWidth="42.0" text="&lt;="/>
                                         <GridPane layoutX="306.0" layoutY="-1.0" prefHeight="50.0" prefWidth="138.0">

@@ -10,9 +10,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -20,7 +24,9 @@ import javafx.scene.shape.Shape;
 import view.ViewSwitcher;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 
 public class EditorController {
 
@@ -158,7 +164,7 @@ public class EditorController {
             case TRIANGLE_POINT3:
                 shape = constructTriangle();
                 waiting_for_more_coordinate = false;
-                addToModel = new business.shape.Triangle(new Coordinates( selected_x, selected_y));
+                addToModel = new business.shape.Triangle(new Coordinates(selected_x, selected_y));
                 break;
             case CIRCLE:
                 float radius = 50.0f;
@@ -167,7 +173,7 @@ public class EditorController {
                 circle.setCenterY(selected_y);
                 circle.setRadius(radius);
                 shape = circle;
-                addToModel = new business.shape.Circle(new Coordinates( selected_x, selected_y), radius);
+                addToModel = new business.shape.Circle(new Coordinates(selected_x, selected_y), radius);
                 break;
             case ARROW:
                 previously_selected_x = selected_x;
@@ -177,7 +183,7 @@ public class EditorController {
                 break;
             case ARROW_POINT2:
                 shape = constructArrow();
-                addToModel = new business.shape.Arrow(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates( selected_x, selected_y));
+                addToModel = new business.shape.Arrow(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates(selected_x, selected_y));
                 waiting_for_more_coordinate = false;
                 break;
             case LINE:
@@ -187,15 +193,15 @@ public class EditorController {
                 waiting_for_more_coordinate = true;
                 break;
             case LINE_POINT2:
-                addToModel = new business.shape.Line(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates( selected_x, selected_y));
+                addToModel = new business.shape.Line(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates(selected_x, selected_y));
                 shape = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
                 shape.setStroke(fillColour.getValue());
                 waiting_for_more_coordinate = false;
                 break;
             case SQUARE:
-                int size =75;
+                int size = 75;
                 shape = new Rectangle(selected_x, selected_y, 75, 75);
-                addToModel = new Square(new Coordinates( selected_x, selected_y),size);
+                addToModel = new Square(new Coordinates(selected_x, selected_y), size);
                 break;
         }
         if (waiting_for_more_coordinate) {
@@ -214,21 +220,27 @@ public class EditorController {
     }
 
     private void onShapeSelected(MouseEvent e) {
-        if(!waiting_for_more_coordinate){
+        if (!waiting_for_more_coordinate) {
             Shape shape = (Shape) e.getSource();
             if (selectedShapes.contains(shape)) { //if already selected => unselect
-                disableToolbar(false);
-                shape.setStroke(Color.TRANSPARENT);
+                shape.setEffect(null);
                 selectedShapes.remove(shape);
+                if (selectedShapes.isEmpty())
+                    disableToolbar(false);
                 System.out.println("unselected");
             } else {                                 //if not selected => add to the list
                 disableToolbar(true);
-                shape.setStroke(Color.GREEN);
+                shape.setStrokeWidth(2);
+                DropShadow borderEffect = new DropShadow(
+                        BlurType.THREE_PASS_BOX, Color.GREEN, 2, 1, 0, 0
+                );
+                shape.setEffect(borderEffect);
                 selectedShapes.add(shape);
                 System.out.println("selected");
             }
         }
     }
+
 
     /**
      * Disables all the buttons except the delete button when a shape is selected
