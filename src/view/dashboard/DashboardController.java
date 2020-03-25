@@ -3,7 +3,7 @@ package view.dashboard;
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 
-import business.UCC.ImportExportUCCImpl;
+import business.UCC.ProjectUCCImpl;
 import exceptions.BizzException;
 
 import business.UCC.UserUCC;
@@ -18,7 +18,7 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
-import persistence.ImportExportDAO;
+import persistence.ProjectDAO;
 import persistence.UserDAOImpl;
 import utilities.Utility;
 import view.ViewName;
@@ -37,7 +37,7 @@ public class DashboardController {
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     private String ContentTextImport = "impossible to import, this project already exists in: ";
 
-    ImportExportUCCImpl projectUCC = new ImportExportUCCImpl();
+    ProjectUCCImpl projectUCC = new ProjectUCCImpl();
 
     private ViewSwitcher viewSwitcher;
     @FXML
@@ -75,7 +75,7 @@ public class DashboardController {
         try{
             this.user = user;
             userSetting.setText(user.getFirst_name());
-            ArrayList<ProjectDTO>  listOfProject = ImportExportDAO.getInstance().getProjects(user.getUser_id());
+            ArrayList<ProjectDTO>  listOfProject = ProjectDAO.getInstance().getProjects(user.getUser_id());
             projectObsList = FXCollections.observableArrayList(listOfProject);
             projectList.setItems(projectObsList);
         }catch(FatalException e){
@@ -151,7 +151,7 @@ public class DashboardController {
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
                             ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
                             projectObsList.add(newProjectImport);
-                            ImportExportDAO.getInstance().saveProject(newProjectImport);
+                            ProjectDAO.getInstance().saveProject(newProjectImport);
                         } catch (IOException | FatalException e) {
                             e.getMessage();
                         }

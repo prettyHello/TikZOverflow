@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import persistence.ImportExportDAO;
+import persistence.ProjectDAO;
 
 import java.io.*;
 
@@ -46,7 +46,7 @@ public class ViewOptionController extends HBox {
     public  void  initialize() {
         try{
             exportBtn.setOnAction(event -> {
-                ProjectDTO  chooserProject = ImportExportDAO.getInstance().getSelectedProject(user.getUser_id(), projectName.getText());
+                ProjectDTO  chooserProject = ProjectDAO.getInstance().getSelectedProject(user.getUser_id(), projectName.getText());
 
                 FileChooser fc = new FileChooser();
                 fc.setTitle("Save project as...");

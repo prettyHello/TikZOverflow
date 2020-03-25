@@ -8,7 +8,7 @@ import exceptions.FatalException;
 import java.io.File;
 import java.nio.file.Path;
 
-public interface ImportExportUCC {
+public interface ProjectUCC {
     /**
      * Rename imported project with input provided by the user
      * @param projectName  folder to be rename
