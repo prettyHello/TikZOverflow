@@ -9,6 +9,9 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.utils.IOUtils;
 
 import java.io.*;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -227,6 +230,32 @@ public class Utility {
             throw new BizzException("The passwords are not the sames");
         checkString(password1, "password");
         checkString(password2, "password");
+    }
+
+
+    public static void deleteFile(File dir) {
+
+        if (dir.isDirectory()){
+            File[] listFiles = dir.listFiles();
+            if(listFiles!=null) {
+                for (File entry : listFiles) {
+                    deleteFile(entry);
+                }
+                dir.delete();
+            }
+        }
+        else {
+            try {
+                Files.delete(dir.toPath());
+            } catch (NoSuchFileException e) {
+                new Alert(Alert.AlertType.ERROR, dir+" no such file or directory").showAndWait();
+            } catch (DirectoryNotEmptyException e) {
+                new Alert(Alert.AlertType.ERROR, dir+" not empty").showAndWait();
+            } catch (IOException e) {
+                new Alert(Alert.AlertType.ERROR, " File permission problems for delete " +dir).showAndWait();
+            }
+
+        }
     }
 
 }

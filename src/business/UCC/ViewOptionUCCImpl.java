@@ -1,12 +1,20 @@
 package business.UCC;
 
+import business.DTO.ProjectDTO;
 import exceptions.BizzException;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
+import persistence.ProjectDAO;
+import utilities.Utility;
+import view.dashboard.DashboardController;
 
 import java.io.*;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.zip.GZIPOutputStream;
 
 public class ViewOptionUCCImpl implements ViewOptionUCC{
@@ -91,7 +99,18 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
         }catch (IOException e) {
             new Alert(Alert.AlertType.ERROR, "Impossible to export the project").showAndWait();
         }
-
-
     }
+
+    public void deleteProject(ProjectDTO project ) {
+        File dir = new File(project.getProjectPath()) ;
+        if (dir.exists()) {
+           Utility.deleteFile(dir);
+        }
+        else {
+            new Alert(Alert.AlertType.ERROR, "This project dont exit in this Computer").showAndWait();
+        }
+    }
+
+
+
 }

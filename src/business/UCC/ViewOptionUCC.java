@@ -1,5 +1,6 @@
 package business.UCC;
 
+import business.DTO.ProjectDTO;
 import exceptions.BizzException;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 
@@ -32,4 +33,6 @@ public interface ViewOptionUCC {
      * @param archiveTarGz destination of the file
      */
     public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) throws RuntimeException ;
+
+    public void deleteProject (ProjectDTO project) ;
 }

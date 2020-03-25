@@ -25,6 +25,11 @@ public class ViewOptionController extends HBox {
     @FXML
     private ImageView exportIcon = null;
     @FXML
+    private Button deleteBtn = null ;
+    @FXML
+    private ImageView deleteIcon = null;
+
+    @FXML
     private HBox projectRowHbox  = null;
 
     private UserDTO user;
@@ -57,6 +62,15 @@ public class ViewOptionController extends HBox {
                 File dir = new File( chooserProject.getProjectPath() );
                 viewOptionUCC.ExportProject(dir, exportDirectory);
             });
+
+            deleteBtn.setOnAction(event -> {
+                ProjectDTO  chooserProject = ProjectDAO.getInstance().getSelectedProject(user.getUser_id(), projectName.getText());
+
+                viewOptionUCC.deleteProject(chooserProject);
+                System.out.println("Delete");
+            });
+
+
         }catch(FatalException e){
             System.out.println("Fatal Exception");
         };
@@ -69,6 +83,11 @@ public class ViewOptionController extends HBox {
 
     public ViewOptionController setExportIcon(String iconUrl) {
         this.exportIcon.setImage(new Image(iconUrl));
+        return this;
+    }
+
+    public ViewOptionController setDeleteIcon(String iconUrl) {
+        this.deleteIcon.setImage(new Image(iconUrl));
         return this;
     }
 
