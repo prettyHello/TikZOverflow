@@ -111,11 +111,10 @@ public class Utility {
     }
 
     /**
-     *
-     * @param tarFile
-     * @param destFile
+     * Decompress file ".tar.gz"
+     * @param tarFile path to source file ".tar.gz"
+     * @param destFile destination directory of decompressed file
      */
-
 
     public static String unTarFile(File tarFile, Path destFile)
     {
@@ -124,7 +123,6 @@ public class Utility {
             FileOutputStream fos = null ;
             tis = new TarArchiveInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarFile))));
             TarArchiveEntry testEntry = tis.getNextTarEntry();
-            // recupere le nom du fichier (principal) desarchivé
             String untaredNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"));
             TarArchiveEntry tarEntry = null;
             while ((tarEntry = tis.getNextTarEntry()) != null) {
@@ -140,12 +138,11 @@ public class Utility {
             }
             return untaredNameFolder ;
         }catch(IOException ex) {
-            System.out.println("Error while untarring a file- " + ex.getMessage());
+            new Alert(Alert.AlertType.ERROR, "File decompression error").showAndWait();
+            return  null ;
         }finally { if(tis != null) { try {
             tis.close(); } catch (IOException e) { e.printStackTrace(); } } }
-        return  null ;
     }
-
 
 
 
