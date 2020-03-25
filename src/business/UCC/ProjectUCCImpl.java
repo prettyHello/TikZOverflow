@@ -1,5 +1,7 @@
 package business.UCC;
 
+import business.Canvas.ActiveCanvas;
+import business.Canvas.ActiveProject;
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 import business.factories.ProjectFactoryImpl;
@@ -60,12 +62,15 @@ public class ProjectUCCImpl implements ProjectUCC {
                 // database
                 UserDTO owner = ConnectedUser.getConnectedUser();
                 String now = Utility.getTimeStamp();
-                String projectPath = "resourcesprojects/userid" + owner.getUser_id() + "/" + projectName;
+                String projectPath = "resources/projects/userid_" + owner.getUser_id() + "/" + projectName;
                 ProjectDTO projectDTO = new ProjectFactoryImpl().createProject(0, owner.getUser_id(), projectName, "", projectPath, now, now);
                 ((ProjectDAO) projectDAO).saveNewProject(projectDTO);
 
                 // filesystem
-                Files.createDirectories(Paths.get("resources/projects/userid_" + ConnectedUser.getConnectedUser().getUser_id() + "/" + projectName));
+                Files.createDirectories(Paths.get(projectPath));
+
+                ActiveProject.setActiveProject(projectDTO);
+                ActiveCanvas.setNewEmptyCanvas(-1, -1);
             } catch (BizzException e) {
                 throw new BizzException("Couldn't create project. Project name already in use");
             } catch (IOException e) {
