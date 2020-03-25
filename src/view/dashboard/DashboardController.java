@@ -2,29 +2,26 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
-
 import business.UCC.ProjectUCCImpl;
-import exceptions.BizzException;
-
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
+import business.factories.ProjectFactory;
+import business.factories.ProjectFactoryImpl;
 import business.factories.UserFactoryImpl;
-
+import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import persistence.DALServices;
-import persistence.DALServicesImpl;
-import persistence.ProjectDAO;
-import persistence.UserDAOImpl;
+import persistence.*;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,15 +30,15 @@ import java.util.Optional;
 
 public class DashboardController {
 
-    private String popupMessage = "Please enter the name of your Project" ;
+    private String popupMessage = "Please enter the name of your Project";
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     private String ContentTextImport = "impossible to import, this project already exists in: ";
 
-    ProjectUCCImpl projectUCC = new ProjectUCCImpl();
+    ProjectUCCImpl projectUCC;
 
     private ViewSwitcher viewSwitcher;
     @FXML
-    private  MenuItem userSetting;
+    private MenuItem userSetting;
 
     @FXML
     private ListView<ProjectDTO> projectList;
@@ -59,31 +56,33 @@ public class DashboardController {
     private UserDTO user;
 
     public DashboardController() {
+        DALServices dal = new DALServicesImpl();
+        ProjectFactory projectFactory = new ProjectFactoryImpl();
+        ProjectDAO dao = new ProjectDAOImpl(dal, projectFactory);
+        this.projectUCC = new ProjectUCCImpl(dal, dao);
         projectList = new ListView<>();
     }
 
     public void handleProfileButton() {
-
         viewSwitcher.switchView(ViewName.PROFILE);
     }
 
 
-
-    public DashboardController setViewSwitcher(ViewSwitcher viewSwitcher) {
+    public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
-        return  this;
     }
 
-    public DashboardController setUserProjectView(UserDTO user) {
+    public void setUserProjectView(UserDTO user) {
+        DALServices dal = new DALServicesImpl();
+        ProjectFactory projectFactory = new ProjectFactoryImpl();
+        ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
+
         this.user = user;
         userSetting.setText(user.getFirst_name());
-        ArrayList<ProjectDTO>  listOfProject = ProjectDAO.getInstance().getProjects(user.getUser_id());
+        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUser_id());
         projectObsList = FXCollections.observableArrayList(listOfProject);
         projectList.setItems(projectObsList);
-
-        return  this;
     }
-
 
 
     public void handleDisconnectButton() {
@@ -96,7 +95,7 @@ public class DashboardController {
     }
 
 
-    public void initialize(){
+    public void initialize() {
         itemList = FXCollections.observableArrayList();
         itemList.add("Your projects");
         itemList.add("Shared with you");
@@ -125,6 +124,7 @@ public class DashboardController {
 
     /**
      * Untar a choose file to user home, show to the dashboard and save into the database
+     *
      * @throws BizzException
      */
     @FXML
@@ -133,55 +133,71 @@ public class DashboardController {
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
-            String extention = selectedFile.getName().substring(selectedFile.getName().length() - 7, selectedFile.getName().length());
+            String extension = selectedFile.getName().substring(selectedFile.getName().length() - 7, selectedFile.getName().length());
 
-            if(extention.equals(".tar.gz")){
-                String projectName = projectUCC.setProjectName(popupMessage);
+            if (extension.equals(".tar.gz")) {
+                String projectName = askProjectName();
 
                 if (projectName != null) {
-                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject +projectName +File.separator +"touch.txt");
-                    Path folderDestination2 = Paths.get(System.getProperty("user.home") + rootProject +projectName );
+                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject + projectName + File.separator + "touch.txt");
+                    Path folderDestination2 = Paths.get(System.getProperty("user.home") + rootProject + projectName);
 
                     if (!Files.exists(folderDestination.resolve(projectName))) {
                         String Dst = Utility.unTarFile(selectedFile, folderDestination2);
-                        projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
+                        projectUCC.renameFolderProject(new File(folderDestination.toFile() + File.separator + Dst), new File(folderDestination.toString() + File.separator + projectName));
                         ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
                         projectObsList.add(newProjectImport);
-                        ProjectDAO.getInstance().saveProject(newProjectImport);
-                    }
-                    else {
+                        //this.projectUCC.createFromImport(newProjectImport);
+                        try {
+                            this.projectUCC.createFromImport("tmp"); //TODO
+                        } catch (IOException e) {
+                            throw new BizzException("Could not locate files to import");
+                        }
+                    } else {
                         new Alert(Alert.AlertType.ERROR, ContentTextImport + folderDestination).showAndWait();
                         throw new BizzException("Existing Project");
                     }
                 }
-            }else {
-                new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extention ").showAndWait();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extension ").showAndWait();
             }
         }
     }
 
     @FXML
     public void newProject() {
+        String projectName = askProjectName();
 
-        Optional<String> projectName;
-        TextInputDialog enterProjectName = new TextInputDialog();
-        enterProjectName.setTitle("Project name");
-        enterProjectName.setHeaderText(popupMessage);
-        enterProjectName.setContentText("Name :");
-        projectName = enterProjectName.showAndWait();
-        if (projectName.isPresent() ) {
-            if (projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN ) ) {
-                System.out.println(projectName.get());
+        if (projectName != null && projectName.matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
+            try {
+                projectUCC.createNewProject(projectName);
+                System.out.println("created project " + projectName);
                 toEditorView();
-
-            }else {
-                new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
+            } catch (BizzException e) {
+                Utility.showAlert(Alert.AlertType.WARNING, "Creation impossible", "Duplicate project name", "A project with ths name already exists. Please specify another one");
             }
+        } else {
+            new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
         }
     }
 
-    private void toEditorView(){
+    private void toEditorView() {
         viewSwitcher.switchView(ViewName.EDITOR);
     }
 
+    private String askProjectName() {
+        Optional<String> projectName;
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Project name");
+        dialog.setHeaderText(popupMessage);
+        dialog.setContentText("Name :");
+        projectName = dialog.showAndWait();
+        if (projectName.isPresent() && projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
+            return projectName.get();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Please enter a valid name").showAndWait();
+        }
+
+        return null;
+    }
 }

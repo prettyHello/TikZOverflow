@@ -4,12 +4,9 @@ import business.DTO.ProjectDTO;
 
 import java.util.ArrayList;
 
-public interface ProjectDAO {
-    static ProjectDAOImpl getInstance() {
-        return  new ProjectDAOImpl();
-    }
+public interface ProjectDAO extends DAO<ProjectDTO> {
 
-    void saveProject(ProjectDTO project);
+    void saveNewProject(ProjectDTO project);
 
     ArrayList<ProjectDTO> getProjects(int userID);
 

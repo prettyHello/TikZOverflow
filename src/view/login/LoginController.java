@@ -75,9 +75,8 @@ public class LoginController {
             userUcc.login(user);
 
             viewSwitcher.setUser(userUcc.getUserInfo(user)).switchView(ViewName.DASHBOARD);
-            //viewSwitcher.switchView(ViewName.DASHBOARD);
 
-        }catch (BizzException e) {
+        } catch (BizzException e) {
             //Update failed on dao lvl
             System.out.println("Login Failed on business lvl");
             showAlert(Alert.AlertType.WARNING, "Login", "Business Error", e.getMessage());
