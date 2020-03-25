@@ -8,27 +8,27 @@ import java.io.Serializable;
  * https://en.wikibooks.org/wiki/LaTeX/PGF/TikZ#Specifying_Coordinates
  */
 public class Coordinates implements Serializable {
-    private float x = 0;
-    private float y = 0;
+    private double x = 0;
+    private double y = 0;
 
-    public Coordinates(float x, float y) {
+    public Coordinates(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 

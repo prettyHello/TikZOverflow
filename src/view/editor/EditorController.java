@@ -1,7 +1,9 @@
 package view.editor;
 
 import business.Canvas.ActiveCanvas;
+import business.Canvas.Canvas;
 import business.shape.Coordinates;
+import business.shape.Square;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
@@ -60,13 +62,13 @@ public class EditorController {
     @FXML
     ColorPicker strokeColour;
 
-    private GraphicsContext gc;
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
     private double selected_x, selected_y;
     private double previously_selected_x, previously_selected_y; // a line needs 2 points so last choice is saved
     private double third_selected_x, third_selected_y; // since a triangle need three points
     private String selected_shape = "";
     private boolean waiting_for_more_coordinate = false;
+    private Canvas canvas = ActiveCanvas.getActiveCanvas();
 
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
@@ -138,7 +140,7 @@ public class EditorController {
 
     private void handle_draw_call() {
         Shape shape = null;
-        business.shape.Shape addToModel;
+        business.shape.Shape addToModel = null;
 
         switch (selected_shape) {
             case TRIANGLE:
@@ -156,19 +158,16 @@ public class EditorController {
             case TRIANGLE_POINT3:
                 shape = constructTriangle();
                 waiting_for_more_coordinate = false;
-
-                addToModel = new business.shape.Triangle(new Coordinates((float) selected_x, (float) selected_y));
-                ActiveCanvas.getActiveCanvas().addShape(addToModel);
+                addToModel = new business.shape.Triangle(new Coordinates( selected_x, selected_y));
                 break;
             case CIRCLE:
+                float radius = 50.0f;
                 Circle circle = new Circle();
                 circle.setCenterX(selected_x);
                 circle.setCenterY(selected_y);
-                circle.setRadius(50.0f);
+                circle.setRadius(radius);
                 shape = circle;
-
-                addToModel = new business.shape.Circle(new Coordinates((float) selected_x, (float) selected_y), 50.0f);
-                ActiveCanvas.getActiveCanvas().addShape(addToModel);
+                addToModel = new business.shape.Circle(new Coordinates( selected_x, selected_y), radius);
                 break;
             case ARROW:
                 previously_selected_x = selected_x;
@@ -178,6 +177,7 @@ public class EditorController {
                 break;
             case ARROW_POINT2:
                 shape = constructArrow();
+                addToModel = new business.shape.Arrow(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates( selected_x, selected_y));
                 waiting_for_more_coordinate = false;
                 break;
             case LINE:
@@ -187,17 +187,15 @@ public class EditorController {
                 waiting_for_more_coordinate = true;
                 break;
             case LINE_POINT2:
+                addToModel = new business.shape.Line(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates( selected_x, selected_y));
                 shape = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
                 shape.setStroke(fillColour.getValue());
                 waiting_for_more_coordinate = false;
                 break;
             case SQUARE:
+                int size =75;
                 shape = new Rectangle(selected_x, selected_y, 75, 75);
-
-                Coordinates begin = new Coordinates((float) selected_x, (float) selected_y);
-                Coordinates end = new Coordinates((float) selected_x + 75, (float) selected_y + 75);
-                addToModel = new business.shape.Rectangle(begin, end);
-                ActiveCanvas.getActiveCanvas().addShape(addToModel);
+                addToModel = new Square(new Coordinates( selected_x, selected_y),size);
                 break;
         }
         if (waiting_for_more_coordinate) {
@@ -205,6 +203,7 @@ public class EditorController {
         } else if (shape == null) { //No shape was previously selected
             alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
         } else {
+            canvas.addShape(addToModel); //warn the model
             shape.setStroke(strokeColour.getValue());
             shape.setFill(fillColour.getValue());
             pane.getChildren().add(shape);
@@ -215,20 +214,20 @@ public class EditorController {
     }
 
     private void onShapeSelected(MouseEvent e) {
-
-        Shape shape = (Shape) e.getSource();
-        if (selectedShapes.contains(shape)) { //if already selected => unselect
-            disableToolbar(false);
-            shape.setStroke(Color.TRANSPARENT);
-            selectedShapes.remove(shape);
-            System.out.println("unselected");
-        } else {                                 //if not selected => add to the list
-            disableToolbar(true);
-            shape.setStroke(Color.GREEN);
-            selectedShapes.add(shape);
-            System.out.println("selected");
+        if(!waiting_for_more_coordinate){
+            Shape shape = (Shape) e.getSource();
+            if (selectedShapes.contains(shape)) { //if already selected => unselect
+                disableToolbar(false);
+                shape.setStroke(Color.TRANSPARENT);
+                selectedShapes.remove(shape);
+                System.out.println("unselected");
+            } else {                                 //if not selected => add to the list
+                disableToolbar(true);
+                shape.setStroke(Color.GREEN);
+                selectedShapes.add(shape);
+                System.out.println("selected");
+            }
         }
-
     }
 
     /**

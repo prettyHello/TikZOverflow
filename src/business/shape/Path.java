@@ -32,6 +32,17 @@ public class Path extends Shape {
         this.pathPoints = pathPoints;
     }
 
+    public Path(Coordinates origin, Coordinates end) throws FatalException {
+        super(true, false);
+        ArrayList<Coordinates> pathPoints = new ArrayList<>();
+        pathPoints.add(origin);
+        pathPoints.add(end);
+        Utility.checkObject(pathPoints);
+        this.pathPoints = pathPoints;
+
+    }
+
+
     /**
      * Personalised path, with arrow and specified color.
      *
