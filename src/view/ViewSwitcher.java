@@ -116,7 +116,7 @@ public class ViewSwitcher {
      *
      * @throws IOException if the associated .fxml file can't be loaded
      */
-    public void toDashboard() throws IOException {
+    private void toDashboard() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/dashboard/dashboard.fxml"));
         Parent root = loader.load();
         DashboardController dashboardController = loader.getController();

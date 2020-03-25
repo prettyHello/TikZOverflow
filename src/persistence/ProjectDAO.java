@@ -10,5 +10,7 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
 
     ArrayList<ProjectDTO> getProjects(int userID);
 
+    ProjectDTO getProjectDTO(int project_id);
+
     ProjectDTO getSelectedProject(int userID, String projectName);
 }

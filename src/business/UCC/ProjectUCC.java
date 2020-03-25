@@ -27,6 +27,13 @@ public interface ProjectUCC {
      */
     ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId);
 
+    /**
+     * retrieve information for a given project id
+     *
+     * @param project_id the id of the project
+     * @return the associated DTO
+     */
+    ProjectDTO getProjectDTO(int project_id);
 
     /**
      * Creates a new project on disk and stores its path in the database

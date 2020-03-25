@@ -14,15 +14,15 @@ public class Rectangle extends Shape {
     /**
      * Default rectangle, drawn with a black line.
      *
-     * @param orginCoordinates
+     * @param originCoordinates
      * @param endCoordinates
      * @throws FatalException
      */
-    public Rectangle(Coordinates orginCoordinates, Coordinates endCoordinates) throws FatalException {
+    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates) throws FatalException {
         super(true, false);
-        Utility.checkObject(orginCoordinates);
+        Utility.checkObject(originCoordinates);
         Utility.checkObject(endCoordinates);
-        this.orginCoordinates = orginCoordinates;
+        this.orginCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;
     }
 

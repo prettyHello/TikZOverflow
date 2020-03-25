@@ -37,6 +37,7 @@ public class DashboardController {
     ProjectUCCImpl projectUCC;
 
     private ViewSwitcher viewSwitcher;
+
     @FXML
     private MenuItem userSetting;
 
@@ -116,7 +117,12 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("images/exportIcon.png").setEditIcon().getProjectRowHbox());
+                    ViewOptionController viewOptionController = new ViewOptionController(user, item.getProjectId());
+                    viewOptionController.setProjectName(item.getProjectName());
+                    viewOptionController.setExportIcon("images/exportIcon.png");
+                    viewOptionController.setEditIcon();
+                    viewOptionController.setViewSwitcher(viewSwitcher);
+                    setGraphic(viewOptionController.getProjectRowHbox());
                 }
             }
         });

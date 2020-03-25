@@ -55,6 +55,14 @@ public class ProjectUCCImpl implements ProjectUCC {
      * {@inheritDoc}
      */
     @Override
+    public ProjectDTO getProjectDTO(int project_id) {
+        return ((ProjectDAO) projectDAO).getProjectDTO(project_id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void createNewProject(String projectName) throws BizzException {
         try {
             dal.startTransaction();

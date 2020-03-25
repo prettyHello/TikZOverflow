@@ -1,5 +1,7 @@
 package view.editor;
 
+import business.Canvas.ActiveCanvas;
+import business.shape.Coordinates;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
@@ -136,6 +138,7 @@ public class EditorController {
 
     private void handle_draw_call() {
         Shape shape = null;
+        business.shape.Shape addToModel;
 
         switch (selected_shape) {
             case TRIANGLE:
@@ -153,6 +156,9 @@ public class EditorController {
             case TRIANGLE_POINT3:
                 shape = constructTriangle();
                 waiting_for_more_coordinate = false;
+
+                addToModel = new business.shape.Triangle(new Coordinates((float) selected_x, (float) selected_y));
+                ActiveCanvas.getActiveCanvas().addShape(addToModel);
                 break;
             case CIRCLE:
                 Circle circle = new Circle();
@@ -161,7 +167,8 @@ public class EditorController {
                 circle.setRadius(50.0f);
                 shape = circle;
 
-
+                addToModel = new business.shape.Circle(new Coordinates((float) selected_x, (float) selected_y), 50.0f);
+                ActiveCanvas.getActiveCanvas().addShape(addToModel);
                 break;
             case ARROW:
                 previously_selected_x = selected_x;
@@ -186,6 +193,11 @@ public class EditorController {
                 break;
             case SQUARE:
                 shape = new Rectangle(selected_x, selected_y, 75, 75);
+
+                Coordinates begin = new Coordinates((float) selected_x, (float) selected_y);
+                Coordinates end = new Coordinates((float) selected_x + 75, (float) selected_y + 75);
+                addToModel = new business.shape.Rectangle(begin, end);
+                ActiveCanvas.getActiveCanvas().addShape(addToModel);
                 break;
         }
         if (waiting_for_more_coordinate) {
@@ -196,7 +208,7 @@ public class EditorController {
             shape.setStroke(strokeColour.getValue());
             shape.setFill(fillColour.getValue());
             pane.getChildren().add(shape);
-            shape.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> onShapeSelected(e)); //add a listener allowing us to know if a shape was selected
+            shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
             selected_shape = "";
         }
         disableButtonOverlay();

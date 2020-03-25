@@ -67,7 +67,7 @@ public class CanvasImpl implements Canvas {
     public String toTikZ() {
         StringBuilder tikz = new StringBuilder();
         for (Shape shape : shapes) {
-            tikz.append(shape.print());
+            tikz.append(shape.print()).append("\n");
         }
         return tikz.toString();
     }
