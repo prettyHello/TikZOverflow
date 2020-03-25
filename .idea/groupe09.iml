@@ -15,5 +15,6 @@
     <orderEntry type="library" name="commons-compress-1.2" level="project" />
     <orderEntry type="library" name="junit-jupiter-api-5.4.2" level="project" />
     <orderEntry type="library" name="junit-jupiter-api-5.4.21" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>

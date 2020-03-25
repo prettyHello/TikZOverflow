@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 
 
-public class ProjectUCCImpl implements ProjectUCC {
+public class ImportExportUCCImpl implements ImportExportUCC {
 
     private String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
 

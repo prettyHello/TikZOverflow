@@ -122,11 +122,10 @@ public class Utility {
         TarArchiveInputStream tis = null;
         try {
             FileOutputStream fos = null ;
-            //lis le fichier archivé, le desarchive et sauve dans tis
             tis = new TarArchiveInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarFile))));
             TarArchiveEntry testEntry = tis.getNextTarEntry();
             // recupere le nom du fichier (principal) desarchivé
-            String untarNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"));
+            String untaredNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"));
             TarArchiveEntry tarEntry = null;
             while ((tarEntry = tis.getNextTarEntry()) != null) {
                 if (tarEntry.isDirectory()) {
@@ -139,9 +138,7 @@ public class Utility {
                     fos.close();
                 }
             }
-
-
-            return untarNameFolder ;
+            return untaredNameFolder ;
         }catch(IOException ex) {
             System.out.println("Error while untarring a file- " + ex.getMessage());
         }finally { if(tis != null) { try {

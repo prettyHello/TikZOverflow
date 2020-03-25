@@ -18,7 +18,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
     /**
      * {@inheritDoc}
      */
-    public void Export(File dir, File selectedFile) {
+    public void ExportProject(File dir, File selectedFile) {
         try {
             if ( selectedFile != null ) {
                 if (dir.exists()) {

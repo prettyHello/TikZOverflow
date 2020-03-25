@@ -6,9 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-// creer une interface pour projetDAO, ensuite modifier la classe ProjectDAO en ProjectDAOImpl
+// creer une interface pour projetDAO, ensuite modifier la classe ImportExportDAO en ImportExportDAOImpl
 
-public class ProjectDAOImpl implements ProjectDAO {
+public class ImportExportDAOImpl implements ImportExportDAO {
     PreparedStatement prstmt;
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
@@ -16,7 +16,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     // gerer les connections en s'appuyant sur l'implementation dans UserUCCImpl pour les fermetures et Exceptions
     DALServicesImpl querry = new DALServicesImpl() ;
 
-    ProjectDAOImpl(){}
+    ImportExportDAOImpl(){}
 
     // lever des exceptions de type FATAL...
 

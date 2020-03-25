@@ -3,13 +3,14 @@ package view.dashboard;
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 
-import business.UCC.ProjectUCCImpl;
+import business.UCC.ImportExportUCCImpl;
 import exceptions.BizzException;
 
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import business.factories.UserFactoryImpl;
 
+import exceptions.FatalException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import persistence.DALServices;
 import persistence.DALServicesImpl;
-import persistence.ProjectDAO;
+import persistence.ImportExportDAO;
 import persistence.UserDAOImpl;
 import utilities.Utility;
 import view.ViewName;
@@ -36,7 +37,7 @@ public class DashboardController {
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     private String ContentTextImport = "impossible to import, this project already exists in: ";
 
-    ProjectUCCImpl projectUCC = new ProjectUCCImpl();
+    ImportExportUCCImpl projectUCC = new ImportExportUCCImpl();
 
     private ViewSwitcher viewSwitcher;
     @FXML
@@ -71,12 +72,15 @@ public class DashboardController {
     }
 
     public DashboardController setUserProjectView(UserDTO user) {
-        this.user = user;
-        userSetting.setText(user.getFirst_name());
-        ArrayList<ProjectDTO>  listOfProject = ProjectDAO.getInstance().getProjects(user.getUser_id());
-        projectObsList = FXCollections.observableArrayList(listOfProject);
-        projectList.setItems(projectObsList);
-
+        try{
+            this.user = user;
+            userSetting.setText(user.getFirst_name());
+            ArrayList<ProjectDTO>  listOfProject = ImportExportDAO.getInstance().getProjects(user.getUser_id());
+            projectObsList = FXCollections.observableArrayList(listOfProject);
+            projectList.setItems(projectObsList);
+        }catch(FatalException e){
+            System.out.println("Fatal Exception");
+        };
         return  this;
     }
 
@@ -125,7 +129,7 @@ public class DashboardController {
      * @throws BizzException
      */
     @FXML
-    public void importd() throws BizzException {
+    public void ImportProject() throws BizzException {
         FileChooser fc = new FileChooser();
         File selectedFile = fc.showOpenDialog(null);
 
@@ -147,8 +151,8 @@ public class DashboardController {
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
                             ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
                             projectObsList.add(newProjectImport);
-                            ProjectDAO.getInstance().saveProject(newProjectImport);
-                        } catch (IOException e) {
+                            ImportExportDAO.getInstance().saveProject(newProjectImport);
+                        } catch (IOException | FatalException e) {
                             e.getMessage();
                         }
                     }

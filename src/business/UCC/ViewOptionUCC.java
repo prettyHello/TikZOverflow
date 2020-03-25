@@ -13,7 +13,7 @@ public interface ViewOptionUCC {
      * @param dir path to the folder we need to compress
      * @param selectedFile path to destination of the compressed file
      */
-    public void Export(File dir, File selectedFile);
+    public void ExportProject(File dir, File selectedFile);
 
     /**
      * create an empty ".tar.gz" folder in which compressed files will be added
