@@ -1,6 +1,8 @@
 package persistence;
 
 import business.DTO.ProjectDTO;
+import javafx.scene.control.Alert;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +22,9 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     // lever des exceptions de type FATAL...
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void saveProject(ProjectDTO project){
         try {
@@ -31,11 +36,13 @@ public class ProjectDAOImpl implements ProjectDAO {
            prstmt.setString(5, project.getModificationDate());
            prstmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Error dans la BD. UNIQUE constraint failed: projects.project_id doit etre unique ");
+            new Alert(Alert.AlertType.ERROR, "Failed to save '"+project.getProjectName() +"'  project").showAndWait();
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<ProjectDTO> getProjects(int userID){
         PreparedStatement pr;
@@ -55,12 +62,14 @@ public class ProjectDAOImpl implements ProjectDAO {
             }
             return projects;
         } catch (Exception e) {
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Failed to load project list").showAndWait();
         }
         return null;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProjectDTO getSelectedProject(int userID, String projectName){
         PreparedStatement pr;
@@ -81,7 +90,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             }
             return project;
         } catch (Exception e) {
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Failed to load the project: "+ project.getProjectName() ).showAndWait();
         }
         return null;
     }

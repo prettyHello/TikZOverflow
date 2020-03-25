@@ -125,8 +125,7 @@ public class DashboardController {
     }
 
     /**
-     * Untar a choose file to user home, show to the dashboard and save into the database
-     * @throws BizzException
+     * Decompress a choose file to user home, display it on the dashboard and save it into the database
      */
     @FXML
     public void ImportProject() throws BizzException {
@@ -142,12 +141,10 @@ public class DashboardController {
                 if (projectName != null) {
                     Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
 
-                    // Se positionne a l'interieur du dossier passe en entree (projectName)
                     if (!Files.exists(folderDestination.resolve(projectName))) {
                         try {
                             Files.createDirectories(folderDestination);
                             String Dst = Utility.unTarFile(selectedFile, folderDestination);
-                            System.out.println(Dst);
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
                             ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
                             projectObsList.add(newProjectImport);

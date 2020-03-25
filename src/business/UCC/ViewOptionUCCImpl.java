@@ -22,7 +22,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
         try {
             if ( selectedFile != null ) {
                 if (dir.exists()) {
-                    if (createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") ) ) {
+                    if ( createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") ) ) {
                         new Alert(Alert.AlertType.CONFIRMATION, "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz")).showAndWait();
                     }
                     else {
@@ -85,8 +85,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
             } else if (file.isDirectory()) {
                 archiveTarGz.closeArchiveEntry();
                 for (File fileInSubFolder : file.listFiles()) {
-                    addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName + File.separator, archiveTarGz);
-                    System.out.println(fileInSubFolder);
+                    addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName + "/", archiveTarGz);
                 }
             }
         }catch (IOException e) {

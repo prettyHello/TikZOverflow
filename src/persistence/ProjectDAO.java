@@ -10,9 +10,22 @@ public interface ProjectDAO {
         return  new ProjectDAOImpl();
     }
 
+    /**
+     * Save a project into a DataBase
+     * @param project Project object to be saved
+     */
     void saveProject(ProjectDTO project) throws FatalException;
 
+    /**
+     * Retrieve the project list of connected user
+     * @param userID User ID
+     */
     ArrayList<ProjectDTO> getProjects(int userID) throws FatalException;
 
+    /**
+     * Retrieve a specific project of connected user
+     * @param userID User ID
+     * @param projectName Project name
+     */
     ProjectDTO getSelectedProject(int userID, String projectName) throws FatalException;
 }
