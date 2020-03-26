@@ -24,7 +24,8 @@ public enum Color {
     VIOLET("violet"),
     WHITE("white");
     public final String value;
-    private Color(String value){
+
+    Color(String value) {
         this.value = value;
     }
 }

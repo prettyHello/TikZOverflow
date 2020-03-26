@@ -1,17 +1,34 @@
 package business.UCC;
+
+import business.Canvas.ActiveCanvas;
+import business.Canvas.ActiveProject;
 import business.DTO.ProjectDTO;
+import business.DTO.UserDTO;
+import business.factories.ProjectFactoryImpl;
 import exceptions.BizzException;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputDialog;
+import persistence.DALServices;
+import persistence.DAO;
+import persistence.ProjectDAO;
 import utilities.Utility;
+
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
+import java.nio.file.Paths;
 
 
 public class ProjectUCCImpl implements ProjectUCC {
 
-    private String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
+    private final String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
+
+    private final DALServices dal;
+    private final DAO<ProjectDTO> projectDAO;
+
+    public ProjectUCCImpl(DALServices dalServices, DAO<ProjectDTO> projectDAO) {
+        this.dal = dalServices;
+        this.projectDAO = projectDAO;
+    }
 
     /**
      * {@inheritDoc}
@@ -25,35 +42,58 @@ public class ProjectUCCImpl implements ProjectUCC {
      * {@inheritDoc}
      */
     @Override
-    public String setProjectName(String popupMessage) throws BizzException {
-        Optional<String> projectName;
-
-        TextInputDialog enterProjectName = new TextInputDialog();
-        enterProjectName.setTitle("Project name");
-        enterProjectName.setHeaderText(popupMessage);
-        enterProjectName.setContentText("Name :");
-        projectName = enterProjectName.showAndWait();
-        if (projectName.isPresent() ) {
-            if (projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN ) ) {
-                return projectName.get();
-            }else {
-                new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
-            }
-        }
-        return null ;
+    public ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId) {
+        return new ProjectDTO().
+                setProjectOwnerId(userId)
+                .setProjectName(projectName)
+                .setProjectPath(folderDestination.toString()+ File.separator +projectName)
+                .setCreateDate(Utility.getTimeStamp())
+                .setModificationDate(Utility.getTimeStamp());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId) {
-        return  new ProjectDTO().
-                setProjectOwnerId(userId)
-                .setProjectName(projectName)
-                .setProjectPath(folderDestination.toString()+ File.separator +projectName)
-                .setCreateDate(Utility.getTimeStamp())
-                .setModificationDate(Utility.getTimeStamp());
+    public ProjectDTO getProjectDTO(int project_id) {
+        return ((ProjectDAO) projectDAO).getProjectDTO(project_id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void createNewProject(String projectName) throws BizzException {
+        try {
+            dal.startTransaction();
+            try {
+                // database
+                UserDTO owner = ConnectedUser.getConnectedUser();
+                String now = Utility.getTimeStamp();
+                String projectPath = "resources/projects/userid_" + owner.getUser_id() + "/" + projectName;
+                ProjectDTO projectDTO = new ProjectFactoryImpl().createProject(0, owner.getUser_id(), projectName, "", projectPath, now, now);
+                ((ProjectDAO) projectDAO).saveNewProject(projectDTO);
+
+                // filesystem
+                Files.createDirectories(Paths.get(projectPath));
+
+                ActiveProject.setActiveProject(projectDTO);
+                ActiveCanvas.setNewEmptyCanvas(-1, -1);
+            } catch (BizzException e) {
+                throw new BizzException("Couldn't create project. Project name already in use");
+            } catch (IOException e) {
+                throw new BizzException("Couldn't create project. Error during project folder creation");
+            }
+            dal.commit();
+        } finally {
+            dal.rollback();
+        }
+    }
+
+    @Override
+    public void createFromImport(String importPath) throws BizzException, IOException {
+        //TODO
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
 

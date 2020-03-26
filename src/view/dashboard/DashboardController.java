@@ -8,19 +8,19 @@ import exceptions.BizzException;
 
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
+import business.factories.ProjectFactory;
+import business.factories.ProjectFactoryImpl;
 import business.factories.UserFactoryImpl;
 
 import exceptions.FatalException;
+import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import persistence.DALServices;
-import persistence.DALServicesImpl;
-import persistence.ProjectDAO;
-import persistence.UserDAOImpl;
+import persistence.*;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -44,8 +44,9 @@ public class DashboardController {
     ProjectUCCImpl projectUCC = new ProjectUCCImpl();
 
     private ViewSwitcher viewSwitcher;
+
     @FXML
-    private  MenuItem userSetting;
+    private MenuItem userSetting;
 
     @FXML
     private ListView<ProjectDTO> projectList;
@@ -63,32 +64,32 @@ public class DashboardController {
     private UserDTO user;
 
     public DashboardController() {
+        DALServices dal = new DALServicesImpl();
+        ProjectFactory projectFactory = new ProjectFactoryImpl();
+        ProjectDAO dao = new ProjectDAOImpl(dal, projectFactory);
+        this.projectUCC = new ProjectUCCImpl(dal, dao);
         projectList = new ListView<>();
     }
 
     public void handleProfileButton() {
-
         viewSwitcher.switchView(ViewName.PROFILE);
     }
 
 
-
-    public DashboardController setViewSwitcher(ViewSwitcher viewSwitcher) {
+    public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
-        return  this;
     }
 
-    public DashboardController setUserProjectView(UserDTO user) {
-        try{
-            this.user = user;
-            userSetting.setText(user.getFirst_name());
-            ArrayList<ProjectDTO>  listOfProject = ProjectDAO.getInstance().getProjects(user.getUser_id());
-            projectObsList = FXCollections.observableArrayList(listOfProject);
-            projectList.setItems(projectObsList);
-        }catch(FatalException e){
-            System.out.println("Fatal Exception");
-        };
-        return  this;
+    public void setUserProjectView(UserDTO user) {
+        DALServices dal = new DALServicesImpl();
+        ProjectFactory projectFactory = new ProjectFactoryImpl();
+        ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
+
+        this.user = user;
+        userSetting.setText(user.getFirst_name());
+        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUser_id());
+        projectObsList = FXCollections.observableArrayList(listOfProject);
+        projectList.setItems(projectObsList);
     }
 
 
@@ -103,7 +104,7 @@ public class DashboardController {
     }
 
 
-    public void initialize(){
+    public void initialize() {
         itemList = FXCollections.observableArrayList();
         itemList.add("Your projects");
         itemList.add("Shared with you");
@@ -125,6 +126,12 @@ public class DashboardController {
                     setGraphic(null);
                 } else {
                     setGraphic(new ViewOptionController(dbc ,user).setProject(item).setExportIcon().setEditIcon().setDeleteIcon().getProjectRowHbox());
+                    ViewOptionController viewOptionController = new ViewOptionController(user, item.getProjectId());
+                    viewOptionController.setProjectName(item.getProjectName());
+                    viewOptionController.setExportIcon("images/exportIcon.png");
+                    viewOptionController.setEditIcon();
+                    viewOptionController.setViewSwitcher(viewSwitcher);
+                    setGraphic(viewOptionController.getProjectRowHbox());
                 }
             }
         });
@@ -132,6 +139,9 @@ public class DashboardController {
 
     /**
      * Decompress a choose file to user home, display it on the dashboard and save it into the database
+     * Untar a choose file to user home, show to the dashboard and save into the database
+     *
+     * @throws BizzException
      */
     @FXML
     public void ImportProject() throws BizzException {
@@ -139,10 +149,10 @@ public class DashboardController {
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
-            String extention = selectedFile.getName().substring(selectedFile.getName().length() - 7, selectedFile.getName().length());
+            String extension = selectedFile.getName().substring(selectedFile.getName().length() - 7, selectedFile.getName().length());
 
-            if(extention.equals(".tar.gz")){
-                String projectName = projectUCC.setProjectName(popupMessage);
+            if (extension.equals(".tar.gz")) {
+                String projectName = askProjectName();
 
                 if (projectName != null) {
                     Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
@@ -155,8 +165,8 @@ public class DashboardController {
                             ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
                             projectObsList.add(newProjectImport);
                             ProjectDAO.getInstance().saveProject(newProjectImport);
-                        } catch (IOException | FatalException e) {
-                            e.getMessage();
+                        } catch (IOException  e) {
+                            throw new BizzException("Could not locate files to import");
                         }
                     }
                     else {
@@ -164,8 +174,8 @@ public class DashboardController {
                         throw new BizzException("Existing Project");
                     }
                 }
-            }else {
-                new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extention ").showAndWait();
+            } else {
+                new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extension ").showAndWait();
             }
         }
     }
@@ -177,25 +187,38 @@ public class DashboardController {
 
     @FXML
     public void newProject() {
+        String projectName = askProjectName();
 
-        Optional<String> projectName;
-        TextInputDialog enterProjectName = new TextInputDialog();
-        enterProjectName.setTitle("Project name");
-        enterProjectName.setHeaderText(popupMessage);
-        enterProjectName.setContentText("Name :");
-        projectName = enterProjectName.showAndWait();
-        if (projectName.isPresent() ) {
-            if (projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN ) ) {
-                System.out.println(projectName.get());
+        if (projectName != null && projectName.matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
+            try {
+                projectUCC.createNewProject(projectName);
+                System.out.println("created project " + projectName);
                 toEditorView();
-            }else {
-                new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
+            } catch (BizzException e) {
+                Utility.showAlert(Alert.AlertType.WARNING, "Creation impossible", "Duplicate project name", "A project with ths name already exists. Please specify another one");
             }
+        } else {
+            new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
         }
     }
 
-    private void toEditorView(){
+    private void toEditorView() {
         viewSwitcher.switchView(ViewName.EDITOR);
     }
 
+    private String askProjectName() {
+        Optional<String> projectName;
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Project name");
+        dialog.setHeaderText(popupMessage);
+        dialog.setContentText("Name :");
+        projectName = dialog.showAndWait();
+        if (projectName.isPresent() && projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
+            return projectName.get();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Please enter a valid name").showAndWait();
+        }
+
+        return null;
+    }
 }

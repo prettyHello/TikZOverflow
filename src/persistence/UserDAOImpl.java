@@ -25,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public UserDTO getUser(UserDTO usrAuth) throws FatalException, BizzException{
+    public UserDTO getUser(UserDTO usrAuth) throws FatalException, BizzException {
         PreparedStatement pr;
         ResultSet rs;
         UserDTO usr = null;
@@ -43,8 +43,8 @@ public class UserDAOImpl implements UserDAO {
                 usr.setSalt(rs.getString("salt"));
                 usr.setRegister_date(rs.getString("register_date"));
                 usr.setUser_id(rs.getInt("user_id"));
-            }else{
-                throw new BizzException("User : "+usrAuth.getEmail()+" does not exist");
+            } else {
+                throw new BizzException("User : " + usrAuth.getEmail() + " does not exist");
             }
         } catch (SQLException exc) {
             exc.printStackTrace();
@@ -60,7 +60,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void create(UserDTO userDTO) throws FatalException{
+    public void create(UserDTO userDTO) throws FatalException {
         PreparedStatement ps = null;
         try {
             ps = dal.prepareStatement(SQL_INSERT_USER);
@@ -75,7 +75,7 @@ public class UserDAOImpl implements UserDAO {
 
         } catch (SQLException exc) {
             exc.printStackTrace();
-            switch (exc.getErrorCode()){
+            switch (exc.getErrorCode()) {
                 case 19:
                     throw new FatalException("Email address or telephone number already in use.");
                 default:

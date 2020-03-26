@@ -17,8 +17,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * Collection of utility functions used in the view
@@ -49,9 +47,9 @@ public class Utility {
     /**
      * Show an alert to the user.
      *
-     * @param type Type of alert (warning, etc).
-     * @param title Title of the alert.
-     * @param headerText Header of the alert box.
+     * @param type        Type of alert (warning, etc).
+     * @param title       Title of the alert.
+     * @param headerText  Header of the alert box.
      * @param contentText Content of the alert box.
      */
     public static void showAlert(Alert.AlertType type, String title, String headerText, String contentText) {
@@ -92,6 +90,7 @@ public class Utility {
 
     /**
      * Check if an object is null.
+     *
      * @param obj
      * @throws FatalException If the object is null.
      */
@@ -103,7 +102,8 @@ public class Utility {
 
     /**
      * Check if a String is empty.
-     * @param chaine String to check.
+     *
+     * @param chaine  String to check.
      * @param varName Name of the variable, to be used in case a BizzException is thrown.
      * @throws BizzException In case the String is empty.
      */
@@ -119,8 +119,8 @@ public class Utility {
      * @param destFile destination directory of decompressed file
      */
 
-    public static String unTarFile(File tarFile, Path destFile)
-    {
+
+    public static String unTarFile(File tarFile, Path destFile) {
         TarArchiveInputStream tis = null;
         try {
             FileOutputStream fos = null ;
@@ -134,8 +134,8 @@ public class Utility {
                 } else {
                     File outputFile = new File(destFile.toString() + File.separator + tarEntry.getName());
                     outputFile.getParentFile().mkdirs();
-                    fos = new FileOutputStream(outputFile) ;
-                    IOUtils.copy(tis,fos);
+                    fos = new FileOutputStream(outputFile);
+                    IOUtils.copy(tis, fos);
                     fos.close();
                 }
             }
@@ -151,6 +151,7 @@ public class Utility {
 
     /**
      * Check the data the users enter while registering of modifying theirs information.
+     *
      * @param firstname
      * @param lastname
      * @param email
@@ -169,6 +170,7 @@ public class Utility {
 
     /**
      * Check if the phone number length is correct.
+     *
      * @param phone
      * @throws BizzException
      */
@@ -184,6 +186,7 @@ public class Utility {
 
     /**
      * Check if the email's structure is correct.
+     *
      * @param email
      * @throws BizzException
      */
@@ -196,6 +199,7 @@ public class Utility {
 
     /**
      * Check if the firstname has no special characters or numbers.
+     *
      * @param firstname
      * @throws BizzException
      */
@@ -208,6 +212,7 @@ public class Utility {
 
     /**
      * Check if the lastname has no special characters or numbers.
+     *
      * @param lastname
      * @throws BizzException
      */
@@ -220,6 +225,7 @@ public class Utility {
 
     /**
      * Check if the passwords introduced are the same.
+     *
      * @param password1
      * @param password2
      * @throws BizzException

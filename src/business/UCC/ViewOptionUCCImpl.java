@@ -19,7 +19,7 @@ import java.nio.file.NoSuchFileException;
 import java.util.Optional;
 import java.util.zip.GZIPOutputStream;
 
-public class ViewOptionUCCImpl implements ViewOptionUCC{
+public class ViewOptionUCCImpl implements ViewOptionUCC {
 
 
     private String ContentTextExport = "the project does not exist on the path: ";
@@ -99,7 +99,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
                     addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName + "/", archiveTarGz);
                 }
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             new Alert(Alert.AlertType.ERROR, "Impossible to export the project").showAndWait();
         }
     }
@@ -123,5 +123,5 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
         }
     }
 
-
+    }
 }

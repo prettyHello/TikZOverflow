@@ -7,6 +7,8 @@ import business.DTO.UserDTO;
  */
 public interface UserFactory {
     UserDTO createUser();
+
     UserDTO createUser(String login, String password);
+
     UserDTO createUser(int user_id, String first_name, String last_name, String email, String phone, String password, String salt, String register_date);
 }

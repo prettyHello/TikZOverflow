@@ -56,11 +56,11 @@ public class Configuration {
     public void initProperties(String[] args) {
         String path = Configuration.PROD_PATH;
         if (args.length == 1) {
-            if(args[0].equals(Configuration.DEV)){
+            if (args[0].equals(Configuration.DEV)) {
                 path = Configuration.DEV_PATH;
-            }else if(args[0].equals(Configuration.TestBusiness)){
+            } else if (args[0].equals(Configuration.TestBusiness)) {
                 path = Configuration.TestBusiness_PATH;
-            }else if(args[0].equals(Configuration.TestDAO)){
+            } else if (args[0].equals(Configuration.TestDAO)) {
                 path = Configuration.TestDAO_PATH;
             }
 

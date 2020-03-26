@@ -1,24 +1,35 @@
 package view.editor;
 
+import business.Canvas.ActiveCanvas;
+import business.Canvas.Canvas;
+import business.shape.Coordinates;
+import business.shape.Square;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.canvas.*;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import persistence.SaveObject;
-import view.ViewName;
 import view.ViewSwitcher;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Optional;
-
-import static java.awt.Color.white;
+import java.util.Random;
 
 public class EditorController {
 
@@ -39,10 +50,13 @@ public class EditorController {
 
     private ViewSwitcher viewSwitcher;
 
+
     @FXML
     Pane toolbar;
     @FXML
     private Pane pane;
+    @FXML
+    private TextArea tikzTA;
     @FXML
     Button square;
     @FXML
@@ -60,14 +74,16 @@ public class EditorController {
     @FXML
     ColorPicker strokeColour;
 
-
-    private GraphicsContext gc;
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
     private double selected_x, selected_y;
-    private double previously_selected_x, previously_selected_y; //a line need 2 points so last choice is saved
-    private double third_selected_x, third_selected_y;//since a triangle need three points
+    private double previously_selected_x, previously_selected_y; // a line needs 2 points so last choice is saved
+    private double third_selected_x, third_selected_y; // since a triangle need three points
     private String selected_shape = "";
     private boolean waiting_for_more_coordinate = false;
+    private Canvas canvas = ActiveCanvas.getActiveCanvas();
+
+    private ContextMenu shapeContextMenu;
+    private ColorPicker contextMenuColorPicker;
 
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
@@ -76,28 +92,42 @@ public class EditorController {
 
     @FXML
     public void initialize() {
-
         pane.setOnMouseClicked((MouseEvent event) ->
         {
-            if (selectedShapes.isEmpty() && selected_shape != "") { // don't forget
+            if (selectedShapes.isEmpty() && !selected_shape.equals("")) { // don't forget
                 selected_x = event.getX();
                 selected_y = event.getY();
-                draw();
+                handle_draw_call();
             }
         });
+
+        contextMenuColorPicker = new ColorPicker();
+        MenuItem delete = new MenuItem("delete");
+        delete.setOnAction(t -> rightClickDeleteShape());
+        MenuItem color = new MenuItem("colour", contextMenuColorPicker);
+        color.setOnAction(t -> setColor());
+        shapeContextMenu = new ContextMenu(delete, color);
+
     }
 
-    //menuBar
+    private void setColor() {
+        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            shape.setFill(contextMenuColorPicker.getValue());
+        }
+    }
 
-    /**
-     * Handles the menu item when the user wants to quit. Does not save progress
-     */
-    @FXML
-    void close() {
-        String title = "Quit without saving?";
-        String header = "All progress will be lost";
-        String content = "Are you ok with this?";
-        alert(title, header, content, Alert.AlertType.CONFIRMATION);
+    private void rightClickDeleteShape() {
+        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            pane.getChildren().remove(shape);
+            if(selectedShapes.contains(shape)){
+                selectedShapes.remove(shape);
+                if (selectedShapes.isEmpty())
+                    disableToolbar(false);
+            }
+
+        }
     }
 
     @FXML
@@ -105,7 +135,6 @@ public class EditorController {
         if (!checkIfMoreCoordinateRequired()) {
             this.selected_shape = LINE;
         }
-
     }
 
     @FXML
@@ -152,8 +181,9 @@ public class EditorController {
         }
     }
 
-    private void draw() {
+    private void handle_draw_call() {
         Shape shape = null;
+        business.shape.Shape addToModel = null;
 
         switch (selected_shape) {
             case TRIANGLE:
@@ -171,13 +201,16 @@ public class EditorController {
             case TRIANGLE_POINT3:
                 shape = constructTriangle();
                 waiting_for_more_coordinate = false;
+                addToModel = new business.shape.Triangle(new Coordinates(selected_x, selected_y));
                 break;
             case CIRCLE:
+                float radius = 50.0f;
                 Circle circle = new Circle();
                 circle.setCenterX(selected_x);
                 circle.setCenterY(selected_y);
-                circle.setRadius(50.0f);
+                circle.setRadius(radius);
                 shape = circle;
+                addToModel = new business.shape.Circle(new Coordinates(selected_x, selected_y), radius);
                 break;
             case ARROW:
                 previously_selected_x = selected_x;
@@ -187,6 +220,7 @@ public class EditorController {
                 break;
             case ARROW_POINT2:
                 shape = constructArrow();
+                addToModel = new business.shape.Arrow(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates(selected_x, selected_y));
                 waiting_for_more_coordinate = false;
                 break;
             case LINE:
@@ -196,44 +230,61 @@ public class EditorController {
                 waiting_for_more_coordinate = true;
                 break;
             case LINE_POINT2:
+                addToModel = new business.shape.Line(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates(selected_x, selected_y));
                 shape = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
                 shape.setStroke(fillColour.getValue());
                 waiting_for_more_coordinate = false;
                 break;
             case SQUARE:
+                int size = 75;
                 shape = new Rectangle(selected_x, selected_y, 75, 75);
+                addToModel = new Square(new Coordinates(selected_x, selected_y), size);
                 break;
         }
         if (waiting_for_more_coordinate) {
             return;
         } else if (shape == null) { //No shape was previously selected
-            alert("Select a shape", "You need to select a shape", "You need to select a shape first!", Alert.AlertType.INFORMATION);
+            alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
         } else {
+            canvas.addShape(addToModel); //warn the model
             shape.setStroke(strokeColour.getValue());
             shape.setFill(fillColour.getValue());
             pane.getChildren().add(shape);
-            shape.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> onShapeSelected(e)); //add a listener allowing us to know if a shape was selected
+            translateToTikz();
+            shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
             selected_shape = "";
         }
         disableButtonOverlay();
-
     }
 
+    ContextMenu menu = new ContextMenu();
+
+
     private void onShapeSelected(MouseEvent e) {
+        if (!waiting_for_more_coordinate && selected_shape =="") {
+            Shape shape = (Shape) e.getSource();
 
-        Shape shape = (Shape) e.getSource();
-        if (selectedShapes.contains(shape)) { //if already selected => unselect
-            disableToolbar(false);
-            shape.setStroke(Color.TRANSPARENT);
-            selectedShapes.remove(shape);
-            System.out.println("unselected");
-        } else {                                 //if not selected => add to the list
-            disableToolbar(true);
-            shape.setStroke(Color.GREEN);
-            selectedShapes.add(shape);
-            System.out.println("selected");
+            if (e.getButton() == MouseButton.PRIMARY) {
+                if (selectedShapes.contains(shape)) { //if already selected => unselect
+                    shape.setEffect(null);
+                    selectedShapes.remove(shape);
+                    if (selectedShapes.isEmpty())
+                        disableToolbar(false);
+                    System.out.println("unselected");
+                } else {                                 //if not selected => add to the list
+                    disableToolbar(true);
+                    shape.setStrokeWidth(2);
+                    DropShadow borderEffect = new DropShadow(
+                            BlurType.THREE_PASS_BOX, Color.GREEN, 2, 1, 0, 0
+                    );
+                    shape.setEffect(borderEffect);
+                    selectedShapes.add(shape);
+                    System.out.println("selected");
+                }
+            } else if (e.getButton() == MouseButton.SECONDARY) {
+                shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, e.getScreenX(), e.getScreenY()));
+            }
         }
-
     }
 
     /**
@@ -259,7 +310,7 @@ public class EditorController {
 
     private boolean checkIfMoreCoordinateRequired() {
         if (waiting_for_more_coordinate) {
-            alert("Finish your action", "You need to select a second point", "You need to select a second point to finish the last shape!", Alert.AlertType.INFORMATION);
+            alert("Finish your action", "You need to select a second point", "You need to select a second point to finish the last shape!");
             disableButtonOverlay();
             return true;
         }
@@ -306,34 +357,30 @@ public class EditorController {
     }
 
     private Shape constructTriangle() {
-        Line line1 = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
-        Line line2 = new Line(previously_selected_x, previously_selected_y, third_selected_x, third_selected_y);
-        Line line3 = new Line(selected_x, selected_y, third_selected_x, third_selected_y);
-        return Shape.union(line1, Shape.union(line2, line3));
+        Polygon polygon = new Polygon();
+        polygon.getPoints().addAll(new Double[]{
+                selected_x, selected_y,
+                previously_selected_x, previously_selected_y,
+                third_selected_x, third_selected_y });
+        return  polygon;
     }
 
-    private void alert(String title, String header, String Content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
+    private void alert(String title, String header, String Content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(Content);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (type == Alert.AlertType.CONFIRMATION) {
-            if (result.get() == ButtonType.OK) {
-                viewSwitcher.switchView(ViewName.DASHBOARD);
-            }
-        }
-
+        alert.showAndWait();
     }
 
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
-        business.Canvas.CanvasImpl canvas = new business.Canvas.CanvasImpl(200,200);
-        business.shape.Coordinates coord = new business.shape.Coordinates(20,4);
         System.out.println("Save Function");
         SaveObject saveObject = new SaveObject();
-        business.shape.Circle circle = new business.shape.Circle(true,true,business.shape.Color.GREEN,business.shape.Color.RED,coord,5);
-        canvas.addShape(circle);
         saveObject.save(canvas,"myfile");
+    }
+
+    private void translateToTikz(){
+        tikzTA.setText(canvas.toTikZ());
     }
 }
 

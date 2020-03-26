@@ -3,8 +3,6 @@ package business.shape;
 import exceptions.FatalException;
 import utilities.Utility;
 
-import java.util.Iterator;
-
 public class Triangle extends Shape {
     private Coordinates originPoint;
     private Coordinates secondPoint;
@@ -13,14 +11,15 @@ public class Triangle extends Shape {
     /**
      * Simple triangle, only set one point, who is the bottom left of
      * a isosceles right triangle, of 1 width/height
+     *
      * @param originPoint
      */
     public Triangle(Coordinates originPoint) {
         super(true, false);
         Utility.checkObject(originPoint);
         this.originPoint = originPoint;
-        this.secondPoint = new Coordinates(originPoint.getX()+1,originPoint.getY());
-        this.thirdPoint = new Coordinates(originPoint.getX(),originPoint.getY()+1);
+        this.secondPoint = new Coordinates(originPoint.getX() + 1, originPoint.getY());
+        this.thirdPoint = new Coordinates(originPoint.getX(), originPoint.getY() + 1);
     }
 
     /**
@@ -39,9 +38,9 @@ public class Triangle extends Shape {
         this.thirdPoint = thirdPoint;
     }
 
-    public String print(){
+    public String print() {
         String returnValue = super.print();
-        returnValue += this.originPoint.print()+"-- "+this.secondPoint.print()+"-- "+this.thirdPoint.print()+"-- cycle;";
+        returnValue += this.originPoint.print() + "-- " + this.secondPoint.print() + "-- " + this.thirdPoint.print() + "-- cycle;";
         return returnValue;
     }
 

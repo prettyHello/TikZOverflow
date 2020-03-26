@@ -1,33 +1,24 @@
 package persistence;
 
 import business.DTO.ProjectDTO;
-import exceptions.FatalException;
 
 import java.util.ArrayList;
 
-public interface ProjectDAO {
+public interface ProjectDAO extends DAO<ProjectDTO> {
+
     static ProjectDAOImpl getInstance(){
         return  new ProjectDAOImpl();
     }
 
-    /**
-     * Save a project into a DataBase
-     * @param project Project object to be saved
-     */
-    void saveProject(ProjectDTO project) throws FatalException;
+    void saveNewProject(ProjectDTO project);
 
-    /**
-     * Retrieve the project list of connected user
-     * @param userID User ID
-     */
-    ArrayList<ProjectDTO> getProjects(int userID) throws FatalException;
+    ArrayList<ProjectDTO> getProjects(int userID);
 
-    /**
-     * Retrieve a specific project of connected user
-     * @param userID User ID
-     * @param projectName Project name
-     */
+
     ProjectDTO getSelectedProject(int userID, String projectName) throws FatalException;
 
+    ProjectDTO getProjectDTO(int project_id);
     void deleteProject(ProjectDTO project ) ;
+
+
 }
