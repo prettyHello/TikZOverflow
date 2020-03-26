@@ -1,5 +1,6 @@
 package business.shape;
 
+
 /**
  * All the colors in tikz.
  */
@@ -25,7 +26,10 @@ public enum Color {
     WHITE("white");
     public final String value;
 
+
     Color(String value) {
         this.value = value;
     }
+
 }
+

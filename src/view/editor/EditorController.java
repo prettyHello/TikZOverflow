@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import persistence.SaveObject;
+import utilities.ColorUtils;
 import view.ViewSwitcher;
 
 import java.io.IOException;
@@ -30,6 +31,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Random;
+
+import static utilities.ColorUtils.getColorNameFromRgb;
 
 public class EditorController {
 
@@ -246,7 +249,7 @@ public class EditorController {
         } else if (shape == null) { //No shape was previously selected
             alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
         } else {
-            canvas.addShape(addToModel); //warn the model
+            notifyModel(addToModel, shape);
             shape.setStroke(strokeColour.getValue());
             shape.setFill(fillColour.getValue());
             pane.getChildren().add(shape);
@@ -255,6 +258,30 @@ public class EditorController {
             selected_shape = "";
         }
         disableButtonOverlay();
+    }
+
+    private void notifyModel(business.shape.Shape addToModel, Shape shape) {
+        Color fillColor =  (Color) shape.getFill();
+        Color drawColor = (Color) shape.getStroke();
+        System.out.println(fillColor.getBlue());
+        System.out.println(fillColor);
+        Paint fill = shape.getFill();
+        System.out.println(fill);
+
+
+        //System.out.println(drawColor);
+        System.out.println(fillColor);
+        if(drawColor!=null){
+            addToModel.setDraw(true);
+            //addToModel.setDrawColor(getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
+        }
+        if(fillColor!=null){
+            addToModel.setFill(true);
+            addToModel.setFillColor(getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(),fillColor.getBlue()));
+        }
+        canvas.addShape(addToModel); //warn the model
+
+
     }
 
     ContextMenu menu = new ContextMenu();
@@ -270,7 +297,6 @@ public class EditorController {
                     selectedShapes.remove(shape);
                     if (selectedShapes.isEmpty())
                         disableToolbar(false);
-                    System.out.println("unselected");
                 } else {                                 //if not selected => add to the list
                     disableToolbar(true);
                     shape.setStrokeWidth(2);
@@ -279,7 +305,6 @@ public class EditorController {
                     );
                     shape.setEffect(borderEffect);
                     selectedShapes.add(shape);
-                    System.out.println("selected");
                 }
             } else if (e.getButton() == MouseButton.SECONDARY) {
                 shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, e.getScreenX(), e.getScreenY()));
@@ -374,7 +399,6 @@ public class EditorController {
     }
 
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
-        System.out.println("Save Function");
         SaveObject saveObject = new SaveObject();
         saveObject.save(canvas,"myfile");
     }
