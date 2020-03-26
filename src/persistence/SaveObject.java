@@ -1,28 +1,40 @@
 package persistence;
 
+
+import business.Canvas.CanvasImpl;
 import business.shape.Shape;
 
 import java.io.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
-
 public class SaveObject {
-    private String rootProject = File.separator + "ProjectTikZ" + File.separator;
-
+    private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator;
     // Saving the magnificient drawing of the users into a file
-    public void save(List<Shape> myList, String nameOfTheFile) throws IOException, ClassNotFoundException {
+    public void save(CanvasImpl canvas, String nameOfTheFile) throws IOException, ClassNotFoundException {
         //Iterating into the list of shapes
-        for (Shape shape : myList) {
-            //Creating an object to save into the file
-            ObjectOutputStream objectOutputStream =
-                    new ObjectOutputStream(new FileOutputStream(rootProject + nameOfTheFile + ".bin"));
-            objectOutputStream.writeObject(shape);
-            objectOutputStream.close();
+        ObjectOutputStream objectOutputStream =
+                new ObjectOutputStream(new FileOutputStream(rootProject + nameOfTheFile + ".bin"));
+
+        objectOutputStream.writeObject(canvas);
+        objectOutputStream.close();
+        System.out.println("Project saved successfully");
+
+
+        FileInputStream fileInputStream = new FileInputStream(rootProject + nameOfTheFile + ".bin");
+        ObjectInputStream in = new ObjectInputStream(fileInputStream);
+        CanvasImpl readCanvas = (CanvasImpl) in.readObject();
+
+        in.close();
+        ArrayList<Shape> shapes = (ArrayList<Shape>) readCanvas.getShapes();
+        for (Shape x : shapes){
+            System.out.println(x.print());
         }
     }
-
-    public List<Shape> open(String nameOfTheFile) throws IOException, ClassNotFoundException {
-        List myList = null;
+    //Method still has to change
+    public List <Shape> open(String nameOfTheFile) throws IOException, ClassNotFoundException {
+        ArrayList myList = null;
         // We still need to work here
         // Adding the object read into the list
         // But we need to make sure the save method is working first

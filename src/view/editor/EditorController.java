@@ -4,6 +4,7 @@ import business.Canvas.ActiveCanvas;
 import business.Canvas.Canvas;
 import business.shape.Coordinates;
 import business.shape.Square;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
@@ -21,8 +22,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import persistence.SaveObject;
 import view.ViewSwitcher;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -326,5 +329,14 @@ public class EditorController {
         alert.showAndWait();
     }
 
+    public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+        business.Canvas.CanvasImpl canvas = new business.Canvas.CanvasImpl(200,200);
+        business.shape.Coordinates coord = new business.shape.Coordinates(20,4);
+        System.out.println("Save Function");
+        SaveObject saveObject = new SaveObject();
+        business.shape.Circle circle = new business.shape.Circle(true,true,business.shape.Color.GREEN,business.shape.Color.RED,coord,5);
+        canvas.addShape(circle);
+        saveObject.save(canvas,"myfile");
+    }
 }
 
