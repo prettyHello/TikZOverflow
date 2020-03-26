@@ -253,7 +253,7 @@ public class EditorController {
 
 
     private void onShapeSelected(MouseEvent e) {
-        if (!waiting_for_more_coordinate) {
+        if (!waiting_for_more_coordinate && selected_shape =="") {
             Shape shape = (Shape) e.getSource();
 
             if(e.getButton() == MouseButton.PRIMARY){
