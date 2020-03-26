@@ -7,19 +7,16 @@ import business.shape.Square;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Glow;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -29,10 +26,7 @@ import view.ViewSwitcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Optional;
-import java.util.Random;
 
 public class EditorController {
 
@@ -104,7 +98,7 @@ public class EditorController {
 
         contextMenuColorPicker = new ColorPicker();
         MenuItem delete = new MenuItem("delete");
-        delete.setOnAction(t -> deleteShape());
+        delete.setOnAction(t -> rightClickDeleteShape());
         MenuItem color = new MenuItem("colour", contextMenuColorPicker);
         color.setOnAction(t -> setColor());
         shapeContextMenu = new ContextMenu(delete, color);
@@ -112,15 +106,24 @@ public class EditorController {
     }
 
     private void setColor() {
-        if(shapeContextMenu.getOwnerNode() instanceof Shape){
+        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             shape.setFill(contextMenuColorPicker.getValue());
         }
     }
 
-    private void deleteShape() {
+    private void rightClickDeleteShape() {
         System.out.println(shapeContextMenu.getOwnerNode());
-        pane.getChildren().remove(shapeContextMenu.getOwnerNode());
+        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            if(selectedShapes.contains(shape)){
+                pane.getChildren().remove(shape);
+                selectedShapes.remove(shape);
+                if (selectedShapes.isEmpty())
+                    disableToolbar(false);
+            }
+
+        }
     }
 
     @FXML
@@ -256,7 +259,7 @@ public class EditorController {
         if (!waiting_for_more_coordinate) {
             Shape shape = (Shape) e.getSource();
 
-            if(e.getButton() == MouseButton.PRIMARY){
+            if (e.getButton() == MouseButton.PRIMARY) {
                 if (selectedShapes.contains(shape)) { //if already selected => unselect
                     shape.setEffect(null);
                     selectedShapes.remove(shape);
@@ -273,8 +276,8 @@ public class EditorController {
                     selectedShapes.add(shape);
                     System.out.println("selected");
                 }
-            } else if(e.getButton() == MouseButton.SECONDARY){
-                shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape,e.getScreenX(), e.getScreenY()));
+            } else if (e.getButton() == MouseButton.SECONDARY) {
+                shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, e.getScreenX(), e.getScreenY()));
             }
         }
     }
@@ -364,13 +367,13 @@ public class EditorController {
     }
 
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
-        business.Canvas.CanvasImpl canvas = new business.Canvas.CanvasImpl(200,200);
-        business.shape.Coordinates coord = new business.shape.Coordinates(20,4);
+        business.Canvas.CanvasImpl canvas = new business.Canvas.CanvasImpl(200, 200);
+        business.shape.Coordinates coord = new business.shape.Coordinates(20, 4);
         System.out.println("Save Function");
         SaveObject saveObject = new SaveObject();
-        business.shape.Circle circle = new business.shape.Circle(true,true,business.shape.Color.GREEN,business.shape.Color.RED,coord,5);
+        business.shape.Circle circle = new business.shape.Circle(true, true, business.shape.Color.GREEN, business.shape.Color.RED, coord, 5);
         canvas.addShape(circle);
-        saveObject.save(canvas,"myfile");
+        saveObject.save(canvas, "myfile");
     }
 }
 
