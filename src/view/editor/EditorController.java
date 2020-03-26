@@ -249,10 +249,10 @@ public class EditorController {
         } else if (shape == null) { //No shape was previously selected
             alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
         } else {
-            notifyModel(addToModel, shape);
             shape.setStroke(strokeColour.getValue());
             shape.setFill(fillColour.getValue());
             pane.getChildren().add(shape);
+            notifyModel(addToModel, shape);
             translateToTikz();
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
             selected_shape = "";
@@ -263,21 +263,18 @@ public class EditorController {
     private void notifyModel(business.shape.Shape addToModel, Shape shape) {
         Color fillColor =  (Color) shape.getFill();
         Color drawColor = (Color) shape.getStroke();
-        System.out.println(fillColor.getBlue());
-        System.out.println(fillColor);
-        Paint fill = shape.getFill();
-        System.out.println(fill);
 
-
-        //System.out.println(drawColor);
-        System.out.println(fillColor);
         if(drawColor!=null){
             addToModel.setDraw(true);
-            //addToModel.setDrawColor(getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
+            addToModel.setDrawColor(getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
+        }else{
+            addToModel.setDraw(false);
         }
         if(fillColor!=null){
             addToModel.setFill(true);
             addToModel.setFillColor(getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(),fillColor.getBlue()));
+        }else{
+            addToModel.setFill(false);
         }
         canvas.addShape(addToModel); //warn the model
 

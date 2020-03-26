@@ -45,18 +45,24 @@ public class ColorUtils {
     /**
      * Get the closest color name from our list
      *
-     * @param r
-     * @param g
-     * @param b
+     * @param red
+     * @param green
+     * @param blue
      * @return
      */
-    public static business.shape.Color getColorNameFromRgb(double r, double g, double b) {
+    public static business.shape.Color getColorNameFromRgb(double red, double green, double blue) {
+        int r = (int) Math.floor(red*255 + 0.5d);
+        int g = (int) Math.floor(green*255 + 0.5d);
+        int b = (int) Math.floor(blue*255 + 0.5d);
+
         ColorName closestMatch = null;
         int minMSE = Integer.MAX_VALUE;
         int mse;
         for (ColorName c : colorList) {
             mse = c.computeMSE(r, g, b);
+            System.out.println(c.getName()+" "+mse );
             if (mse < minMSE) {
+                System.out.println(mse+" < "+minMSE);
                 minMSE = mse;
                 closestMatch = c;
             }
