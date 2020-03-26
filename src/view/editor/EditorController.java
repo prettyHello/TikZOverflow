@@ -364,12 +364,8 @@ public class EditorController {
     }
 
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
-        business.Canvas.CanvasImpl canvas = new business.Canvas.CanvasImpl(200,200);
-        business.shape.Coordinates coord = new business.shape.Coordinates(20,4);
         System.out.println("Save Function");
         SaveObject saveObject = new SaveObject();
-        business.shape.Circle circle = new business.shape.Circle(true,true,business.shape.Color.GREEN,business.shape.Color.RED,coord,5);
-        canvas.addShape(circle);
         saveObject.save(canvas,"myfile");
     }
 }

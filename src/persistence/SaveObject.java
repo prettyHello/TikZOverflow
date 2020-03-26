@@ -1,7 +1,7 @@
 package persistence;
 
 
-import business.Canvas.CanvasImpl;
+import business.Canvas.Canvas;
 import business.shape.Shape;
 
 import java.io.*;
@@ -12,19 +12,19 @@ import java.util.List;
 public class SaveObject {
     private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator;
     // Saving the magnificient drawing of the users into a file
-    public void save(CanvasImpl canvas, String nameOfTheFile) throws IOException, ClassNotFoundException {
-        //Iterating into the list of shapes
+    public void save(Canvas canvas, String nameOfTheFile) throws IOException, ClassNotFoundException {
+        //Creating the file to save to
         ObjectOutputStream objectOutputStream =
                 new ObjectOutputStream(new FileOutputStream(rootProject + nameOfTheFile + ".bin"));
-
+        //Saving the canvas to the file
         objectOutputStream.writeObject(canvas);
         objectOutputStream.close();
         System.out.println("Project saved successfully");
 
-
+        //Read out the canvas and output the content of it
         FileInputStream fileInputStream = new FileInputStream(rootProject + nameOfTheFile + ".bin");
         ObjectInputStream in = new ObjectInputStream(fileInputStream);
-        CanvasImpl readCanvas = (CanvasImpl) in.readObject();
+        Canvas readCanvas = (Canvas) in.readObject();
 
         in.close();
         ArrayList<Shape> shapes = (ArrayList<Shape>) readCanvas.getShapes();
