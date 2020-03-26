@@ -59,6 +59,8 @@ public class EditorController {
     @FXML
     private Pane pane;
     @FXML
+    private TextArea tikzTA;
+    @FXML
     Button square;
     @FXML
     Button circle;
@@ -252,6 +254,7 @@ public class EditorController {
             shape.setStroke(strokeColour.getValue());
             shape.setFill(fillColour.getValue());
             pane.getChildren().add(shape);
+            translateToTikz();
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
             selected_shape = "";
         }
@@ -376,6 +379,10 @@ public class EditorController {
         System.out.println("Save Function");
         SaveObject saveObject = new SaveObject();
         saveObject.save(canvas,"myfile");
+    }
+
+    private void translateToTikz(){
+        tikzTA.setText(canvas.toTikZ());
     }
 }
 
