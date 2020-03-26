@@ -3,6 +3,7 @@ package business.UCC;
 import business.DTO.ProjectDTO;
 import exceptions.BizzException;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -15,6 +16,7 @@ import java.io.*;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.util.Optional;
 import java.util.zip.GZIPOutputStream;
 
 public class ViewOptionUCCImpl implements ViewOptionUCC{
@@ -104,15 +106,21 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
     public void deleteProject(ProjectDTO project, DashboardController dashboard ) {
         File dir = new File(project.getProjectPath()) ;
         if (dir.exists()) {
-            ProjectDAO.getInstance().deleteProject(project);
-            Utility.deleteFile(dir);
-            dashboard.delete(project);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("confirmation ?");
+            alert.setHeaderText("once deleted, the "+ project.getProjectName()+" project can no longer be restored");
+            alert.setContentText("are you sure you want to delete");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                ProjectDAO.getInstance().deleteProject(project);
+                Utility.deleteFile(dir);
+                dashboard.delete(project);
+            }
         }
         else {
             new Alert(Alert.AlertType.ERROR, "This project dont exit in this Computer").showAndWait();
         }
     }
-
 
 
 }
