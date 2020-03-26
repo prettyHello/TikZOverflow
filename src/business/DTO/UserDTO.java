@@ -6,39 +6,39 @@ package business.DTO;
  */
 public interface UserDTO {
 
-    public String getLast_name();
+    String getLast_name();
 
-    public String getEmail();
+    String getEmail();
 
-    public String getPhone();
+    String getPhone();
 
-    public String getPassword();
+    String getPassword();
 
-    public String getSalt();
+    String getSalt();
 
-    public String getRegister_date();
+    String getRegister_date();
 
-    public int getUser_id();
+    int getUser_id();
 
-    public void setUser_id(int user_id);
+    void setUser_id(int user_id);
 
-    public void setFirst_name(String first_name);
+    void setFirst_name(String first_name);
 
-    public void setLast_name(String last_name);
+    void setLast_name(String last_name);
 
-    public void setEmail(String email);
+    void setEmail(String email);
 
-    public void setPhone(String phone);
+    void setPhone(String phone);
 
-    public void setPassword(String password);
+    void setPassword(String password);
 
-    public void setSalt(String salt);
+    void setSalt(String salt);
 
-    public void setRegister_date(String register_date);
+    void setRegister_date(String register_date);
 
-    public void setAuthorized(boolean authorized);
+    void setAuthorized(boolean authorized);
 
-    public  boolean isAuthorized();
+    boolean isAuthorized();
 
-    public String getFirst_name();
+    String getFirst_name();
 }

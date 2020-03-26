@@ -9,7 +9,7 @@ import org.apache.commons.compress.utils.IOUtils;
 import java.io.*;
 import java.util.zip.GZIPOutputStream;
 
-public class ViewOptionUCCImpl implements ViewOptionUCC{
+public class ViewOptionUCCImpl implements ViewOptionUCC {
 
 
     private String ContentTextExport = "this project does not exist on the path: ";
@@ -20,18 +20,17 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
      */
     public void Export(File dir, File selectedFile) {
         try {
-            if ( selectedFile != null ) {
+            if (selectedFile != null) {
                 if (dir.getAbsoluteFile().exists()) {
-                    createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") );
+                    createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz"));
                     new Alert(Alert.AlertType.CONFIRMATION, "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz")).showAndWait();
                 } else {
-                    new Alert(Alert.AlertType.ERROR, "Error Export " + ContentTextExport +dir ).showAndWait();
+                    new Alert(Alert.AlertType.ERROR, "Error Export " + ContentTextExport + dir).showAndWait();
                 }
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        catch (BizzException e){
+        } catch (BizzException e) {
             e.getMessage();
         }
     }
@@ -72,7 +71,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
                     addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName + File.separator, archiveTarGz);
                 }
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             new Alert(Alert.AlertType.ERROR, "Impossible to export the project").showAndWait();
         }
 

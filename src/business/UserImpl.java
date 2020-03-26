@@ -32,7 +32,6 @@ public class UserImpl implements User {
     }
 
 
-
     //---------------- getters and setters ---------------//
     public String getLast_name() {
         return last_name;

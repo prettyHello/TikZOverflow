@@ -5,17 +5,17 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <fx:root type="javafx.scene.layout.HBox" fx:id="projectRowHbox" spacing="10" xmlns:fx="http://javafx.com/fxml"
-         alignment="CENTER_LEFT" >
+         alignment="CENTER_LEFT">
 
-    <Label fx:id="projectName"  maxWidth="165"  minWidth="165"  wrapText="true"/>
+    <Label fx:id="projectName" maxWidth="165" minWidth="165" wrapText="true"/>
     <Button fx:id="editBtn" mnemonicParsing="true" maxHeight="20" minWidth="20" style="-fx-background-color: none">
         <graphic>
-            <ImageView fx:id="editIcon" fitHeight="20" fitWidth="16" />
+            <ImageView fx:id="editIcon" fitHeight="20" fitWidth="16"/>
         </graphic>
     </Button>
     <Button fx:id="exportBtn" mnemonicParsing="true" maxHeight="20" minWidth="20" style="-fx-background-color: none">
         <graphic>
-            <ImageView fx:id="exportIcon" fitHeight="20" fitWidth="16" />
+            <ImageView fx:id="exportIcon" fitHeight="20" fitWidth="16"/>
         </graphic>
     </Button>
 

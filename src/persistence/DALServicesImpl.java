@@ -47,7 +47,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
 
     @Override
     public void rollback() {
-        if(this.connection == null)
+        if (this.connection == null)
             return;
         try {
             this.connection.rollback();
@@ -75,8 +75,8 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
             // read script line by line
             while ((line = reader.readLine()) != null) {
                 // execute query
-                text+=line;
-                text+='\n';
+                text += line;
+                text += '\n';
             }
             statement.executeUpdate(text);
         } catch (Exception e) {
@@ -128,13 +128,13 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     /**
      * This private method safely close the connexion with the database
      */
-    private  void closeConnection(){
-        if (this.connection  != null) {
+    private void closeConnection() {
+        if (this.connection != null) {
             try {
-                this.connection .close();
+                this.connection.close();
                 this.connection = null;
-            } catch ( Exception e ) {
-                System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            } catch (Exception e) {
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
                 System.exit(0);
             }
         }
