@@ -20,10 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import persistence.SaveObject;
 import view.ViewSwitcher;
 
@@ -119,11 +116,10 @@ public class EditorController {
     }
 
     private void rightClickDeleteShape() {
-        System.out.println(shapeContextMenu.getOwnerNode());
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            pane.getChildren().remove(shape);
             if(selectedShapes.contains(shape)){
-                pane.getChildren().remove(shape);
                 selectedShapes.remove(shape);
                 if (selectedShapes.isEmpty())
                     disableToolbar(false);
@@ -358,10 +354,12 @@ public class EditorController {
     }
 
     private Shape constructTriangle() {
-        Line line1 = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
-        Line line2 = new Line(previously_selected_x, previously_selected_y, third_selected_x, third_selected_y);
-        Line line3 = new Line(selected_x, selected_y, third_selected_x, third_selected_y);
-        return Shape.union(line1, Shape.union(line2, line3));
+        Polygon polygon = new Polygon();
+        polygon.getPoints().addAll(new Double[]{
+                selected_x, selected_y,
+                previously_selected_x, previously_selected_y,
+                third_selected_x, third_selected_y });
+        return  polygon;
     }
 
     private void alert(String title, String header, String Content) {
