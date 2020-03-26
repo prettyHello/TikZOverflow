@@ -287,6 +287,7 @@ public class EditorController {
             node.setDisable(isDisabled);
         }
         delete.setDisable(false);
+    }
 
     private void disableButtonOverlay() {
         square.setStyle("-fx-focus-color: transparent;");
