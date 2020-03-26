@@ -14,6 +14,8 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -29,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Random;
 
 public class EditorController {
@@ -49,6 +52,7 @@ public class EditorController {
     private static final String ARROW_POINT2 = "ARROW_POINT2";
 
     private ViewSwitcher viewSwitcher;
+
 
     @FXML
     Pane toolbar;
@@ -79,6 +83,9 @@ public class EditorController {
     private boolean waiting_for_more_coordinate = false;
     private Canvas canvas = ActiveCanvas.getActiveCanvas();
 
+    private ContextMenu shapeContextMenu;
+    private ColorPicker contextMenuColorPicker;
+
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
@@ -94,6 +101,26 @@ public class EditorController {
                 handle_draw_call();
             }
         });
+
+        contextMenuColorPicker = new ColorPicker();
+        MenuItem delete = new MenuItem("delete");
+        delete.setOnAction(t -> deleteShape());
+        MenuItem color = new MenuItem("colour", contextMenuColorPicker);
+        color.setOnAction(t -> setColor());
+        shapeContextMenu = new ContextMenu(delete, color);
+
+    }
+
+    private void setColor() {
+        if(shapeContextMenu.getOwnerNode() instanceof Shape){
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            shape.setFill(contextMenuColorPicker.getValue());
+        }
+    }
+
+    private void deleteShape() {
+        System.out.println(shapeContextMenu.getOwnerNode());
+        pane.getChildren().remove(shapeContextMenu.getOwnerNode());
     }
 
     @FXML
@@ -222,28 +249,35 @@ public class EditorController {
         disableButtonOverlay();
     }
 
+    ContextMenu menu = new ContextMenu();
+
+
     private void onShapeSelected(MouseEvent e) {
         if (!waiting_for_more_coordinate) {
             Shape shape = (Shape) e.getSource();
-            if (selectedShapes.contains(shape)) { //if already selected => unselect
-                shape.setEffect(null);
-                selectedShapes.remove(shape);
-                if (selectedShapes.isEmpty())
-                    disableToolbar(false);
-                System.out.println("unselected");
-            } else {                                 //if not selected => add to the list
-                disableToolbar(true);
-                shape.setStrokeWidth(2);
-                DropShadow borderEffect = new DropShadow(
-                        BlurType.THREE_PASS_BOX, Color.GREEN, 2, 1, 0, 0
-                );
-                shape.setEffect(borderEffect);
-                selectedShapes.add(shape);
-                System.out.println("selected");
+
+            if(e.getButton() == MouseButton.PRIMARY){
+                if (selectedShapes.contains(shape)) { //if already selected => unselect
+                    shape.setEffect(null);
+                    selectedShapes.remove(shape);
+                    if (selectedShapes.isEmpty())
+                        disableToolbar(false);
+                    System.out.println("unselected");
+                } else {                                 //if not selected => add to the list
+                    disableToolbar(true);
+                    shape.setStrokeWidth(2);
+                    DropShadow borderEffect = new DropShadow(
+                            BlurType.THREE_PASS_BOX, Color.GREEN, 2, 1, 0, 0
+                    );
+                    shape.setEffect(borderEffect);
+                    selectedShapes.add(shape);
+                    System.out.println("selected");
+                }
+            } else if(e.getButton() == MouseButton.SECONDARY){
+                shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape,e.getScreenX(), e.getScreenY()));
             }
         }
     }
-
 
     /**
      * Disables all the buttons except the delete button when a shape is selected
