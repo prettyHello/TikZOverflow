@@ -83,6 +83,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             rs = pr.executeQuery();
             while (rs.next()) {
 
+                project.setProjectId(rs.getInt("project_id"));
+                project.setProjectOwnerId(rs.getInt("project_owner_id"));
                 project.setProjectName(rs.getString("name"));
                 project.setCreateDate(rs.getString("creation_date"));
                 project.setModificationDate(rs.getString("modification_date"));
@@ -102,14 +104,14 @@ public class ProjectDAOImpl implements ProjectDAO {
     @Override
     public void deleteProject(ProjectDTO project ){
         PreparedStatement pr;
-        ResultSet rs;
+
         try {
             pr = ((DALBackEndServices) this.querry).prepareStatement(SQL_DELETE_PROJECT_OF_USER);
             pr.setInt(1, project.getProjectOwnerId());
             pr.setString(2, project.getProjectName());
-            rs = pr.executeQuery();
+            pr.executeUpdate();
         } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, "Failed to Delete the project: "+ project.getProjectName() ).showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Failed to Delete the project '"+ project.getProjectName() + "' in Database" ).showAndWait();
             e.printStackTrace();
         }
     }

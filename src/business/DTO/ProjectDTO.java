@@ -2,6 +2,8 @@ package business.DTO;
 
 
 public class ProjectDTO {
+
+    private int projectId  ;
     private int projectOwnerId  ;
     private String projectName ;
     private String projectReference  ;
@@ -9,6 +11,15 @@ public class ProjectDTO {
     private String createDate ;
     private String modificationDate ;
 
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public ProjectDTO setProjectId(int projectId) {
+        this.projectId=projectId;
+        return  this;
+    }
     public String getProjectName() {
         return projectName;
     }

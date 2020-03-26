@@ -78,6 +78,7 @@ public class ViewOptionController extends HBox {
     }
 
     public ViewOptionController setProject(ProjectDTO projectDTO) {
+        projectDTO.setProjectOwnerId(user.getUser_id());
         this.projectDTO = projectDTO;
         this.projectName.setText(projectDTO.getProjectName());
         return this;
