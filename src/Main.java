@@ -19,7 +19,9 @@ public class Main extends Application {
         ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage);
         viewSwitcher.switchView(ViewName.LOGIN);
 
-        primaryStage.setTitle("Hello World");
+        primaryStage.setMinHeight(500.0);
+        primaryStage.setMinWidth(500.0);
+        primaryStage.setTitle("Groupe9");
         primaryStage.show();
     }
 

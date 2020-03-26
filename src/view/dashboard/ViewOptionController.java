@@ -5,7 +5,6 @@ import business.UCC.ViewOptionUCCImpl;
 import exceptions.FatalException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -29,12 +28,16 @@ public class ViewOptionController extends HBox {
     @FXML
     private Button exportBtn = null ;
     @FXML
+    private Button editBtn = null;
+    @FXML
     private ImageView exportIcon = null;
     @FXML
     private Button deleteBtn = null ;
     @FXML
     private ImageView deleteIcon = null;
 
+    @FXML
+    private ImageView editIcon = null;
     @FXML
     private HBox projectRowHbox  = null;
 
@@ -56,7 +59,7 @@ public class ViewOptionController extends HBox {
     }
 
     public  void  initialize() {
-        try{
+
             exportBtn.setOnAction(event -> {
                 ProjectDTO  chooserProject = ProjectDAO.getInstance().getSelectedProject(user.getUser_id(), projectName.getText());
 
@@ -74,10 +77,9 @@ public class ViewOptionController extends HBox {
                 viewOptionUCC.deleteProject(projectDTO, dashboard);
             });
 
-
-        }catch(FatalException e){
-            System.out.println("Fatal Exception");
-        };
+        editBtn.setOnAction(event -> {
+            System.out.println("edit!");
+        });
     }
 
     public ViewOptionController setProject(ProjectDTO projectDTO) {
@@ -97,11 +99,14 @@ public class ViewOptionController extends HBox {
         return this;
     }
 
+    public ViewOptionController setEditIcon() {
+        this.editIcon.setImage(new Image("images/edit.png"));
+        return this;
+    }
+
     public HBox getProjectRowHbox() {
         return projectRowHbox;
     }
-
-
 
 
 

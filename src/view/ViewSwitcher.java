@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import utilities.Utility;
 import view.dashboard.DashboardController;
+import view.editor.EditorController;
 import view.login.LoginController;
 import view.profile.ProfileController;
 import view.registration.RegistrationController;
@@ -55,6 +56,7 @@ public class ViewSwitcher {
                     toDashboard();
                     break;
                 case EDITOR:
+                    toEditor();
                     break;
                 default:
                     throw new IllegalArgumentException("Unhandled view");
@@ -119,6 +121,19 @@ public class ViewSwitcher {
         Parent root = loader.load();
         DashboardController dashboardController = loader.getController();
         dashboardController.setViewSwitcher(this).setUserProjectView(user);
+        this.stage.setScene(new Scene(root));
+    }
+
+    /**
+     * Switches to the dashboard screen
+     *
+     * @throws IOException if the associated .fxml file can't be loaded
+     */
+    private void toEditor() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/editor/editor.fxml"));
+        Parent root = loader.load();
+        EditorController editorController = loader.getController();
+        editorController.setViewSwitcher(this);
         this.stage.setScene(new Scene(root));
     }
 }

@@ -8,6 +8,11 @@
          alignment="CENTER_LEFT" >
 
     <Label fx:id="projectName"  maxWidth="165"  minWidth="165"  wrapText="true"/>
+    <Button fx:id="editBtn" mnemonicParsing="true" maxHeight="20" minWidth="20" style="-fx-background-color: none">
+        <graphic>
+            <ImageView fx:id="editIcon" fitHeight="20" fitWidth="16" />
+        </graphic>
+    </Button>
     <Button fx:id="exportBtn" mnemonicParsing="true" maxHeight="20" minWidth="20" style="-fx-background-color: none">
         <graphic>
             <ImageView fx:id="exportIcon" fitHeight="20" fitWidth="16" />
