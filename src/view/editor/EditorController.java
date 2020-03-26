@@ -1,10 +1,10 @@
 package view.editor;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -12,6 +12,7 @@ import javafx.scene.shape.*;
 import view.ViewSwitcher;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
 
 public class EditorController {
 
@@ -31,6 +32,7 @@ public class EditorController {
     private static final String ARROW_POINT2 = "ARROW_POINT2";
 
     private ViewSwitcher viewSwitcher;
+
 
     @FXML
     private Pane pane;
@@ -57,6 +59,9 @@ public class EditorController {
     private String selected_shape = "";
     private  boolean waiting_for_more_coordinate = false;
 
+    private ContextMenu shapeContextMenu;
+    private ColorPicker contextMenuColorPicker;
+
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
@@ -64,6 +69,7 @@ public class EditorController {
 
     @FXML
     public void initialize() {
+
 
         pane.setOnMouseClicked((MouseEvent event) ->
         {
@@ -73,6 +79,26 @@ public class EditorController {
                 draw();
             }
         });
+
+        contextMenuColorPicker = new ColorPicker();
+        MenuItem delete = new MenuItem("delete");
+        delete.setOnAction(t -> deleteShape());
+        MenuItem color = new MenuItem("colour", contextMenuColorPicker);
+        color.setOnAction(t -> setColor());
+        shapeContextMenu = new ContextMenu(delete, color);
+
+    }
+
+    private void setColor() {
+        if(shapeContextMenu.getOwnerNode() instanceof Shape){
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            shape.setFill(contextMenuColorPicker.getValue());
+        }
+    }
+
+    private void deleteShape() {
+        System.out.println(shapeContextMenu.getOwnerNode());
+        pane.getChildren().remove(shapeContextMenu.getOwnerNode());
     }
 
     @FXML
@@ -192,17 +218,29 @@ public class EditorController {
 
     }
 
+    ContextMenu menu = new ContextMenu();
+
+
     private void onShapeSelected(MouseEvent e) {
         Shape shape = (Shape) e.getSource();
-        if (selectedShapes.contains(shape)) { //if already selected => unselect
-            shape.setStroke(Color.TRANSPARENT);
-            selectedShapes.remove(shape);
-            System.out.println("unselected");
-        }else{                                 //if not selected => add to the list
-            shape.setStroke(Color.GREEN);
-            selectedShapes.add(shape);
-            System.out.println("selected");
+        if(e.getButton() == MouseButton.PRIMARY){
+            if (selectedShapes.contains(shape)) { //if already selected => unselect
+                shape.setStroke(Color.TRANSPARENT);
+                selectedShapes.remove(shape);
+                System.out.println("unselected");
+            }else{                                 //if not selected => add to the list
+                shape.setStroke(Color.GREEN);
+                selectedShapes.add(shape);
+                System.out.println("selected");
+            }
+        } else if(e.getButton() == MouseButton.SECONDARY){
+            shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape,e.getScreenX(), e.getScreenY()));
         }
+    }
+
+
+
+    public void test(){
 
     }
 
