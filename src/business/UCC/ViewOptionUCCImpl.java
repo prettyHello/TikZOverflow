@@ -36,6 +36,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
                         new Alert(Alert.AlertType.CONFIRMATION, "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz")).showAndWait();
                     }
                     else {
+                        Utility.deleteFile(new File(selectedFile.getAbsolutePath().concat(".tar.gz") ) );
                         new Alert(Alert.AlertType.ERROR, "Too long path to a certain file ( > 100 bytes)").showAndWait();
                     }
                 } else {
