@@ -28,4 +28,6 @@ public interface ProjectDAO {
      * @param projectName Project name
      */
     ProjectDTO getSelectedProject(int userID, String projectName) throws FatalException;
+
+    void deleteProject(ProjectDTO project ) ;
 }

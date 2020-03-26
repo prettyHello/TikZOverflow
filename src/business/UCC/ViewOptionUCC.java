@@ -3,6 +3,7 @@ package business.UCC;
 import business.DTO.ProjectDTO;
 import exceptions.BizzException;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import view.dashboard.DashboardController;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,5 +35,5 @@ public interface ViewOptionUCC {
      */
     public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) throws RuntimeException ;
 
-    public void deleteProject (ProjectDTO project) ;
+    public void deleteProject (ProjectDTO project, DashboardController dashboard ) ;
 }

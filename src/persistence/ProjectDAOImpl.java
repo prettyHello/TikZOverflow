@@ -15,6 +15,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
     private static final String SQL_SELECT_PROJECT_OF_USER = "SELECT * FROM projects WHERE project_owner_id = ?  AND name = ?";
+    private static final String SQL_DELETE_PROJECT_OF_USER = "DELETE FROM projects WHERE project_owner_id = ? AND name = ?";
     // gerer les connections en s'appuyant sur l'implementation dans UserUCCImpl pour les fermetures et Exceptions
     DALServicesImpl querry = new DALServicesImpl() ;
 
@@ -93,6 +94,24 @@ public class ProjectDAOImpl implements ProjectDAO {
             new Alert(Alert.AlertType.ERROR, "Failed to load the project: "+ project.getProjectName() ).showAndWait();
         }
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteProject(ProjectDTO project ){
+        PreparedStatement pr;
+        ResultSet rs;
+        try {
+            pr = ((DALBackEndServices) this.querry).prepareStatement(SQL_DELETE_PROJECT_OF_USER);
+            pr.setInt(1, project.getProjectOwnerId());
+            pr.setString(2, project.getProjectName());
+            rs = pr.executeQuery();
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, "Failed to Delete the project: "+ project.getProjectName() ).showAndWait();
+            e.printStackTrace();
+        }
     }
 
 }

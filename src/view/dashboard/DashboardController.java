@@ -4,6 +4,7 @@ import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 
 import business.UCC.ProjectUCCImpl;
+import business.UCC.ViewOptionUCCImpl;
 import exceptions.BizzException;
 
 import business.UCC.UserUCC;
@@ -32,6 +33,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class DashboardController {
+
+    DashboardController dbc = this;
 
     private String popupMessage = "Please enter the name of your Project" ;
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
@@ -118,7 +121,7 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(new ViewOptionController(user).setProjectName(item.getProjectName()).setExportIcon("view/images/exportIcon.png").setDeleteIcon("view/images/deleteIcon.png").getProjectRowHbox());
+                    setGraphic(new ViewOptionController(dbc ,user).setProject(item).setExportIcon("view/images/exportIcon.png").setDeleteIcon("view/images/deleteIcon.png").getProjectRowHbox());
                 }
             }
         });
@@ -162,5 +165,10 @@ public class DashboardController {
                 new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extention ").showAndWait();
             }
         }
+    }
+
+
+    public void delete(ProjectDTO data) {
+        projectObsList.remove(data);
     }
 }

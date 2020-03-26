@@ -17,6 +17,9 @@ import java.io.*;
 
 public class ViewOptionController extends HBox {
 
+    DashboardController dashboard;
+    private ProjectDTO projectDTO ;
+
 
     @FXML
     private  Label projectName = null ;
@@ -36,7 +39,8 @@ public class ViewOptionController extends HBox {
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     ViewOptionUCCImpl viewOptionUCC = new ViewOptionUCCImpl();
 
-    public ViewOptionController(UserDTO userDTO)  {
+    public ViewOptionController(DashboardController dashboard, UserDTO userDTO)  {
+        this.dashboard = dashboard;
         this.user = userDTO ;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("view/dashboard/viewOption.fxml"));
@@ -64,10 +68,7 @@ public class ViewOptionController extends HBox {
             });
 
             deleteBtn.setOnAction(event -> {
-                ProjectDTO  chooserProject = ProjectDAO.getInstance().getSelectedProject(user.getUser_id(), projectName.getText());
-
-                viewOptionUCC.deleteProject(chooserProject);
-                System.out.println("Delete");
+                viewOptionUCC.deleteProject(projectDTO, dashboard);
             });
 
 
@@ -76,8 +77,9 @@ public class ViewOptionController extends HBox {
         };
     }
 
-    public ViewOptionController setProjectName(String projectName) {
-        this.projectName.setText(projectName);
+    public ViewOptionController setProject(ProjectDTO projectDTO) {
+        this.projectDTO = projectDTO;
+        this.projectName.setText(projectDTO.getProjectName());
         return this;
     }
 

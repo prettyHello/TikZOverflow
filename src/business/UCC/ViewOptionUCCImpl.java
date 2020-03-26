@@ -101,10 +101,12 @@ public class ViewOptionUCCImpl implements ViewOptionUCC{
         }
     }
 
-    public void deleteProject(ProjectDTO project ) {
+    public void deleteProject(ProjectDTO project, DashboardController dashboard ) {
         File dir = new File(project.getProjectPath()) ;
         if (dir.exists()) {
-           Utility.deleteFile(dir);
+            //ProjectDAO.getInstance().deleteProject(project);
+            Utility.deleteFile(dir);
+            dashboard.delete(project);
         }
         else {
             new Alert(Alert.AlertType.ERROR, "This project dont exit in this Computer").showAndWait();
