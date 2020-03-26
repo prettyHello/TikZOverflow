@@ -7,16 +7,19 @@ import business.shape.Square;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -26,7 +29,10 @@ import view.ViewSwitcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Optional;
+import java.util.Random;
 
 public class EditorController {
 
@@ -256,7 +262,7 @@ public class EditorController {
 
 
     private void onShapeSelected(MouseEvent e) {
-        if (!waiting_for_more_coordinate) {
+        if (!waiting_for_more_coordinate && selected_shape =="") {
             Shape shape = (Shape) e.getSource();
 
             if (e.getButton() == MouseButton.PRIMARY) {
@@ -367,13 +373,9 @@ public class EditorController {
     }
 
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
-        business.Canvas.CanvasImpl canvas = new business.Canvas.CanvasImpl(200, 200);
-        business.shape.Coordinates coord = new business.shape.Coordinates(20, 4);
         System.out.println("Save Function");
         SaveObject saveObject = new SaveObject();
-        business.shape.Circle circle = new business.shape.Circle(true, true, business.shape.Color.GREEN, business.shape.Color.RED, coord, 5);
-        canvas.addShape(circle);
-        saveObject.save(canvas, "myfile");
+        saveObject.save(canvas,"myfile");
     }
 }
 
