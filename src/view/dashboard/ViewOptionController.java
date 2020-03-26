@@ -89,13 +89,13 @@ public class ViewOptionController extends HBox {
         return this;
     }
 
-    public ViewOptionController setExportIcon(String iconUrl) {
-        this.exportIcon.setImage(new Image(iconUrl));
+    public ViewOptionController setExportIcon() {
+        this.exportIcon.setImage(new Image("images/exportIcon.png"));
         return this;
     }
 
-    public ViewOptionController setDeleteIcon(String iconUrl) {
-        this.deleteIcon.setImage(new Image(iconUrl));
+    public ViewOptionController setDeleteIcon() {
+        this.deleteIcon.setImage(new Image("images/deleteIcon.png"));
         return this;
     }
 

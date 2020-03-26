@@ -4,7 +4,6 @@ import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 
 import business.UCC.ProjectUCCImpl;
-import business.UCC.ViewOptionUCCImpl;
 import exceptions.BizzException;
 
 import business.UCC.UserUCC;
@@ -125,7 +124,7 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(new ViewOptionController(dbc ,user).setProject(item).setExportIcon("view/images/exportIcon.png").setEditIcon().setDeleteIcon("view/images/deleteIcon.png").getProjectRowHbox());
+                    setGraphic(new ViewOptionController(dbc ,user).setProject(item).setExportIcon().setEditIcon().setDeleteIcon().getProjectRowHbox());
                 }
             }
         });
@@ -189,7 +188,6 @@ public class DashboardController {
             if (projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN ) ) {
                 System.out.println(projectName.get());
                 toEditorView();
-
             }else {
                 new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
             }
