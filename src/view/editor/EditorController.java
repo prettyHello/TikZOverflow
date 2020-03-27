@@ -2,10 +2,13 @@ package view.editor;
 
 import business.Canvas.ActiveCanvas;
 import business.Canvas.Canvas;
+import business.DTO.ProjectDTO;
+import business.DTO.UserDTO;
 import business.shape.Coordinates;
 import business.shape.Square;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
@@ -24,6 +27,7 @@ import javafx.scene.shape.*;
 import persistence.SaveObject;
 import utilities.ColorUtils;
 import view.ViewSwitcher;
+import view.dashboard.DashboardController;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,6 +92,11 @@ public class EditorController {
     private ContextMenu shapeContextMenu;
     private ColorPicker contextMenuColorPicker;
 
+    ProjectDTO projectDTO;
+    public EditorController setNewProjcet(ProjectDTO projectDTO)  {
+        this.projectDTO = projectDTO;
+        return this;
+    }
 
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
@@ -397,7 +406,7 @@ public class EditorController {
 
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
         SaveObject saveObject = new SaveObject();
-        saveObject.save(canvas,"myfile");
+        saveObject.save(canvas,projectDTO.getProjectName());
     }
 
     private void translateToTikz(){

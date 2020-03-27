@@ -62,7 +62,6 @@ public class ViewOptionController extends HBox {
 
     public ViewOptionController(DashboardController dashboard, UserDTO userDTO, int project_id)  {
 
-
         this.project_id = project_id;
         this.dashboard = dashboard;
         this.user = userDTO ;

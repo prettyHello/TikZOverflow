@@ -12,8 +12,6 @@ import business.factories.ProjectFactory;
 import business.factories.ProjectFactoryImpl;
 import business.factories.UserFactoryImpl;
 
-import exceptions.FatalException;
-import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -191,8 +189,12 @@ public class DashboardController {
 
         if (projectName != null && projectName.matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
             try {
+                ProjectDTO newProject = new ProjectDTO();
+                newProject.setProjectName(projectName);
+                newProject.setCreateDate(Utility.getTimeStamp());
+                viewSwitcher.setproject(newProject);
+
                 projectUCC.createNewProject(projectName);
-                System.out.println("created project " + projectName);
                 toEditorView();
             } catch (BizzException e) {
                 Utility.showAlert(Alert.AlertType.WARNING, "Creation impossible", "Duplicate project name", "A project with ths name already exists. Please specify another one");

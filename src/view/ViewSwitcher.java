@@ -1,5 +1,6 @@
 package view;
 
+import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -25,9 +26,15 @@ public class ViewSwitcher {
      */
     private final Stage stage;
     private UserDTO user;
+    private ProjectDTO projectDTO ;
 
     public ViewSwitcher setUser(UserDTO user) {
         this.user = user;
+        return this;
+    }
+
+    public ViewSwitcher setproject(ProjectDTO projectDTO) {
+        this.projectDTO = projectDTO;
         return this;
     }
 
@@ -135,6 +142,7 @@ public class ViewSwitcher {
         Parent root = loader.load();
         EditorController editorController = loader.getController();
         editorController.setViewSwitcher(this);
+        editorController.setNewProjcet(projectDTO) ;
         this.stage.setScene(new Scene(root));
     }
 }

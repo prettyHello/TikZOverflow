@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 public class ProjectUCCImpl implements ProjectUCC {
 
     private final String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
+    private String rootProject = File.separator + "ProjectTikZ" + File.separator;
 
     private final DALServices dal;
     private final DAO<ProjectDTO> projectDAO;
@@ -70,7 +71,7 @@ public class ProjectUCCImpl implements ProjectUCC {
                 // database
                 UserDTO owner = ConnectedUser.getConnectedUser();
                 String now = Utility.getTimeStamp();
-                String projectPath = "resources/projects/userid_" + owner.getUser_id() + "/" + projectName;
+                String projectPath = System.getProperty("user.home") + rootProject + projectName;
                 ProjectDTO projectDTO = new ProjectFactoryImpl().createProject(0, owner.getUser_id(), projectName, "", projectPath, now, now);
                 ((ProjectDAO) projectDAO).saveNewProject(projectDTO);
 

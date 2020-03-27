@@ -13,6 +13,7 @@ public class SaveObject {
     private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator;
     // Saving the magnificient drawing of the users into a file
     public void save(Canvas canvas, String nameOfTheFile) throws IOException, ClassNotFoundException {
+        rootProject = rootProject + nameOfTheFile + File.separator;
         //Creating the file to save to
         ObjectOutputStream objectOutputStream =
                 new ObjectOutputStream(new FileOutputStream(rootProject + nameOfTheFile + ".bin"));
