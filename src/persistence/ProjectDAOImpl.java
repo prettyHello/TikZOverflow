@@ -33,7 +33,7 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     // lever des exceptions de type FATAL...
 
-    @Override
+
     public void saveNewProject(ProjectDTO project) {
         try {
             prstmt = dal.prepareStatement(SQL_INSERT_PROJECT);
@@ -66,7 +66,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         } catch (Exception e) {
             throw new BizzException("Failed to load project list");
         }
-        return null;
     }
 
     @Override
@@ -109,7 +108,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         } catch (Exception e) {
             throw new BizzException("Failed to load the project: "+ project.getProjectName());
         }
-        return null;
     }
 
     /**
@@ -120,7 +118,7 @@ public class ProjectDAOImpl implements ProjectDAO {
         PreparedStatement pr;
 
         try {
-            pr = ((DALBackEndServices) this.querry).prepareStatement(SQL_DELETE_PROJECT_OF_USER);
+            pr = this.dal.prepareStatement(SQL_DELETE_PROJECT_OF_USER);
             pr.setInt(1, project.getProjectOwnerId());
             pr.setString(2, project.getProjectName());
             pr.executeUpdate();

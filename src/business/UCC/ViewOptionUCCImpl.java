@@ -1,6 +1,8 @@
 package business.UCC;
 
 import business.DTO.ProjectDTO;
+import business.factories.ProjectFactory;
+import business.factories.ProjectFactoryImpl;
 import exceptions.BizzException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -8,7 +10,10 @@ import javafx.scene.control.TextInputDialog;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
+import persistence.DALServices;
+import persistence.DALServicesImpl;
 import persistence.ProjectDAO;
+import persistence.ProjectDAOImpl;
 import utilities.Utility;
 import view.dashboard.DashboardController;
 
@@ -113,7 +118,10 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
             alert.setContentText("are you sure you want to delete");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
-                ProjectDAO.getInstance().deleteProject(project);
+                DALServices dal = new DALServicesImpl();
+                ProjectFactory projectFactory = new ProjectFactoryImpl();
+                ProjectDAO dao = new ProjectDAOImpl(dal, projectFactory);
+                ((ProjectDAO) dao).deleteProject(project);
                 Utility.deleteFile(dir);
                 dashboard.delete(project);
             }
@@ -123,5 +131,5 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
         }
     }
 
-    }
 }
+

@@ -41,7 +41,7 @@ public class DashboardController {
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     private String ContentTextImport = "impossible to import, this project already exists in: ";
 
-    ProjectUCCImpl projectUCC = new ProjectUCCImpl();
+    ProjectUCCImpl projectUCC ;
 
     private ViewSwitcher viewSwitcher;
 
@@ -125,11 +125,11 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(new ViewOptionController(dbc ,user).setProject(item).setExportIcon().setEditIcon().setDeleteIcon().getProjectRowHbox());
-                    ViewOptionController viewOptionController = new ViewOptionController(user, item.getProjectId());
-                    viewOptionController.setProjectName(item.getProjectName());
-                    viewOptionController.setExportIcon("images/exportIcon.png");
+                    ViewOptionController viewOptionController = new ViewOptionController(dbc, user, item.getProjectId());
+                    viewOptionController.setProject(item);
+                    viewOptionController.setExportIcon();
                     viewOptionController.setEditIcon();
+                    viewOptionController.setDeleteIcon();
                     viewOptionController.setViewSwitcher(viewSwitcher);
                     setGraphic(viewOptionController.getProjectRowHbox());
                 }
@@ -164,7 +164,7 @@ public class DashboardController {
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
                             ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
                             projectObsList.add(newProjectImport);
-                            ProjectDAO.getInstance().saveProject(newProjectImport);
+                            this.projectUCC.createFromImport(newProjectImport); //TODO
                         } catch (IOException  e) {
                             throw new BizzException("Could not locate files to import");
                         }

@@ -91,9 +91,8 @@ public class ProjectUCCImpl implements ProjectUCC {
     }
 
     @Override
-    public void createFromImport(String importPath) throws BizzException, IOException {
-        //TODO
-        throw new UnsupportedOperationException("Not yet implemented");
+    public void createFromImport(ProjectDTO projectDTO) throws BizzException, IOException {
+        ((ProjectDAO) projectDAO).saveNewProject(projectDTO);
     }
 }
 

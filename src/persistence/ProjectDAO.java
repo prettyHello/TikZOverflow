@@ -1,14 +1,13 @@
 package persistence;
 
 import business.DTO.ProjectDTO;
+import exceptions.FatalException;
 
 import java.util.ArrayList;
 
+
 public interface ProjectDAO extends DAO<ProjectDTO> {
 
-    static ProjectDAOImpl getInstance(){
-        return  new ProjectDAOImpl();
-    }
 
     void saveNewProject(ProjectDTO project);
 

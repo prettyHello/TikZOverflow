@@ -60,7 +60,10 @@ public class ViewOptionController extends HBox {
     ViewOptionUCCImpl viewOptionUCC = new ViewOptionUCCImpl();
     private ViewSwitcher viewSwitcher;
 
-    public ViewOptionController(DashboardController dashboard, UserDTO userDTO)  {
+    public ViewOptionController(DashboardController dashboard, UserDTO userDTO, int project_id)  {
+
+
+        this.project_id = project_id;
         this.dashboard = dashboard;
         this.user = userDTO ;
         try {
@@ -79,7 +82,7 @@ public class ViewOptionController extends HBox {
                 DALServices dal = new DALServicesImpl();
                 ProjectFactory projectFactory = new ProjectFactoryImpl();
                 ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
-                ProjectDTO  chooserProject = ProjectDAO.getInstance().getSelectedProject(user.getUser_id(), projectName.getText());
+                ProjectDTO  chooserProject =  ((ProjectDAO) new ProjectDAOImpl(new DALServicesImpl(), new ProjectFactoryImpl())).getSelectedProject(user.getUser_id(), projectName.getText());
 
                 FileChooser fc = new FileChooser();
                 fc.setTitle("Save project as...");
