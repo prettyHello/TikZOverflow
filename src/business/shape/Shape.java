@@ -4,6 +4,7 @@ import exceptions.FatalException;
 import utilities.Utility;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Shape is the representation of a line of tikz code, eg :
@@ -21,16 +22,18 @@ public abstract class Shape implements Serializable {
     private boolean fill = false;
     private Color fillColor = Color.BLACK;
     private Color drawColor = Color.BLACK;
+    private int id;
 
     /**
      * @param draw Is the shape have a outer line, can be combined with fill.
      * @param fill Is the shape filled with a color, can be combined with draw.
      */
-    public Shape(boolean draw, boolean fill) {
+    public Shape(boolean draw, boolean fill, int id) {
         this.draw = draw;
         this.fill = fill;
         this.fillColor = Color.BLACK;
         this.drawColor = Color.BLACK;
+        this.id = id;
     }
 
     /**
@@ -39,7 +42,7 @@ public abstract class Shape implements Serializable {
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor) throws FatalException {
+    public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor, int id) throws FatalException {
         this.draw = draw;
         this.fill = fill;
         if (draw) {
@@ -50,6 +53,30 @@ public abstract class Shape implements Serializable {
             Utility.checkObject(drawColor);
             this.drawColor = drawColor;
         }
+        this.id = id;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean retVal = false;
+        if (obj instanceof Shape){
+            Shape ptr = (Shape) obj;
+            retVal = ptr.getId() == this.id;
+        }
+        return retVal;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean isDraw() {

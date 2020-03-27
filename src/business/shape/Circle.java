@@ -15,8 +15,8 @@ public class Circle extends Shape {
      * @param coordinates
      * @param radius
      */
-    public Circle(Coordinates coordinates, float radius) throws FatalException {
-        super(true, false);
+    public Circle(Coordinates coordinates, float radius, int id) throws FatalException {
+        super(true, false, id);
         if (radius <= 0) {
             throw new BizzException("Radius is negative or null");
         }
@@ -32,8 +32,8 @@ public class Circle extends Shape {
      * @param coordinates
      * @param radius
      */
-    public Circle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates coordinates, float radius) throws FatalException, BizzException {
-        super(draw, fill, drawColor, fillColor);
+    public Circle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates coordinates, float radius, int id) throws FatalException, BizzException {
+        super(draw, fill, drawColor, fillColor, id);
         Utility.checkObject(coordinates);
         if (radius <= 0) {
             throw new BizzException("Radius is negative or null");

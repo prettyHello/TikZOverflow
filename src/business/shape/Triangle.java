@@ -14,8 +14,8 @@ public class Triangle extends Shape {
      *
      * @param originPoint
      */
-    public Triangle(Coordinates originPoint) {
-        super(true, false);
+    public Triangle(Coordinates originPoint, int id) {
+        super(true, false, id);
         Utility.checkObject(originPoint);
         this.originPoint = originPoint;
         this.secondPoint = new Coordinates(originPoint.getX() + 1, originPoint.getY());
@@ -28,8 +28,8 @@ public class Triangle extends Shape {
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public Triangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originPoint, Coordinates secondPoint, Coordinates thirdPoint) throws FatalException {
-        super(draw, fill, drawColor, fillColor);
+    public Triangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originPoint, Coordinates secondPoint, Coordinates thirdPoint, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, id);
         Utility.checkObject(originPoint);
         Utility.checkObject(secondPoint);
         Utility.checkObject(thirdPoint);

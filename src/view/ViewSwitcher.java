@@ -142,7 +142,7 @@ public class ViewSwitcher {
         Parent root = loader.load();
         EditorController editorController = loader.getController();
         editorController.setViewSwitcher(this);
-        editorController.setNewProjcet(projectDTO) ;
+        editorController.setNewProject(projectDTO) ;
         this.stage.setScene(new Scene(root));
     }
 }

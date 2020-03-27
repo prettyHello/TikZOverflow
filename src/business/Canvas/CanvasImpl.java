@@ -1,6 +1,9 @@
 package business.Canvas;
 
+import business.shape.Coordinates;
 import business.shape.Shape;
+import business.shape.Square;
+import exceptions.FatalException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +12,7 @@ public class CanvasImpl implements Canvas {
     final int width;
     final int height;
     final List<Shape> shapes;
+    private int idCounter = 0;
 
     /**
      * package visibility constructor. Should use the singleton to get an instance of this class.
@@ -46,13 +50,32 @@ public class CanvasImpl implements Canvas {
      * @throws IllegalArgumentException if the shape is already present on the canvas
      */
     @Override
-    public void addShape(Shape shape) {
+    public void addShape(Shape shape) throws FatalException {
         if (this.shapes.contains(shape)) {
-            throw new IllegalArgumentException("Shape already exists on the canvas. Need to be able to differentiate between shapes");
+            throw new FatalException("Shape already exists on the canvas. Need to be able to differentiate between shapes");
         }
         this.shapes.add(shape);
     }
 
+    /**
+     * update a shape to the canvas
+     *
+     * @param shape the shape to update
+     * @throws IllegalArgumentException if the shape is not present on the canvas
+     */
+    @Override
+    public void updateShape(Shape shape) throws FatalException {
+        if (!this.shapes.contains(shape)) {
+            throw new FatalException("Shape doesn't exists on the canvas.");
+        }
+        this.shapes.remove(shape);
+        this.shapes.add(shape);
+    }
+
+    public int getIdForNewShape(){
+        this.idCounter = this.idCounter + 1;
+        return this.idCounter;
+    }
     /**
      * Deletes a shape from the canvas. If the canvas does not contain the given shape, silently returns
      *
@@ -61,6 +84,18 @@ public class CanvasImpl implements Canvas {
     @Override
     public void rmShape(Shape shape) {
         this.shapes.remove(shape);
+    }
+
+    /**
+     * Deletes a shape from the canvas. If the canvas does not contain the given shape, silently returns
+     *
+     * @param id the id of the shape to remove
+     */
+    @Override
+    public void rmShapeById(int id) {
+        //We need to create a temporary shape for the array to find the one in the list, shape are only compared on their id, nothing else mather for the list.
+        Shape tmpShape = new Square(new Coordinates(0, 0), 0,id);
+        this.shapes.remove(tmpShape);
     }
 
     @Override

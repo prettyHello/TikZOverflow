@@ -18,8 +18,8 @@ public class Rectangle extends Shape {
      * @param endCoordinates
      * @throws FatalException
      */
-    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates) throws FatalException {
-        super(true, false);
+    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
+        super(true, false, id);
         Utility.checkObject(originCoordinates);
         Utility.checkObject(endCoordinates);
         this.orginCoordinates = originCoordinates;
@@ -36,8 +36,8 @@ public class Rectangle extends Shape {
      * @param fillColor        Color to fill the shape with, color list in Color enum.
      * @param drawColor        Outer line color, color list in Color enum.
      */
-    public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates orginCoordinates, Coordinates endCoordinates) throws FatalException {
-        super(draw, fill, drawColor, fillColor);
+    public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates orginCoordinates, Coordinates endCoordinates, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, id);
         Utility.checkObject(orginCoordinates);
         Utility.checkObject(endCoordinates);
         this.orginCoordinates = orginCoordinates;

@@ -26,14 +26,23 @@ public class Path extends Shape {
      * @param pathPoints List of points the path goes trough.
      * @throws FatalException
      */
-    public Path(ArrayList<Coordinates> pathPoints) throws FatalException {
-        super(true, false);
+    public Path(ArrayList<Coordinates> pathPoints, int id) throws FatalException {
+        super(true, false, id);
         Utility.checkObject(pathPoints);
         this.pathPoints = pathPoints;
     }
 
-    public Path(Coordinates origin, Coordinates end) throws FatalException {
-        super(true, false);
+    /**
+     * TODO benja, add the damn doc when you do something.
+     * @param origin
+     * @param end
+     * @param id
+     * @throws FatalException
+     */
+    public Path(Coordinates origin, Coordinates end, int id,boolean arrowStart,boolean arrowEnd) throws FatalException {
+        super(true, false, id);
+        this.arrowStart = arrowStart;
+        this.arrowEnd = arrowEnd;
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
         pathPoints.add(origin);
         pathPoints.add(end);
@@ -52,8 +61,8 @@ public class Path extends Shape {
      * @param drawColor
      * @throws FatalException
      */
-    public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor) throws FatalException {
-        super(true, false, Color.WHITE, drawColor);
+    public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
+        super(true, false, Color.WHITE, drawColor, id);
         Utility.checkObject(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -69,7 +78,7 @@ public class Path extends Shape {
      * /!\ Print always add an exta " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
-        String returnValue = super.print();
+        String returnValue = "\\draw ["+super.getDrawColor().value+"] ";
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
         returnValue += iterator.next().print();
         while (iterator.hasNext()) {

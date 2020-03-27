@@ -42,7 +42,7 @@ public class EditorController {
 
 
     /**
-     * We need to divide teh fxml so that we have separate controller for this one and the other view
+     * TODO We need to divide teh fxml so that we have separate controller for this one and the other view
      */
 
     private static final String SQUARE = "SQUARE";
@@ -93,7 +93,7 @@ public class EditorController {
     private ColorPicker contextMenuColorPicker;
 
     ProjectDTO projectDTO;
-    public EditorController setNewProjcet(ProjectDTO projectDTO)  {
+    public EditorController setNewProject(ProjectDTO projectDTO)  {
         this.projectDTO = projectDTO;
         return this;
     }
@@ -123,23 +123,26 @@ public class EditorController {
     }
 
     private void setColor() {
+        //TODO use canvas.updateShape to update the shape.
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             shape.setFill(contextMenuColorPicker.getValue());
         }
+        translateToTikz();
     }
 
     private void rightClickDeleteShape() {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             pane.getChildren().remove(shape);
+            canvas.rmShapeById(Integer.parseInt(shape.getId()));
             if(selectedShapes.contains(shape)){
                 selectedShapes.remove(shape);
                 if (selectedShapes.isEmpty())
                     disableToolbar(false);
             }
-
         }
+        translateToTikz();
     }
 
     @FXML
@@ -186,11 +189,13 @@ public class EditorController {
                     Shape s = it.next();
                     pane.getChildren().remove(s);
                     it.remove();
+                    canvas.rmShapeById(Integer.parseInt(s.getId()));
                     disableToolbar(false);
                 }
             }
             delete.setStyle("-fx-focus-color: transparent;");
         }
+        translateToTikz();
     }
 
     private void handle_draw_call() {
@@ -211,9 +216,9 @@ public class EditorController {
                 waiting_for_more_coordinate = true;
                 break;
             case TRIANGLE_POINT3:
+                addToModel = new business.shape.Triangle(new Coordinates(selected_x, selected_y),canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waiting_for_more_coordinate = false;
-                addToModel = new business.shape.Triangle(new Coordinates(selected_x, selected_y));
                 break;
             case CIRCLE:
                 float radius = 50.0f;
@@ -221,8 +226,8 @@ public class EditorController {
                 circle.setCenterX(selected_x);
                 circle.setCenterY(selected_y);
                 circle.setRadius(radius);
+                addToModel = new business.shape.Circle(new Coordinates(selected_x, selected_y), radius,canvas.getIdForNewShape());
                 shape = circle;
-                addToModel = new business.shape.Circle(new Coordinates(selected_x, selected_y), radius);
                 break;
             case ARROW:
                 previously_selected_x = selected_x;
@@ -231,8 +236,8 @@ public class EditorController {
                 waiting_for_more_coordinate = true;
                 break;
             case ARROW_POINT2:
+                addToModel = new business.shape.Arrow(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates(selected_x, selected_y),canvas.getIdForNewShape());
                 shape = constructArrow();
-                addToModel = new business.shape.Arrow(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates(selected_x, selected_y));
                 waiting_for_more_coordinate = false;
                 break;
             case LINE:
@@ -242,7 +247,7 @@ public class EditorController {
                 waiting_for_more_coordinate = true;
                 break;
             case LINE_POINT2:
-                addToModel = new business.shape.Line(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates(selected_x, selected_y));
+                addToModel = new business.shape.Line(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates(selected_x, selected_y),canvas.getIdForNewShape());
                 shape = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
                 shape.setStroke(fillColour.getValue());
                 waiting_for_more_coordinate = false;
@@ -250,7 +255,7 @@ public class EditorController {
             case SQUARE:
                 int size = 75;
                 shape = new Rectangle(selected_x, selected_y, 75, 75);
-                addToModel = new Square(new Coordinates(selected_x, selected_y), size);
+                addToModel = new Square(new Coordinates(selected_x, selected_y), size,canvas.getIdForNewShape());
                 break;
         }
         if (waiting_for_more_coordinate) {
@@ -262,7 +267,6 @@ public class EditorController {
             shape.setFill(fillColour.getValue());
             pane.getChildren().add(shape);
             notifyModel(addToModel, shape);
-            translateToTikz();
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
             selected_shape = "";
         }
@@ -272,7 +276,7 @@ public class EditorController {
     private void notifyModel(business.shape.Shape addToModel, Shape shape) {
         Color fillColor =  (Color) shape.getFill();
         Color drawColor = (Color) shape.getStroke();
-
+        shape.setId(Integer.toString(addToModel.getId()));
         if(drawColor!=null){
             addToModel.setDraw(true);
             addToModel.setDrawColor(getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
@@ -286,18 +290,17 @@ public class EditorController {
             addToModel.setFill(false);
         }
         canvas.addShape(addToModel); //warn the model
-
-
+        translateToTikz();
     }
 
     ContextMenu menu = new ContextMenu();
 
 
-    private void onShapeSelected(MouseEvent e) {
+    private void onShapeSelected(MouseEvent mouseEvent) {
         if (!waiting_for_more_coordinate && selected_shape =="") {
-            Shape shape = (Shape) e.getSource();
+            Shape shape = (Shape) mouseEvent.getSource();
 
-            if (e.getButton() == MouseButton.PRIMARY) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 if (selectedShapes.contains(shape)) { //if already selected => unselect
                     shape.setEffect(null);
                     selectedShapes.remove(shape);
@@ -312,8 +315,8 @@ public class EditorController {
                     shape.setEffect(borderEffect);
                     selectedShapes.add(shape);
                 }
-            } else if (e.getButton() == MouseButton.SECONDARY) {
-                shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, e.getScreenX(), e.getScreenY()));
+            } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, mouseEvent.getScreenX(), mouseEvent.getScreenY()));
             }
         }
     }
