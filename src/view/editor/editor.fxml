@@ -20,6 +20,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.SVGPath?>
 
+<?import javafx.scene.control.ChoiceBox?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="931.0" prefWidth="1267.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.editor.EditorController">
     <center>
         <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -71,7 +72,7 @@
                                                 <VBox prefHeight="23.0" prefWidth="138.0">
                                                     <children>
                                                         <Label text="Fill colour" />
-                                                        <ColorPicker fx:id="fillColour" prefHeight="30.0" />
+                                                        <ChoiceBox fx:id="fillColour" prefWidth="150.0" />
                                                     </children>
                                                 </VBox>
                                             </children>
@@ -87,7 +88,7 @@
                                                 <VBox prefHeight="175.0" prefWidth="100.0">
                                                     <children>
                                                         <Label text="Stroke colour" />
-                                                        <ColorPicker fx:id="strokeColour" prefHeight="30.0" />
+                                                        <ChoiceBox fx:id="strokeColour" prefWidth="150.0" />
                                                     </children>
                                                 </VBox>
                                             </children>

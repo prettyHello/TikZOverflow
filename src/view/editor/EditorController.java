@@ -77,9 +77,9 @@ public class EditorController {
     @FXML
     Button delete;
     @FXML
-    ColorPicker fillColour;
+    ChoiceBox fillColour;
     @FXML
-    ColorPicker strokeColour;
+    ChoiceBox strokeColour;
 
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
     private double selected_x, selected_y;
@@ -90,7 +90,7 @@ public class EditorController {
     private Canvas canvas = ActiveCanvas.getActiveCanvas();
 
     private ContextMenu shapeContextMenu;
-    private ColorPicker contextMenuColorPicker;
+    private ChoiceBox contextMenuColorPicker;
 
     ProjectDTO projectDTO;
     public EditorController setNewProject(ProjectDTO projectDTO)  {
@@ -113,7 +113,18 @@ public class EditorController {
             }
         });
 
-        contextMenuColorPicker = new ColorPicker();
+        contextMenuColorPicker = new ChoiceBox();
+
+        for (business.shape.Color colour : business.shape.Color.values()) {
+            fillColour.getItems().add(colour);
+            strokeColour.getItems().add(colour);
+            contextMenuColorPicker.getItems().add(colour);
+        }
+
+        fillColour.setValue(business.shape.Color.BLACK);
+        strokeColour.setValue(business.shape.Color.BLACK);
+        contextMenuColorPicker.setValue(business.shape.Color.BLACK);
+
         MenuItem delete = new MenuItem("delete");
         delete.setOnAction(t -> rightClickDeleteShape());
         MenuItem color = new MenuItem("colour", contextMenuColorPicker);
@@ -126,7 +137,7 @@ public class EditorController {
         //TODO use canvas.updateShape to update the shape.
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            shape.setFill(contextMenuColorPicker.getValue());
+            shape.setFill(Color.valueOf(contextMenuColorPicker.getValue().toString()));
         }
         translateToTikz();
     }
@@ -249,7 +260,7 @@ public class EditorController {
             case LINE_POINT2:
                 addToModel = new business.shape.Line(new Coordinates(previously_selected_x, previously_selected_y), new Coordinates(selected_x, selected_y),canvas.getIdForNewShape());
                 shape = new Line(previously_selected_x, previously_selected_y, selected_x, selected_y);
-                shape.setStroke(fillColour.getValue());
+                shape.setStroke(Color.valueOf(fillColour.getValue().toString()));
                 waiting_for_more_coordinate = false;
                 break;
             case SQUARE:
@@ -263,8 +274,8 @@ public class EditorController {
         } else if (shape == null) { //No shape was previously selected
             alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
         } else {
-            shape.setStroke(strokeColour.getValue());
-            shape.setFill(fillColour.getValue());
+            shape.setFill(Color.valueOf(fillColour.getValue().toString()));
+            shape.setStroke(Color.valueOf(strokeColour.getValue().toString()));
             pane.getChildren().add(shape);
             notifyModel(addToModel, shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
