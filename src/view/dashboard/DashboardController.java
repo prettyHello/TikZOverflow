@@ -2,12 +2,17 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
+
 import business.UCC.ProjectUCCImpl;
+import exceptions.BizzException;
+
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import business.factories.ProjectFactory;
 import business.factories.ProjectFactoryImpl;
 import business.factories.UserFactoryImpl;
+
+import exceptions.FatalException;
 import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,11 +35,13 @@ import java.util.Optional;
 
 public class DashboardController {
 
-    private String popupMessage = "Please enter the name of your Project";
+    DashboardController dbc = this;
+
+    private String popupMessage = "Please enter the name of your Project" ;
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     private String ContentTextImport = "impossible to import, this project already exists in: ";
 
-    ProjectUCCImpl projectUCC;
+    ProjectUCCImpl projectUCC ;
 
     private ViewSwitcher viewSwitcher;
 
@@ -86,6 +93,7 @@ public class DashboardController {
     }
 
 
+
     public void handleDisconnectButton() {
         viewSwitcher.switchView(ViewName.LOGIN);
         UserFactoryImpl userFactory = new UserFactoryImpl();
@@ -117,10 +125,11 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    ViewOptionController viewOptionController = new ViewOptionController(user, item.getProjectId());
-                    viewOptionController.setProjectName(item.getProjectName());
-                    viewOptionController.setExportIcon("images/exportIcon.png");
+                    ViewOptionController viewOptionController = new ViewOptionController(dbc, user, item.getProjectId());
+                    viewOptionController.setProject(item);
+                    viewOptionController.setExportIcon();
                     viewOptionController.setEditIcon();
+                    viewOptionController.setDeleteIcon();
                     viewOptionController.setViewSwitcher(viewSwitcher);
                     setGraphic(viewOptionController.getProjectRowHbox());
                 }
@@ -129,12 +138,13 @@ public class DashboardController {
     }
 
     /**
+     * Decompress a choose file to user home, display it on the dashboard and save it into the database
      * Untar a choose file to user home, show to the dashboard and save into the database
      *
      * @throws BizzException
      */
     @FXML
-    public void importd() throws BizzException {
+    public void ImportProject() throws BizzException {
         FileChooser fc = new FileChooser();
         File selectedFile = fc.showOpenDialog(null);
 
@@ -145,21 +155,21 @@ public class DashboardController {
                 String projectName = askProjectName();
 
                 if (projectName != null) {
-                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject + projectName + File.separator + "touch.txt");
-                    Path folderDestination2 = Paths.get(System.getProperty("user.home") + rootProject + projectName);
+                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
 
                     if (!Files.exists(folderDestination.resolve(projectName))) {
-                        String Dst = Utility.unTarFile(selectedFile, folderDestination2);
-                        projectUCC.renameFolderProject(new File(folderDestination.toFile() + File.separator + Dst), new File(folderDestination.toString() + File.separator + projectName));
-                        ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
-                        projectObsList.add(newProjectImport);
-                        //this.projectUCC.createFromImport(newProjectImport);
                         try {
-                            this.projectUCC.createFromImport("tmp"); //TODO
-                        } catch (IOException e) {
+                            Files.createDirectories(folderDestination);
+                            String Dst = Utility.unTarFile(selectedFile, folderDestination);
+                            projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
+                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
+                            projectObsList.add(newProjectImport);
+                            this.projectUCC.createFromImport(newProjectImport); //TODO
+                        } catch (IOException  e) {
                             throw new BizzException("Could not locate files to import");
                         }
-                    } else {
+                    }
+                    else {
                         new Alert(Alert.AlertType.ERROR, ContentTextImport + folderDestination).showAndWait();
                         throw new BizzException("Existing Project");
                     }
@@ -168,6 +178,11 @@ public class DashboardController {
                 new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extension ").showAndWait();
             }
         }
+    }
+
+
+    public void delete(ProjectDTO data) {
+        projectObsList.remove(data);
     }
 
     @FXML

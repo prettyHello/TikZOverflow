@@ -5,6 +5,8 @@ import business.factories.ProjectFactory;
 import exceptions.BizzException;
 import exceptions.FatalException;
 
+import javafx.scene.control.Alert;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +20,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
     private static final String SQL_SELECT_BY_PROJECTID = "SELECT * FROM projects WHERE project_id = ?";
     private static final String SQL_SELECT_PROJECT_OF_USER = "SELECT * FROM projects WHERE project_owner_id = ?  AND name = ?";
+    private static final String SQL_DELETE_PROJECT_OF_USER = "DELETE FROM projects WHERE project_owner_id = ? AND name = ?";
     // gerer les connections en s'appuyant sur l'implementation dans UserUCCImpl pour les fermetures et Exceptions
 
     private final DALBackEndServices dal;
@@ -30,7 +33,7 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     // lever des exceptions de type FATAL...
 
-    @Override
+
     public void saveNewProject(ProjectDTO project) {
         try {
             prstmt = dal.prepareStatement(SQL_INSERT_PROJECT);
@@ -61,9 +64,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             }
             return projects;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new BizzException("Failed to load project list");
         }
-        return null;
     }
 
     @Override
@@ -94,6 +96,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             rs = pr.executeQuery();
             while (rs.next()) {
 
+                project.setProjectId(rs.getInt("project_id"));
+                project.setProjectOwnerId(rs.getInt("project_owner_id"));
                 project.setProjectName(rs.getString("name"));
                 project.setCreateDate(rs.getString("creation_date"));
                 project.setModificationDate(rs.getString("modification_date"));
@@ -102,9 +106,26 @@ public class ProjectDAOImpl implements ProjectDAO {
             }
             return project;
         } catch (Exception e) {
+            throw new BizzException("Failed to load the project: "+ project.getProjectName());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteProject(ProjectDTO project ){
+        PreparedStatement pr;
+
+        try {
+            pr = this.dal.prepareStatement(SQL_DELETE_PROJECT_OF_USER);
+            pr.setInt(1, project.getProjectOwnerId());
+            pr.setString(2, project.getProjectName());
+            pr.executeUpdate();
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, "Failed to Delete the project '"+ project.getProjectName() + "' in Database" ).showAndWait();
             e.printStackTrace();
         }
-        return null;
     }
 
     @Override

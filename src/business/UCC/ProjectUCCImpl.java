@@ -46,7 +46,7 @@ public class ProjectUCCImpl implements ProjectUCC {
         return new ProjectDTO().
                 setProjectOwnerId(userId)
                 .setProjectName(projectName)
-                .setProjectPath(folderDestination.toString())
+                .setProjectPath(folderDestination.toString()+ File.separator +projectName)
                 .setCreateDate(Utility.getTimeStamp())
                 .setModificationDate(Utility.getTimeStamp());
     }
@@ -91,8 +91,8 @@ public class ProjectUCCImpl implements ProjectUCC {
     }
 
     @Override
-    public void createFromImport(String importPath) throws BizzException, IOException {
-        //TODO
-        throw new UnsupportedOperationException("Not yet implemented");
+    public void createFromImport(ProjectDTO projectDTO) throws BizzException, IOException {
+        ((ProjectDAO) projectDAO).saveNewProject(projectDTO);
     }
 }
+

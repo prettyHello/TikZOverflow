@@ -47,9 +47,9 @@ public interface ProjectUCC {
     /**
      * Creates a new project on disk and stores its path in the database from a specified import
      *
-     * @param importPath the path to the archive to import
+     * @param projectDTO the path to the archive to import
      * @throws BizzException if the project in the archive has a problem or if a similar project already exists
      * @throws IOException   if an error occurred during finding/opening the archive
      */
-    void createFromImport(String importPath) throws BizzException, IOException;
+    void createFromImport(ProjectDTO projectDTO) throws BizzException, IOException;
 }

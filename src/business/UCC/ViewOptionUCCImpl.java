@@ -1,59 +1,92 @@
 package business.UCC;
 
+import business.DTO.ProjectDTO;
+import business.factories.ProjectFactory;
+import business.factories.ProjectFactoryImpl;
 import exceptions.BizzException;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputDialog;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
+import persistence.DALServices;
+import persistence.DALServicesImpl;
+import persistence.ProjectDAO;
+import persistence.ProjectDAOImpl;
+import utilities.Utility;
+import view.dashboard.DashboardController;
 
 import java.io.*;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.util.Optional;
 import java.util.zip.GZIPOutputStream;
 
 public class ViewOptionUCCImpl implements ViewOptionUCC {
 
 
-    private String ContentTextExport = "this project does not exist on the path: ";
+    private String ContentTextExport = "the project does not exist on the path: ";
 
 
     /**
      * {@inheritDoc}
      */
-    public void Export(File dir, File selectedFile) {
+    public void ExportProject(File dir, File selectedFile) {
         try {
-            if (selectedFile != null) {
-                if (dir.getAbsoluteFile().exists()) {
-                    createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz"));
-                    new Alert(Alert.AlertType.CONFIRMATION, "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz")).showAndWait();
+            if ( selectedFile != null ) {
+                if (dir.exists()) {
+                    if ( createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") ) ) {
+                        new Alert(Alert.AlertType.CONFIRMATION, "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz")).showAndWait();
+                    }
+                    else {
+                        Utility.deleteFile(new File(selectedFile.getAbsolutePath().concat(".tar.gz") ) );
+                        new Alert(Alert.AlertType.ERROR, "Too long path to a certain file ( > 100 bytes)").showAndWait();
+                    }
                 } else {
-                    new Alert(Alert.AlertType.ERROR, "Error Export " + ContentTextExport + dir).showAndWait();
+                    new Alert(Alert.AlertType.ERROR, "Error Export " + ContentTextExport +dir ).showAndWait();
                 }
             }
-        } catch (IOException e) {
+        }catch (IOException e) {
             e.printStackTrace();
-        } catch (BizzException e) {
+        }
+        catch (BizzException e){
             e.getMessage();
         }
     }
 
     /**
      * {@inheritDoc}
+     * @return
      */
     @Override
-    public void createTarGz(String folderProject, String fileTarDestination) throws IOException, BizzException {
+    public Boolean createTarGz(String folderProject, String fileTarDestination) throws IOException, BizzException {
         File root = new File(folderProject);
         // create tar archive
         FileOutputStream fileOutputStream = new FileOutputStream(new File(fileTarDestination));
         GZIPOutputStream gzIpoutput = new GZIPOutputStream(new BufferedOutputStream(fileOutputStream));
         TarArchiveOutputStream archiveTarGz = new TarArchiveOutputStream(gzIpoutput);
-        addFileToArchiveTarGz(folderProject, "", archiveTarGz);
-        archiveTarGz.close();
+
+        try
+        {
+            addFileToArchiveTarGz(folderProject, "", archiveTarGz);
+            return true;
+        }
+        catch ( RuntimeException e) {
+        return false ;
+        }
+        finally {
+            archiveTarGz.close();
+        }
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) {
+    public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz){
         File file = new File(folderProject);
         String entryName = parent + file.getName();
         // add tar ArchiveEntry
@@ -68,13 +101,35 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
             } else if (file.isDirectory()) {
                 archiveTarGz.closeArchiveEntry();
                 for (File fileInSubFolder : file.listFiles()) {
-                    addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName + File.separator, archiveTarGz);
+                    addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName + "/", archiveTarGz);
                 }
             }
         } catch (IOException e) {
             new Alert(Alert.AlertType.ERROR, "Impossible to export the project").showAndWait();
         }
-
-
     }
+
+    public void deleteProject(ProjectDTO project, DashboardController dashboard ) {
+        File dir = new File(project.getProjectPath()) ;
+        if (dir.exists()) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("confirmation ?");
+            alert.setHeaderText("once deleted, the "+ project.getProjectName()+" project can no longer be restored");
+            alert.setContentText("are you sure you want to delete");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                DALServices dal = new DALServicesImpl();
+                ProjectFactory projectFactory = new ProjectFactoryImpl();
+                ProjectDAO dao = new ProjectDAOImpl(dal, projectFactory);
+                ((ProjectDAO) dao).deleteProject(project);
+                Utility.deleteFile(dir);
+                dashboard.delete(project);
+            }
+        }
+        else {
+            new Alert(Alert.AlertType.ERROR, "This project dont exit in this Computer").showAndWait();
+        }
+    }
+
 }
+

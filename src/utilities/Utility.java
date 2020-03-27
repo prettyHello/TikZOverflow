@@ -9,6 +9,9 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.utils.IOUtils;
 
 import java.io.*;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -111,19 +114,19 @@ public class Utility {
     }
 
     /**
-     * @param tarFile
-     * @param destFile
+     * Decompress file ".tar.gz"
+     * @param tarFile path to source file ".tar.gz"
+     * @param destFile destination directory of decompressed file
      */
 
 
     public static String unTarFile(File tarFile, Path destFile) {
         TarArchiveInputStream tis = null;
         try {
-            FileInputStream fis = new FileInputStream(tarFile);
-            FileOutputStream fos = null;
-            GZIPInputStream gzipInputStream = new GZIPInputStream(new BufferedInputStream(fis));
-            tis = new TarArchiveInputStream(gzipInputStream);
-            // String untarNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"))  ;
+            FileOutputStream fos = null ;
+            tis = new TarArchiveInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarFile))));
+            TarArchiveEntry testEntry = tis.getNextTarEntry();
+            String untaredNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"));
             TarArchiveEntry tarEntry = null;
             while ((tarEntry = tis.getNextTarEntry()) != null) {
                 if (tarEntry.isDirectory()) {
@@ -136,21 +139,14 @@ public class Utility {
                     fos.close();
                 }
             }
-
-            //   return untarNameFolder ;
-        } catch (IOException ex) {
-            System.out.println("Error while untarring a file- " + ex.getMessage());
-        } finally {
-            if (tis != null) {
-                try {
-                    tis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
+            return untaredNameFolder ;
+        }catch(IOException ex) {
+            new Alert(Alert.AlertType.ERROR, "File decompression error").showAndWait();
+            return  null ;
+        }finally { if(tis != null) { try {
+            tis.close(); } catch (IOException e) { e.printStackTrace(); } } }
     }
+
 
 
     /**
@@ -240,6 +236,32 @@ public class Utility {
             throw new BizzException("The passwords are not the sames");
         checkString(password1, "password");
         checkString(password2, "password");
+    }
+
+
+    public static void deleteFile(File dir) {
+
+        if (dir.isDirectory()){
+            File[] listFiles = dir.listFiles();
+            if(listFiles!=null) {
+                for (File entry : listFiles) {
+                    deleteFile(entry);
+                }
+                dir.delete();
+            }
+        }
+        else {
+            try {
+                Files.delete(dir.toPath());
+            } catch (NoSuchFileException e) {
+                new Alert(Alert.AlertType.ERROR, dir+" no such file or directory").showAndWait();
+            } catch (DirectoryNotEmptyException e) {
+                new Alert(Alert.AlertType.ERROR, dir+" not empty").showAndWait();
+            } catch (IOException e) {
+                new Alert(Alert.AlertType.ERROR, " File permission problems for delete " +dir).showAndWait();
+            }
+
+        }
     }
 
 }

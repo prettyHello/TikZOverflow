@@ -18,5 +18,9 @@
             <ImageView fx:id="exportIcon" fitHeight="20" fitWidth="16"/>
         </graphic>
     </Button>
-
+    <Button fx:id="deleteBtn" mnemonicParsing="true" maxHeight="20" minWidth="20" style="-fx-background-color: none">
+        <graphic>
+            <ImageView fx:id="deleteIcon" fitHeight="20" fitWidth="16" />
+        </graphic>
+    </Button>
 </fx:root>
