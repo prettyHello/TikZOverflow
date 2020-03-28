@@ -3,6 +3,9 @@ package business.factories;
 import business.DTO.UserDTO;
 import business.UserImpl;
 
+/**
+ * {@inheritDoc}
+ */
 public class UserFactoryImpl implements UserFactory {
 
     @Override

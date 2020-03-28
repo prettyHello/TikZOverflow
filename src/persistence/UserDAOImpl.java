@@ -9,6 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * {@inheritDoc}
+ */
 public class UserDAOImpl implements UserDAO {
     private DALBackEndServices dal;
     private UserFactory userFactory;
@@ -24,6 +27,9 @@ public class UserDAOImpl implements UserDAO {
         this.userFactory = userFactory;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserDTO getUser(UserDTO usrAuth) throws FatalException, BizzException {
         PreparedStatement pr;
@@ -54,11 +60,17 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserDTO find(UserDTO obj) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void create(UserDTO userDTO) throws FatalException {
         PreparedStatement ps = null;
@@ -85,6 +97,9 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(UserDTO userDTO) throws FatalException {
 
@@ -105,6 +120,9 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(UserDTO userDTO) {
         PreparedStatement ps = null;

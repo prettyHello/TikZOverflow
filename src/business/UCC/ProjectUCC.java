@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * Controller that handles operations on projects
+ */
 public interface ProjectUCC {
 
     /**

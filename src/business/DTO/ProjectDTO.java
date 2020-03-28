@@ -1,6 +1,9 @@
 package business.DTO;
 
-
+/**
+ * The project DTO contains all the data related to the project and is serializable
+ * the project DTO travels between the mvc layers of the application
+ */
 public class ProjectDTO {
     private int projectId;
     private int projectOwnerId;

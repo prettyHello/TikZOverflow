@@ -17,7 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
+/**
+ * {@inheritDoc}
+ */
 public class ProjectUCCImpl implements ProjectUCC {
 
     private final String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
@@ -91,6 +93,9 @@ public class ProjectUCCImpl implements ProjectUCC {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createFromImport(ProjectDTO projectDTO) throws BizzException, IOException {
         ((ProjectDAO) projectDAO).saveNewProject(projectDTO);

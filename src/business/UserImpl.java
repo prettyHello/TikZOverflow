@@ -104,6 +104,4 @@ public class UserImpl implements User {
     public void setAuthorized(boolean authorized) {
         isAuthorized = authorized;
     }
-
-
 }

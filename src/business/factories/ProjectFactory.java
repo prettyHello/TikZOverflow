@@ -2,6 +2,9 @@ package business.factories;
 
 import business.DTO.ProjectDTO;
 
+/**
+ * This interface is meant to be used by the front end or the persistence by giving them the DTO they need
+ */
 public interface ProjectFactory {
     ProjectDTO createProject();
 

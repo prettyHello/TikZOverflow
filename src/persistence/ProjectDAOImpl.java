@@ -4,7 +4,6 @@ import business.DTO.ProjectDTO;
 import business.factories.ProjectFactory;
 import exceptions.BizzException;
 import exceptions.FatalException;
-
 import javafx.scene.control.Alert;
 
 import java.sql.PreparedStatement;
@@ -14,6 +13,9 @@ import java.util.ArrayList;
 
 // creer une interface pour projetDAO, ensuite modifier la classe ProjectDAO en ProjectDAOImpl
 
+/**
+ * {@inheritDoc}
+ */
 public class ProjectDAOImpl implements ProjectDAO {
     PreparedStatement prstmt;
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
@@ -33,7 +35,9 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     // lever des exceptions de type FATAL...
 
-
+    /**
+     * {@inheritDoc}
+     */
     public void saveNewProject(ProjectDTO project) {
         try {
             prstmt = dal.prepareStatement(SQL_INSERT_PROJECT);
@@ -48,7 +52,9 @@ public class ProjectDAOImpl implements ProjectDAO {
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ArrayList<ProjectDTO> getProjects(int userID) {
         PreparedStatement pr;
@@ -68,6 +74,9 @@ public class ProjectDAOImpl implements ProjectDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProjectDTO getProjectDTO(int project_id) {
         PreparedStatement pr;
@@ -84,6 +93,9 @@ public class ProjectDAOImpl implements ProjectDAO {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProjectDTO getSelectedProject(int userID, String projectName) {
         PreparedStatement pr;
@@ -106,7 +118,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             }
             return project;
         } catch (Exception e) {
-            throw new BizzException("Failed to load the project: "+ project.getProjectName());
+            throw new BizzException("Failed to load the project: " + project.getProjectName());
         }
     }
 
@@ -114,7 +126,7 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public void deleteProject(ProjectDTO project ){
+    public void deleteProject(ProjectDTO project) {
         PreparedStatement pr;
 
         try {
@@ -123,30 +135,45 @@ public class ProjectDAOImpl implements ProjectDAO {
             pr.setString(2, project.getProjectName());
             pr.executeUpdate();
         } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR, "Failed to Delete the project '"+ project.getProjectName() + "' in Database" ).showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Failed to Delete the project '" + project.getProjectName() + "' in Database").showAndWait();
             e.printStackTrace();
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProjectDTO find(ProjectDTO obj) {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void create(ProjectDTO obj) throws FatalException {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(ProjectDTO obj) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(ProjectDTO obj) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProjectDTO getUser(ProjectDTO user) {
         return null;

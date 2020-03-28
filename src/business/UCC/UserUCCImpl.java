@@ -8,6 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
 import persistence.DAO;
 
+/**
+ * {@inheritDoc}
+ */
 public class UserUCCImpl implements UserUCC {
 
     private final DALServices dal;
@@ -18,7 +21,9 @@ public class UserUCCImpl implements UserUCC {
         this.userDAO = userDAO;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     public void login(UserDTO user) throws BizzException, FatalException {
         utilities.Utility.checkObject(user);
         User usr = (User) user;
@@ -40,6 +45,10 @@ public class UserUCCImpl implements UserUCC {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void updateUserInfo(UserDTO userDTO) throws BizzException, FatalException {
         //TODO need to check userDTO with utils
         //good implementation, a little bit empty
@@ -53,21 +62,34 @@ public class UserUCCImpl implements UserUCC {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setConnectedUser(UserDTO user) {
         ConnectedUser.setConnectedUser(user);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteConnectedUser() {
         ConnectedUser.deleteConnectedUser();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserDTO getConnectedUser() {
         return ConnectedUser.getConnectedUser();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public UserDTO getUserInfo(UserDTO user) throws BizzException, FatalException {
         utilities.Utility.checkObject(user);
         User usr = (User) user;
@@ -82,8 +104,11 @@ public class UserUCCImpl implements UserUCC {
         return (UserDTO) userDb;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void register(UserDTO userDTO) throws BizzException, FatalException {
+    public void register(UserDTO userDTO) throws FatalException {
         utilities.Utility.checkObject(userDTO);
         try {
             dal.startTransaction();

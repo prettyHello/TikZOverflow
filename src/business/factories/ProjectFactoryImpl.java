@@ -2,6 +2,9 @@ package business.factories;
 
 import business.DTO.ProjectDTO;
 
+/**
+ * {@inheritDoc}
+ */
 public class ProjectFactoryImpl implements ProjectFactory {
     @Override
     public ProjectDTO createProject() {
