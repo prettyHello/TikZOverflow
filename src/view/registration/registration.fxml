@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<BorderPane fx:id="borderpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="450.0"
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="450.0"
             xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="view.registration.RegistrationController">
 
@@ -71,8 +71,8 @@
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                             <children>
                                 <Label text="I have read and accept the EULA"/>
-                                <CheckBox fx:id="checkbox_eula" mnemonicParsing="false"/>
-                                <Button fx:id="bt_eula" minWidth="95.0" mnemonicParsing="false"
+                                <CheckBox fx:id="checkboxEula" mnemonicParsing="false"/>
+                                <Button fx:id="buttonEula" minWidth="95.0" mnemonicParsing="false"
                                         onAction="#handleReadEulaButton" text="Read EULA"/>
                             </children>
                         </HBox>
@@ -89,9 +89,9 @@
             <children>
                 <HBox alignment="CENTER_RIGHT" spacing="10.0">
                     <children>
-                        <Button fx:id="bt_cancel" minWidth="95.0" mnemonicParsing="false" onAction="#handleCancelButton"
+                        <Button fx:id="buttonCancel" minWidth="95.0" mnemonicParsing="false" onAction="#handleCancelButton"
                                 text="Cancel"/>
-                        <Button fx:id="bt_register" minWidth="95.0" mnemonicParsing="false" onAction="#registerBtn"
+                        <Button fx:id="buttonRegister" minWidth="95.0" mnemonicParsing="false" onAction="#handleRegisterButton"
                                 text="Register" textAlignment="CENTER"/>
                     </children>
                     <VBox.margin>

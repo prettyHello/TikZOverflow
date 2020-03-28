@@ -43,19 +43,19 @@ public class RegistrationController {
     PasswordField secondPasswordTF;
 
     @FXML
-    Button bt_register;
+    Button buttonRegister;
 
     @FXML
-    Button bt_cancel;
+    Button buttonCancel;
 
     @FXML
-    BorderPane borderpane;
+    BorderPane borderPane;
 
     @FXML
-    Button bt_eula;
+    Button buttonEula;
 
     @FXML
-    CheckBox checkbox_eula;
+    CheckBox checkboxEula;
 
     private ViewSwitcher viewSwitcher;
 
@@ -71,28 +71,28 @@ public class RegistrationController {
 
     @FXML
     public void initialize() {
-        borderpane.setOnKeyPressed(event -> {
+        borderPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                registerBtn();
+                handleRegisterButton();
             }
         });
-        checkbox_eula.setOnKeyPressed(event -> {
+        checkboxEula.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if (checkbox_eula.isSelected()) {
-                    checkbox_eula.setSelected(false);
+                if (checkboxEula.isSelected()) {
+                    checkboxEula.setSelected(false);
                 } else {
-                    checkbox_eula.setSelected(true);
+                    checkboxEula.setSelected(true);
                 }
                 event.consume();
             }
         });
-        bt_cancel.setOnKeyPressed(event -> {
+        buttonCancel.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 handleCancelButton();
                 event.consume();
             }
         });
-        bt_eula.setOnKeyPressed(event -> {
+        buttonEula.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 handleReadEulaButton();
                 event.consume();
@@ -108,10 +108,10 @@ public class RegistrationController {
         viewSwitcher.switchView(ViewName.LOGIN);
     }
 
-    public void registerBtn() {
+    public void handleRegisterButton() {
         try {
             Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.emailTF.getText(), this.passwordTF.getText(), this.secondPasswordTF.getText(), this.phoneTF.getText());
-            if (!checkbox_eula.isSelected()) {
+            if (!checkboxEula.isSelected()) {
                 throw new IllegalStateException("EULA not accepted");
             }
             UserFactoryImpl userFactory = new UserFactoryImpl();
