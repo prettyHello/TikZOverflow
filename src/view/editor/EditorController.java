@@ -26,6 +26,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import persistence.SaveObject;
 import utilities.ColorUtils;
+import view.ViewName;
 import view.ViewSwitcher;
 import view.dashboard.DashboardController;
 
@@ -421,6 +422,27 @@ public class EditorController {
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
         SaveObject saveObject = new SaveObject();
         saveObject.save(canvas,projectDTO.getProjectName());
+    }
+
+    public void close(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Close project");
+        alert.setHeaderText("Do you want to save your project?");
+
+        ButtonType buttonTypeOne = new ButtonType("Yes");
+        ButtonType buttonTypeTwo = new ButtonType("No");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOne){
+            SaveObject saveObject = new SaveObject();
+            saveObject.save(canvas,projectDTO.getProjectName());
+            viewSwitcher.switchView(ViewName.DASHBOARD);
+        } else if (result.get() == buttonTypeTwo) {
+            viewSwitcher.switchView(ViewName.DASHBOARD);
+        }
     }
 
     private void translateToTikz(){
