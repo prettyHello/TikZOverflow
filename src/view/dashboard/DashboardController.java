@@ -2,16 +2,13 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
-
 import business.UCC.ProjectUCCImpl;
-import exceptions.BizzException;
-
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import business.factories.ProjectFactory;
 import business.factories.ProjectFactoryImpl;
 import business.factories.UserFactoryImpl;
-
+import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -162,7 +159,7 @@ public class DashboardController {
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
                             ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUserId());
                             projectObsList.add(newProjectImport);
-                            this.projectUCC.createFromImport(newProjectImport); //TODO
+                            this.projectUCC.createFromImport(newProjectImport);
                         } catch (IOException  e) {
                             throw new BizzException("Could not locate files to import");
                         }
@@ -192,7 +189,6 @@ public class DashboardController {
                 ProjectDTO newProject = new ProjectDTO();
                 newProject.setProjectName(projectName);
                 newProject.setCreateDate(Utility.getTimeStamp());
-                viewSwitcher.setproject(newProject);
 
                 projectUCC.createNewProject(projectName);
                 toEditorView();

@@ -74,7 +74,8 @@ public class LoginController {
             UserUCC userUcc = new UserUCCImpl(dal, dao);
             userUcc.login(user);
 
-            viewSwitcher.setUser(userUcc.getUserInfo(user)).switchView(ViewName.DASHBOARD);
+            viewSwitcher.setUser(userUcc.getUserInfo(user));
+            viewSwitcher.switchView(ViewName.DASHBOARD);
 
         } catch (BizzException e) {
             //Update failed on dao lvl

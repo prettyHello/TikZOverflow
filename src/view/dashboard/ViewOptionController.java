@@ -1,6 +1,8 @@
 package view.dashboard;
 
+import business.Canvas.ActiveCanvas;
 import business.Canvas.ActiveProject;
+import business.Canvas.Canvas;
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 import business.UCC.ProjectUCC;
@@ -10,16 +12,15 @@ import business.factories.ProjectFactory;
 import business.factories.ProjectFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import persistence.DALServices;
-import persistence.DALServicesImpl;
-import persistence.ProjectDAO;
-import persistence.ProjectDAOImpl;
+import persistence.*;
+import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -29,7 +30,7 @@ import java.io.IOException;
 public class ViewOptionController extends HBox {
 
     DashboardController dashboard;
-    private ProjectDTO projectDTO ;
+    private ProjectDTO projectDTO;
 
 
     @FXML
@@ -41,7 +42,7 @@ public class ViewOptionController extends HBox {
     @FXML
     private ImageView exportIcon = null;
     @FXML
-    private Button deleteBtn = null ;
+    private Button deleteBtn = null;
     @FXML
     private ImageView deleteIcon = null;
 
@@ -56,11 +57,11 @@ public class ViewOptionController extends HBox {
     ViewOptionUCCImpl viewOptionUCC = new ViewOptionUCCImpl();
     private ViewSwitcher viewSwitcher;
 
-    public ViewOptionController(DashboardController dashboard, UserDTO userDTO, int project_id)  {
+    public ViewOptionController(DashboardController dashboard, UserDTO userDTO, int project_id) {
 
         this.project_id = project_id;
         this.dashboard = dashboard;
-        this.user = userDTO ;
+        this.user = userDTO;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("view/dashboard/viewOption.fxml"));
             fxmlLoader.setController(this);
@@ -73,25 +74,25 @@ public class ViewOptionController extends HBox {
 
     public void initialize() {
 
-            exportBtn.setOnAction(event -> {
-                DALServices dal = new DALServicesImpl();
-                ProjectFactory projectFactory = new ProjectFactoryImpl();
-                ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
-                ProjectDTO  chooserProject =  ((ProjectDAO) new ProjectDAOImpl(new DALServicesImpl(), new ProjectFactoryImpl())).getSelectedProject(user.getUserId(), projectName.getText());
+        exportBtn.setOnAction(event -> {
+            DALServices dal = new DALServicesImpl();
+            ProjectFactory projectFactory = new ProjectFactoryImpl();
+            ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
+            ProjectDTO chooserProject = ((ProjectDAO) new ProjectDAOImpl(new DALServicesImpl(), new ProjectFactoryImpl())).getSelectedProject(user.getUserId(), projectName.getText());
 
-                FileChooser fc = new FileChooser();
-                fc.setTitle("Save project as...");
-                fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
-                fc.setInitialDirectory(new File(System.getProperty("user.home") + rootProject));
-                fc.setInitialFileName(projectName.getText() );
-                File exportDirectory= fc.showSaveDialog(null);
-                File dir = new File( chooserProject.getProjectPath() );
-                viewOptionUCC.ExportProject(dir, exportDirectory);
-            });
+            FileChooser fc = new FileChooser();
+            fc.setTitle("Save project as...");
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
+            fc.setInitialDirectory(new File(System.getProperty("user.home") + rootProject));
+            fc.setInitialFileName(projectName.getText());
+            File exportDirectory = fc.showSaveDialog(null);
+            File dir = new File(chooserProject.getProjectPath());
+            viewOptionUCC.ExportProject(dir, exportDirectory);
+        });
 
-            deleteBtn.setOnAction(event -> {
-                viewOptionUCC.deleteProject(projectDTO, dashboard);
-            });
+        deleteBtn.setOnAction(event -> {
+            viewOptionUCC.deleteProject(projectDTO, dashboard);
+        });
 
         editBtn.setOnAction(event -> {
             DALServices dal = new DALServicesImpl();
@@ -101,9 +102,17 @@ public class ViewOptionController extends HBox {
             ProjectDTO activeProject = projectUCC.getProjectDTO(project_id);
 
             ActiveProject.setActiveProject(activeProject);
-            viewSwitcher.switchView(ViewName.EDITOR);
-            //TODO set active canvas
-            System.out.println("edit!");
+            SaveObject loader = new SaveObject();
+            Canvas loaded = null;
+            try {
+                loaded = loader.open(activeProject.getProjectName());
+            } catch (IOException | ClassNotFoundException e) {
+                Utility.showAlert(Alert.AlertType.ERROR, "Fatal error", "Internal error", "Error during loading of the project");
+            }
+            if (loaded != null) {
+                ActiveCanvas.setActiveCanvas(loaded);
+                viewSwitcher.switchView(ViewName.EDITOR);
+            }
         });
     }
 

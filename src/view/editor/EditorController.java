@@ -1,6 +1,7 @@
 package view.editor;
 
 import business.Canvas.ActiveCanvas;
+import business.Canvas.ActiveProject;
 import business.Canvas.Canvas;
 import business.DTO.ProjectDTO;
 import business.shape.Coordinates;
@@ -8,11 +9,9 @@ import business.shape.Square;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -87,19 +86,6 @@ public class EditorController {
     private ContextMenu shapeContextMenu;
     private ChoiceBox contextMenuColorPicker;
 
-    ProjectDTO projectDTO;
-
-    /**
-     * Used by viewswitcher to initialize the editor view
-     *
-     * @param projectDTO Project that we want to edit
-     * @return return the right view controller
-     */
-    public EditorController setNewProject(ProjectDTO projectDTO) {
-        this.projectDTO = projectDTO;
-        return this;
-    }
-
     /**
      * Required to load view
      *
@@ -144,6 +130,8 @@ public class EditorController {
         color.setOnAction(t -> setColor());
         shapeContextMenu = new ContextMenu(delete, color);
 
+        // show shapes at the start(don't have to interact to have thel show up)
+        translateToTikz();
     }
 
     /**
@@ -310,7 +298,7 @@ public class EditorController {
      * Notify Shape controller of javafx shape creation
      *
      * @param addToController
-     * @param shape JavaFX shape
+     * @param shape           JavaFX shape
      */
     private void notifyController(business.shape.Shape addToController, Shape shape) {
         Color fillColor = (Color) shape.getFill();
@@ -484,6 +472,7 @@ public class EditorController {
      * @throws ClassNotFoundException
      */
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+        ProjectDTO projectDTO = ActiveProject.getActiveProject();
         SaveObject saveObject = new SaveObject();
         saveObject.save(canvas, projectDTO.getProjectName());
     }
@@ -509,11 +498,11 @@ public class EditorController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOne) {
             SaveObject saveObject = new SaveObject();
+            ProjectDTO projectDTO = ActiveProject.getActiveProject();
             saveObject.save(canvas, projectDTO.getProjectName());
-            viewSwitcher.switchView(ViewName.DASHBOARD);
-        } else if (result.get() == buttonTypeTwo) {
-            viewSwitcher.switchView(ViewName.DASHBOARD);
         }
+        ActiveCanvas.deleteActiveCanvas();
+        viewSwitcher.switchView(ViewName.DASHBOARD);
     }
 
     /**
