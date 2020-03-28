@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.utils.IOUtils;
 
 import java.io.*;
@@ -29,6 +30,8 @@ public class Utility {
 
 
     public static final String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
+    private static String nameArchive1;
+
 
     //TODO Change capital letters
     public static final String EMAIL_PATTERN = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
@@ -124,18 +127,33 @@ public class Utility {
         TarArchiveInputStream tis = null;
         try {
             FileOutputStream fos = null ;
-            tis = new TarArchiveInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarFile))));
-            TarArchiveEntry testEntry = tis.getNextTarEntry();
-            String untaredNameFolder  = tis.getNextTarEntry().getName().substring(0, tis.getNextTarEntry().getName().indexOf("/"));
+            String untaredNameFolder =null;
             TarArchiveEntry tarEntry = null;
+            tis = new TarArchiveInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarFile))));
+            tis.getNextTarEntry();
+
             while ((tarEntry = tis.getNextTarEntry()) != null) {
+
+                int it =0;
+                if (it <= 0) {
+                    String name = tarEntry.getName();
+                    untaredNameFolder = name.substring(0, name.indexOf("/"));
+                }
+
                 if (tarEntry.isDirectory()) {
                     continue;
                 } else {
-                    File outputFile = new File(destFile.toString() + File.separator + tarEntry.getName());
+                    File outputFile =  new File(destFile.toFile(), tarEntry.getName());
                     outputFile.getParentFile().mkdirs();
                     fos = new FileOutputStream(outputFile);
-                    IOUtils.copy(tis, fos);
+
+                    byte [] fileRead = new byte[1024];
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
+
+                    int len = 0;
+                    while((len = tis.read(fileRead)) != -1) { bos.write(fileRead,0,len); }
+                    bos.close();
+                    fileRead = null;
                     fos.close();
                 }
             }
