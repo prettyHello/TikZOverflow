@@ -74,7 +74,7 @@ public class ProjectUCCImpl implements ProjectUCC {
                 UserDTO owner = ConnectedUser.getConnectedUser();
                 String now = Utility.getTimeStamp();
                 String projectPath = System.getProperty("user.home") + rootProject + projectName;
-                ProjectDTO projectDTO = new ProjectFactoryImpl().createProject(0, owner.getUser_id(), projectName, "", projectPath, now, now);
+                ProjectDTO projectDTO = new ProjectFactoryImpl().createProject(0, owner.getUserId(), projectName, "", projectPath, now, now);
                 ((ProjectDAO) projectDAO).saveNewProject(projectDTO);
 
                 // filesystem

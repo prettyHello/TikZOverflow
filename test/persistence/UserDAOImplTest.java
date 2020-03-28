@@ -42,43 +42,56 @@ class UserDAOImplTest {
     }
 
     @Test
-    void create() {
-
+    void testBasicInsert(){
         // Test1: simple, working insert
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
         UserDTO result = userDAO.getUser(user);
 
-        assertEquals(user.getFirst_name(), result.getFirst_name(), "First name does not match");
+        assertEquals(user.getFirstName(), result.getFirstName(), "First name does not match");
         assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
         assertEquals(user.getPassword(), user.getPassword(), "Password does not match");
         assertEquals(user.getPhone(), user.getPhone(), "Phone does not match");
-        assertEquals(user.getLast_name(), user.getLast_name(), "LastName does not match");
-        assertEquals(user.getRegister_date(), user.getRegister_date(), "Date does not match");
+        assertEquals(user.getLastName(), user.getLastName(), "LastName does not match");
+        assertEquals(user.getRegisterDate(), user.getRegisterDate(), "Date does not match");
         assertEquals(user.getSalt(), user.getSalt(), "Salt does not match");
+    }
 
-        // Test2: error same email
+    @Test
+    void testEmailUnicity(){
+        UserDTO user = generateBasicUserDTO();
         UserDTO user2 = generateBasicUser2DTO();
-
+        userDAO.create(user);
         assertThrows(FatalException.class, () -> {
             user2.setEmail("mail@mail.be");
             userDAO.create(user2);
         });
+    }
 
-        // Test3: error same salt
+    @Test
+    void testSaltUnicity(){
+        UserDTO user = generateBasicUserDTO();
+        UserDTO user2 = generateBasicUser2DTO();
+        userDAO.create(user);
         assertThrows(FatalException.class, () -> {
             user2.setSalt("salt");
             userDAO.create(user2);
         });
 
-        // Test4: error same phone number
+    }
+
+    @Test
+    void testPhoneNumberUnicity(){
+        UserDTO user = generateBasicUserDTO();
+        UserDTO user2 = generateBasicUser2DTO();
+        userDAO.create(user);
         assertThrows(FatalException.class, () -> {
             user2.setPhone("123");
             userDAO.create(user2);
         });
 
-
     }
+
 
     @Test
     void getUser() {
@@ -86,12 +99,12 @@ class UserDAOImplTest {
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
         UserDTO result = userDAO.getUser(user);
-        assertEquals(user.getFirst_name(), result.getFirst_name(), "First name does not match");
+        assertEquals(user.getFirstName(), result.getFirstName(), "First name does not match");
         assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
         assertEquals(user.getPassword(), user.getPassword(), "Password does not match");
         assertEquals(user.getPhone(), user.getPhone(), "Phone does not match");
-        assertEquals(user.getLast_name(), user.getLast_name(), "LastName does not match");
-        assertEquals(user.getRegister_date(), user.getRegister_date(), "Date does not match");
+        assertEquals(user.getLastName(), user.getLastName(), "LastName does not match");
+        assertEquals(user.getRegisterDate(), user.getRegisterDate(), "Date does not match");
         assertEquals(user.getSalt(), user.getSalt(), "Salt does not match");
 
         // Test 2 User don't exist
@@ -153,25 +166,25 @@ class UserDAOImplTest {
 
     private UserDTO generateBasicUserDTO() {
         UserDTO user = userFactory.createUser();
-        user.setFirst_name("ben");
+        user.setFirstName("ben");
         user.setPassword("pass");
         user.setSalt("salt");
         user.setEmail("mail@mail.be");
-        user.setLast_name("ber");
+        user.setLastName("ber");
         user.setPhone("123");
-        user.setRegister_date(LocalDateTime.now().toString());
+        user.setRegisterDate(LocalDateTime.now().toString());
         return user;
     }
 
     private UserDTO generateBasicUser2DTO() {
         UserDTO user2 = userFactory.createUser();
-        user2.setFirst_name("mat");
+        user2.setFirstName("mat");
         user2.setPassword("pass2");
         user2.setSalt("salt2");
         user2.setEmail("mail2@mail.be");
-        user2.setLast_name("han");
+        user2.setLastName("han");
         user2.setPhone("049");
-        user2.setRegister_date(LocalDateTime.now().toString());
+        user2.setRegisterDate(LocalDateTime.now().toString());
         return user2;
     }
 

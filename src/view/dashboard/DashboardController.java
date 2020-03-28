@@ -84,8 +84,8 @@ public class DashboardController {
         ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
 
         this.user = user;
-        userSetting.setText(user.getFirst_name());
-        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUser_id());
+        userSetting.setText(user.getFirstName());
+        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUserId());
         projectObsList = FXCollections.observableArrayList(listOfProject);
         projectList.setItems(projectObsList);
     }
@@ -114,7 +114,7 @@ public class DashboardController {
         UserUCC userUcc = new UserUCCImpl(dal, dao);
         UserDTO user = userUcc.getConnectedUser();
 
-        userSetting.setText(user.getFirst_name());
+        userSetting.setText(user.getFirstName());
 
         projectList.setCellFactory(cell -> new ListCell<ProjectDTO>() {
             @Override
@@ -160,7 +160,7 @@ public class DashboardController {
                             Files.createDirectories(folderDestination);
                             String Dst = Utility.unTarFile(selectedFile, folderDestination);
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
-                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
+                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUserId());
                             projectObsList.add(newProjectImport);
                             this.projectUCC.createFromImport(newProjectImport); //TODO
                         } catch (IOException  e) {

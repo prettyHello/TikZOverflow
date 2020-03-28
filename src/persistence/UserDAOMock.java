@@ -41,13 +41,13 @@ public class UserDAOMock implements UserDAO {
 
     private UserDTO testWrongPassword() {
         UserDTO user = userFactory.createUser();
-        user.setFirst_name("Michel");
+        user.setFirstName("Michel");
         user.setSalt("salt");
         user.setPassword(BCrypt.hashpw("password", "salt"));
         user.setEmail("mail@mail.be");
-        user.setLast_name("ber");
+        user.setLastName("ber");
         user.setPhone("123");
-        user.setRegister_date(LocalDateTime.now().toString());
+        user.setRegisterDate(LocalDateTime.now().toString());
         return user;
     }
 }

@@ -6,13 +6,11 @@ import business.DTO.UserDTO;
 import business.UCC.ProjectUCC;
 import business.UCC.ProjectUCCImpl;
 import business.UCC.ViewOptionUCCImpl;
-import exceptions.FatalException;
 import business.factories.ProjectFactory;
 import business.factories.ProjectFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,8 +23,6 @@ import persistence.ProjectDAOImpl;
 import view.ViewName;
 import view.ViewSwitcher;
 
-import java.io.*;
-import java.util.Optional;
 import java.io.File;
 import java.io.IOException;
 
@@ -81,7 +77,7 @@ public class ViewOptionController extends HBox {
                 DALServices dal = new DALServicesImpl();
                 ProjectFactory projectFactory = new ProjectFactoryImpl();
                 ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
-                ProjectDTO  chooserProject =  ((ProjectDAO) new ProjectDAOImpl(new DALServicesImpl(), new ProjectFactoryImpl())).getSelectedProject(user.getUser_id(), projectName.getText());
+                ProjectDTO  chooserProject =  ((ProjectDAO) new ProjectDAOImpl(new DALServicesImpl(), new ProjectFactoryImpl())).getSelectedProject(user.getUserId(), projectName.getText());
 
                 FileChooser fc = new FileChooser();
                 fc.setTitle("Save project as...");
@@ -112,7 +108,7 @@ public class ViewOptionController extends HBox {
     }
 
     public ViewOptionController setProject(ProjectDTO projectDTO) {
-        projectDTO.setProjectOwnerId(user.getUser_id());
+        projectDTO.setProjectOwnerId(user.getUserId());
         this.projectDTO = projectDTO;
         this.projectName.setText(projectDTO.getProjectName());
         return this;
