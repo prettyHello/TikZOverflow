@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
 import persistence.DAO;
 
+import java.io.File;
+
 /**
  * {@inheritDoc}
  */
@@ -15,6 +17,7 @@ public class UserUCCImpl implements UserUCC {
 
     private final DALServices dal;
     private final DAO<UserDTO> userDAO;
+    private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator;
 
     public UserUCCImpl(DALServices dalServices, DAO<UserDTO> userDAO) {
         this.dal = dalServices;
@@ -40,6 +43,14 @@ public class UserUCCImpl implements UserUCC {
             dal.commit();
             UserDTO connectedUser = getUserInfo(userDb);
             ConnectedUser.setConnectedUser(connectedUser);
+            File file = new File(rootProject +"userid_" +userDb.getUserId());
+            if (!file.exists()) {
+                if (file.mkdir()) {
+                    System.out.println("Directory is created!");
+                } else {
+                    System.out.println("Failed to create directory!");
+                }
+            }
         } finally {
             dal.rollback();
         }

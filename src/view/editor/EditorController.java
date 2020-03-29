@@ -4,6 +4,10 @@ import business.Canvas.ActiveCanvas;
 import business.Canvas.ActiveProject;
 import business.Canvas.Canvas;
 import business.DTO.ProjectDTO;
+import business.DTO.UserDTO;
+import business.UCC.UserUCC;
+import business.UCC.UserUCCImpl;
+import business.factories.UserFactoryImpl;
 import business.shape.Coordinates;
 import business.shape.Square;
 import javafx.event.ActionEvent;
@@ -18,7 +22,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import persistence.DALServices;
+import persistence.DALServicesImpl;
 import persistence.SaveObject;
+import persistence.UserDAOImpl;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -506,8 +513,15 @@ public class EditorController {
      */
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
         ProjectDTO projectDTO = ActiveProject.getActiveProject();
+
+        UserFactoryImpl userFactory = new UserFactoryImpl();
+        DALServices dal = new DALServicesImpl();
+        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
+        UserUCC userUcc = new UserUCCImpl(dal, dao);
+        UserDTO user = userUcc.getConnectedUser();
+
         SaveObject saveObject = new SaveObject();
-        saveObject.save(canvas, projectDTO.getProjectName());
+        saveObject.save(canvas, projectDTO.getProjectName(),user);
     }
 
     /**
@@ -522,6 +536,12 @@ public class EditorController {
         alert.setTitle("Close project");
         alert.setHeaderText("Do you want to save your project?");
 
+        UserFactoryImpl userFactory = new UserFactoryImpl();
+        DALServices dal = new DALServicesImpl();
+        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
+        UserUCC userUcc = new UserUCCImpl(dal, dao);
+        UserDTO user = userUcc.getConnectedUser();
+
         ButtonType buttonTypeOne = new ButtonType("Yes");
         ButtonType buttonTypeTwo = new ButtonType("No");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -532,7 +552,7 @@ public class EditorController {
         if (result.get() == buttonTypeOne) {
             SaveObject saveObject = new SaveObject();
             ProjectDTO projectDTO = ActiveProject.getActiveProject();
-            saveObject.save(canvas, projectDTO.getProjectName());
+            saveObject.save(canvas, projectDTO.getProjectName(), user);
         }
         ActiveCanvas.deleteActiveCanvas();
         viewSwitcher.switchView(ViewName.DASHBOARD);
