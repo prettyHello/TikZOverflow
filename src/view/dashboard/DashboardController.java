@@ -11,6 +11,7 @@ import business.factories.UserFactoryImpl;
 import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -34,12 +35,13 @@ import java.util.Optional;
 public class DashboardController {
 
     DashboardController dbc = this;
+    private boolean useAskedName;
 
-    private String popupMessage = "Please enter the name of your Project" ;
+    private String popupMessage = "Please enter the name of your Project";
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     private String ContentTextImport = "impossible to import, this project already exists in: ";
 
-    ProjectUCCImpl projectUCC ;
+    ProjectUCCImpl projectUCC;
 
     private ViewSwitcher viewSwitcher;
 
@@ -172,15 +174,14 @@ public class DashboardController {
                         try {
                             Files.createDirectories(folderDestination);
                             String Dst = Utility.unTarFile(selectedFile, folderDestination);
-                            projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
+                            projectUCC.renameFolderProject(new File(folderDestination.toFile() + File.separator + Dst), new File(folderDestination.toString() + File.separator + projectName));
                             ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUserId());
                             projectObsList.add(newProjectImport);
                             this.projectUCC.createFromImport(newProjectImport);
-                        } catch (IOException  e) {
+                        } catch (IOException e) {
                             throw new BizzException("Could not locate files to import");
                         }
-                    }
-                    else {
+                    } else {
                         new Alert(Alert.AlertType.ERROR, ContentTextImport + folderDestination).showAndWait();
                         throw new BizzException("Existing Project");
                     }
@@ -205,7 +206,11 @@ public class DashboardController {
      */
     @FXML
     public void newProject() {
+        this.useAskedName = false;
         String projectName = askProjectName();
+        if (!this.useAskedName) {
+            return;
+        }
 
         if (projectName != null && projectName.matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
             try {
@@ -224,13 +229,6 @@ public class DashboardController {
     }
 
     /**
-     * Change actual view to project editor view.
-     */
-    private void toEditorView() {
-        viewSwitcher.switchView(ViewName.EDITOR);
-    }
-
-    /**
      * Ask the name of the new project.
      *
      * @return a String with the new name or null
@@ -238,16 +236,30 @@ public class DashboardController {
     private String askProjectName() {
         Optional<String> projectName;
         TextInputDialog dialog = new TextInputDialog();
+
+        final Button confirm = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        confirm.addEventFilter(ActionEvent.ACTION, event -> this.useAskedName = true);
+
         dialog.setTitle("Project name");
         dialog.setHeaderText(popupMessage);
         dialog.setContentText("Name :");
         projectName = dialog.showAndWait();
+
         if (projectName.isPresent() && projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
             return projectName.get();
         } else {
-            new Alert(Alert.AlertType.ERROR, "Please enter a valid name").showAndWait();
+            if (this.useAskedName) {
+                new Alert(Alert.AlertType.ERROR, "Please enter a valid name").showAndWait();
+            }
         }
 
         return null;
+    }
+
+    /**
+     * Change actual view to project editor view.
+     */
+    private void toEditorView() {
+        viewSwitcher.switchView(ViewName.EDITOR);
     }
 }
