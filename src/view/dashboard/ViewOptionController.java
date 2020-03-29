@@ -8,6 +8,7 @@ import business.DTO.UserDTO;
 import business.UCC.*;
 import business.factories.ProjectFactory;
 import business.factories.ProjectFactoryImpl;
+import business.factories.UserFactory;
 import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import persistence.*;
+import utilities.ProductionConfigurationSingleton;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -30,6 +32,10 @@ import java.io.IOException;
 //TODO refactor to be MVC compliant
 public class ViewOptionController extends HBox {
 
+    ProjectFactory projectFactory = ProductionConfigurationSingleton.getProjectFactory();
+    ProjectUCC projectUCC = ProductionConfigurationSingleton.getProjectUCC();
+    UserFactory userFactory = ProductionConfigurationSingleton.getUserFactory();
+    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
     DashboardController dashboard;
     private ProjectDTO projectDTO;
 
@@ -96,16 +102,9 @@ public class ViewOptionController extends HBox {
         });
 
         editBtn.setOnAction(event -> {
-            DALServices dal = new DALServicesImpl();
-            ProjectFactory projectFactory = new ProjectFactoryImpl();
-            ProjectDAO doa = new ProjectDAOImpl(dal, projectFactory);
-            ProjectUCC projectUCC = new ProjectUCCImpl(dal, doa);
-            ProjectDTO activeProject = projectUCC.getProjectDTO(project_id);
-
-            UserFactoryImpl userFactory = new UserFactoryImpl();
-            UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
-            UserUCC userUcc = new UserUCCImpl(dal, dao);
+            
             UserDTO user = userUcc.getConnectedUser();
+            ProjectDTO activeProject = projectUCC.getProjectDTO(project_id);
 
             ActiveProject.setActiveProject(activeProject);
             SaveObject loader = new SaveObject();

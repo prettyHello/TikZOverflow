@@ -7,6 +7,7 @@ import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
+import business.factories.UserFactory;
 import business.factories.UserFactoryImpl;
 import business.shape.Coordinates;
 import business.shape.Square;
@@ -26,6 +27,7 @@ import persistence.DALServices;
 import persistence.DALServicesImpl;
 import persistence.SaveObject;
 import persistence.UserDAOImpl;
+import utilities.ProductionConfigurationSingleton;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -56,6 +58,7 @@ public class EditorController {
     private static final String LINE_POINT2 = "LINE_POINT2";
     private static final String ARROW = "ARROW";
     private static final String ARROW_POINT2 = "ARROW_POINT2";
+    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
 
     private ViewSwitcher viewSwitcher;
 
@@ -511,13 +514,7 @@ public class EditorController {
      */
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
         ProjectDTO projectDTO = ActiveProject.getActiveProject();
-
-        UserFactoryImpl userFactory = new UserFactoryImpl();
-        DALServices dal = new DALServicesImpl();
-        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
-        UserUCC userUcc = new UserUCCImpl(dal, dao);
         UserDTO user = userUcc.getConnectedUser();
-
         SaveObject saveObject = new SaveObject();
         saveObject.save(canvas, projectDTO.getProjectName(),user);
     }
@@ -534,10 +531,6 @@ public class EditorController {
         alert.setTitle("Close project");
         alert.setHeaderText("Do you want to save your project?");
 
-        UserFactoryImpl userFactory = new UserFactoryImpl();
-        DALServices dal = new DALServicesImpl();
-        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
-        UserUCC userUcc = new UserUCCImpl(dal, dao);
         UserDTO user = userUcc.getConnectedUser();
 
         ButtonType buttonTypeOne = new ButtonType("Yes");
