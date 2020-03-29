@@ -12,20 +12,20 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 | Priority/3 | N° | Description | Risk/3 | Hours/? | Points | Status | Introduced in iteration | 
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
 | 1 | [1](#1-create-a-user-login-and-password) | Create a user, login and password | 2 | 38 | 24 | Done | 1 |
-|   | [4](#4-creation-of-diagrams) | Creation of diagrams | - | - | -- | -- |
-| 2 | [2](#2-project-management) | Project management: saving, changing the project name, displaying information | - | - | -- | -- | -- | 
+|   | [4](#4-creation-of-diagrams) | Creation of diagrams | 1 | - | 40 | Ongoing | -
+| 2 | [2](#2-project-management) | Project management: saving, changing the project name, displaying information | 2 | - | 37 | Done | 2 | 
 |   | [3](#3-importation-and-exportation-of-files) | Importation and exportation of files | 3 | 17 | 10 | Ongoing | 1 |
-|   | [6](#6-overview) | Overview | - | - | -- | -- | -- |
-|   | [7](#7-drag-and-drop) | Drag and Drop | - | - | -- | -- | -- |
-|   | [10](#10-support-for-specific-tikz-libraries) | Support for specific TikZ libraries | - | - | -- | -- | -- |
-| 3 | [5](#5-relative-placement) | Relative placement | - | -- | -- | -- | -- |
-|   | [8](#8-integration-with-existing-cloud-services) | Integration with existing cloud services | - | -- | -- | -- | -- |
-|   | [9](#9-versioning) | Versioning | - | -- | -- | -- | -- |
-|   | [11](#11-tikz-syntax-highlighting) | TikZ syntax highlighting | - | -- | -- | -- | -- |
-|   | [12](#12-help Section) | Help Section | - | -- | -- | -- | -- |
-|   | [13](#13-data-security) | Data security | - | -- | -- | -- | -- |
-|   | [14](#14-data-integrity) | Data integrity | - | -- | -- | -- | -- |
-|   | [15](#15-copy-paste) | Copy-paste | - | -- | -- | -- | -- |
+|   | [6](#6-overview) | Overview | 2 | - | 15 | To do | - |
+|   | [7](#7-drag-and-drop) | Drag and Drop | 2 | - | 15 | To do | - |
+|   | [10](#10-support-for-specific-tikz-libraries) | Support for specific TikZ libraries | 1 | - | 15 per library | To do | - |
+| 3 | [5](#5-relative-placement) | Relative placement | 2 | - | 10 | To do | - |
+|   | [8](#8-integration-with-existing-cloud-services) | Integration with existing cloud services | 3 | - | 14 + 6 per platform | To do | - |
+|   | [9](#9-versioning) | Versioning | 2 | - | 8 | To do | - |
+|   | [11](#11-tikz-syntax-highlighting) | TikZ syntax highlighting | 2 | - | 20 | To do | - |
+|   | [12](#12-help Section) | Help Section | 3 | - | 13 | To do | - |
+|   | [13](#13-data-security) | Data security | 1 | - | 16 | To do | - |
+|   | [14](#14-data-integrity) | Data integrity | 1 | - | 8 | To do | - |
+|   | [15](#15-copy-paste) | Copy-paste | 2 | - | 10 | To do | - |
 
 
 ----------------------
@@ -74,6 +74,11 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 **Tasks:** 
 
+- Create a view to manage projects.
+- Create a new project.
+- Edit an existing project.
+- Delete an existing project.
+
 **Extra Tasks:**
 
 :question: **Question:** 
@@ -101,8 +106,17 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
     - **use the point-and-click method:** the user must first define the initial characteristics of the nodes and links he wants to use, thanks to a configuration panel where the user can choose the type of node (circle, rectangle, triangle, ...), the type of link (arc, edge, ...) and their graphical characteristics (color, thickness, label, ...). When an element (node/link) is defined, the user can select it and place it in a point-and-click frame containing a canvas. This action has the effect of placing the element on the canvas and at the same time producing the corresponding TikZ code which is visible in a second associated text frame.  
     - **use the TikZ language:** the user can use the text frame to describe his diagram in TikZ language. When the user completes his code, the frame containing the canvas will produce drawing the diagram automatically.
 
-**Tasks:** 
+**Tasks:**
 
+- Create a conversion architecture from canvas to TikZ and vice versa.
+- Save the current diagram.
+- Close the current diagram.
+- Automatically write the TikZ code of the diagram.
+- Point and click:
+  - Draw different shapes (square, circle, triangle and lines).
+  - Select fill and stroke color of a shape. 
+  - Delete a shape.
+  - Change the color of an existing shape.
 
 **Extra Tasks:**
 
