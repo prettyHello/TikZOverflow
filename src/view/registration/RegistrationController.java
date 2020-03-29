@@ -22,6 +22,9 @@ import java.util.function.UnaryOperator;
 
 import static utilities.Utility.showAlert;
 
+/**
+ * This class handles the process of register a new user.
+ */
 public class RegistrationController {
 
     @FXML
@@ -100,14 +103,23 @@ public class RegistrationController {
         });
     }
 
+    /**
+     * Show EULA when requested.
+     */
     public void handleReadEulaButton() {
         Utility.showEula();
     }
 
+    /**
+     * Cancel registration and go back to login.
+     */
     public void handleCancelButton() {
         viewSwitcher.switchView(ViewName.LOGIN);
     }
 
+    /**
+     * Proceed with registration and check fields.
+     */
     public void handleRegisterButton() {
         try {
             Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.emailTF.getText(), this.passwordTF.getText(), this.secondPasswordTF.getText(), this.phoneTF.getText());
@@ -143,8 +155,9 @@ public class RegistrationController {
         }
     }
 
-    //test
-    // Only allows the user to type numbers on phone textfield
+    /**
+     * Filter for the phone number field to only allow integers.
+     */
     public void allowIntegersOnly() {
 
         UnaryOperator<TextFormatter.Change> filter = change -> {
@@ -160,9 +173,12 @@ public class RegistrationController {
         phoneTF.setTextFormatter(textFormatter);
 
     }
-    //endtest
 
-
+    /**
+     * Required to load view.
+     *
+     * @param viewSwitcher
+     */
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
     }

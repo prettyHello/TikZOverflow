@@ -28,6 +28,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * This class handles the main screen of the program and allows the user to manage through their projects.
+ */
 public class DashboardController {
 
     DashboardController dbc = this;
@@ -66,15 +69,27 @@ public class DashboardController {
         projectList = new ListView<>();
     }
 
+    /**
+     * Switch to the user's profile view.
+     */
     public void handleProfileButton() {
         viewSwitcher.switchView(ViewName.PROFILE);
     }
 
-
+    /**
+     * Required to load view.
+     *
+     * @param viewSwitcher
+     */
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
     }
 
+    /**
+     * Set the projects of the current user.
+     *
+     * @param user
+     */
     public void setUserProjectView(UserDTO user) {
         DALServices dal = new DALServicesImpl();
         ProjectFactory projectFactory = new ProjectFactoryImpl();
@@ -87,8 +102,9 @@ public class DashboardController {
         projectList.setItems(projectObsList);
     }
 
-
-
+    /**
+     * Disconnect current user from the program and go back to login screen.
+     */
     public void handleDisconnectButton() {
         viewSwitcher.switchView(ViewName.LOGIN);
         UserFactoryImpl userFactory = new UserFactoryImpl();
@@ -175,11 +191,18 @@ public class DashboardController {
         }
     }
 
-
+    /**
+     * Delete an existing project.
+     *
+     * @param data
+     */
     public void delete(ProjectDTO data) {
         projectObsList.remove(data);
     }
 
+    /**
+     * Create a new project, requiring the name and checking that it doesn't exist a project with the same name.
+     */
     @FXML
     public void newProject() {
         String projectName = askProjectName();
@@ -200,10 +223,18 @@ public class DashboardController {
         }
     }
 
+    /**
+     * Change actual view to project editor view.
+     */
     private void toEditorView() {
         viewSwitcher.switchView(ViewName.EDITOR);
     }
 
+    /**
+     * Ask the name of the new project.
+     *
+     * @return a String with the new name or null
+     */
     private String askProjectName() {
         Optional<String> projectName;
         TextInputDialog dialog = new TextInputDialog();

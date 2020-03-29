@@ -96,10 +96,16 @@ public class ProfileController {
         emailTF.setDisable(true);
     }
 
+    /**
+     * Cancel registration and go back to login.
+     */
     public void handleCancelButton() {
         viewSwitcher.switchView(ViewName.DASHBOARD);
     }
 
+    /**
+     * Show EULA when requested.
+     */
     public void handleReadEulaButton() {
         Utility.showEula();
     }
@@ -148,8 +154,9 @@ public class ProfileController {
         }
     }
 
-    //test
-    // Only allows the user to type numbers on phone textfield
+    /**
+     * Filter for the phone number field to only allow integers.
+     */
     public void allowIntegersOnly() {
 
         UnaryOperator<TextFormatter.Change> filter = change -> {
@@ -166,6 +173,11 @@ public class ProfileController {
 
     }
 
+    /**
+     * Required to load view.
+     *
+     * @param viewSwitcher
+     */
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
     }
