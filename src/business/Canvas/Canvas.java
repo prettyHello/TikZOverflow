@@ -1,5 +1,6 @@
 package business.Canvas;
 
+import business.shape.Color;
 import business.shape.Shape;
 import exceptions.FatalException;
 
@@ -38,6 +39,22 @@ public interface Canvas extends Serializable {
      * @param shape the shape to update
      */
     void updateShape(Shape shape) throws FatalException;
+
+    /**
+     * Change the draw color of a shape
+     *
+     * @param id id of the shape
+     * @param drawColor color to draw whit
+     */
+    public void changeShapeDrawColor(int id, Color drawColor);
+
+    /**
+     * Change the fill color of a shape
+     *
+     * @param id id of the shape
+     * @param fillColor color to fill whit
+     */
+    public void changeShapeFillColor(int id, Color fillColor);
 
     /**
      * Get the id for the next shape
