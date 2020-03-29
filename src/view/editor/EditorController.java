@@ -20,6 +20,7 @@ import javafx.scene.effect.Glow;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -81,6 +82,10 @@ public class EditorController {
     ChoiceBox fillColour;
     @FXML
     ChoiceBox strokeColour;
+    @FXML
+    SplitPane mainSplitPane;
+    @FXML
+    AnchorPane leftAnchorPane;
 
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
     private double selected_x, selected_y;
@@ -113,6 +118,12 @@ public class EditorController {
                 handle_draw_call();
             }
         });
+
+        // to make the split pane non resizeable
+        leftAnchorPane.maxWidthProperty().bind(mainSplitPane.widthProperty().multiply(0.5));
+        leftAnchorPane.minWidthProperty().bind(mainSplitPane.widthProperty().multiply(0.5));
+
+
 
         contextMenuColorPicker = new ChoiceBox();
 
