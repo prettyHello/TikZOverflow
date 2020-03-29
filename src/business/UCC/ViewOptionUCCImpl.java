@@ -127,7 +127,12 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
             }
         }
         else {
-            new Alert(Alert.AlertType.ERROR, "This project dont exit in this Computer").showAndWait();
+            new Alert(Alert.AlertType.ERROR, "This project doesn't exit in this computer. It will be deleted from your projects").showAndWait();
+            DALServices dal = new DALServicesImpl();
+            ProjectFactory projectFactory = new ProjectFactoryImpl();
+            ProjectDAO dao = new ProjectDAOImpl(dal, projectFactory);
+            ((ProjectDAO) dao).deleteProject(project);
+            dashboard.delete(project);
         }
     }
 

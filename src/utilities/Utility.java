@@ -166,6 +166,36 @@ public class Utility {
     }
 
 
+    public static void copy(File dirSrc, File dirDest) throws IOException{
+
+        if(dirSrc.isDirectory()){
+            if(!dirDest.exists()){
+                dirDest.mkdir();
+                System.out.println("Dossier "+ dirSrc + "  > " + dirDest);
+            }
+            String files[] = dirSrc.list();
+
+            for (String f : files) {
+                File srcF = new File(dirSrc, f);
+                File destF = new File(dirDest, f);
+                copy(srcF, destF);
+            }
+        }else{
+            InputStream in = new FileInputStream(dirSrc);
+            OutputStream out = new FileOutputStream(dirDest);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = in.read(buffer)) > 0){
+                out.write(buffer, 0, length);
+            }
+
+            in.close();
+            out.close();
+        }
+    }
+
+
 
     /**
      * Check the data the users enter while registering of modifying theirs information.
