@@ -171,10 +171,17 @@ public class DashboardController {
                     if (!Files.exists(folderDestination.resolve(projectName))) {
                         try {
                             Files.createDirectories(folderDestination);
-                            String Dst = Utility.unTarFile(selectedFile, folderDestination);
+                            Files.createDirectories(folderDestination.resolve("tmp"));
+
+
+                            String Dst = Utility.unTarFile(selectedFile, folderDestination.resolve("tmp"));
+                            Utility.copy(folderDestination.resolve("tmp"+ File.separator+ Dst).toFile(), folderDestination.resolve(Dst).toFile() );
+
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
                             ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUserId());
                             projectObsList.add(newProjectImport);
+
+                            //Utility.deleteFile(folderDestination.resolve("tmp" + File.separator+ Dst).toFile());
                             this.projectUCC.createFromImport(newProjectImport);
                         } catch (IOException  e) {
                             throw new BizzException("Could not locate files to import");
