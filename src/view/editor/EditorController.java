@@ -89,7 +89,8 @@ public class EditorController {
     private Canvas canvas = ActiveCanvas.getActiveCanvas();
 
     private ContextMenu shapeContextMenu;
-    private ChoiceBox contextMenuColorPicker;
+    private ChoiceBox contextMenuFillColorPicker;
+    private ChoiceBox contextMenuDrawColorPicker;
 
     /**
      * Required to load view
@@ -121,38 +122,59 @@ public class EditorController {
 
 
 
-        contextMenuColorPicker = new ChoiceBox();
+        contextMenuFillColorPicker = new ChoiceBox();
+        contextMenuDrawColorPicker = new ChoiceBox();
 
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
         for (business.shape.Color colour : business.shape.Color.values()) {
             fillColour.getItems().add(colour);
             strokeColour.getItems().add(colour);
-            contextMenuColorPicker.getItems().add(colour);
+            contextMenuFillColorPicker.getItems().add(colour);
+            contextMenuDrawColorPicker.getItems().add(colour);
         }
         // Set start value dropdown to black
         fillColour.setValue(business.shape.Color.BLACK);
         strokeColour.setValue(business.shape.Color.BLACK);
-        contextMenuColorPicker.setValue(business.shape.Color.BLACK);
+        contextMenuFillColorPicker.setValue(business.shape.Color.BLACK);
+        contextMenuDrawColorPicker.setValue(business.shape.Color.BLACK);
 
         MenuItem delete = new MenuItem("delete");
         delete.setOnAction(t -> rightClickDeleteShape());
-        MenuItem color = new MenuItem("colour", contextMenuColorPicker);
-        color.setOnAction(t -> setColor());
-        shapeContextMenu = new ContextMenu(delete, color);
+        MenuItem fillColorMenu = new MenuItem("Fill color", contextMenuFillColorPicker);
+        fillColorMenu.setOnAction(t -> setFillColor());
+        MenuItem drawColorMenu = new MenuItem("Stroke color", contextMenuDrawColorPicker);
+        drawColorMenu.setOnAction(t -> setDrawColor());
+        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu);
 
         // show shapes at the start(don't have to interact to have thel show up)
         translateToTikz();
     }
 
     /**
-     * Rightclick dropdown menu, change color
+     * Rightclick dropdown menu, change FillColor
      */
-    private void setColor() {
+    private void setFillColor() {
         //TODO use canvas.updateShape to update the shape.
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            shape.setFill(Color.valueOf(contextMenuColorPicker.getValue().toString()));
+            shape.setFill(Color.valueOf(contextMenuFillColorPicker.getValue().toString()));
+            Color fillColor = (Color) shape.getFill();
+            canvas.changeShapeFillColor(Integer.parseInt(shape.getId()),getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
+        }
+        translateToTikz();
+    }
+
+    /**
+     * Rightclick dropdown menu, change StokeColor
+     */
+    private void setDrawColor() {
+        //TODO use canvas.updateShape to update the shape.
+        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            shape.setStroke(Color.valueOf(contextMenuDrawColorPicker.getValue().toString()));
+            Color drawColor = (Color) shape.getStroke();
+            canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()),getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
         }
         translateToTikz();
     }

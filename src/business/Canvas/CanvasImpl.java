@@ -1,5 +1,6 @@
 package business.Canvas;
 
+import business.shape.Color;
 import business.shape.Coordinates;
 import business.shape.Shape;
 import business.shape.Square;
@@ -58,7 +59,7 @@ public class CanvasImpl implements Canvas {
     }
 
     /**
-     * update a shape to the canvas
+     * Update a shape to the canvas
      *
      * @param shape the shape to update
      * @throws IllegalArgumentException if the shape is not present on the canvas
@@ -72,10 +73,45 @@ public class CanvasImpl implements Canvas {
         this.shapes.add(shape);
     }
 
+    /**
+     * Change the fill color of a shape
+     *
+     * @param id id of the shape
+     * @param fillColor color to fill whit
+     */
+    public void changeShapeFillColor(int id, Color fillColor){
+        for (Shape shape : shapes) {
+            if( shape.getId() == id){
+                shape.setFill(true);
+                shape.setFillColor(fillColor);
+            }
+        }
+    }
+
+    /**
+     * Change the draw color of a shape
+     *
+     * @param id id of the shape
+     * @param drawColor color to draw whit
+     */
+    public void changeShapeDrawColor(int id, Color drawColor){
+        for (Shape shape : shapes) {
+            if( shape.getId() == id){
+                shape.setDraw(true);
+                shape.setDrawColor(drawColor);
+            }
+        }
+    }
+
+    /**
+     * Get an unique id for a new shape
+     * @return unique id
+     */
     public int getIdForNewShape(){
         this.idCounter = this.idCounter + 1;
         return this.idCounter;
     }
+
     /**
      * Deletes a shape from the canvas. If the canvas does not contain the given shape, silently returns
      *
