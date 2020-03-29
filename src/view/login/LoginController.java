@@ -44,11 +44,12 @@ public class LoginController {
 
     private ViewSwitcher viewSwitcher;
 
+    public LoginController() {
+        ProductionConfigurationSingleton.getInstance();
+    }
+
     @FXML
     public void initialize() {
-        ProductionConfigurationSingleton.getInstance();
-
-
         anchorPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 handleLoginButton();

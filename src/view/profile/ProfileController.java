@@ -55,28 +55,31 @@ public class ProfileController {
     @FXML
     Button buttonCancel;
 
-    String firstnameText;
+    private String firstnameText;
 
-    String lastnameText;
+    private String lastnameText;
 
-    String emailText;
+    private String emailText;
 
-    String phoneText;
+    private String phoneText;
 
-    String passwordText;
+    private String passwordText;
 
     private ViewSwitcher viewSwitcher;
 
-    UserDTO connectedUser;
+    private UserDTO connectedUser;
+    private UserFactory userFactory;
+    private UserUCC userUcc;
 
-    UserFactory userFactory = ProductionConfigurationSingleton.getUserFactory();
-    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
+    public ProfileController() {
+        //TODO We need a way to know wich user we are talking about
+        this.userFactory = ProductionConfigurationSingleton.getUserFactory();
+        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
+        this.connectedUser = userUcc.getConnectedUser();
+    }
 
     @FXML
     public void initialize() {
-
-        //TODO We need a way to know wich user we are talking about
-        connectedUser = userUcc.getConnectedUser();
         preFillFields(connectedUser);
 
         borderpane.setOnKeyPressed(event -> {

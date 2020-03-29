@@ -41,8 +41,6 @@ public class DashboardController {
     ProjectUCC projectUCC ;
     ProjectFactory projectFactory;
 
-
-
     DashboardController dbc = this;
     private boolean useAskedName;
 
@@ -72,6 +70,12 @@ public class DashboardController {
 
     public DashboardController() {;
         projectList = new ListView<>();
+        //load the configuration
+        this.dal = ProductionConfigurationSingleton.getDalServices(); //TODO remove once the code was refactored and dal is not used in view anymore
+        this.userFactory = ProductionConfigurationSingleton.getUserFactory();
+        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
+        this.projectUCC = ProductionConfigurationSingleton.getProjectUCC();
+        this.projectFactory = ProductionConfigurationSingleton.getProjectFactory();
     }
 
     /**
@@ -115,12 +119,6 @@ public class DashboardController {
 
 
     public void initialize() {
-        //load the configuration
-        this.dal = ProductionConfigurationSingleton.getDalServices(); //TODO remove once the code was refactored and dal is not used in view anymore
-        this.userFactory = ProductionConfigurationSingleton.getUserFactory();
-        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
-        this.projectUCC = ProductionConfigurationSingleton.getProjectUCC();
-        this.projectFactory = ProductionConfigurationSingleton.getProjectFactory();
 
         UserDTO user = userUcc.getConnectedUser();
 

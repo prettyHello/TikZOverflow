@@ -60,18 +60,23 @@ public class RegistrationController {
 
     private ViewSwitcher viewSwitcher;
 
-    String firstnameText;
+    private String firstnameText;
 
-    String lastnameText;
+    private String lastnameText;
 
-    String emailText;
+    private String emailText;
 
-    String phoneText;
+    private String phoneText;
 
-    String passwordText;
+    private String passwordText;
 
-    UserFactory userFactory = ProductionConfigurationSingleton.getUserFactory();
-    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
+    private UserFactory userFactory;
+    private UserUCC userUcc;
+
+    public RegistrationController() {
+        this.userFactory = ProductionConfigurationSingleton.getUserFactory();
+        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
+    }
 
     @FXML
     public void initialize() {

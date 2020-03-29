@@ -32,11 +32,9 @@ import java.io.IOException;
 //TODO refactor to be MVC compliant
 public class ViewOptionController extends HBox {
 
-    ProjectFactory projectFactory = ProductionConfigurationSingleton.getProjectFactory();
-    ProjectUCC projectUCC = ProductionConfigurationSingleton.getProjectUCC();
-    UserFactory userFactory = ProductionConfigurationSingleton.getUserFactory();
-    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
-    DashboardController dashboard;
+    private ProjectUCC projectUCC;
+    private UserUCC userUcc;
+    private DashboardController dashboard;
     private ProjectDTO projectDTO;
 
 
@@ -61,11 +59,13 @@ public class ViewOptionController extends HBox {
     private UserDTO user;
     private int project_id;
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
-    ViewOptionUCCImpl viewOptionUCC = new ViewOptionUCCImpl();
+    private ViewOptionUCCImpl viewOptionUCC;
     private ViewSwitcher viewSwitcher;
 
     public ViewOptionController(DashboardController dashboard, UserDTO userDTO, int project_id) {
-
+        this.projectUCC = ProductionConfigurationSingleton.getProjectUCC();
+        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
+        this.viewOptionUCC = new ViewOptionUCCImpl();
         this.project_id = project_id;
         this.dashboard = dashboard;
         this.user = userDTO;

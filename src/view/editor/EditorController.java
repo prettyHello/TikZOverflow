@@ -58,7 +58,7 @@ public class EditorController {
     private static final String LINE_POINT2 = "LINE_POINT2";
     private static final String ARROW = "ARROW";
     private static final String ARROW_POINT2 = "ARROW_POINT2";
-    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
+    private UserUCC userUcc;
 
     private ViewSwitcher viewSwitcher;
 
@@ -96,12 +96,16 @@ public class EditorController {
     private double thirdSelectedX, thirdSelectedY; // since a triangle need three points
     private String shapeToDraw = "";
     private boolean waitingForMoreCoordinate = false;
-    private Canvas canvas = ActiveCanvas.getActiveCanvas();
+    private Canvas canvas;
 
     private ContextMenu shapeContextMenu;
     private ChoiceBox contextMenuFillColorPicker;
     private ChoiceBox contextMenuDrawColorPicker;
 
+    public EditorController() {
+        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
+        this.canvas = ActiveCanvas.getActiveCanvas();
+    }
     /**
      * Required to load view
      *
