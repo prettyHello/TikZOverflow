@@ -62,7 +62,7 @@
                 <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                     <children>
                         <Label text="By click 'modify' you agree to the EULA"/>
-                        <Button fx:id="bt_eula" minWidth="95.0" mnemonicParsing="false" onAction="#handleReadEulaButton"
+                        <Button fx:id="buttonEula" minWidth="95.0" mnemonicParsing="false" onAction="#handleReadEulaButton"
                                 text="Read EULA"/>
                     </children>
                     <VBox.margin>
@@ -80,9 +80,9 @@
             <children>
                 <HBox alignment="CENTER_RIGHT" spacing="10.0">
                     <children>
-                        <Button fx:id="bt_cancel" minWidth="95.0" mnemonicParsing="false" onAction="#handleCancelButton"
+                        <Button fx:id="buttonCancel" minWidth="95.0" mnemonicParsing="false" onAction="#handleCancelButton"
                                 text="Cancel"/>
-                        <Button fx:id="bt_modify" minWidth="95.0" mnemonicParsing="false" onAction="#handleModifyButton"
+                        <Button fx:id="buttonModify" minWidth="95.0" mnemonicParsing="false" onAction="#handleModifyButton"
                                 text="Modify" textAlignment="CENTER"/>
                     </children>
                     <VBox.margin>

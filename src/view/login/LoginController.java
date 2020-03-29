@@ -23,50 +23,47 @@ import view.ViewSwitcher;
 
 import static utilities.Utility.showAlert;
 
+/**
+ * This class handles the process of login of a user.
+ */
 public class LoginController {
     @FXML
-    public TextField tf_username;
+    public TextField usernameTF;
 
     @FXML
-    public PasswordField tf_password;
+    public PasswordField passwordTF;
 
     @FXML
-    public Button bt_login;
+    public Button buttonLogin;
 
     @FXML
-    public Button bt_createAccount;
+    public Button buttonCreateAccount;
 
     @FXML
-    public AnchorPane anchorpane;
+    public AnchorPane anchorPane;
 
     private ViewSwitcher viewSwitcher;
 
     @FXML
     public void initialize() {
-        anchorpane.setOnKeyPressed(event -> {
+        anchorPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 handleLoginButton();
             }
         });
-        bt_createAccount.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                handleCreateAccountButton();
-                event.consume();
-            }
-        });
     }
 
-    private void handleCreateAccountButton() {
-    }
-
+    /**
+     * Proceed with login and check fields.
+     */
     @FXML
     public void handleLoginButton() {
-        String username = tf_username.getText();
-        String password = tf_password.getText();
+        String username = usernameTF.getText();
+        String password = passwordTF.getText();
 
         try {
-            Utility.checkString(tf_username.getText(), "username");
-            Utility.checkString(tf_password.getText(), "password");
+            Utility.checkString(usernameTF.getText(), "username");
+            Utility.checkString(passwordTF.getText(), "password");
             UserFactoryImpl dto = new UserFactoryImpl();
             UserDTO user = dto.createUser(username, password);
             DALServices dal = new DALServicesImpl();
@@ -89,13 +86,21 @@ public class LoginController {
         }
     }
 
+    /**
+     * Switch to registration view when the create account button is pressed.
+     *
+     * @param event
+     */
     @FXML
-
     public void handleCreateAccountButton(ActionEvent event) {
         viewSwitcher.switchView(ViewName.REGISTRATION);
-
     }
 
+    /**
+     * Required to load view.
+     *
+     * @param viewSwitcher
+     */
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
     }
