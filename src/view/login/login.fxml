@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane fx:id="anchorpane" minWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane fx:id="anchorPane" minWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="view.login.LoginController">
     <children>
         <VBox minWidth="500.0">
@@ -53,7 +53,7 @@
                                     </VBox.margin>
                                     <children>
                                         <Label text="User email address"/>
-                                        <TextField fx:id="tf_username"/>
+                                        <TextField fx:id="usernameTF"/>
                                     </children>
                                 </VBox>
                                 <VBox spacing="10.0">
@@ -62,16 +62,16 @@
                                     </VBox.margin>
                                     <children>
                                         <Label text="Password"/>
-                                        <PasswordField fx:id="tf_password"/>
+                                        <PasswordField fx:id="passwordTF"/>
                                     </children>
                                 </VBox>
                             </children>
                         </VBox>
                         <HBox alignment="TOP_RIGHT" spacing="10.0">
                             <children>
-                                <Button fx:id="bt_createAccount" mnemonicParsing="false"
+                                <Button fx:id="buttonCreateAccount" mnemonicParsing="false"
                                         onAction="#handleCreateAccountButton" text="Create account"/>
-                                <Button fx:id="bt_login" mnemonicParsing="false" onAction="#handleLoginButton"
+                                <Button fx:id="buttonLogin" mnemonicParsing="false" onAction="#handleLoginButton"
                                         text="Login"/>
                             </children>
                             <VBox.margin>

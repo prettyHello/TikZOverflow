@@ -22,8 +22,9 @@ import java.util.function.UnaryOperator;
 
 import static utilities.Utility.showAlert;
 
-//import javax.rmi.CORBA.Util;
-
+/**
+ * This class shows the connected user's profile and allows to modify user's data.
+ */
 public class ProfileController {
 
     @FXML
@@ -48,13 +49,13 @@ public class ProfileController {
     BorderPane borderpane;
 
     @FXML
-    Button bt_eula;
+    Button buttonEula;
 
     @FXML
-    Button bt_modify;
+    Button buttonModify;
 
     @FXML
-    Button bt_cancel;
+    Button buttonCancel;
 
     String firstnameText;
 
@@ -79,7 +80,7 @@ public class ProfileController {
         UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
         UserUCC userUcc = new UserUCCImpl(dal, dao);
         connectedUser = userUcc.getConnectedUser();
-        prefillFields(connectedUser);
+        preFillFields(connectedUser);
 
         borderpane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -88,7 +89,10 @@ public class ProfileController {
         });
     }
 
-    private void prefillFields(UserDTO user) {
+    /**
+     * Fill profile fields with user's data.
+     */
+    private void preFillFields(UserDTO user) {
         firstnameTF.setText(user.getFirstName());
         lastnameTF.setText(user.getLastName());
         emailTF.setText(user.getEmail());
@@ -110,6 +114,9 @@ public class ProfileController {
         Utility.showEula();
     }
 
+    /**
+     * Proceed with modification and check fields.
+     */
     @FXML
     public void handleModifyButton() {
         try {
