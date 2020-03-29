@@ -2,8 +2,7 @@ package view.login;
 
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
-import business.UCC.UserUCCImpl;
-import business.factories.UserFactoryImpl;
+import business.factories.UserFactory;
 import exceptions.BizzException;
 import exceptions.FatalException;
 import javafx.event.ActionEvent;
@@ -14,9 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import persistence.DALServices;
-import persistence.DALServicesImpl;
-import persistence.UserDAOImpl;
+import utilities.ProductionConfigurationSingleton;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -27,6 +24,9 @@ import static utilities.Utility.showAlert;
  * This class handles the process of login of a user.
  */
 public class LoginController {
+    UserFactory userFactory = ProductionConfigurationSingleton.getUserFactory();
+    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
+
     @FXML
     public TextField usernameTF;
 
@@ -46,6 +46,9 @@ public class LoginController {
 
     @FXML
     public void initialize() {
+        ProductionConfigurationSingleton.getInstance();
+
+
         anchorPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 handleLoginButton();
@@ -64,11 +67,7 @@ public class LoginController {
         try {
             Utility.checkString(usernameTF.getText(), "username");
             Utility.checkString(passwordTF.getText(), "password");
-            UserFactoryImpl dto = new UserFactoryImpl();
-            UserDTO user = dto.createUser(username, password);
-            DALServices dal = new DALServicesImpl();
-            UserDAOImpl dao = new UserDAOImpl(dal, dto);
-            UserUCC userUcc = new UserUCCImpl(dal, dao);
+            UserDTO user = userFactory.createUser(username, password);
             userUcc.login(user);
 
             viewSwitcher.setUser(userUcc.getUserInfo(user));

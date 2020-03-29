@@ -24,6 +24,9 @@ import java.nio.file.NoSuchFileException;
 import java.util.Optional;
 import java.util.zip.GZIPOutputStream;
 
+
+//TODO refactor to be MVC compliant (everything related to javaFX should be in the javaFX controller)
+//TODO once MVC compliant move into projectUCC
 public class ViewOptionUCCImpl implements ViewOptionUCC {
 
 

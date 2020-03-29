@@ -2,12 +2,10 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
-import business.UCC.ProjectUCCImpl;
+import business.UCC.ProjectUCC;
 import business.UCC.UserUCC;
-import business.UCC.UserUCCImpl;
 import business.factories.ProjectFactory;
-import business.factories.ProjectFactoryImpl;
-import business.factories.UserFactoryImpl;
+import business.factories.UserFactory;
 import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +14,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import persistence.*;
+import utilities.DAOConfigurationSingleton;
+import utilities.ProductionConfigurationSingleton;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -33,13 +33,19 @@ import java.util.Optional;
  */
 public class DashboardController {
 
+    UserFactory userFactory;
+    DALServices dal; //TODO remove once the code was refactored and dal is not used in view anymore
+    UserUCC userUcc;
+    ProjectUCC projectUCC ;
+    ProjectFactory projectFactory;
+
+
+
     DashboardController dbc = this;
 
     private String popupMessage = "Please enter the name of your Project" ;
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
     private String ContentTextImport = "impossible to import, this project already exists in: ";
-
-    ProjectUCCImpl projectUCC ;
 
     private ViewSwitcher viewSwitcher;
 
@@ -61,11 +67,7 @@ public class DashboardController {
 
     private UserDTO user;
 
-    public DashboardController() {
-        DALServices dal = new DALServicesImpl();
-        ProjectFactory projectFactory = new ProjectFactoryImpl();
-        ProjectDAO dao = new ProjectDAOImpl(dal, projectFactory);
-        this.projectUCC = new ProjectUCCImpl(dal, dao);
+    public DashboardController() {;
         projectList = new ListView<>();
     }
 
@@ -91,13 +93,11 @@ public class DashboardController {
      * @param user
      */
     public void setUserProjectView(UserDTO user) {
-        DALServices dal = new DALServicesImpl();
-        ProjectFactory projectFactory = new ProjectFactoryImpl();
-        ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
+        ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory); //TODO remove once error below is fixed
 
         this.user = user;
         userSetting.setText(user.getFirstName());
-        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUserId());
+        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUserId()); //TODO this should be in a real controller, can't call model from view
         projectObsList = FXCollections.observableArrayList(listOfProject);
         projectList.setItems(projectObsList);
     }
@@ -107,25 +107,24 @@ public class DashboardController {
      */
     public void handleDisconnectButton() {
         viewSwitcher.switchView(ViewName.LOGIN);
-        UserFactoryImpl userFactory = new UserFactoryImpl();
-        DALServices dal = new DALServicesImpl();
-        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
-        UserUCC userUcc = new UserUCCImpl(dal, dao);
         userUcc.deleteConnectedUser();
     }
 
 
     public void initialize() {
+        //load the configuration
+        this.dal = ProductionConfigurationSingleton.getDalServices(); //TODO remove once the code was refactored and dal is not used in view anymore
+        this.userFactory = ProductionConfigurationSingleton.getUserFactory();
+        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
+        this.projectUCC = ProductionConfigurationSingleton.getProjectUCC();
+        this.projectFactory = ProductionConfigurationSingleton.getProjectFactory();
+
+        UserDTO user = userUcc.getConnectedUser();
+
         itemList = FXCollections.observableArrayList();
         itemList.add("Your projects");
         itemList.add("Shared with you");
         optionList.setItems(itemList);
-
-        UserFactoryImpl userFactory = new UserFactoryImpl();
-        DALServices dal = new DALServicesImpl();
-        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
-        UserUCC userUcc = new UserUCCImpl(dal, dao);
-        UserDTO user = userUcc.getConnectedUser();
 
         userSetting.setText(user.getFirstName());
 
@@ -212,11 +211,13 @@ public class DashboardController {
                 ProjectDTO newProject = new ProjectDTO();
                 newProject.setProjectName(projectName);
                 newProject.setCreateDate(Utility.getTimeStamp());
-
                 projectUCC.createNewProject(projectName);
                 toEditorView();
             } catch (BizzException e) {
                 Utility.showAlert(Alert.AlertType.WARNING, "Creation impossible", "Duplicate project name", "A project with ths name already exists. Please specify another one");
+            } catch (IOException e) {
+                //TODO I/O exception
+                e.printStackTrace();
             }
         } else {
             new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();

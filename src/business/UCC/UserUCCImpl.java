@@ -26,23 +26,13 @@ public class UserUCCImpl implements UserUCC {
      */
     public void login(UserDTO user) throws BizzException, FatalException {
         utilities.Utility.checkObject(user);
-        User usr = (User) user;
-        try {
-            dal.startTransaction();
-            User userDb = (User) userDAO.getUser(user);
-            /*
-             * The salt is incorporated into the hash (encoded in a base64-style format).
-             * That's why the salt shouldn't actually be saved */
-            if (userDb == null || !BCrypt.checkpw(user.getPassword(), userDb.getPassword())) {
-                //dal.rollback();
-                throw new BizzException("Wrong Password");
-            }
-            dal.commit();
-            UserDTO connectedUser = getUserInfo(userDb);
-            ConnectedUser.setConnectedUser(connectedUser);
-        } finally {
-            dal.rollback();
+        User userDb = (User) userDAO.getUser(user);
+        /* The salt is incorporated into the hash (encoded in a base64-style format).
+         * That's why the salt shouldn't actually be saved */
+        if (userDb == null || !BCrypt.checkpw(user.getPassword(), userDb.getPassword())) {
+            throw new BizzException("Wrong Password");
         }
+        ConnectedUser.setConnectedUser(userDb);
     }
 
     /**
@@ -55,6 +45,7 @@ public class UserUCCImpl implements UserUCC {
         utilities.Utility.checkObject(userDTO);
         try {
             dal.startTransaction();
+            //TODO add business constrains here or remove the transaction/rollback/commit
             userDAO.update(userDTO);
             dal.commit();
         } finally {
@@ -92,16 +83,7 @@ public class UserUCCImpl implements UserUCC {
     @Override
     public UserDTO getUserInfo(UserDTO user) throws BizzException, FatalException {
         utilities.Utility.checkObject(user);
-        User usr = (User) user;
-        User userDb = null;
-        try {
-            dal.startTransaction();
-            userDb = (User) userDAO.getUser(user);
-            dal.commit();
-        } finally {
-            dal.rollback();
-        }
-        return (UserDTO) userDb;
+        return userDAO.getUser(user);
     }
 
     /**
@@ -112,6 +94,7 @@ public class UserUCCImpl implements UserUCC {
         utilities.Utility.checkObject(userDTO);
         try {
             dal.startTransaction();
+            //TODO add business constrains here or remove the transaction/rollback/commit
             userDAO.create(userDTO);
             dal.commit();
         } finally {

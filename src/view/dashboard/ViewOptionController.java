@@ -27,6 +27,8 @@ import view.ViewSwitcher;
 import java.io.File;
 import java.io.IOException;
 
+
+//TODO refactor to be MVC compliant
 public class ViewOptionController extends HBox {
 
     DashboardController dashboard;

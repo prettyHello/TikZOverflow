@@ -2,8 +2,7 @@ package view.profile;
 
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
-import business.UCC.UserUCCImpl;
-import business.factories.UserFactoryImpl;
+import business.factories.UserFactory;
 import exceptions.BizzException;
 import exceptions.FatalException;
 import javafx.fxml.FXML;
@@ -12,8 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
-import persistence.DALServicesImpl;
-import persistence.UserDAOImpl;
+import utilities.ProductionConfigurationSingleton;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -71,14 +69,13 @@ public class ProfileController {
 
     UserDTO connectedUser;
 
+    UserFactory userFactory = ProductionConfigurationSingleton.getUserFactory();
+    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
+
     @FXML
     public void initialize() {
 
         //TODO We need a way to know wich user we are talking about
-        UserFactoryImpl userFactory = new UserFactoryImpl();
-        DALServices dal = new DALServicesImpl();
-        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
-        UserUCC userUcc = new UserUCCImpl(dal, dao);
         connectedUser = userUcc.getConnectedUser();
         preFillFields(connectedUser);
 
@@ -139,12 +136,8 @@ public class ProfileController {
 
             lastnameText = lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             firstnameText = firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            UserFactoryImpl userFactory = new UserFactoryImpl();
 
-            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
-            DALServices dal = new DALServicesImpl();
-            UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
-            UserUCC userUcc = new UserUCCImpl(dal, dao);
+            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());;
             userUcc.updateUserInfo(user);
             showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information succesfully updated");
         } catch (BizzException e) {

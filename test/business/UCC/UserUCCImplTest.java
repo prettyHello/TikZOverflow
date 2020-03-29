@@ -18,7 +18,7 @@ class UserUCCImplTest {
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-        BusinessConfigurationSingleton holder = BusinessConfigurationSingleton.getInstance();
+        BusinessConfigurationSingleton.getInstance();
         this.dalServices = BusinessConfigurationSingleton.getDalServices();
         this.userDAO = BusinessConfigurationSingleton.getUserDAO();
         this.userFactory = BusinessConfigurationSingleton.getUserFactory();

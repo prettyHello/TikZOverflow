@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import persistence.DALServices;
 import persistence.DAO;
+import utilities.ProductionConfigurationSingleton;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -27,40 +28,18 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-        //Load the configuration file (if 'dev' is given in argument load the src/config/dev.properties), load the production configuration otherwise
-        Configuration configuration = null;
+        //Init the pseudo-singleton holding the configuration, this should be only done here
+        ProductionConfigurationSingleton prod = new ProductionConfigurationSingleton(args);
+
+        //Create the database if it doesn't exist
         try {
-            configuration = (Configuration) Class.forName("config.Configuration").getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
-            //logger.fatal("Unexpected error", exc);
-            System.exit(1);
-        }
-        configuration.initProperties(args);
-
-        // Instantiate the Data Access Layer implementation of the loaded the configuration
-        DALServices dalServices = null;
-        UserFactory userFactory = null;
-        DAO<UserDTO> userDAO = null;
-        UserUCC userUcc = null;
-
-        try {
-            dalServices = (DALServices) configuration.getClassFor(("DALServices")).getDeclaredConstructor().newInstance();
-            userFactory = (UserFactory) configuration.getClassFor(("UserFactory")).getDeclaredConstructor().newInstance();
-            userDAO = (DAO<UserDTO>) configuration.getClassFor(("UserDAO")).getDeclaredConstructor(DALServices.class, UserFactory.class).newInstance(dalServices, userFactory);
-            userUcc = (UserUCC) configuration.getClassFor("UserUCC").getConstructor(DALServices.class, DAO.class).newInstance(dalServices, userDAO);
-
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
-            exc.printStackTrace();
-            System.exit(1);
-        }
-
-        try {
-            dalServices.createTables();
+            ProductionConfigurationSingleton.getDalServices().createTables();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         launch(args);
     }
+
 }
 

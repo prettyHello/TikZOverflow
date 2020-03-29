@@ -2,8 +2,7 @@ package view.registration;
 
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
-import business.UCC.UserUCCImpl;
-import business.factories.UserFactoryImpl;
+import business.factories.UserFactory;
 import exceptions.BizzException;
 import exceptions.FatalException;
 import javafx.fxml.FXML;
@@ -12,8 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import persistence.DALServices;
-import persistence.DALServicesImpl;
-import persistence.UserDAOImpl;
+import utilities.ProductionConfigurationSingleton;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -72,6 +70,9 @@ public class RegistrationController {
 
     String passwordText;
 
+    UserFactory userFactory = ProductionConfigurationSingleton.getUserFactory();
+    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
+
     @FXML
     public void initialize() {
         borderPane.setOnKeyPressed(event -> {
@@ -126,7 +127,6 @@ public class RegistrationController {
             if (!checkboxEula.isSelected()) {
                 throw new IllegalStateException("EULA not accepted");
             }
-            UserFactoryImpl userFactory = new UserFactoryImpl();
             String salt = BCrypt.gensalt(12);
             this.phoneText = this.phoneTF.getText();
             this.emailText = this.emailTF.getText();
@@ -135,9 +135,6 @@ public class RegistrationController {
             this.firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
             UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
-            DALServices dal = new DALServicesImpl();
-            UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
-            UserUCC userUcc = new UserUCCImpl(dal, dao);
             userUcc.register(user);
             showAlert(Alert.AlertType.CONFIRMATION, "Account registration", "Success", "Account successfully created");
             viewSwitcher.switchView(ViewName.LOGIN);
