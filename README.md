@@ -81,5 +81,23 @@ TO DO: Informations sur la façon d'executer les tests
 ## Développement
 
 ## Screenshot
+##### Login screen
+![Login screen](screenshots/login_screen.png)
 
+##### Register screen
+![Register screen](screenshots/register_screen.png)
+
+| Error | Success
+| ------ | ------
+|![Error msg](screenshots/register_error.png) | ![Success msg](screenshots/register_success.png) 
+
+##### Dashboard
+![Dashboard](screenshots/dashboard_screen.png)
+
+| New project | Delete project
+| ------ | ------
+|![Error msg](screenshots/new_project_name_request.png) | ![Success msg](screenshots/delete_confirmation_alert.png) 
+
+##### Edit screen
+![Edit screen](screenshots/edit_screen.png)
 ## License
