@@ -2,16 +2,13 @@ package view.dashboard;
 
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
-
 import business.UCC.ProjectUCCImpl;
-import exceptions.BizzException;
-
 import business.UCC.UserUCC;
 import business.UCC.UserUCCImpl;
 import business.factories.ProjectFactory;
 import business.factories.ProjectFactoryImpl;
 import business.factories.UserFactoryImpl;
-
+import exceptions.BizzException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -84,8 +81,8 @@ public class DashboardController {
         ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
 
         this.user = user;
-        userSetting.setText(user.getFirst_name());
-        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUser_id());
+        userSetting.setText(user.getFirstName());
+        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUserId());
         projectObsList = FXCollections.observableArrayList(listOfProject);
         projectList.setItems(projectObsList);
     }
@@ -114,7 +111,7 @@ public class DashboardController {
         UserUCC userUcc = new UserUCCImpl(dal, dao);
         UserDTO user = userUcc.getConnectedUser();
 
-        userSetting.setText(user.getFirst_name());
+        userSetting.setText(user.getFirstName());
 
         projectList.setCellFactory(cell -> new ListCell<ProjectDTO>() {
             @Override
@@ -160,9 +157,9 @@ public class DashboardController {
                             Files.createDirectories(folderDestination);
                             String Dst = Utility.unTarFile(selectedFile, folderDestination);
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ Dst), new File(folderDestination.toString() + File.separator + projectName));
-                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUser_id());
+                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUserId());
                             projectObsList.add(newProjectImport);
-                            this.projectUCC.createFromImport(newProjectImport); //TODO
+                            this.projectUCC.createFromImport(newProjectImport);
                         } catch (IOException  e) {
                             throw new BizzException("Could not locate files to import");
                         }
@@ -192,7 +189,6 @@ public class DashboardController {
                 ProjectDTO newProject = new ProjectDTO();
                 newProject.setProjectName(projectName);
                 newProject.setCreateDate(Utility.getTimeStamp());
-                viewSwitcher.setproject(newProject);
 
                 projectUCC.createNewProject(projectName);
                 toEditorView();

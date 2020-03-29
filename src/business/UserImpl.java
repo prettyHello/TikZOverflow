@@ -33,7 +33,7 @@ public class UserImpl implements User {
 
 
     //---------------- getters and setters ---------------//
-    public String getLast_name() {
+    public String getLastName() {
         return last_name;
     }
 
@@ -53,23 +53,23 @@ public class UserImpl implements User {
         return salt;
     }
 
-    public String getRegister_date() {
+    public String getRegisterDate() {
         return register_date;
     }
 
-    public int getUser_id() {
+    public int getUserId() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUserId(int user_id) {
         this.user_id = user_id;
     }
 
-    public void setFirst_name(String first_name) {
+    public void setFirstName(String first_name) {
         this.first_name = first_name;
     }
 
-    public void setLast_name(String last_name) {
+    public void setLastName(String last_name) {
         this.last_name = last_name;
     }
 
@@ -89,11 +89,11 @@ public class UserImpl implements User {
         this.salt = salt;
     }
 
-    public void setRegister_date(String register_date) {
+    public void setRegisterDate(String register_date) {
         this.register_date = register_date;
     }
 
-    public String getFirst_name() {
+    public String getFirstName() {
         return first_name;
     }
 

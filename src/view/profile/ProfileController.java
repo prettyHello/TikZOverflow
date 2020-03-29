@@ -89,8 +89,8 @@ public class ProfileController {
     }
 
     private void prefillFields(UserDTO user) {
-        firstnameTF.setText(user.getFirst_name());
-        lastnameTF.setText(user.getLast_name());
+        firstnameTF.setText(user.getFirstName());
+        lastnameTF.setText(user.getLastName());
         emailTF.setText(user.getEmail());
         phoneTF.setText(user.getPhone());
         emailTF.setDisable(true);

@@ -6,7 +6,7 @@ package business.DTO;
  */
 public interface UserDTO {
 
-    String getLast_name();
+    String getLastName();
 
     String getEmail();
 
@@ -16,15 +16,15 @@ public interface UserDTO {
 
     String getSalt();
 
-    String getRegister_date();
+    String getRegisterDate();
 
-    int getUser_id();
+    int getUserId();
 
-    void setUser_id(int user_id);
+    void setUserId(int user_id);
 
-    void setFirst_name(String first_name);
+    void setFirstName(String first_name);
 
-    void setLast_name(String last_name);
+    void setLastName(String last_name);
 
     void setEmail(String email);
 
@@ -34,11 +34,11 @@ public interface UserDTO {
 
     void setSalt(String salt);
 
-    void setRegister_date(String register_date);
+    void setRegisterDate(String register_date);
 
     void setAuthorized(boolean authorized);
 
     boolean isAuthorized();
 
-    String getFirst_name();
+    String getFirstName();
 }

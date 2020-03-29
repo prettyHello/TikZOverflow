@@ -42,13 +42,13 @@ public class UserDAOImpl implements UserDAO {
             usr = (UserDTO) this.userFactory.createUser();
             if (rs.next()) {
                 usr.setEmail(rs.getString("email"));
-                usr.setFirst_name(rs.getString("first_name"));
-                usr.setLast_name(rs.getString("last_name"));
+                usr.setFirstName(rs.getString("first_name"));
+                usr.setLastName(rs.getString("last_name"));
                 usr.setPassword(rs.getString("password"));
                 usr.setPhone(rs.getString("phone"));
                 usr.setSalt(rs.getString("salt"));
-                usr.setRegister_date(rs.getString("register_date"));
-                usr.setUser_id(rs.getInt("user_id"));
+                usr.setRegisterDate(rs.getString("register_date"));
+                usr.setUserId(rs.getInt("user_id"));
             } else {
                 throw new BizzException("User : " + usrAuth.getEmail() + " does not exist");
             }
@@ -76,13 +76,13 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement ps = null;
         try {
             ps = dal.prepareStatement(SQL_INSERT_USER);
-            ps.setString(1, userDTO.getFirst_name());
-            ps.setString(2, userDTO.getLast_name());
+            ps.setString(1, userDTO.getFirstName());
+            ps.setString(2, userDTO.getLastName());
             ps.setString(3, userDTO.getEmail());
             ps.setString(4, userDTO.getPhone());
             ps.setString(5, userDTO.getPassword());
             ps.setString(6, userDTO.getSalt());
-            ps.setString(7, userDTO.getRegister_date());
+            ps.setString(7, userDTO.getRegisterDate());
             ps.executeUpdate();
 
         } catch (SQLException exc) {
@@ -106,8 +106,8 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement ps = null;
         try {
             ps = dal.prepareStatement(SQL_UPDATE_USER);
-            ps.setString(1, userDTO.getFirst_name());
-            ps.setString(2, userDTO.getLast_name());
+            ps.setString(1, userDTO.getFirstName());
+            ps.setString(2, userDTO.getLastName());
             ps.setString(3, userDTO.getEmail());
             ps.setString(4, userDTO.getPhone());
             ps.setString(5, userDTO.getPassword());

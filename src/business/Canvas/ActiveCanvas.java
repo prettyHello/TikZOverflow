@@ -4,7 +4,7 @@ package business.Canvas;
  * Singleton for the canvas that is currently being worked on
  */
 public class ActiveCanvas {
-    private static CanvasImpl INSTANCE = null;
+    private static Canvas INSTANCE = null;
 
     public static Canvas getActiveCanvas() {
         if (INSTANCE == null) {
@@ -13,8 +13,7 @@ public class ActiveCanvas {
         return INSTANCE;
     }
 
-    //TODO used by load project ?
-    public static void setActiveCanvas(CanvasImpl canvas) {
+    public static void setActiveCanvas(Canvas canvas) {
         INSTANCE = canvas;
     }
 
