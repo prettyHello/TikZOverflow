@@ -4,6 +4,10 @@ import business.Canvas.ActiveCanvas;
 import business.Canvas.ActiveProject;
 import business.Canvas.Canvas;
 import business.DTO.ProjectDTO;
+import business.DTO.UserDTO;
+import business.UCC.UserUCC;
+import business.UCC.UserUCCImpl;
+import business.factories.UserFactoryImpl;
 import business.shape.Coordinates;
 import business.shape.Square;
 import javafx.event.ActionEvent;
@@ -18,7 +22,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import persistence.DALServices;
+import persistence.DALServicesImpl;
 import persistence.SaveObject;
+import persistence.UserDAOImpl;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -121,7 +128,6 @@ public class EditorController {
         leftAnchorPane.minWidthProperty().bind(mainSplitPane.widthProperty().multiply(0.5));
 
 
-
         contextMenuFillColorPicker = new ChoiceBox();
         contextMenuDrawColorPicker = new ChoiceBox();
 
@@ -160,7 +166,7 @@ public class EditorController {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             shape.setFill(Color.valueOf(contextMenuFillColorPicker.getValue().toString()));
             Color fillColor = (Color) shape.getFill();
-            canvas.changeShapeFillColor(Integer.parseInt(shape.getId()),getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
+            canvas.changeShapeFillColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
         }
         translateToTikz();
     }
@@ -174,7 +180,7 @@ public class EditorController {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             shape.setStroke(Color.valueOf(contextMenuDrawColorPicker.getValue().toString()));
             Color drawColor = (Color) shape.getStroke();
-            canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()),getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
+            canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
         }
         translateToTikz();
     }
@@ -475,10 +481,9 @@ public class EditorController {
      */
     private Shape constructTriangle() {
         Polygon polygon = new Polygon();
-        polygon.getPoints().addAll(new Double[]{
-                selectedX, selectedY,
+        polygon.getPoints().addAll(selectedX, selectedY,
                 previouslySelectedX, previouslySelectedY,
-                thirdSelectedX, thirdSelectedY});
+                thirdSelectedX, thirdSelectedY);
         return polygon;
     }
 
@@ -506,8 +511,15 @@ public class EditorController {
      */
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
         ProjectDTO projectDTO = ActiveProject.getActiveProject();
+
+        UserFactoryImpl userFactory = new UserFactoryImpl();
+        DALServices dal = new DALServicesImpl();
+        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
+        UserUCC userUcc = new UserUCCImpl(dal, dao);
+        UserDTO user = userUcc.getConnectedUser();
+
         SaveObject saveObject = new SaveObject();
-        saveObject.save(canvas, projectDTO.getProjectName());
+        saveObject.save(canvas, projectDTO.getProjectName(),user);
     }
 
     /**
@@ -522,18 +534,30 @@ public class EditorController {
         alert.setTitle("Close project");
         alert.setHeaderText("Do you want to save your project?");
 
+        UserFactoryImpl userFactory = new UserFactoryImpl();
+        DALServices dal = new DALServicesImpl();
+        UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
+        UserUCC userUcc = new UserUCCImpl(dal, dao);
+        UserDTO user = userUcc.getConnectedUser();
+
         ButtonType buttonTypeOne = new ButtonType("Yes");
         ButtonType buttonTypeTwo = new ButtonType("No");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
         alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
+        if (!result.isPresent()) {
+            return;
+        }
+        if (result.get() == buttonTypeCancel) {
+            return;
+        }
         if (result.get() == buttonTypeOne) {
             SaveObject saveObject = new SaveObject();
             ProjectDTO projectDTO = ActiveProject.getActiveProject();
-            saveObject.save(canvas, projectDTO.getProjectName());
+            saveObject.save(canvas, projectDTO.getProjectName(), user);
         }
+
         ActiveCanvas.deleteActiveCanvas();
         viewSwitcher.switchView(ViewName.DASHBOARD);
     }

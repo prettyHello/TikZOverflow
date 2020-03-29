@@ -5,11 +5,10 @@ import business.Canvas.ActiveProject;
 import business.Canvas.Canvas;
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
-import business.UCC.ProjectUCC;
-import business.UCC.ProjectUCCImpl;
-import business.UCC.ViewOptionUCCImpl;
+import business.UCC.*;
 import business.factories.ProjectFactory;
 import business.factories.ProjectFactoryImpl;
+import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -101,11 +100,16 @@ public class ViewOptionController extends HBox {
             ProjectUCC projectUCC = new ProjectUCCImpl(dal, doa);
             ProjectDTO activeProject = projectUCC.getProjectDTO(project_id);
 
+            UserFactoryImpl userFactory = new UserFactoryImpl();
+            UserDAOImpl dao = new UserDAOImpl(dal, userFactory);
+            UserUCC userUcc = new UserUCCImpl(dal, dao);
+            UserDTO user = userUcc.getConnectedUser();
+
             ActiveProject.setActiveProject(activeProject);
             SaveObject loader = new SaveObject();
             Canvas loaded = null;
             try {
-                loaded = loader.open(activeProject.getProjectName());
+                loaded = loader.open(activeProject.getProjectName(), user);
             } catch (IOException | ClassNotFoundException e) {
                 Utility.showAlert(Alert.AlertType.ERROR, "Fatal error", "Internal error", "Error during loading of the project");
             }
