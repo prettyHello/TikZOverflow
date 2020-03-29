@@ -1,6 +1,6 @@
 package utilities;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -60,15 +60,12 @@ public class ColorUtils {
         int mse;
         for (ColorName c : colorList) {
             mse = c.computeMSE(r, g, b);
-            System.out.println(c.getName()+" "+mse );
             if (mse < minMSE) {
-                System.out.println(mse+" < "+minMSE);
                 minMSE = mse;
                 closestMatch = c;
             }
         }
         return closestMatch.getName();
-
     }
 
     /**
