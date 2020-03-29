@@ -85,6 +85,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             pr = this.dal.prepareStatement(SQL_SELECT_BY_PROJECTID);
             pr.setInt(1, project_id);
             rs = pr.executeQuery();
+            //TODO le resultSet est potentielement vide, donc fermé, ce qui crée un bug.
             rs.next();
             return fillDTO(rs);
         } catch (Exception e) {
