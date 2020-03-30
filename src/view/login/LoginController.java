@@ -13,7 +13,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import utilities.ProductionConfigurationSingleton;
+import utilities.ConfigurationSingleton;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -24,8 +24,8 @@ import static utilities.Utility.showAlert;
  * This class handles the process of login of a user.
  */
 public class LoginController {
-    UserFactory userFactory = ProductionConfigurationSingleton.getUserFactory();
-    UserUCC userUcc = ProductionConfigurationSingleton.getUserUcc();
+    UserFactory userFactory = ConfigurationSingleton.getUserFactory();
+    UserUCC userUcc = ConfigurationSingleton.getUserUcc();
 
     @FXML
     public TextField usernameTF;
@@ -45,7 +45,7 @@ public class LoginController {
     private ViewSwitcher viewSwitcher;
 
     public LoginController() {
-        ProductionConfigurationSingleton.getInstance();
+        ConfigurationSingleton.getInstance();
     }
 
     @FXML

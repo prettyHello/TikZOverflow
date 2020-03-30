@@ -6,9 +6,6 @@ import business.Canvas.Canvas;
 import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 import business.UCC.UserUCC;
-import business.UCC.UserUCCImpl;
-import business.factories.UserFactory;
-import business.factories.UserFactoryImpl;
 import business.shape.Coordinates;
 import business.shape.Square;
 import javafx.event.ActionEvent;
@@ -23,11 +20,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import persistence.DALServices;
-import persistence.DALServicesImpl;
 import persistence.SaveObject;
-import persistence.UserDAOImpl;
-import utilities.ProductionConfigurationSingleton;
+import utilities.ConfigurationSingleton;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -103,7 +97,7 @@ public class EditorController {
     private ChoiceBox contextMenuDrawColorPicker;
 
     public EditorController() {
-        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
+        this.userUcc = ConfigurationSingleton.getUserUcc();
         this.canvas = ActiveCanvas.getActiveCanvas();
     }
     /**

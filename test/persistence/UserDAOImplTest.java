@@ -7,7 +7,7 @@ import exceptions.FatalException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import utilities.DAOConfigurationSingleton;
+import utilities.TestDAOConfigurationSingleton;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -25,10 +25,10 @@ class UserDAOImplTest {
 
     @BeforeEach
     void setUp() {
-        DAOConfigurationSingleton holder = DAOConfigurationSingleton.getInstance();
-        this.dalServices = DAOConfigurationSingleton.getDalServices();
-        this.userFactory = DAOConfigurationSingleton.getUserFactory();
-        this.userDAO = DAOConfigurationSingleton.getUserDAO();
+        TestDAOConfigurationSingleton holder = TestDAOConfigurationSingleton.getInstance();
+        this.dalServices = TestDAOConfigurationSingleton.getDalServices();
+        this.userFactory = TestDAOConfigurationSingleton.getUserFactory();
+        this.userDAO = TestDAOConfigurationSingleton.getUserDAO();
         try {
             dalServices.createTables("dao_test");
         } catch (IOException e) {

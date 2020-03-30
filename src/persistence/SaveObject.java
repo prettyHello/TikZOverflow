@@ -22,6 +22,7 @@ public class SaveObject {
     }
 
     public Canvas open(String nameOfTheFile,UserDTO userID) throws IOException, ClassNotFoundException {
+        //Open a file and return the resulting Canvas
         FileInputStream fileInputStream = new FileInputStream(rootProject +"userid_" +userID.getUserId() + File.separator + nameOfTheFile + File.separator + nameOfTheFile + ".bin");
         ObjectInputStream in = new ObjectInputStream(fileInputStream);
         Canvas readCanvas = (Canvas) in.readObject();
