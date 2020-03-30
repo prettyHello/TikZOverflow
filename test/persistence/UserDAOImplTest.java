@@ -94,7 +94,7 @@ class UserDAOImplTest {
 
 
     @Test
-    void getUser() {
+    void getExistingUser() {
         // Test 1 User exist
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
@@ -106,8 +106,12 @@ class UserDAOImplTest {
         assertEquals(user.getLastName(), user.getLastName(), "LastName does not match");
         assertEquals(user.getRegisterDate(), user.getRegisterDate(), "Date does not match");
         assertEquals(user.getSalt(), user.getSalt(), "Salt does not match");
+    }
 
-        // Test 2 User don't exist
+    @Test
+    void getNoneExistingUser(){
+        UserDTO user = generateBasicUserDTO();
+        userDAO.create(user);
         assertThrows(BizzException.class, () -> {
             user.setEmail("oops");
             userDAO.getUser(user);
@@ -119,35 +123,48 @@ class UserDAOImplTest {
     }
 
     @Test
-    void update() {
+    void updateToExistsingPhoneNumber() {
+        //  error same phone number
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
         UserDTO user2 = generateBasicUser2DTO();
         userDAO.create(user2);
-
-        // Test2: error same email
         assertThrows(FatalException.class, () -> {
-            user.setEmail("mail2@mail.be");
-            userDAO.update(user);
-        }, "update email to an existing one doesn't raise an exception");
-
-        // Test3: error same salt
-        assertThrows(FatalException.class, () -> {
-            user.setSalt("salt2");
-            userDAO.update(user);
-        }, "update salt to an existing one doesn't raise an exception");
-        // Test4: error same phone number
-
-        assertThrows(FatalException.class, () -> {
-            user.setPhone("123");
+            user.setPhone("049");
             userDAO.update(user);
         }, "update phone number to an existing one doesn't raise an exception");
 
     }
 
+    @Test
+    void updateWithexistingMail(){
+        UserDTO user = generateBasicUserDTO();
+        userDAO.create(user);
+        UserDTO user2 = generateBasicUser2DTO();
+        userDAO.create(user2);
+
+        // error same email
+        assertThrows(FatalException.class, () -> {
+            user.setEmail("mail2@mail.be");
+            userDAO.update(user);
+        }, "update email to an existing one doesn't raise an exception");
+    }
 
     @Test
-    void delete() {
+    void updateWithExistingSalt(){
+        // error same salt
+        UserDTO user = generateBasicUserDTO();
+        userDAO.create(user);
+        UserDTO user2 = generateBasicUser2DTO();
+        userDAO.create(user2);
+        assertThrows(FatalException.class, () -> {
+            user.setSalt("salt2");
+            userDAO.update(user);
+        }, "update salt to an existing one doesn't raise an exception");
+    }
+
+    @Test
+    void deleteExistingUser() {
         // test 1: create then delete then see if still exists
         UserDTO user = generateBasicUserDTO();
         assertThrows(BizzException.class, () -> {
@@ -156,10 +173,7 @@ class UserDAOImplTest {
             userDAO.getUser(user);
         }, "getUser still return a user after delete was called");
 
-        // test 2: throw fatal exception if not exists
-        assertThrows(FatalException.class, () -> {
-            userDAO.delete(user);
-        }, "delete doesn't throw a fatal exception when trying to delete a user that doesn't exists");
+
 
     }
 

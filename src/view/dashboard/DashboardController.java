@@ -197,6 +197,7 @@ public class DashboardController {
 
                             Utility.deleteFile(delFile.toFile());
                             this.projectUCC.createFromImport(newProjectImport);
+                            setUserProjectView(this.user);
                         } catch (IOException e) {
                             throw new BizzException("Could not locate files to import");
                         }

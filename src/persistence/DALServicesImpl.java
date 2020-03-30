@@ -61,15 +61,14 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      */
     @Override
     public void rollback() throws FatalException {
-        if (this.connection == null)
-            return;
-        try {
-            this.connection.rollback();
-            this.connection.setAutoCommit(true);
-        } catch (SQLException e) {
-            throw new FatalException("DalServices error - impossible to rollback: \n\t"+e.getMessage());
+        if (this.connection != null){
+            try {
+                this.connection.rollback();
+                this.connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                throw new FatalException("DalServices error - impossible to rollback: \n\t"+e.getMessage());
+            }
         }
-        this.closeConnection();
     }
 
     /**
@@ -124,7 +123,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
         this.closeConnection();
         try {
             File f = new File("./" + this.DBName + ".db");
-            if (!f.delete()) {
+            if (!f.exists() || !f.delete()) {
                 throw new FatalException("Database ./"+this.DBName + " deletion impossible: \n\t");
             }
         } catch (Exception e) {
