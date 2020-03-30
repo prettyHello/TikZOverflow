@@ -98,7 +98,7 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO getSelectedProject(int userID, String projectName) {
+    public ProjectDTO getSelectedProject(int userID, String projectName) throws BizzException {
         PreparedStatement pr;
         ResultSet rs;
         ProjectDTO project = new ProjectDTO();

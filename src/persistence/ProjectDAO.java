@@ -1,6 +1,7 @@
 package persistence;
 
 import business.DTO.ProjectDTO;
+import exceptions.BizzException;
 import exceptions.FatalException;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
      * @return
      * @throws FatalException
      */
-    ProjectDTO getSelectedProject(int userID, String projectName) throws FatalException;
+    ProjectDTO getSelectedProject(int userID, String projectName) throws BizzException;
 
     /**
      * Retrieve a project from the database
