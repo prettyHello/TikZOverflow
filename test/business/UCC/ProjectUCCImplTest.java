@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class ProjectUCCImplTest {
 
     DALServices dalServices;
-    DAO<ProjectDAO> projectDAO;
+    ProjectDAO projectDAO;
     ProjectUCC projectUCC;
     UserDTO userDTO;
 

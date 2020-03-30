@@ -103,7 +103,7 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public void createFromImport(ProjectDTO projectDTO) throws BizzException, IOException {
-        ((ProjectDAO) projectDAO).create(projectDTO);
+         projectDAO.create(projectDTO);
     }
 }
 

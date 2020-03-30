@@ -31,7 +31,7 @@ public abstract class AbstractConfigurationSingleton {
     private static UserUCC userUcc;
     private  static ProjectFactory projectFactory;
     private static ProjectUCC projectUCC;
-    private  static  DAO<ProjectDAO> projectDAO;
+    private  static  ProjectDAO projectDAO;
 
     public static String getConf_name() {
         return conf_name;
@@ -61,7 +61,7 @@ public abstract class AbstractConfigurationSingleton {
 
     public static ProjectUCC getProjectUCC() { return projectUCC; }
 
-    public static DAO<ProjectDAO> getProjectDAO() { return projectDAO; }
+    public static ProjectDAO getProjectDAO() { return projectDAO; }
 
 
     /**
@@ -93,7 +93,7 @@ public abstract class AbstractConfigurationSingleton {
             this.userDAO = (DAO<UserDTO>) configuration.getClassFor(("UserDAO")).getDeclaredConstructor(DALServices.class, UserFactory.class).newInstance(dalServices, userFactory);
             this.userUcc = (UserUCC) configuration.getClassFor("UserUCC").getConstructor(DALServices.class, DAO.class).newInstance(dalServices, userDAO);
             this.projectFactory = (ProjectFactory) configuration.getClassFor("ProjectFactory").getConstructor().newInstance();
-            this.projectDAO = (DAO<ProjectDAO>) configuration.getClassFor(("ProjectDAO")).getDeclaredConstructor(DALServices.class, ProjectFactory.class).newInstance(dalServices, projectFactory);
+            this.projectDAO = (ProjectDAO) configuration.getClassFor(("ProjectDAO")).getDeclaredConstructor(DALServices.class, ProjectFactory.class).newInstance(dalServices, projectFactory);
             this.projectUCC = (ProjectUCC) configuration.getClassFor(("ProjectUCC")).getDeclaredConstructor(DALServices.class, DAO.class).newInstance(dalServices, projectDAO);
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {

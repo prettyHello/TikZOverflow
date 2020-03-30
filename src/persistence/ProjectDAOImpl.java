@@ -137,6 +137,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             pr.setString(2, project.getProjectName());
             pr.executeUpdate();
         } catch (Exception e) {
+            //TODO this is not MVC, should throw a bizzException and not use javafx in the model
             new Alert(Alert.AlertType.ERROR, "Failed to Delete the project '" + project.getProjectName() + "' in Database").showAndWait();
             e.printStackTrace();
         }
