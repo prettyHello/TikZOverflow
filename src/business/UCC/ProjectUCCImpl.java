@@ -59,8 +59,8 @@ public class ProjectUCCImpl implements ProjectUCC {
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO getProjectDTO(int project_id) {
-        return ((ProjectDAO) projectDAO).getProjectDTO(project_id);
+    public ProjectDTO get(ProjectDTO project) {
+        return ((ProjectDAO) projectDAO).get(project);
     }
 
     /**
@@ -80,7 +80,7 @@ public class ProjectUCCImpl implements ProjectUCC {
                 String now = Utility.getTimeStamp();
                 String projectPath = System.getProperty("user.home") + rootProject +"userid_" +owner.getUserId() + File.separator + projectName;
                 ProjectDTO projectDTO = new ProjectFactoryImpl().createProject(0, owner.getUserId(), projectName, "", projectPath, now, now);
-                ((ProjectDAO) projectDAO).saveNewProject(projectDTO);
+                ((ProjectDAO) projectDAO).create(projectDTO);
 
                 // filesystem
                 Files.createDirectories(Paths.get(projectPath));
@@ -103,7 +103,7 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public void createFromImport(ProjectDTO projectDTO) throws BizzException, IOException {
-        ((ProjectDAO) projectDAO).saveNewProject(projectDTO);
+        ((ProjectDAO) projectDAO).create(projectDTO);
     }
 }
 

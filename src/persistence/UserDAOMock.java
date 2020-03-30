@@ -35,7 +35,7 @@ public class UserDAOMock implements UserDAO {
     }
 
     @Override
-    public UserDTO getUser(UserDTO usrAuth) {
+    public UserDTO get(UserDTO usrAuth) {
         return testWrongPassword();
     }
 

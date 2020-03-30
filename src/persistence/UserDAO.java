@@ -9,5 +9,5 @@ import exceptions.FatalException;
  * Such as find user by email
  */
 public interface UserDAO extends DAO<UserDTO> {
-    UserDTO getUser(UserDTO usrAuth) throws FatalException, BizzException;
+
 }

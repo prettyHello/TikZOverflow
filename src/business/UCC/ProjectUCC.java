@@ -33,10 +33,10 @@ public interface ProjectUCC {
     /**
      * retrieve information for a given project id
      *
-     * @param project_id the id of the project
+     * @param projet the DTO containing the id of the project
      * @return the associated DTO
      */
-    ProjectDTO getProjectDTO(int project_id);
+    ProjectDTO get(ProjectDTO projet);
 
     /**
      * Creates a new project on disk and stores its path in the database

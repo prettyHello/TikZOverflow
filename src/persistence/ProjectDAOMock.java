@@ -24,7 +24,7 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public void saveNewProject(ProjectDTO project) {
+    public void create(ProjectDTO project) {
         for (ProjectDTO dto : projects) {
             if(dto.getProjectPath().equals(project.getProjectPath())){
                 throw new BizzException("Project already exists");
@@ -50,7 +50,8 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public ProjectDTO getProjectDTO(int project_id) {
+    public ProjectDTO get(ProjectDTO p) {
+        int project_id = p.getProjectId();
         for (ProjectDTO proj : projects) {
             if(proj.getProjectId() == project_id){
                 return proj;
@@ -60,7 +61,7 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public void deleteProject(ProjectDTO project) {
+    public void delete(ProjectDTO project) {
         projects.remove(project);
     }
 
@@ -69,23 +70,13 @@ public class ProjectDAOMock implements ProjectDAO {
         return null;
     }
 
-    @Override
-    public void create(ProjectDTO obj) throws FatalException {
-
-    }
 
     @Override
     public void update(ProjectDTO obj) {
 
     }
 
-    @Override
-    public void delete(ProjectDTO obj) {
 
-    }
 
-    @Override
-    public ProjectDTO getUser(ProjectDTO user) {
-        return null;
-    }
+
 }

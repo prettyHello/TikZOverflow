@@ -11,12 +11,6 @@ import java.util.ArrayList;
  */
 public interface ProjectDAO extends DAO<ProjectDTO> {
 
-    /**
-     * Adds a new project to the database
-     *
-     * @param project the project to save
-     */
-    void saveNewProject(ProjectDTO project);
 
     /**
      * Retrieve a project from the database
@@ -34,18 +28,7 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
      */
     ProjectDTO getSelectedProject(int userID, String projectName) throws BizzException;
 
-    /**
-     * Retrieve a project from the database
-     *
-     * @param project_id the id of the project to retrieve
-     * @return the project DTO
-     */
-    ProjectDTO getProjectDTO(int project_id);
 
-    /**
-     * Deletes a project from the database
-     *
-     * @param project the project to delete
-     */
-    void deleteProject(ProjectDTO project);
+
+
 }

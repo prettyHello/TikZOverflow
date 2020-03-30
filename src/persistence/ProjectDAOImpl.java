@@ -38,7 +38,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     /**
      * {@inheritDoc}
      */
-    public void saveNewProject(ProjectDTO project) {
+    public void create(ProjectDTO project) {
         try {
             prstmt = dal.prepareStatement(SQL_INSERT_PROJECT);
             prstmt.setInt(1, project.getProjectOwnerId());
@@ -78,7 +78,8 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO getProjectDTO(int project_id) {
+    public ProjectDTO get(ProjectDTO p) {
+        int project_id = p.getProjectId();
         PreparedStatement pr;
         ResultSet rs;
         try {
@@ -127,7 +128,7 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public void deleteProject(ProjectDTO project) {
+    public void delete(ProjectDTO project) {
         PreparedStatement pr;
 
         try {
@@ -149,12 +150,7 @@ public class ProjectDAOImpl implements ProjectDAO {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void create(ProjectDTO obj) throws FatalException {
-    }
+
 
     /**
      * {@inheritDoc}
@@ -164,21 +160,7 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void delete(ProjectDTO obj) {
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ProjectDTO getUser(ProjectDTO user) {
-        return null;
-    }
 
     private ProjectDTO fillDTO(ResultSet rs) throws SQLException {
         ProjectDTO projectDTO = new ProjectDTO();

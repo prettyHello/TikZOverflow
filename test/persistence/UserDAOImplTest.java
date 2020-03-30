@@ -46,7 +46,7 @@ class UserDAOImplTest {
         // Test1: simple, working insert
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
-        UserDTO result = userDAO.getUser(user);
+        UserDTO result = userDAO.get(user);
 
         assertEquals(user.getFirstName(), result.getFirstName(), "First name does not match");
         assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
@@ -98,7 +98,7 @@ class UserDAOImplTest {
         // Test 1 User exist
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
-        UserDTO result = userDAO.getUser(user);
+        UserDTO result = userDAO.get(user);
         assertEquals(user.getFirstName(), result.getFirstName(), "First name does not match");
         assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
         assertEquals(user.getPassword(), user.getPassword(), "Password does not match");
@@ -114,7 +114,7 @@ class UserDAOImplTest {
         userDAO.create(user);
         assertThrows(BizzException.class, () -> {
             user.setEmail("oops");
-            userDAO.getUser(user);
+            userDAO.get(user);
         });
     }
 
@@ -170,7 +170,7 @@ class UserDAOImplTest {
         assertThrows(BizzException.class, () -> {
             userDAO.create(user);
             userDAO.delete(user);
-            userDAO.getUser(user);
+            userDAO.get(user);
         }, "getUser still return a user after delete was called");
 
 

@@ -100,9 +100,10 @@ public class ViewOptionController extends HBox {
         });
 
         editBtn.setOnAction(event -> {
-            
+            ProjectDTO project= new ProjectDTO();
+            project.setProjectId(project_id);
             UserDTO user = userUcc.getConnectedUser();
-            ProjectDTO activeProject = projectUCC.getProjectDTO(project_id);
+            ProjectDTO activeProject = projectUCC.get(project);
 
             ActiveProject.setActiveProject(activeProject);
             SaveObject loader = new SaveObject();

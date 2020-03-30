@@ -29,7 +29,7 @@ public class UserUCCImpl implements UserUCC {
      */
     public void login(UserDTO user) throws BizzException, FatalException {
         utilities.Utility.checkObject(user);
-        User userDb = (User) userDAO.getUser(user);
+        User userDb = (User) userDAO.get(user);
         /* The salt is incorporated into the hash (encoded in a base64-style format).
          * That's why the salt shouldn't actually be saved */
         if (userDb == null || !BCrypt.checkpw(user.getPassword(), userDb.getPassword())) {
@@ -94,7 +94,7 @@ public class UserUCCImpl implements UserUCC {
     @Override
     public UserDTO getUserInfo(UserDTO user) throws BizzException, FatalException {
         utilities.Utility.checkObject(user);
-        return userDAO.getUser(user);
+        return userDAO.get(user);
     }
 
     /**

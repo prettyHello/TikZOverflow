@@ -31,7 +31,7 @@ public class UserDAOImpl implements UserDAO {
      * {@inheritDoc}
      */
     @Override
-    public UserDTO getUser(UserDTO usrAuth) throws FatalException, BizzException {
+    public UserDTO get(UserDTO usrAuth) throws FatalException, BizzException {
         PreparedStatement pr;
         ResultSet rs;
         UserDTO usr = null;

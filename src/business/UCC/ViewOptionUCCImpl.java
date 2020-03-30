@@ -124,7 +124,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
                 DALServices dal = new DALServicesImpl();
                 ProjectFactory projectFactory = new ProjectFactoryImpl();
                 ProjectDAO dao = new ProjectDAOImpl(dal, projectFactory);
-                ((ProjectDAO) dao).deleteProject(project);
+                ((ProjectDAO) dao).delete(project);
                 Utility.deleteFile(dir);
                 dashboard.delete(project);
             }
@@ -134,7 +134,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
             DALServices dal = new DALServicesImpl();
             ProjectFactory projectFactory = new ProjectFactoryImpl();
             ProjectDAO dao = new ProjectDAOImpl(dal, projectFactory);
-            ((ProjectDAO) dao).deleteProject(project);
+            ((ProjectDAO) dao).delete(project);
             dashboard.delete(project);
         }
     }
