@@ -45,6 +45,19 @@ public class CanvasImpl implements Canvas {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Shape getShapeById(int id) throws IllegalArgumentException {
+        for (Shape shape : this.shapes) {
+            if (shape.getId() == id) {
+                return shape;
+            }
+        }
+        throw new IllegalArgumentException("No shape with this id exists in the canvas");
+    }
+
+    /**
      * Adds a shape to the canvas
      *
      * @param shape the shape to add
@@ -76,12 +89,12 @@ public class CanvasImpl implements Canvas {
     /**
      * Change the fill color of a shape
      *
-     * @param id id of the shape
+     * @param id        id of the shape
      * @param fillColor color to fill whit
      */
-    public void changeShapeFillColor(int id, Color fillColor){
+    public void changeShapeFillColor(int id, Color fillColor) {
         for (Shape shape : shapes) {
-            if( shape.getId() == id){
+            if (shape.getId() == id) {
                 shape.setFill(true);
                 shape.setFillColor(fillColor);
             }
@@ -91,12 +104,12 @@ public class CanvasImpl implements Canvas {
     /**
      * Change the draw color of a shape
      *
-     * @param id id of the shape
+     * @param id        id of the shape
      * @param drawColor color to draw whit
      */
-    public void changeShapeDrawColor(int id, Color drawColor){
+    public void changeShapeDrawColor(int id, Color drawColor) {
         for (Shape shape : shapes) {
-            if( shape.getId() == id){
+            if (shape.getId() == id) {
                 shape.setDraw(true);
                 shape.setDrawColor(drawColor);
             }
@@ -105,9 +118,10 @@ public class CanvasImpl implements Canvas {
 
     /**
      * Get an unique id for a new shape
+     *
      * @return unique id
      */
-    public int getIdForNewShape(){
+    public int getIdForNewShape() {
         this.idCounter = this.idCounter + 1;
         return this.idCounter;
     }
@@ -130,7 +144,7 @@ public class CanvasImpl implements Canvas {
     @Override
     public void rmShapeById(int id) {
         //We need to create a temporary shape for the array to find the one in the list, shape are only compared on their id, nothing else mather for the list.
-        Shape tmpShape = new Square(new Coordinates(0, 0), 0,id);
+        Shape tmpShape = new Square(new Coordinates(0, 0), 0, id);
         this.shapes.remove(tmpShape);
     }
 

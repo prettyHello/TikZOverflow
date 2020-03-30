@@ -27,6 +27,15 @@ public interface Canvas extends Serializable {
     List<Shape> getShapes();
 
     /**
+     * Returns the shape in the canvas with the specified id
+     *
+     * @param id the id of the shape to find
+     * @return the shape
+     * @throws IllegalArgumentException if the canvas does not contain the shape
+     */
+    Shape getShapeById(int id) throws IllegalArgumentException;
+
+    /**
      * Adds a shape to the canvas
      *
      * @param shape the shape to add
@@ -43,18 +52,18 @@ public interface Canvas extends Serializable {
     /**
      * Change the draw color of a shape
      *
-     * @param id id of the shape
+     * @param id        id of the shape
      * @param drawColor color to draw whit
      */
-    public void changeShapeDrawColor(int id, Color drawColor);
+    void changeShapeDrawColor(int id, Color drawColor);
 
     /**
      * Change the fill color of a shape
      *
-     * @param id id of the shape
+     * @param id        id of the shape
      * @param fillColor color to fill whit
      */
-    public void changeShapeFillColor(int id, Color fillColor);
+    void changeShapeFillColor(int id, Color fillColor);
 
     /**
      * Get the id for the next shape
