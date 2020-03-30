@@ -21,7 +21,7 @@ class DALServicesImplTest {
     @Test
     void deleteInexistantDB(){
         assertThrows(FatalException.class, () -> {
-            dal.deleteDB("doesn't exist");
+            dal.deleteDB("noDB");
         });
     }
 

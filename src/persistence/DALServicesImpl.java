@@ -122,12 +122,12 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     public void deleteDB(String name) throws FatalException {
         this.closeConnection();
         try {
-            File f = new File("./" + this.DBName + ".db");
+            File f = new File("./" + name + ".db");
             if (!f.exists() || !f.delete()) {
-                throw new FatalException("Database ./"+this.DBName + " deletion impossible: \n\t");
+                throw new FatalException("Database ./"+name + " deletion impossible: \n\t");
             }
         } catch (Exception e) {
-            throw new FatalException("Database ./"+this.DBName + " deletion impossible: \n\t: "+e.getMessage());
+            throw new FatalException("Database ./"+name + " deletion impossible: \n\t: "+e.getMessage());
         }
     }
 
