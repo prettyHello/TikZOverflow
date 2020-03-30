@@ -68,6 +68,10 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public void createNewProject(String projectName) throws BizzException, FatalException {
+        if(projectName == null || projectName.isEmpty()){
+            throw new IllegalArgumentException("project name can't be null nor empty");
+        }
+
         try {
             dal.startTransaction();
             try {

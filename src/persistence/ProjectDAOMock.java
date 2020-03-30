@@ -2,22 +2,34 @@ package persistence;
 
 import business.DTO.ProjectDTO;
 import business.UCC.ProjectUCC;
+import business.factories.ProjectFactory;
 import exceptions.BizzException;
 import exceptions.FatalException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 
 public class ProjectDAOMock implements ProjectDAO {
 
     private ArrayList<ProjectDTO> projects;
+    private DALBackEndServices dal;
+    private ProjectFactory projectFactory;
 
-    public ProjectDAOMock(){
+    public ProjectDAOMock(DALServices dalServices, ProjectFactory projectFactory) {
+        //this.dal = (DALBackEndServices) dalServices;
+        this.projectFactory = projectFactory;
         projects = new ArrayList<>();
+
     }
 
     @Override
     public void saveNewProject(ProjectDTO project) {
+        for (ProjectDTO dto : projects) {
+            if(dto.getProjectPath().equals(project.getProjectPath())){
+                throw new BizzException("Project already exists");
+            }
+        }
         projects.add(project);
     }
 
