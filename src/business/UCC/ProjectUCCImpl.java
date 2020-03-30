@@ -6,6 +6,7 @@ import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 import business.factories.ProjectFactoryImpl;
 import exceptions.BizzException;
+import exceptions.FatalException;
 import persistence.DALServices;
 import persistence.DAO;
 import persistence.ProjectDAO;
@@ -66,7 +67,7 @@ public class ProjectUCCImpl implements ProjectUCC {
      * {@inheritDoc}
      */
     @Override
-    public void createNewProject(String projectName) throws BizzException {
+    public void createNewProject(String projectName) throws BizzException, FatalException {
         try {
             dal.startTransaction();
             try {

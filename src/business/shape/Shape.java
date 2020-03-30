@@ -45,11 +45,11 @@ public abstract class Shape implements Serializable {
     public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor, int id) throws FatalException {
         this.draw = draw;
         this.fill = fill;
-        if (draw) {
+        if (fill) {
             Utility.checkObject(fillColor);
             this.fillColor = fillColor;
         }
-        if (fill) {
+        if (draw) {
             Utility.checkObject(drawColor);
             this.drawColor = drawColor;
         }
