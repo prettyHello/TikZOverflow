@@ -62,7 +62,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     @Override
     public void rollback() throws FatalException {
         if (this.connection == null)
-            return;
+            throw new FatalException("No db connection");
         try {
             this.connection.rollback();
             this.connection.setAutoCommit(true);
@@ -124,7 +124,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
         this.closeConnection();
         try {
             File f = new File("./" + this.DBName + ".db");
-            if (!f.delete()) {
+            if (!f.exists() || !f.delete()) {
                 throw new FatalException("Database ./"+this.DBName + " deletion impossible: \n\t");
             }
         } catch (Exception e) {
