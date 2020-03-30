@@ -6,9 +6,6 @@ import java.util.Iterator;
 
 public class Arrow extends Path {
 
-    //TODO CHANGE AFTER JOLAN FIXED ARROW IN PATH
-    //
-    //TODO actually read the damn methods, ur not blind
     public Arrow(Coordinates origin, Coordinates end, int id) throws FatalException {
         super(origin, end, id, false, true);
     }

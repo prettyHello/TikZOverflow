@@ -7,15 +7,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * TODO, implementation is like shape for now, but when looking at tikz code, we can see that while using the draw command, the color definition is probably different for path, might need to check that when going from tikz to canvas.
+ * /!\ Only used in the package, use Arrow or line for the displaying a path. (subject to change later)
  * Only support straight path for now
  * eg : \draw (-1.5,0) -- (1.5,0) -- (0,-1.5) -- (0,1.5);
- * <p>
  * A path can have arrow on both sides;
  * eg : \draw [<->]
  * for now, we only support one type of arrow.
  */
-public class Path extends Shape {
+ class Path extends Shape {
     private ArrayList<Coordinates> pathPoints = null;
     private boolean arrowStart = false;
     private boolean arrowEnd = false;
@@ -33,7 +32,7 @@ public class Path extends Shape {
     }
 
     /**
-     * TODO benja, add the damn doc when you do something.
+     * Personalised path with only 2 points, with arrows and specified color.
      * @param origin
      * @param end
      * @param id
@@ -53,7 +52,7 @@ public class Path extends Shape {
 
 
     /**
-     * Personalised path, with arrow and specified color.
+     * Personalised path with multiple points, with arrows and specified color.
      *
      * @param pathPoints
      * @param arrowStart
@@ -62,7 +61,7 @@ public class Path extends Shape {
      * @throws FatalException
      */
     public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
-        super(true, false, Color.WHITE, drawColor, id);
+        super(true, false, drawColor, Color.WHITE, id);
         Utility.checkObject(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -72,8 +71,7 @@ public class Path extends Shape {
     }
 
     /**
-     * TODO fix arrow
-     *
+     * TODO, not in usage right now, status: it's complicated
      * @return The Tikz code for these coordinates, intended to use in other print function of shapes, like rectangle.
      * /!\ Print always add an exta " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
