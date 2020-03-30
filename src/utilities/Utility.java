@@ -1,11 +1,11 @@
 package utilities;
 
-import exceptions.BizzException;
-import exceptions.FatalException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import utilities.exceptions.BizzException;
+import utilities.exceptions.FatalException;
 
 import java.io.*;
 import java.nio.file.DirectoryNotEmptyException;

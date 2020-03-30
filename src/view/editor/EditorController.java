@@ -1,13 +1,14 @@
 package view.editor;
 
-import business.Canvas.ActiveCanvas;
-import business.Canvas.ActiveProject;
-import business.Canvas.Canvas;
-import business.DTO.ProjectDTO;
-import business.DTO.UserDTO;
-import business.UCC.UserUCC;
-import business.shape.Coordinates;
-import business.shape.Square;
+import config.ConfigurationSingleton;
+import controller.Canvas.ActiveCanvas;
+import controller.Canvas.ActiveProject;
+import controller.Canvas.Canvas;
+import controller.DTO.ProjectDTO;
+import controller.DTO.UserDTO;
+import controller.UCC.UserUCC;
+import controller.shape.Coordinates;
+import controller.shape.Square;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -20,8 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import persistence.SaveObject;
-import utilities.ConfigurationSingleton;
+import model.SaveObject;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -134,17 +134,17 @@ public class EditorController {
 
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
-        for (business.shape.Color colour : business.shape.Color.values()) {
+        for (controller.shape.Color colour : controller.shape.Color.values()) {
             fillColour.getItems().add(colour);
             strokeColour.getItems().add(colour);
             contextMenuFillColorPicker.getItems().add(colour);
             contextMenuDrawColorPicker.getItems().add(colour);
         }
         // Set start value dropdown to black
-        fillColour.setValue(business.shape.Color.BLACK);
-        strokeColour.setValue(business.shape.Color.BLACK);
-        contextMenuFillColorPicker.setValue(business.shape.Color.BLACK);
-        contextMenuDrawColorPicker.setValue(business.shape.Color.BLACK);
+        fillColour.setValue(controller.shape.Color.BLACK);
+        strokeColour.setValue(controller.shape.Color.BLACK);
+        contextMenuFillColorPicker.setValue(controller.shape.Color.BLACK);
+        contextMenuDrawColorPicker.setValue(controller.shape.Color.BLACK);
 
         MenuItem delete = new MenuItem("delete");
         delete.setOnAction(t -> rightClickDeleteShape());
@@ -261,7 +261,7 @@ public class EditorController {
      */
     private void handleDrawCall() {
         Shape shape = null;
-        business.shape.Shape addToController = null;
+        controller.shape.Shape addToController = null;
 
         switch (shapeToDraw) {
             case TRIANGLE:
@@ -277,7 +277,7 @@ public class EditorController {
                 waitingForMoreCoordinate = true;
                 break;
             case TRIANGLE_POINT3:
-                addToController = new business.shape.Triangle(new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                addToController = new controller.shape.Triangle(new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
@@ -287,7 +287,7 @@ public class EditorController {
                 circle.setCenterX(selectedX);
                 circle.setCenterY(selectedY);
                 circle.setRadius(radius);
-                addToController = new business.shape.Circle(new Coordinates(selectedX, selectedY), radius, canvas.getIdForNewShape());
+                addToController = new controller.shape.Circle(new Coordinates(selectedX, selectedY), radius, canvas.getIdForNewShape());
                 shape = circle;
                 break;
             case ARROW:
@@ -297,7 +297,7 @@ public class EditorController {
                 waitingForMoreCoordinate = true;
                 break;
             case ARROW_POINT2:
-                addToController = new business.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                addToController = new controller.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
                 shape = constructArrow();
                 waitingForMoreCoordinate = false;
                 break;
@@ -308,7 +308,7 @@ public class EditorController {
                 waitingForMoreCoordinate = true;
                 break;
             case LINE_POINT2:
-                addToController = new business.shape.Line(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                addToController = new controller.shape.Line(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
                 shape = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
                 shape.setStroke(Color.valueOf(fillColour.getValue().toString()));
                 waitingForMoreCoordinate = false;
@@ -340,7 +340,7 @@ public class EditorController {
      * @param addToController
      * @param shape           JavaFX shape
      */
-    private void notifyController(business.shape.Shape addToController, Shape shape) {
+    private void notifyController(controller.shape.Shape addToController, Shape shape) {
         Color fillColor = (Color) shape.getFill();
         Color drawColor = (Color) shape.getStroke();
         shape.setId(Integer.toString(addToController.getId()));

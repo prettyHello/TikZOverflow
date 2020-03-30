@@ -17,25 +17,25 @@ public class ColorUtils {
      * Initialize the color list that we have.
      */
     static  {
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.RED, 0xFF, 0x00, 0x00));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.GREEN, 0x00, 0x80, 0x00));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.BLUE, 0x00, 0x00, 0xFF));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.CYAN, 0x00, 0xFF, 0xFF));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.MAGENTA, 0xFF, 0x00, 0xFF));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.YELLOW, 0xFF, 0xFF, 0x00));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.BLACK, 0x00, 0x00, 0x00));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.GRAY, 0x80, 0x80, 0x80));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.DARKGRAY, 0xA9, 0xA9, 0xA9));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.LIGHTGRAY, 0xD3, 0xD3, 0xD3));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.BROWN, 0xA5, 0x2A, 0x2A));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.LIME, 0x00, 0xFF, 0x00));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.OLIVE, 0x80, 0x80, 0x00));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.ORANGE, 0xFF, 0xA5, 0x00));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.PINK, 0xFF, 0xC0, 0xCB));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.PURPLE, 0x80, 0x00, 0x80));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.TEAL, 0x00, 0x80, 0x80));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.VIOLET, 0xEE, 0x82, 0xEE));
-        colorList.add(new ColorUtils.ColorName(business.shape.Color.WHITE, 0xFF, 0xFF, 0xFF));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.RED, 0xFF, 0x00, 0x00));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.GREEN, 0x00, 0x80, 0x00));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.BLUE, 0x00, 0x00, 0xFF));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.CYAN, 0x00, 0xFF, 0xFF));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.MAGENTA, 0xFF, 0x00, 0xFF));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.YELLOW, 0xFF, 0xFF, 0x00));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.BLACK, 0x00, 0x00, 0x00));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.GRAY, 0x80, 0x80, 0x80));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.DARKGRAY, 0xA9, 0xA9, 0xA9));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.LIGHTGRAY, 0xD3, 0xD3, 0xD3));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.BROWN, 0xA5, 0x2A, 0x2A));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.LIME, 0x00, 0xFF, 0x00));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.OLIVE, 0x80, 0x80, 0x00));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.ORANGE, 0xFF, 0xA5, 0x00));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.PINK, 0xFF, 0xC0, 0xCB));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.PURPLE, 0x80, 0x00, 0x80));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.TEAL, 0x00, 0x80, 0x80));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.VIOLET, 0xEE, 0x82, 0xEE));
+        colorList.add(new ColorUtils.ColorName(controller.shape.Color.WHITE, 0xFF, 0xFF, 0xFF));
     }
 
     /**
@@ -46,10 +46,10 @@ public class ColorUtils {
      * @param blue
      * @return
      */
-    public static business.shape.Color getColorNameFromRgb(double red, double green, double blue) {
-        int r = (int) Math.floor(red*255 + 0.5d);
-        int g = (int) Math.floor(green*255 + 0.5d);
-        int b = (int) Math.floor(blue*255 + 0.5d);
+    public static controller.shape.Color getColorNameFromRgb(double red, double green, double blue) {
+        int r = (int) Math.floor(red * 255 + 0.5d);
+        int g = (int) Math.floor(green * 255 + 0.5d);
+        int b = (int) Math.floor(blue * 255 + 0.5d);
 
         ColorName closestMatch = null;
         int minMSE = Integer.MAX_VALUE;
@@ -70,7 +70,7 @@ public class ColorUtils {
      * @param hexColor
      * @return
      */
-    public business.shape.Color getColorNameFromHex(int hexColor) {
+    public controller.shape.Color getColorNameFromHex(int hexColor) {
         int r = (hexColor & 0xFF0000) >> 16;
         int g = (hexColor & 0xFF00) >> 8;
         int b = (hexColor & 0xFF);
@@ -82,7 +82,7 @@ public class ColorUtils {
                 + Integer.toHexString(c.getRGB()).substring(2));
     }
 
-    public business.shape.Color getColorNameFromColor(Color color) {
+    public controller.shape.Color getColorNameFromColor(Color color) {
         return getColorNameFromRgb(color.getRed(), color.getGreen(),
                 color.getBlue());
     }
@@ -94,9 +94,9 @@ public class ColorUtils {
      */
     public static class ColorName {
         public int r, g, b;
-        public business.shape.Color name;
+        public controller.shape.Color name;
 
-        public ColorName(business.shape.Color name, int r, int g, int b) {
+        public ColorName(controller.shape.Color name, int r, int g, int b) {
             this.r = r;
             this.g = g;
             this.b = b;
@@ -120,7 +120,7 @@ public class ColorUtils {
             return b;
         }
 
-        public business.shape.Color getName() {
+        public controller.shape.Color getName() {
             return name;
         }
     }

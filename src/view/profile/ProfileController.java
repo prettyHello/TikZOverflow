@@ -1,17 +1,17 @@
 package view.profile;
 
-import business.DTO.UserDTO;
-import business.UCC.UserUCC;
-import business.factories.UserFactory;
-import exceptions.BizzException;
-import exceptions.FatalException;
+import config.ConfigurationSingleton;
+import controller.DTO.UserDTO;
+import controller.UCC.UserUCC;
+import controller.factories.UserFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import utilities.ConfigurationSingleton;
 import utilities.Utility;
+import utilities.exceptions.BizzException;
+import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 

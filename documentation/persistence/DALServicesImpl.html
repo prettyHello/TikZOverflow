@@ -48,11 +48,13 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../persistence/DALServices.html" title="interface in persistence"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../persistence/DAO.html" title="interface in persistence"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+    <li><a href="../model/DALServices.html" title="interface in model"><span class="typeNameLink">Prev&nbsp;Class</span></a>
+    </li>
+    <li><a href="../model/DAO.html" title="interface in model"><span class="typeNameLink">Next&nbsp;Class</span></a>
+    </li>
 </ul>
 <ul class="navList">
-<li><a href="../index.html?persistence/DALServicesImpl.html" target="_top">Frames</a></li>
+    <li><a href="../index.html?model/DALServicesImpl.html" target="_top">Frames</a></li>
 <li><a href="DALServicesImpl.html" target="_top">No&nbsp;Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
@@ -91,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ========= END OF TOP NAVBAR ========= -->
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">persistence</div>
+    <div class="subTitle">model</div>
 <h2 title="Class DALServicesImpl" class="title">Class DALServicesImpl</h2>
 </div>
 <div class="contentContainer">
@@ -99,22 +101,24 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>persistence.DALServicesImpl</li>
+    <li>model.DALServicesImpl</li>
 </ul>
 </li>
 </ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Implemented Interfaces:</dt>
-<dd><a href="../persistence/DALBackEndServices.html" title="interface in persistence">DALBackEndServices</a>, <a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a></dd>
-</dl>
+    <dl>
+        <dt>All Implemented Interfaces:</dt>
+        <dd><a href="../model/DALBackEndServices.html" title="interface in model">DALBackEndServices</a>, <a
+                href="../model/DALServices.html" title="interface in model">DALServices</a></dd>
+    </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">DALServicesImpl</span>
+    <pre>public class <span class="typeNameLabel">DALServicesImpl</span>
 extends java.lang.Object
-implements <a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a>, <a href="../persistence/DALBackEndServices.html" title="interface in persistence">DALBackEndServices</a></pre>
+implements <a href="../model/DALServices.html" title="interface in model">DALServices</a>, <a
+                href="../model/DALBackEndServices.html" title="interface in model">DALBackEndServices</a></pre>
 <div class="block">This implementation of DALServices and DALBackEndServices is meant to be used in the production environment</div>
 </li>
 </ul>
@@ -133,9 +137,10 @@ implements <a href="../persistence/DALServices.html" title="interface in persist
 <tr>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../persistence/DALServicesImpl.html#DALServicesImpl--">DALServicesImpl</a></span>()</code>&nbsp;</td>
-</tr>
+    <tr class="altColor">
+        <td class="colOne"><code><span class="memberNameLink"><a href="../model/DALServicesImpl.html#DALServicesImpl--">DALServicesImpl</a></span>()</code>&nbsp;
+        </td>
+    </tr>
 </table>
 </li>
 </ul>
@@ -151,47 +156,55 @@ implements <a href="../persistence/DALServices.html" title="interface in persist
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
-<tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/DALServicesImpl.html#commit--">commit</a></span>()</code>
-<div class="block">Commits all operations performed on the database and closes the connection.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/DALServicesImpl.html#createTables--">createTables</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/DALServicesImpl.html#createTables-java.lang.String-">createTables</a></span>(java.lang.String&nbsp;name)</code>
-<div class="block">This method creates all the necessary tables if they don't exist</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/DALServicesImpl.html#deleteDB-java.lang.String-">deleteDB</a></span>(java.lang.String&nbsp;name)</code>
-<div class="block">This method delete the database
- Usefull for tests</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>java.sql.PreparedStatement</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/DALServicesImpl.html#prepareStatement-java.lang.String-">prepareStatement</a></span>(java.lang.String&nbsp;query)</code>
-<div class="block">Uses the connection to the database to create a prepared statement.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/DALServicesImpl.html#rollback--">rollback</a></span>()</code>
-<div class="block">Rolls back all operations performed on the database and closes the connection.</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/DALServicesImpl.html#startTransaction--">startTransaction</a></span>()</code>
-<div class="block">Opens a connection and starts a transaction.</div>
-</td>
-</tr>
+    <tr id="i0" class="altColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/DALServicesImpl.html#commit--">commit</a></span>()</code>
+            <div class="block">Commits all operations performed on the database and closes the connection.</div>
+        </td>
+    </tr>
+    <tr id="i1" class="rowColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a href="../model/DALServicesImpl.html#createTables--">createTables</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i2" class="altColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/DALServicesImpl.html#createTables-java.lang.String-">createTables</a></span>(java.lang.String&nbsp;name)</code>
+            <div class="block">This method creates all the necessary tables if they don't exist</div>
+        </td>
+    </tr>
+    <tr id="i3" class="rowColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/DALServicesImpl.html#deleteDB-java.lang.String-">deleteDB</a></span>(java.lang.String&nbsp;name)</code>
+            <div class="block">This method delete the database
+                Usefull for tests
+            </div>
+        </td>
+    </tr>
+    <tr id="i4" class="altColor">
+        <td class="colFirst"><code>java.sql.PreparedStatement</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/DALServicesImpl.html#prepareStatement-java.lang.String-">prepareStatement</a></span>(java.lang.String&nbsp;query)</code>
+            <div class="block">Uses the connection to the database to create a prepared statement.</div>
+        </td>
+    </tr>
+    <tr id="i5" class="rowColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/DALServicesImpl.html#rollback--">rollback</a></span>()</code>
+            <div class="block">Rolls back all operations performed on the database and closes the connection.</div>
+        </td>
+    </tr>
+    <tr id="i6" class="altColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/DALServicesImpl.html#startTransaction--">startTransaction</a></span>()</code>
+            <div class="block">Opens a connection and starts a transaction.</div>
+        </td>
+    </tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -235,87 +248,105 @@ implements <a href="../persistence/DALServices.html" title="interface in persist
 <!--   -->
 </a>
 <ul class="blockList">
-<li class="blockList">
-<h4>prepareStatement</h4>
-<pre>public&nbsp;java.sql.PreparedStatement&nbsp;prepareStatement(java.lang.String&nbsp;query)
+    <li class="blockList">
+        <h4>prepareStatement</h4>
+        <pre>public&nbsp;java.sql.PreparedStatement&nbsp;prepareStatement(java.lang.String&nbsp;query)
                                             throws java.sql.SQLException</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DALBackEndServices.html#prepareStatement-java.lang.String-">DALBackEndServices</a></code></span></div>
-<div class="block">Uses the connection to the database to create a prepared statement. The returned object is
- expected to have its parameters `(?)` filled through setObject() calls if needed.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DALBackEndServices.html#prepareStatement-java.lang.String-">prepareStatement</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DALBackEndServices.html" title="interface in persistence">DALBackEndServices</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>query</code> - the query as a string, potentially with `?` denoting placeholders for parameters.</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the PreparedStatement object.</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.sql.SQLException</code> - if a preparedStatement can't be retrieved from the Connection object.</dd>
-</dl>
+        <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                href="../model/DALBackEndServices.html#prepareStatement-java.lang.String-">DALBackEndServices</a></code></span>
+        </div>
+        <div class="block">Uses the connection to the database to create a prepared statement. The returned object is
+            expected to have its parameters `(?)` filled through setObject() calls if needed.
+        </div>
+        <dl>
+            <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+            <dd><code><a href="../model/DALBackEndServices.html#prepareStatement-java.lang.String-">prepareStatement</a></code>&nbsp;in
+                interface&nbsp;<code><a href="../model/DALBackEndServices.html"
+                                        title="interface in model">DALBackEndServices</a></code></dd>
+            <dt><span class="paramLabel">Parameters:</span></dt>
+            <dd><code>query</code> - the query as a string, potentially with `?` denoting placeholders for parameters.
+            </dd>
+            <dt><span class="returnLabel">Returns:</span></dt>
+            <dd>the PreparedStatement object.</dd>
+            <dt><span class="throwsLabel">Throws:</span></dt>
+            <dd><code>java.sql.SQLException</code> - if a preparedStatement can't be retrieved from the Connection
+                object.
+            </dd>
+        </dl>
 </li>
 </ul>
 <a name="startTransaction--">
 <!--   -->
 </a>
 <ul class="blockList">
-<li class="blockList">
-<h4>startTransaction</h4>
-<pre>public&nbsp;void&nbsp;startTransaction()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DALServices.html#startTransaction--">DALServices</a></code></span></div>
-<div class="block">Opens a connection and starts a transaction.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DALServices.html#startTransaction--">startTransaction</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a></code></dd>
-</dl>
-</li>
+    <li class="blockList">
+        <h4>startTransaction</h4>
+        <pre>public&nbsp;void&nbsp;startTransaction()</pre>
+        <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                href="../model/DALServices.html#startTransaction--">DALServices</a></code></span></div>
+        <div class="block">Opens a connection and starts a transaction.</div>
+        <dl>
+            <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+            <dd><code><a href="../model/DALServices.html#startTransaction--">startTransaction</a></code>&nbsp;in
+                interface&nbsp;<code><a
+                        href="../model/DALServices.html" title="interface in model">DALServices</a></code></dd>
+        </dl>
+    </li>
 </ul>
 <a name="commit--">
 <!--   -->
 </a>
 <ul class="blockList">
-<li class="blockList">
-<h4>commit</h4>
-<pre>public&nbsp;void&nbsp;commit()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DALServices.html#commit--">DALServices</a></code></span></div>
-<div class="block">Commits all operations performed on the database and closes the connection.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DALServices.html#commit--">commit</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a></code></dd>
-</dl>
-</li>
+    <li class="blockList">
+        <h4>commit</h4>
+        <pre>public&nbsp;void&nbsp;commit()</pre>
+        <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                href="../model/DALServices.html#commit--">DALServices</a></code></span></div>
+        <div class="block">Commits all operations performed on the database and closes the connection.</div>
+        <dl>
+            <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+            <dd><code><a href="../model/DALServices.html#commit--">commit</a></code>&nbsp;in interface&nbsp;<code><a
+                    href="../model/DALServices.html" title="interface in model">DALServices</a></code></dd>
+        </dl>
+    </li>
 </ul>
 <a name="rollback--">
 <!--   -->
 </a>
 <ul class="blockList">
-<li class="blockList">
-<h4>rollback</h4>
-<pre>public&nbsp;void&nbsp;rollback()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DALServices.html#rollback--">DALServices</a></code></span></div>
-<div class="block">Rolls back all operations performed on the database and closes the connection.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DALServices.html#rollback--">rollback</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a></code></dd>
-</dl>
-</li>
+    <li class="blockList">
+        <h4>rollback</h4>
+        <pre>public&nbsp;void&nbsp;rollback()</pre>
+        <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                href="../model/DALServices.html#rollback--">DALServices</a></code></span></div>
+        <div class="block">Rolls back all operations performed on the database and closes the connection.</div>
+        <dl>
+            <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+            <dd><code><a href="../model/DALServices.html#rollback--">rollback</a></code>&nbsp;in interface&nbsp;<code><a
+                    href="../model/DALServices.html" title="interface in model">DALServices</a></code></dd>
+        </dl>
+    </li>
 </ul>
 <a name="createTables-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
-<li class="blockList">
-<h4>createTables</h4>
-<pre>public&nbsp;void&nbsp;createTables(java.lang.String&nbsp;name)
+    <li class="blockList">
+        <h4>createTables</h4>
+        <pre>public&nbsp;void&nbsp;createTables(java.lang.String&nbsp;name)
                   throws java.io.IOException</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DALServices.html#createTables-java.lang.String-">DALServices</a></code></span></div>
-<div class="block">This method creates all the necessary tables if they don't exist</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DALServices.html#createTables-java.lang.String-">createTables</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a></code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code></dd>
-</dl>
-</li>
+        <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                href="../model/DALServices.html#createTables-java.lang.String-">DALServices</a></code></span></div>
+        <div class="block">This method creates all the necessary tables if they don't exist</div>
+        <dl>
+            <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+            <dd><code><a href="../model/DALServices.html#createTables-java.lang.String-">createTables</a></code>&nbsp;in
+                interface&nbsp;<code><a href="../model/DALServices.html"
+                                        title="interface in model">DALServices</a></code></dd>
+            <dt><span class="throwsLabel">Throws:</span></dt>
+            <dd><code>java.io.IOException</code></dd>
+        </dl>
+    </li>
 </ul>
 <a name="createTables--">
 <!--   -->
@@ -325,29 +356,35 @@ implements <a href="../persistence/DALServices.html" title="interface in persist
 <h4>createTables</h4>
 <pre>public&nbsp;void&nbsp;createTables()
                   throws java.io.IOException</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DALServices.html#createTables--">createTables</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a></code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../model/DALServices.html#createTables--">createTables</a></code>&nbsp;in
+            interface&nbsp;<code><a
+                    href="../model/DALServices.html" title="interface in model">DALServices</a></code></dd>
+        <dt><span class="throwsLabel">Throws:</span></dt>
+        <dd><code>java.io.IOException</code></dd>
+    </dl>
 </li>
 </ul>
 <a name="deleteDB-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
-<li class="blockList">
-<h4>deleteDB</h4>
-<pre>public&nbsp;void&nbsp;deleteDB(java.lang.String&nbsp;name)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DALServices.html#deleteDB-java.lang.String-">DALServices</a></code></span></div>
-<div class="block">This method delete the database
- Usefull for tests</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DALServices.html#deleteDB-java.lang.String-">deleteDB</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a></code></dd>
-</dl>
-</li>
+    <li class="blockList">
+        <h4>deleteDB</h4>
+        <pre>public&nbsp;void&nbsp;deleteDB(java.lang.String&nbsp;name)</pre>
+        <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                href="../model/DALServices.html#deleteDB-java.lang.String-">DALServices</a></code></span></div>
+        <div class="block">This method delete the database
+            Usefull for tests
+        </div>
+        <dl>
+            <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+            <dd><code><a href="../model/DALServices.html#deleteDB-java.lang.String-">deleteDB</a></code>&nbsp;in
+                interface&nbsp;<code><a
+                        href="../model/DALServices.html" title="interface in model">DALServices</a></code></dd>
+        </dl>
+    </li>
 </ul>
 </li>
 </ul>
@@ -375,19 +412,21 @@ implements <a href="../persistence/DALServices.html" title="interface in persist
 </ul>
 </div>
 <div class="subNav">
-<ul class="navList">
-<li><a href="../persistence/DALServices.html" title="interface in persistence"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../persistence/DAO.html" title="interface in persistence"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
-</ul>
-<ul class="navList">
-<li><a href="../index.html?persistence/DALServicesImpl.html" target="_top">Frames</a></li>
-<li><a href="DALServicesImpl.html" target="_top">No&nbsp;Frames</a></li>
-</ul>
-<ul class="navList" id="allclasses_navbar_bottom">
-<li><a href="../allclasses-noframe.html">All&nbsp;Classes</a></li>
-</ul>
-<div>
-<script type="text/javascript"><!--
+    <ul class="navList">
+        <li><a href="../model/DALServices.html" title="interface in model"><span
+                class="typeNameLink">Prev&nbsp;Class</span></a></li>
+        <li><a href="../model/DAO.html" title="interface in model"><span class="typeNameLink">Next&nbsp;Class</span></a>
+        </li>
+    </ul>
+    <ul class="navList">
+        <li><a href="../index.html?model/DALServicesImpl.html" target="_top">Frames</a></li>
+        <li><a href="DALServicesImpl.html" target="_top">No&nbsp;Frames</a></li>
+    </ul>
+    <ul class="navList" id="allclasses_navbar_bottom">
+        <li><a href="../allclasses-noframe.html">All&nbsp;Classes</a></li>
+    </ul>
+    <div>
+        <script type="text/javascript"><!--
   allClassesLink = document.getElementById("allclasses_navbar_bottom");
   if(window==top) {
     allClassesLink.style.display = "block";

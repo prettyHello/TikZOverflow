@@ -72,125 +72,198 @@
 <h1 class="title">Hierarchy For All Packages</h1>
 <span class="packageHierarchyLabel">Package Hierarchies:</span>
 <ul class="horizontal">
-<li><a href="business/package-tree.html">business</a>, </li>
-<li><a href="business/DTO/package-tree.html">business.DTO</a>, </li>
-<li><a href="business/factories/package-tree.html">business.factories</a>, </li>
-<li><a href="business/UCC/package-tree.html">business.UCC</a>, </li>
-<li><a href="business/view/package-tree.html">business.view</a>, </li>
-<li><a href="config/package-tree.html">config</a>, </li>
-<li><a href="exceptions/package-tree.html">exceptions</a>, </li>
-<li><a href="persistence/package-tree.html">persistence</a>, </li>
-<li><a href="utilities/package-tree.html">utilities</a>, </li>
-<li><a href="view/package-tree.html">view</a>, </li>
-<li><a href="view/dashboard/package-tree.html">view.dashboard</a>, </li>
-<li><a href="view/login/package-tree.html">view.login</a>, </li>
-<li><a href="view/profile/package-tree.html">view.profile</a>, </li>
-<li><a href="view/registration/package-tree.html">view.registration</a></li>
+    <li><a href="controller/package-tree.html">controller</a>,</li>
+    <li><a href="controller/DTO/package-tree.html">controller.DTO</a>,</li>
+    <li><a href="controller/factories/package-tree.html">controller.factories</a>,</li>
+    <li><a href="controller/UCC/package-tree.html">controller.UCC</a>,</li>
+    <li><a href="controller/view/package-tree.html">controller.view</a>,</li>
+    <li><a href="config/package-tree.html">config</a>,</li>
+    <li><a href="utilities.exceptions/package-tree.html">utilities.exceptions</a>,</li>
+    <li><a href="model/package-tree.html">model</a>,</li>
+    <li><a href="utilities/package-tree.html">utilities</a>,</li>
+    <li><a href="view/package-tree.html">view</a>,</li>
+    <li><a href="view/dashboard/package-tree.html">view.dashboard</a>,</li>
+    <li><a href="view/login/package-tree.html">view.login</a>,</li>
+    <li><a href="view/profile/package-tree.html">view.profile</a>,</li>
+    <li><a href="view/registration/package-tree.html">view.registration</a></li>
 </ul>
 </div>
 <div class="contentContainer">
 <h2 title="Class Hierarchy">Class Hierarchy</h2>
 <ul>
 <li type="circle">java.lang.Object
-<ul>
-<li type="circle">utilities.<a href="utilities/AbstractConfigurationSingleton.html" title="class in utilities"><span class="typeNameLink">AbstractConfigurationSingleton</span></a>
-<ul>
-<li type="circle">utilities.<a href="utilities/BusinessConfigurationSingleton.html" title="class in utilities"><span class="typeNameLink">BusinessConfigurationSingleton</span></a></li>
-<li type="circle">utilities.<a href="utilities/DAOConfigurationSingleton.html" title="class in utilities"><span class="typeNameLink">DAOConfigurationSingleton</span></a></li>
-</ul>
+    <ul>
+        <li type="circle">utilities.<a href="utilities/AbstractConfigurationSingleton.html"
+                                       title="class in utilities"><span class="typeNameLink">AbstractConfigurationSingleton</span></a>
+            <ul>
+                <li type="circle">utilities.<a href="utilities/BusinessConfigurationSingleton.html"
+                                               title="class in utilities"><span
+                        class="typeNameLink">BusinessConfigurationSingleton</span></a></li>
+                <li type="circle">utilities.<a href="utilities/DAOConfigurationSingleton.html"
+                                               title="class in utilities"><span
+                        class="typeNameLink">DAOConfigurationSingleton</span></a></li>
+            </ul>
+        </li>
+        <li type="circle">javafx.application.Application
+            <ul>
+                <li type="circle"><a href="Main.html" title="class in &lt;Unnamed&gt;"><span
+                        class="typeNameLink">Main</span></a></li>
+            </ul>
+        </li>
+        <li type="circle">config.<a href="config/Configuration.html" title="class in config"><span class="typeNameLink">Configuration</span></a>
+        </li>
+        <li type="circle">controller.UCC.<a href="controller/UCC/ConnectedUser.html"
+                                            title="class in controller.UCC"><span
+                class="typeNameLink">ConnectedUser</span></a></li>
+        <li type="circle">model.<a href="model/DALServicesImpl.html" title="class in model"><span class="typeNameLink">DALServicesImpl</span></a>
+            (implements model.<a href="model/DALBackEndServices.html" title="interface in model">DALBackEndServices</a>,
+            model.<a href="model/DALServices.html" title="interface in model">DALServices</a>)
+        </li>
+        <li type="circle">view.dashboard.<a href="view/dashboard/DashboardController.html"
+                                            title="class in view.dashboard"><span
+                class="typeNameLink">DashboardController</span></a></li>
+        <li type="circle">view.login.<a href="view/login/LoginController.html" title="class in view.login"><span
+                class="typeNameLink">LoginController</span></a></li>
+        <li type="circle">javafx.scene.Node (implements javafx.event.EventTarget, javafx.css.Styleable)
+            <ul>
+                <li type="circle">javafx.scene.Parent
+                    <ul>
+                        <li type="circle">javafx.scene.layout.Region
+                            <ul>
+                                <li type="circle">javafx.scene.layout.Pane
+                                    <ul>
+                                        <li type="circle">javafx.scene.layout.HBox
+                                            <ul>
+                                                <li type="circle">view.dashboard.<a
+                                                        href="view/dashboard/ViewOptionController.html"
+                                                        title="class in view.dashboard"><span class="typeNameLink">ViewOptionController</span></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li type="circle">view.profile.<a href="view/profile/ProfileController.html" title="class in view.profile"><span
+                class="typeNameLink">ProfileController</span></a></li>
+        <li type="circle">model.<a href="model/ProjectDAOImpl.html" title="class in model"><span class="typeNameLink">ProjectDAOImpl</span></a>
+            (implements model.<a href="model/ProjectDAO.html" title="interface in model">ProjectDAO</a>)
+        </li>
+        <li type="circle">controller.DTO.<a href="controller/DTO/ProjectDTO.html" title="class in controller.DTO"><span
+                class="typeNameLink">ProjectDTO</span></a></li>
+        <li type="circle">controller.UCC.<a href="controller/UCC/ProjectUCCImpl.html"
+                                            title="class in controller.UCC"><span
+                class="typeNameLink">ProjectUCCImpl</span></a> (implements controller.UCC.<a
+                href="controller/UCC/ProjectUCC.html" title="interface in controller.UCC">ProjectUCC</a>)
+        </li>
+        <li type="circle">view.registration.<a href="view/registration/RegistrationController.html"
+                                               title="class in view.registration"><span class="typeNameLink">RegistrationController</span></a>
+        </li>
+        <li type="circle">controller.view.<a href="controller/view/SampleController.html"
+                                             title="class in controller.view"><span
+                class="typeNameLink">SampleController</span></a></li>
+        <li type="circle">java.lang.Throwable (implements java.io.Serializable)
+            <ul>
+                <li type="circle">java.lang.Exception
+                    <ul>
+                        <li type="circle">java.lang.RuntimeException
+                            <ul>
+                                <li type="circle">utilities.exceptions.<a href="utilities.exceptions/BizzException.html"
+                                                                          title="class in utilities.exceptions"><span
+                                        class="typeNameLink">BizzException</span></a></li>
+                                <li type="circle">utilities.exceptions.<a
+                                        href="utilities.exceptions/FatalException.html"
+                                        title="class in utilities.exceptions"><span
+                                        class="typeNameLink">FatalException</span></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li type="circle">model.<a href="model/UserDAOImpl.html" title="class in model"><span class="typeNameLink">UserDAOImpl</span></a>
+            (implements model.<a href="model/UserDAO.html" title="interface in model">UserDAO</a>)
+        </li>
+        <li type="circle">model.<a href="model/UserDAOMock.html" title="class in model"><span class="typeNameLink">UserDAOMock</span></a>
+            (implements model.<a href="model/UserDAO.html" title="interface in model">UserDAO</a>)
+        </li>
+        <li type="circle">controller.factories.<a href="controller/factories/UserFactoryImpl.html"
+                                                  title="class in controller.factories"><span class="typeNameLink">UserFactoryImpl</span></a>
+            (implements controller.factories.<a href="controller/factories/UserFactory.html"
+                                                title="interface in controller.factories">UserFactory</a>)
+        </li>
+        <li type="circle">controller.<a href="controller/UserImpl.html" title="class in controller"><span
+                class="typeNameLink">UserImpl</span></a> (implements controller.<a href="controller/User.html"
+                                                                                   title="interface in controller">User</a>)
+        </li>
+        <li type="circle">controller.UCC.<a href="controller/UCC/UserUCCImpl.html" title="class in controller.UCC"><span
+                class="typeNameLink">UserUCCImpl</span></a> (implements controller.UCC.<a
+                href="controller/UCC/UserUCC.html"
+                title="interface in controller.UCC">UserUCC</a>)
+        </li>
+        <li type="circle">utilities.<a href="utilities/Utility.html" title="class in utilities"><span
+                class="typeNameLink">Utility</span></a>
+        </li>
+        <li type="circle">controller.UCC.<a href="controller/UCC/ViewOptionUCCImpl.html"
+                                            title="class in controller.UCC"><span
+                class="typeNameLink">ViewOptionUCCImpl</span></a> (implements controller.UCC.<a
+                href="controller/UCC/ViewOptionUCC.html" title="interface in controller.UCC">ViewOptionUCC</a>)
+        </li>
+        <li type="circle">view.<a href="view/ViewSwitcher.html" title="class in view"><span class="typeNameLink">ViewSwitcher</span></a>
+        </li>
+    </ul>
 </li>
-<li type="circle">javafx.application.Application
-<ul>
-<li type="circle"><a href="Main.html" title="class in &lt;Unnamed&gt;"><span class="typeNameLink">Main</span></a></li>
 </ul>
-</li>
-<li type="circle">config.<a href="config/Configuration.html" title="class in config"><span class="typeNameLink">Configuration</span></a></li>
-<li type="circle">business.UCC.<a href="business/UCC/ConnectedUser.html" title="class in business.UCC"><span class="typeNameLink">ConnectedUser</span></a></li>
-<li type="circle">persistence.<a href="persistence/DALServicesImpl.html" title="class in persistence"><span class="typeNameLink">DALServicesImpl</span></a> (implements persistence.<a href="persistence/DALBackEndServices.html" title="interface in persistence">DALBackEndServices</a>, persistence.<a href="persistence/DALServices.html" title="interface in persistence">DALServices</a>)</li>
-<li type="circle">view.dashboard.<a href="view/dashboard/DashboardController.html" title="class in view.dashboard"><span class="typeNameLink">DashboardController</span></a></li>
-<li type="circle">view.login.<a href="view/login/LoginController.html" title="class in view.login"><span class="typeNameLink">LoginController</span></a></li>
-<li type="circle">javafx.scene.Node (implements javafx.event.EventTarget, javafx.css.Styleable)
-<ul>
-<li type="circle">javafx.scene.Parent
-<ul>
-<li type="circle">javafx.scene.layout.Region
-<ul>
-<li type="circle">javafx.scene.layout.Pane
-<ul>
-<li type="circle">javafx.scene.layout.HBox
-<ul>
-<li type="circle">view.dashboard.<a href="view/dashboard/ViewOptionController.html" title="class in view.dashboard"><span class="typeNameLink">ViewOptionController</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li type="circle">view.profile.<a href="view/profile/ProfileController.html" title="class in view.profile"><span class="typeNameLink">ProfileController</span></a></li>
-<li type="circle">persistence.<a href="persistence/ProjectDAOImpl.html" title="class in persistence"><span class="typeNameLink">ProjectDAOImpl</span></a> (implements persistence.<a href="persistence/ProjectDAO.html" title="interface in persistence">ProjectDAO</a>)</li>
-<li type="circle">business.DTO.<a href="business/DTO/ProjectDTO.html" title="class in business.DTO"><span class="typeNameLink">ProjectDTO</span></a></li>
-<li type="circle">business.UCC.<a href="business/UCC/ProjectUCCImpl.html" title="class in business.UCC"><span class="typeNameLink">ProjectUCCImpl</span></a> (implements business.UCC.<a href="business/UCC/ProjectUCC.html" title="interface in business.UCC">ProjectUCC</a>)</li>
-<li type="circle">view.registration.<a href="view/registration/RegistrationController.html" title="class in view.registration"><span class="typeNameLink">RegistrationController</span></a></li>
-<li type="circle">business.view.<a href="business/view/SampleController.html" title="class in business.view"><span class="typeNameLink">SampleController</span></a></li>
-<li type="circle">java.lang.Throwable (implements java.io.Serializable)
-<ul>
-<li type="circle">java.lang.Exception
-<ul>
-<li type="circle">java.lang.RuntimeException
-<ul>
-<li type="circle">exceptions.<a href="exceptions/BizzException.html" title="class in exceptions"><span class="typeNameLink">BizzException</span></a></li>
-<li type="circle">exceptions.<a href="exceptions/FatalException.html" title="class in exceptions"><span class="typeNameLink">FatalException</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li type="circle">persistence.<a href="persistence/UserDAOImpl.html" title="class in persistence"><span class="typeNameLink">UserDAOImpl</span></a> (implements persistence.<a href="persistence/UserDAO.html" title="interface in persistence">UserDAO</a>)</li>
-<li type="circle">persistence.<a href="persistence/UserDAOMock.html" title="class in persistence"><span class="typeNameLink">UserDAOMock</span></a> (implements persistence.<a href="persistence/UserDAO.html" title="interface in persistence">UserDAO</a>)</li>
-<li type="circle">business.factories.<a href="business/factories/UserFactoryImpl.html" title="class in business.factories"><span class="typeNameLink">UserFactoryImpl</span></a> (implements business.factories.<a href="business/factories/UserFactory.html" title="interface in business.factories">UserFactory</a>)</li>
-<li type="circle">business.<a href="business/UserImpl.html" title="class in business"><span class="typeNameLink">UserImpl</span></a> (implements business.<a href="business/User.html" title="interface in business">User</a>)</li>
-<li type="circle">business.UCC.<a href="business/UCC/UserUCCImpl.html" title="class in business.UCC"><span class="typeNameLink">UserUCCImpl</span></a> (implements business.UCC.<a href="business/UCC/UserUCC.html" title="interface in business.UCC">UserUCC</a>)</li>
-<li type="circle">utilities.<a href="utilities/Utility.html" title="class in utilities"><span class="typeNameLink">Utility</span></a></li>
-<li type="circle">business.UCC.<a href="business/UCC/ViewOptionUCCImpl.html" title="class in business.UCC"><span class="typeNameLink">ViewOptionUCCImpl</span></a> (implements business.UCC.<a href="business/UCC/ViewOptionUCC.html" title="interface in business.UCC">ViewOptionUCC</a>)</li>
-<li type="circle">view.<a href="view/ViewSwitcher.html" title="class in view"><span class="typeNameLink">ViewSwitcher</span></a></li>
-</ul>
-</li>
-</ul>
-<h2 title="Interface Hierarchy">Interface Hierarchy</h2>
-<ul>
-<li type="circle">persistence.<a href="persistence/DALBackEndServices.html" title="interface in persistence"><span class="typeNameLink">DALBackEndServices</span></a></li>
-<li type="circle">persistence.<a href="persistence/DALServices.html" title="interface in persistence"><span class="typeNameLink">DALServices</span></a></li>
-<li type="circle">persistence.<a href="persistence/DAO.html" title="interface in persistence"><span class="typeNameLink">DAO</span></a>&lt;T&gt;
-<ul>
-<li type="circle">persistence.<a href="persistence/UserDAO.html" title="interface in persistence"><span class="typeNameLink">UserDAO</span></a></li>
-</ul>
-</li>
-<li type="circle">persistence.<a href="persistence/ProjectDAO.html" title="interface in persistence"><span class="typeNameLink">ProjectDAO</span></a></li>
-<li type="circle">business.UCC.<a href="business/UCC/ProjectUCC.html" title="interface in business.UCC"><span class="typeNameLink">ProjectUCC</span></a></li>
-<li type="circle">business.DTO.<a href="business/DTO/UserDTO.html" title="interface in business.DTO"><span class="typeNameLink">UserDTO</span></a>
-<ul>
-<li type="circle">business.<a href="business/User.html" title="interface in business"><span class="typeNameLink">User</span></a></li>
-</ul>
-</li>
-<li type="circle">business.factories.<a href="business/factories/UserFactory.html" title="interface in business.factories"><span class="typeNameLink">UserFactory</span></a></li>
-<li type="circle">business.UCC.<a href="business/UCC/UserUCC.html" title="interface in business.UCC"><span class="typeNameLink">UserUCC</span></a></li>
-<li type="circle">business.UCC.<a href="business/UCC/ViewOptionUCC.html" title="interface in business.UCC"><span class="typeNameLink">ViewOptionUCC</span></a></li>
-</ul>
-<h2 title="Enum Hierarchy">Enum Hierarchy</h2>
-<ul>
-<li type="circle">java.lang.Object
-<ul>
-<li type="circle">java.lang.Enum&lt;E&gt; (implements java.lang.Comparable&lt;T&gt;, java.io.Serializable)
-<ul>
-<li type="circle">view.<a href="view/ViewName.html" title="enum in view"><span class="typeNameLink">ViewName</span></a></li>
-</ul>
-</li>
-</ul>
+    <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
+    <ul>
+        <li type="circle">model.<a href="model/DALBackEndServices.html" title="interface in model"><span
+                class="typeNameLink">DALBackEndServices</span></a></li>
+        <li type="circle">model.<a href="model/DALServices.html" title="interface in model"><span class="typeNameLink">DALServices</span></a>
+        </li>
+        <li type="circle">model.<a href="model/DAO.html" title="interface in model"><span
+                class="typeNameLink">DAO</span></a>&lt;T&gt;
+            <ul>
+                <li type="circle">model.<a href="model/UserDAO.html" title="interface in model"><span
+                        class="typeNameLink">UserDAO</span></a></li>
+            </ul>
+        </li>
+        <li type="circle">model.<a href="model/ProjectDAO.html" title="interface in model"><span class="typeNameLink">ProjectDAO</span></a>
+        </li>
+        <li type="circle">controller.UCC.<a href="controller/UCC/ProjectUCC.html"
+                                            title="interface in controller.UCC"><span
+                class="typeNameLink">ProjectUCC</span></a></li>
+        <li type="circle">controller.DTO.<a href="controller/DTO/UserDTO.html" title="interface in controller.DTO"><span
+                class="typeNameLink">UserDTO</span></a>
+            <ul>
+                <li type="circle">controller.<a href="controller/User.html" title="interface in controller"><span
+                        class="typeNameLink">User</span></a></li>
+            </ul>
+        </li>
+        <li type="circle">controller.factories.<a href="controller/factories/UserFactory.html"
+                                                  title="interface in controller.factories"><span class="typeNameLink">UserFactory</span></a>
+        </li>
+        <li type="circle">controller.UCC.<a href="controller/UCC/UserUCC.html" title="interface in controller.UCC"><span
+                class="typeNameLink">UserUCC</span></a></li>
+        <li type="circle">controller.UCC.<a href="controller/UCC/ViewOptionUCC.html"
+                                            title="interface in controller.UCC"><span
+                class="typeNameLink">ViewOptionUCC</span></a></li>
+    </ul>
+    <h2 title="Enum Hierarchy">Enum Hierarchy</h2>
+    <ul>
+        <li type="circle">java.lang.Object
+            <ul>
+                <li type="circle">java.lang.Enum&lt;E&gt; (implements java.lang.Comparable&lt;T&gt;,
+                    java.io.Serializable)
+                    <ul>
+                        <li type="circle">view.<a href="view/ViewName.html" title="enum in view"><span
+                                class="typeNameLink">ViewName</span></a></li>
+                    </ul>
+                </li>
+            </ul>
 </li>
 </ul>
 </div>

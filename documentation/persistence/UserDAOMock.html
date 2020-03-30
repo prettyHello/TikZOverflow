@@ -48,11 +48,12 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../persistence/UserDAOImpl.html" title="class in persistence"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../model/UserDAOImpl.html" title="class in model"><span class="typeNameLink">Prev&nbsp;Class</span></a>
+</li>
 <li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
-<li><a href="../index.html?persistence/UserDAOMock.html" target="_top">Frames</a></li>
+    <li><a href="../index.html?model/UserDAOMock.html" target="_top">Frames</a></li>
 <li><a href="UserDAOMock.html" target="_top">No&nbsp;Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
@@ -91,7 +92,7 @@ var activeTableTab = "activeTableTab";
 <!-- ========= END OF TOP NAVBAR ========= -->
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">persistence</div>
+    <div class="subTitle">model</div>
 <h2 title="Class UserDAOMock" class="title">Class UserDAOMock</h2>
 </div>
 <div class="contentContainer">
@@ -99,22 +100,24 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>persistence.UserDAOMock</li>
+    <li>model.UserDAOMock</li>
 </ul>
 </li>
 </ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Implemented Interfaces:</dt>
-<dd><a href="../persistence/DAO.html" title="interface in persistence">DAO</a>&lt;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&gt;, <a href="../persistence/UserDAO.html" title="interface in persistence">UserDAO</a></dd>
-</dl>
+    <dl>
+        <dt>All Implemented Interfaces:</dt>
+        <dd><a href="../model/DAO.html" title="interface in model">DAO</a>&lt;<a href="../controller/DTO/UserDTO.html"
+                                                                                 title="interface in controller.DTO">UserDTO</a>&gt;,
+            <a href="../model/UserDAO.html" title="interface in model">UserDAO</a></dd>
+    </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">UserDAOMock</span>
+    <pre>public class <span class="typeNameLabel">UserDAOMock</span>
 extends java.lang.Object
-implements <a href="../persistence/UserDAO.html" title="interface in persistence">UserDAO</a></pre>
+implements <a href="../model/UserDAO.html" title="interface in model">UserDAO</a></pre>
 </li>
 </ul>
 </div>
@@ -132,10 +135,13 @@ implements <a href="../persistence/UserDAO.html" title="interface in persistence
 <tr>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../persistence/UserDAOMock.html#UserDAOMock-persistence.DALServices-business.factories.UserFactory-">UserDAOMock</a></span>(<a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a>&nbsp;dalServices,
-           <a href="../business/factories/UserFactory.html" title="interface in business.factories">UserFactory</a>&nbsp;userFactory)</code>&nbsp;</td>
-</tr>
+    <tr class="altColor">
+        <td class="colOne"><code><span class="memberNameLink"><a
+                href="../model/UserDAOMock.html#UserDAOMock-model.DALServices-controller.factories.UserFactory-">UserDAOMock</a></span>(<a
+                href="../model/DALServices.html" title="interface in model">DALServices</a>&nbsp;dalServices,
+            <a href="../controller/factories/UserFactory.html" title="interface in controller.factories">UserFactory</a>&nbsp;userFactory)</code>&nbsp;
+        </td>
+    </tr>
 </table>
 </li>
 </ul>
@@ -151,34 +157,48 @@ implements <a href="../persistence/UserDAO.html" title="interface in persistence
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
-<tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/UserDAOMock.html#create-business.DTO.UserDTO-">create</a></span>(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;obj)</code>
-<div class="block">Creates an entry in the database.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/UserDAOMock.html#delete-business.DTO.UserDTO-">delete</a></span>(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;obj)</code>
-<div class="block">Deletes an entry in the database.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/UserDAOMock.html#find-business.DTO.UserDTO-">find</a></span>(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;obj)</code>
-<div class="block">Finds an object in the database by its id.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/UserDAOMock.html#getUser-business.DTO.UserDTO-">getUser</a></span>(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;usrAuth)</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../persistence/UserDAOMock.html#update-business.DTO.UserDTO-">update</a></span>(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;obj)</code>
-<div class="block">Updates an entry in the database.</div>
-</td>
-</tr>
+    <tr id="i0" class="altColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/UserDAOMock.html#create-controller.DTO.UserDTO-">create</a></span>(<a
+                href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a>&nbsp;obj)</code>
+            <div class="block">Creates an entry in the database.</div>
+        </td>
+    </tr>
+    <tr id="i1" class="rowColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/UserDAOMock.html#delete-controller.DTO.UserDTO-">delete</a></span>(<a
+                href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a>&nbsp;obj)</code>
+            <div class="block">Deletes an entry in the database.</div>
+        </td>
+    </tr>
+    <tr id="i2" class="altColor">
+        <td class="colFirst"><code><a href="../controller/DTO/UserDTO.html"
+                                      title="interface in controller.DTO">UserDTO</a></code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/UserDAOMock.html#find-controller.DTO.UserDTO-">find</a></span>(<a
+                href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a>&nbsp;obj)</code>
+            <div class="block">Finds an object in the database by its id.</div>
+        </td>
+    </tr>
+    <tr id="i3" class="rowColor">
+        <td class="colFirst"><code><a href="../controller/DTO/UserDTO.html"
+                                      title="interface in controller.DTO">UserDTO</a></code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/UserDAOMock.html#getUser-controller.DTO.UserDTO-">getUser</a></span>(<a
+                href="../controller/DTO/UserDTO.html"
+                title="interface in controller.DTO">UserDTO</a>&nbsp;usrAuth)</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i4" class="altColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../model/UserDAOMock.html#update-controller.DTO.UserDTO-">update</a></span>(<a
+                href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a>&nbsp;obj)</code>
+            <div class="block">Updates an entry in the database.</div>
+        </td>
+    </tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -197,111 +217,145 @@ implements <a href="../persistence/UserDAO.html" title="interface in persistence
 <li class="blockList">
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
-<li class="blockList"><a name="constructor.detail">
-<!--   -->
-</a>
-<h3>Constructor Detail</h3>
-<a name="UserDAOMock-persistence.DALServices-business.factories.UserFactory-">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>UserDAOMock</h4>
-<pre>public&nbsp;UserDAOMock(<a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a>&nbsp;dalServices,
-                   <a href="../business/factories/UserFactory.html" title="interface in business.factories">UserFactory</a>&nbsp;userFactory)</pre>
-</li>
-</ul>
-</li>
+    <li class="blockList"><a name="constructor.detail">
+        <!--   -->
+    </a>
+        <h3>Constructor Detail</h3>
+        <a name="UserDAOMock-model.DALServices-controller.factories.UserFactory-">
+            <!--   -->
+        </a>
+        <ul class="blockListLast">
+            <li class="blockList">
+                <h4>UserDAOMock</h4>
+                <pre>public&nbsp;UserDAOMock(<a href="../model/DALServices.html"
+                                                title="interface in model">DALServices</a>&nbsp;dalServices,
+                   <a href="../controller/factories/UserFactory.html" title="interface in controller.factories">UserFactory</a>&nbsp;userFactory)</pre>
+            </li>
+        </ul>
+    </li>
 </ul>
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
-<li class="blockList"><a name="method.detail">
-<!--   -->
-</a>
-<h3>Method Detail</h3>
-<a name="find-business.DTO.UserDTO-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>find</h4>
-<pre>public&nbsp;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;find(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;obj)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DAO.html#find-T-">DAO</a></code></span></div>
-<div class="block">Finds an object in the database by its id.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DAO.html#find-T-">find</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DAO.html" title="interface in persistence">DAO</a>&lt;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>obj</code> - a generic type object defined in children interfaces (a DTO).</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a generic type object (a DTO).</dd>
-</dl>
-</li>
-</ul>
-<a name="create-business.DTO.UserDTO-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>create</h4>
-<pre>public&nbsp;void&nbsp;create(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;obj)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DAO.html#create-T-">DAO</a></code></span></div>
-<div class="block">Creates an entry in the database.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DAO.html#create-T-">create</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DAO.html" title="interface in persistence">DAO</a>&lt;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>obj</code> - a generic type object defined in children interfaces (a DTO).</dd>
-</dl>
-</li>
-</ul>
-<a name="update-business.DTO.UserDTO-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>update</h4>
-<pre>public&nbsp;void&nbsp;update(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;obj)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DAO.html#update-T-">DAO</a></code></span></div>
-<div class="block">Updates an entry in the database.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DAO.html#update-T-">update</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DAO.html" title="interface in persistence">DAO</a>&lt;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>obj</code> - a generic type object defined in children interfaces (a DTO).</dd>
-</dl>
-</li>
-</ul>
-<a name="delete-business.DTO.UserDTO-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>delete</h4>
-<pre>public&nbsp;void&nbsp;delete(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;obj)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../persistence/DAO.html#delete-T-">DAO</a></code></span></div>
-<div class="block">Deletes an entry in the database.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DAO.html#delete-T-">delete</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DAO.html" title="interface in persistence">DAO</a>&lt;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>obj</code> - a generic type object defined in children interfaces (a DTO).</dd>
-</dl>
-</li>
-</ul>
-<a name="getUser-business.DTO.UserDTO-">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getUser</h4>
-<pre>public&nbsp;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;getUser(<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&nbsp;usrAuth)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/DAO.html#getUser-T-">getUser</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/DAO.html" title="interface in persistence">DAO</a>&lt;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&gt;</code></dd>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../persistence/UserDAO.html#getUser-business.DTO.UserDTO-">getUser</a></code>&nbsp;in interface&nbsp;<code><a href="../persistence/UserDAO.html" title="interface in persistence">UserDAO</a></code></dd>
-</dl>
+    <li class="blockList"><a name="method.detail">
+        <!--   -->
+    </a>
+        <h3>Method Detail</h3>
+        <a name="find-controller.DTO.UserDTO-">
+            <!--   -->
+        </a>
+        <ul class="blockList">
+            <li class="blockList">
+                <h4>find</h4>
+                <pre>public&nbsp;<a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a>&nbsp;find(<a
+                        href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a>&nbsp;obj)</pre>
+                <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                        href="../model/DAO.html#find-T-">DAO</a></code></span></div>
+                <div class="block">Finds an object in the database by its id.</div>
+                <dl>
+                    <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+                    <dd><code><a href="../model/DAO.html#find-T-">find</a></code>&nbsp;in interface&nbsp;<code><a
+                            href="../model/DAO.html" title="interface in model">DAO</a>&lt;<a
+                            href="../controller/DTO/UserDTO.html"
+                            title="interface in controller.DTO">UserDTO</a>&gt;</code>
+                    </dd>
+                    <dt><span class="paramLabel">Parameters:</span></dt>
+                    <dd><code>obj</code> - a generic type object defined in children interfaces (a DTO).</dd>
+                    <dt><span class="returnLabel">Returns:</span></dt>
+                    <dd>a generic type object (a DTO).</dd>
+                </dl>
+            </li>
+        </ul>
+        <a name="create-controller.DTO.UserDTO-">
+            <!--   -->
+        </a>
+        <ul class="blockList">
+            <li class="blockList">
+                <h4>create</h4>
+                <pre>public&nbsp;void&nbsp;create(<a href="../controller/DTO/UserDTO.html"
+                                                     title="interface in controller.DTO">UserDTO</a>&nbsp;obj)</pre>
+                <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                        href="../model/DAO.html#create-T-">DAO</a></code></span></div>
+                <div class="block">Creates an entry in the database.</div>
+                <dl>
+                    <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+                    <dd><code><a href="../model/DAO.html#create-T-">create</a></code>&nbsp;in interface&nbsp;<code><a
+                            href="../model/DAO.html" title="interface in model">DAO</a>&lt;<a
+                            href="../controller/DTO/UserDTO.html"
+                            title="interface in controller.DTO">UserDTO</a>&gt;</code>
+                    </dd>
+                    <dt><span class="paramLabel">Parameters:</span></dt>
+                    <dd><code>obj</code> - a generic type object defined in children interfaces (a DTO).</dd>
+                </dl>
+            </li>
+        </ul>
+        <a name="update-controller.DTO.UserDTO-">
+            <!--   -->
+        </a>
+        <ul class="blockList">
+            <li class="blockList">
+                <h4>update</h4>
+                <pre>public&nbsp;void&nbsp;update(<a href="../controller/DTO/UserDTO.html"
+                                                     title="interface in controller.DTO">UserDTO</a>&nbsp;obj)</pre>
+                <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                        href="../model/DAO.html#update-T-">DAO</a></code></span></div>
+                <div class="block">Updates an entry in the database.</div>
+                <dl>
+                    <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+                    <dd><code><a href="../model/DAO.html#update-T-">update</a></code>&nbsp;in interface&nbsp;<code><a
+                            href="../model/DAO.html" title="interface in model">DAO</a>&lt;<a
+                            href="../controller/DTO/UserDTO.html"
+                            title="interface in controller.DTO">UserDTO</a>&gt;</code>
+                    </dd>
+                    <dt><span class="paramLabel">Parameters:</span></dt>
+                    <dd><code>obj</code> - a generic type object defined in children interfaces (a DTO).</dd>
+                </dl>
+            </li>
+        </ul>
+        <a name="delete-controller.DTO.UserDTO-">
+            <!--   -->
+        </a>
+        <ul class="blockList">
+            <li class="blockList">
+                <h4>delete</h4>
+                <pre>public&nbsp;void&nbsp;delete(<a href="../controller/DTO/UserDTO.html"
+                                                     title="interface in controller.DTO">UserDTO</a>&nbsp;obj)</pre>
+                <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a
+                        href="../model/DAO.html#delete-T-">DAO</a></code></span></div>
+                <div class="block">Deletes an entry in the database.</div>
+                <dl>
+                    <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+                    <dd><code><a href="../model/DAO.html#delete-T-">delete</a></code>&nbsp;in interface&nbsp;<code><a
+                            href="../model/DAO.html" title="interface in model">DAO</a>&lt;<a
+                            href="../controller/DTO/UserDTO.html"
+                            title="interface in controller.DTO">UserDTO</a>&gt;</code>
+                    </dd>
+                    <dt><span class="paramLabel">Parameters:</span></dt>
+                    <dd><code>obj</code> - a generic type object defined in children interfaces (a DTO).</dd>
+                </dl>
+            </li>
+        </ul>
+        <a name="getUser-controller.DTO.UserDTO-">
+            <!--   -->
+        </a>
+        <ul class="blockListLast">
+            <li class="blockList">
+                <h4>getUser</h4>
+                <pre>public&nbsp;<a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a>&nbsp;getUser(<a
+                        href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a>&nbsp;usrAuth)</pre>
+                <dl>
+                    <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+                    <dd><code><a href="../model/DAO.html#getUser-T-">getUser</a></code>&nbsp;in interface&nbsp;<code><a
+                            href="../model/DAO.html" title="interface in model">DAO</a>&lt;<a
+                            href="../controller/DTO/UserDTO.html"
+                            title="interface in controller.DTO">UserDTO</a>&gt;</code>
+                    </dd>
+                    <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+                    <dd><code><a href="../model/UserDAO.html#getUser-controller.DTO.UserDTO-">getUser</a></code>&nbsp;in
+                        interface&nbsp;<code><a
+                                href="../model/UserDAO.html" title="interface in model">UserDAO</a></code></dd>
+                </dl>
 </li>
 </ul>
 </li>
@@ -330,12 +384,13 @@ implements <a href="../persistence/UserDAO.html" title="interface in persistence
 </ul>
 </div>
 <div class="subNav">
+    <ul class="navList">
+        <li><a href="../model/UserDAOImpl.html" title="class in model"><span class="typeNameLink">Prev&nbsp;Class</span></a>
+        </li>
+        <li>Next&nbsp;Class</li>
+    </ul>
 <ul class="navList">
-<li><a href="../persistence/UserDAOImpl.html" title="class in persistence"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
-</ul>
-<ul class="navList">
-<li><a href="../index.html?persistence/UserDAOMock.html" target="_top">Frames</a></li>
+    <li><a href="../index.html?model/UserDAOMock.html" target="_top">Frames</a></li>
 <li><a href="UserDAOMock.html" target="_top">No&nbsp;Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_bottom">

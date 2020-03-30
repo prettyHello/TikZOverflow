@@ -99,7 +99,7 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>utilities.AbstractConfigurationSingleton</li>
+<li>config.AbstractConfigurationSingleton</li>
 </ul>
 </li>
 </ul>
@@ -159,22 +159,35 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static <a href="../config/Configuration.html" title="class in config">Configuration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../utilities/AbstractConfigurationSingleton.html#getConfiguration--">getConfiguration</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>static <a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../utilities/AbstractConfigurationSingleton.html#getDalServices--">getDalServices</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>static <a href="../persistence/DAO.html" title="interface in persistence">DAO</a>&lt;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../utilities/AbstractConfigurationSingleton.html#getUserDAO--">getUserDAO</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>static <a href="../business/factories/UserFactory.html" title="interface in business.factories">UserFactory</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../utilities/AbstractConfigurationSingleton.html#getUserFactory--">getUserFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>static <a href="../business/UCC/UserUCC.html" title="interface in business.UCC">UserUCC</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../utilities/AbstractConfigurationSingleton.html#getUserUcc--">getUserUcc</a></span>()</code>&nbsp;</td>
-</tr>
+ <tr id="i2" class="altColor">
+  <td class="colFirst"><code>static <a href="../model/DALServices.html"
+                                       title="interface in model">DALServices</a></code>
+  </td>
+  <td class="colLast"><code><span class="memberNameLink"><a
+          href="../utilities/AbstractConfigurationSingleton.html#getDalServices--">getDalServices</a></span>()</code>&nbsp;
+  </td>
+ </tr>
+ <tr id="i3" class="rowColor">
+  <td class="colFirst"><code>static <a href="../model/DAO.html" title="interface in model">DAO</a>&lt;<a
+          href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a>&gt;</code></td>
+  <td class="colLast"><code><span class="memberNameLink"><a
+          href="../utilities/AbstractConfigurationSingleton.html#getUserDAO--">getUserDAO</a></span>()</code>&nbsp;
+  </td>
+ </tr>
+ <tr id="i4" class="altColor">
+  <td class="colFirst"><code>static <a href="../controller/factories/UserFactory.html"
+                                       title="interface in controller.factories">UserFactory</a></code></td>
+  <td class="colLast"><code><span class="memberNameLink"><a
+          href="../utilities/AbstractConfigurationSingleton.html#getUserFactory--">getUserFactory</a></span>()</code>&nbsp;
+  </td>
+ </tr>
+ <tr id="i5" class="rowColor">
+  <td class="colFirst"><code>static <a href="../controller/UCC/UserUCC.html"
+                                       title="interface in controller.UCC">UserUCC</a></code></td>
+  <td class="colLast"><code><span class="memberNameLink"><a
+          href="../utilities/AbstractConfigurationSingleton.html#getUserUcc--">getUserUcc</a></span>()</code>&nbsp;
+  </td>
+ </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../utilities/AbstractConfigurationSingleton.html#loadConfiguration-java.lang.String-">loadConfiguration</a></span>(java.lang.String&nbsp;conf_name)</code>&nbsp;</td>
@@ -242,7 +255,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDalServices</h4>
-<pre>public static&nbsp;<a href="../persistence/DALServices.html" title="interface in persistence">DALServices</a>&nbsp;getDalServices()</pre>
+ <pre>public static&nbsp;<a href="../model/DALServices.html" title="interface in model">DALServices</a>&nbsp;getDalServices()</pre>
 </li>
 </ul>
 <a name="getUserFactory--">
@@ -251,17 +264,19 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getUserFactory</h4>
-<pre>public static&nbsp;<a href="../business/factories/UserFactory.html" title="interface in business.factories">UserFactory</a>&nbsp;getUserFactory()</pre>
+ <pre>public static&nbsp;<a href="../controller/factories/UserFactory.html" title="interface in controller.factories">UserFactory</a>&nbsp;getUserFactory()</pre>
 </li>
 </ul>
 <a name="getUserDAO--">
 <!--   -->
 </a>
 <ul class="blockList">
-<li class="blockList">
-<h4>getUserDAO</h4>
-<pre>public static&nbsp;<a href="../persistence/DAO.html" title="interface in persistence">DAO</a>&lt;<a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>&gt;&nbsp;getUserDAO()</pre>
-</li>
+ <li class="blockList">
+  <h4>getUserDAO</h4>
+  <pre>public static&nbsp;<a href="../model/DAO.html" title="interface in model">DAO</a>&lt;<a
+          href="../controller/DTO/UserDTO.html"
+          title="interface in controller.DTO">UserDTO</a>&gt;&nbsp;getUserDAO()</pre>
+ </li>
 </ul>
 <a name="getUserUcc--">
 <!--   -->
@@ -269,7 +284,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getUserUcc</h4>
-<pre>public static&nbsp;<a href="../business/UCC/UserUCC.html" title="interface in business.UCC">UserUCC</a>&nbsp;getUserUcc()</pre>
+ <pre>public static&nbsp;<a href="../controller/UCC/UserUCC.html" title="interface in controller.UCC">UserUCC</a>&nbsp;getUserUcc()</pre>
 </li>
 </ul>
 <a name="loadConfiguration-java.lang.String-">

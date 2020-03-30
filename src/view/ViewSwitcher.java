@@ -1,6 +1,6 @@
 package view;
 
-import business.DTO.UserDTO;
+import controller.DTO.UserDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

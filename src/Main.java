@@ -1,6 +1,6 @@
+import config.ConfigurationSingleton;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import utilities.ConfigurationSingleton;
 import view.ViewName;
 import view.ViewSwitcher;
 

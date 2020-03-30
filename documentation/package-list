@@ -1,12 +1,12 @@
 
-business
-business.DTO
-business.UCC
-business.factories
-business.view
+controller
+controller.DTO
+controller.UCC
+controller.factories
+controller.view
 config
-exceptions
-persistence
+utilities.exceptions
+model
 utilities
 view
 view.dashboard

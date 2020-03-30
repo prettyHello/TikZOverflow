@@ -48,11 +48,12 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../business/User.html" title="interface in business"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../controller/User.html" title="interface in controller"><span class="typeNameLink">Prev&nbsp;Class</span></a>
+</li>
 <li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
-<li><a href="../index.html?business/UserImpl.html" target="_top">Frames</a></li>
+    <li><a href="../index.html?controller/UserImpl.html" target="_top">Frames</a></li>
 <li><a href="UserImpl.html" target="_top">No&nbsp;Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_top">
@@ -91,7 +92,7 @@ var activeTableTab = "activeTableTab";
 <!-- ========= END OF TOP NAVBAR ========= -->
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="subTitle">business</div>
+    <div class="subTitle">controller</div>
 <h2 title="Class UserImpl" class="title">Class UserImpl</h2>
 </div>
 <div class="contentContainer">
@@ -99,22 +100,23 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>business.UserImpl</li>
+    <li>controller.UserImpl</li>
 </ul>
 </li>
 </ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Implemented Interfaces:</dt>
-<dd><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a>, <a href="../business/User.html" title="interface in business">User</a></dd>
-</dl>
+    <dl>
+        <dt>All Implemented Interfaces:</dt>
+        <dd><a href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a>, <a
+                href="../controller/User.html" title="interface in controller">User</a></dd>
+    </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">UserImpl</span>
+    <pre>public class <span class="typeNameLabel">UserImpl</span>
 extends java.lang.Object
-implements <a href="../business/User.html" title="interface in business">User</a></pre>
+implements <a href="../controller/User.html" title="interface in controller">User</a></pre>
 </li>
 </ul>
 </div>
@@ -132,23 +134,29 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <tr>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../business/UserImpl.html#UserImpl--">UserImpl</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../business/UserImpl.html#UserImpl-int-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">UserImpl</a></span>(int&nbsp;user_id,
-        java.lang.String&nbsp;first_name,
-        java.lang.String&nbsp;last_name,
-        java.lang.String&nbsp;email,
-        java.lang.String&nbsp;phone,
-        java.lang.String&nbsp;password,
-        java.lang.String&nbsp;salt,
-        java.lang.String&nbsp;register_date)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../business/UserImpl.html#UserImpl-java.lang.String-java.lang.String-">UserImpl</a></span>(java.lang.String&nbsp;email,
-        java.lang.String&nbsp;password)</code>&nbsp;</td>
-</tr>
+    <tr class="altColor">
+        <td class="colOne"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#UserImpl--">UserImpl</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr class="rowColor">
+        <td class="colOne"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#UserImpl-int-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">UserImpl</a></span>(int&nbsp;user_id,
+            java.lang.String&nbsp;first_name,
+            java.lang.String&nbsp;last_name,
+            java.lang.String&nbsp;email,
+            java.lang.String&nbsp;phone,
+            java.lang.String&nbsp;password,
+            java.lang.String&nbsp;salt,
+            java.lang.String&nbsp;register_date)</code>&nbsp;
+        </td>
+    </tr>
+    <tr class="altColor">
+        <td class="colOne"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#UserImpl-java.lang.String-java.lang.String-">UserImpl</a></span>(java.lang.String&nbsp;email,
+            java.lang.String&nbsp;password)</code>&nbsp;
+        </td>
+    </tr>
 </table>
 </li>
 </ul>
@@ -164,78 +172,108 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
-<tr id="i0" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#getEmail--">getEmail</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#getFirst_name--">getFirst_name</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#getLast_name--">getLast_name</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#getPassword--">getPassword</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#getPhone--">getPhone</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#getRegister_date--">getRegister_date</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#getSalt--">getSalt</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#getUser_id--">getUser_id</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#isAuthorized--">isAuthorized</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#setAuthorized-boolean-">setAuthorized</a></span>(boolean&nbsp;authorized)</code>&nbsp;</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#setEmail-java.lang.String-">setEmail</a></span>(java.lang.String&nbsp;email)</code>&nbsp;</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#setFirst_name-java.lang.String-">setFirst_name</a></span>(java.lang.String&nbsp;first_name)</code>&nbsp;</td>
-</tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#setLast_name-java.lang.String-">setLast_name</a></span>(java.lang.String&nbsp;last_name)</code>&nbsp;</td>
-</tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#setPassword-java.lang.String-">setPassword</a></span>(java.lang.String&nbsp;password)</code>&nbsp;</td>
-</tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#setPhone-java.lang.String-">setPhone</a></span>(java.lang.String&nbsp;phone)</code>&nbsp;</td>
-</tr>
-<tr id="i15" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#setRegister_date-java.lang.String-">setRegister_date</a></span>(java.lang.String&nbsp;register_date)</code>&nbsp;</td>
-</tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#setSalt-java.lang.String-">setSalt</a></span>(java.lang.String&nbsp;salt)</code>&nbsp;</td>
-</tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../business/UserImpl.html#setUser_id-int-">setUser_id</a></span>(int&nbsp;user_id)</code>&nbsp;</td>
-</tr>
+    <tr id="i0" class="altColor">
+        <td class="colFirst"><code>java.lang.String</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#getEmail--">getEmail</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i1" class="rowColor">
+        <td class="colFirst"><code>java.lang.String</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a href="../controller/UserImpl.html#getFirst_name--">getFirst_name</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i2" class="altColor">
+        <td class="colFirst"><code>java.lang.String</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a href="../controller/UserImpl.html#getLast_name--">getLast_name</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i3" class="rowColor">
+        <td class="colFirst"><code>java.lang.String</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a href="../controller/UserImpl.html#getPassword--">getPassword</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i4" class="altColor">
+        <td class="colFirst"><code>java.lang.String</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#getPhone--">getPhone</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i5" class="rowColor">
+        <td class="colFirst"><code>java.lang.String</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a href="../controller/UserImpl.html#getRegister_date--">getRegister_date</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i6" class="altColor">
+        <td class="colFirst"><code>java.lang.String</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#getSalt--">getSalt</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i7" class="rowColor">
+        <td class="colFirst"><code>int</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#getUser_id--">getUser_id</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i8" class="altColor">
+        <td class="colFirst"><code>boolean</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a href="../controller/UserImpl.html#isAuthorized--">isAuthorized</a></span>()</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i9" class="rowColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#setAuthorized-boolean-">setAuthorized</a></span>(boolean&nbsp;authorized)</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i10" class="altColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#setEmail-java.lang.String-">setEmail</a></span>(java.lang.String&nbsp;email)</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i11" class="rowColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#setFirst_name-java.lang.String-">setFirst_name</a></span>(java.lang.String&nbsp;first_name)</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i12" class="altColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#setLast_name-java.lang.String-">setLast_name</a></span>(java.lang.String&nbsp;last_name)</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i13" class="rowColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#setPassword-java.lang.String-">setPassword</a></span>(java.lang.String&nbsp;password)</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i14" class="altColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#setPhone-java.lang.String-">setPhone</a></span>(java.lang.String&nbsp;phone)</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i15" class="rowColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#setRegister_date-java.lang.String-">setRegister_date</a></span>(java.lang.String&nbsp;register_date)</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i16" class="altColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a
+                href="../controller/UserImpl.html#setSalt-java.lang.String-">setSalt</a></span>(java.lang.String&nbsp;salt)</code>&nbsp;
+        </td>
+    </tr>
+    <tr id="i17" class="rowColor">
+        <td class="colFirst"><code>void</code></td>
+        <td class="colLast"><code><span class="memberNameLink"><a href="../controller/UserImpl.html#setUser_id-int-">setUser_id</a></span>(int&nbsp;user_id)</code>&nbsp;
+        </td>
+    </tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -308,10 +346,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>getLast_name</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getLast_name()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#getLast_name--">getLast_name</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#getLast_name--">getLast_name</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="getEmail--">
@@ -321,10 +361,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>getEmail</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getEmail()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#getEmail--">getEmail</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#getEmail--">getEmail</a></code>&nbsp;in
+            interface&nbsp;<code><a
+                    href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="getPhone--">
@@ -334,10 +376,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>getPhone</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getPhone()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#getPhone--">getPhone</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#getPhone--">getPhone</a></code>&nbsp;in
+            interface&nbsp;<code><a
+                    href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="getPassword--">
@@ -347,10 +391,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>getPassword</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getPassword()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#getPassword--">getPassword</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#getPassword--">getPassword</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="getSalt--">
@@ -360,10 +406,11 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>getSalt</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getSalt()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#getSalt--">getSalt</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#getSalt--">getSalt</a></code>&nbsp;in interface&nbsp;<code><a
+                href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="getRegister_date--">
@@ -373,10 +420,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>getRegister_date</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getRegister_date()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#getRegister_date--">getRegister_date</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#getRegister_date--">getRegister_date</a></code>&nbsp;in
+            interface&nbsp;<code><a
+                    href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="getUser_id--">
@@ -386,10 +435,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>getUser_id</h4>
 <pre>public&nbsp;int&nbsp;getUser_id()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#getUser_id--">getUser_id</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#getUser_id--">getUser_id</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="setUser_id-int-">
@@ -399,10 +450,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>setUser_id</h4>
 <pre>public&nbsp;void&nbsp;setUser_id(int&nbsp;user_id)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#setUser_id-int-">setUser_id</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#setUser_id-int-">setUser_id</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="setFirst_name-java.lang.String-">
@@ -412,10 +465,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>setFirst_name</h4>
 <pre>public&nbsp;void&nbsp;setFirst_name(java.lang.String&nbsp;first_name)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#setFirst_name-java.lang.String-">setFirst_name</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#setFirst_name-java.lang.String-">setFirst_name</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="setLast_name-java.lang.String-">
@@ -425,10 +480,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>setLast_name</h4>
 <pre>public&nbsp;void&nbsp;setLast_name(java.lang.String&nbsp;last_name)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#setLast_name-java.lang.String-">setLast_name</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#setLast_name-java.lang.String-">setLast_name</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="setEmail-java.lang.String-">
@@ -438,10 +495,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>setEmail</h4>
 <pre>public&nbsp;void&nbsp;setEmail(java.lang.String&nbsp;email)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#setEmail-java.lang.String-">setEmail</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#setEmail-java.lang.String-">setEmail</a></code>&nbsp;in
+            interface&nbsp;<code><a
+                    href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="setPhone-java.lang.String-">
@@ -451,10 +510,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>setPhone</h4>
 <pre>public&nbsp;void&nbsp;setPhone(java.lang.String&nbsp;phone)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#setPhone-java.lang.String-">setPhone</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#setPhone-java.lang.String-">setPhone</a></code>&nbsp;in
+            interface&nbsp;<code><a
+                    href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="setPassword-java.lang.String-">
@@ -464,10 +525,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>setPassword</h4>
 <pre>public&nbsp;void&nbsp;setPassword(java.lang.String&nbsp;password)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#setPassword-java.lang.String-">setPassword</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#setPassword-java.lang.String-">setPassword</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="setSalt-java.lang.String-">
@@ -477,10 +540,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>setSalt</h4>
 <pre>public&nbsp;void&nbsp;setSalt(java.lang.String&nbsp;salt)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#setSalt-java.lang.String-">setSalt</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#setSalt-java.lang.String-">setSalt</a></code>&nbsp;in
+            interface&nbsp;<code><a
+                    href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="setRegister_date-java.lang.String-">
@@ -490,10 +555,13 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>setRegister_date</h4>
 <pre>public&nbsp;void&nbsp;setRegister_date(java.lang.String&nbsp;register_date)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#setRegister_date-java.lang.String-">setRegister_date</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a
+                href="../controller/DTO/UserDTO.html#setRegister_date-java.lang.String-">setRegister_date</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="getFirst_name--">
@@ -503,10 +571,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>getFirst_name</h4>
 <pre>public&nbsp;java.lang.String&nbsp;getFirst_name()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#getFirst_name--">getFirst_name</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#getFirst_name--">getFirst_name</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="isAuthorized--">
@@ -516,10 +586,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>isAuthorized</h4>
 <pre>public&nbsp;boolean&nbsp;isAuthorized()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#isAuthorized--">isAuthorized</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#isAuthorized--">isAuthorized</a></code>&nbsp;in
+            interface&nbsp;<code><a href="../controller/DTO/UserDTO.html"
+                                    title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 <a name="setAuthorized-boolean-">
@@ -529,10 +601,12 @@ implements <a href="../business/User.html" title="interface in business">User</a
 <li class="blockList">
 <h4>setAuthorized</h4>
 <pre>public&nbsp;void&nbsp;setAuthorized(boolean&nbsp;authorized)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../business/DTO/UserDTO.html#setAuthorized-boolean-">setAuthorized</a></code>&nbsp;in interface&nbsp;<code><a href="../business/DTO/UserDTO.html" title="interface in business.DTO">UserDTO</a></code></dd>
-</dl>
+    <dl>
+        <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+        <dd><code><a href="../controller/DTO/UserDTO.html#setAuthorized-boolean-">setAuthorized</a></code>&nbsp;in
+            interface&nbsp;<code><a
+                    href="../controller/DTO/UserDTO.html" title="interface in controller.DTO">UserDTO</a></code></dd>
+    </dl>
 </li>
 </ul>
 </li>
@@ -561,12 +635,13 @@ implements <a href="../business/User.html" title="interface in business">User</a
 </ul>
 </div>
 <div class="subNav">
+    <ul class="navList">
+        <li><a href="../controller/User.html" title="interface in controller"><span
+                class="typeNameLink">Prev&nbsp;Class</span></a></li>
+        <li>Next&nbsp;Class</li>
+    </ul>
 <ul class="navList">
-<li><a href="../business/User.html" title="interface in business"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
-</ul>
-<ul class="navList">
-<li><a href="../index.html?business/UserImpl.html" target="_top">Frames</a></li>
+    <li><a href="../index.html?controller/UserImpl.html" target="_top">Frames</a></li>
 <li><a href="UserImpl.html" target="_top">No&nbsp;Frames</a></li>
 </ul>
 <ul class="navList" id="allclasses_navbar_bottom">

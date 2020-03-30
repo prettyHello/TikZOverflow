@@ -1,12 +1,12 @@
 package view.dashboard;
 
-import business.DTO.ProjectDTO;
-import business.DTO.UserDTO;
-import business.UCC.ProjectUCC;
-import business.UCC.UserUCC;
-import business.factories.ProjectFactory;
-import business.factories.UserFactory;
-import exceptions.BizzException;
+import config.ConfigurationSingleton;
+import controller.DTO.ProjectDTO;
+import controller.DTO.UserDTO;
+import controller.UCC.ProjectUCC;
+import controller.UCC.UserUCC;
+import controller.factories.ProjectFactory;
+import controller.factories.UserFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,9 +14,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import persistence.*;
-import utilities.ConfigurationSingleton;
+import model.DALServices;
+import model.ProjectDAO;
+import model.ProjectDAOImpl;
 import utilities.Utility;
+import utilities.exceptions.BizzException;
 import view.ViewName;
 import view.ViewSwitcher;
 

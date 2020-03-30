@@ -1,10 +1,9 @@
 package view.login;
 
-import business.DTO.UserDTO;
-import business.UCC.UserUCC;
-import business.factories.UserFactory;
-import exceptions.BizzException;
-import exceptions.FatalException;
+import config.ConfigurationSingleton;
+import controller.DTO.UserDTO;
+import controller.UCC.UserUCC;
+import controller.factories.UserFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,8 +12,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
-import utilities.ConfigurationSingleton;
 import utilities.Utility;
+import utilities.exceptions.BizzException;
+import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 
