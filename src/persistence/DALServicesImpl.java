@@ -61,15 +61,14 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      */
     @Override
     public void rollback() throws FatalException {
-        if (this.connection == null)
-            throw new FatalException("No db connection");
-        try {
-            this.connection.rollback();
-            this.connection.setAutoCommit(true);
-        } catch (SQLException e) {
-            throw new FatalException("DalServices error - impossible to rollback: \n\t"+e.getMessage());
+        if (this.connection != null){
+            try {
+                this.connection.rollback();
+                this.connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                throw new FatalException("DalServices error - impossible to rollback: \n\t"+e.getMessage());
+            }
         }
-        this.closeConnection();
     }
 
     /**

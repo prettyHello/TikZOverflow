@@ -26,13 +26,6 @@ class DALServicesImplTest {
     }
 
     @Test
-    void rollBackWithoutConnection(){
-        assertThrows(FatalException.class, () -> {
-            dal.rollback();
-        });
-    }
-
-    @Test
     void rollBackNothing(){
         assertThrows(FatalException.class, () -> {
             dal.startTransaction();
