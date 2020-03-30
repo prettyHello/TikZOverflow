@@ -64,17 +64,14 @@ The javaFX SDK can be downloaded from here https://gluonhq.com/products/javafx/,
 
 # Configuration :
 
-## Serveur 
-
-This program being a desktop application, there is no server configuration required.
-
-## Client
-
-TO DO: Informations sur la configuration du client
-
 # Tests
 
-TO DO: Informations sur la façon d'executer les tests
+<p>
+All the unit test are in the test folder, the mock are with the code.
+</p>
+<p>
+The mock are initialized through the configurations classes in the utilities package.
+</p>
 
 # Misc
 
