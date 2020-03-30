@@ -3,33 +3,26 @@
 Here you will find the packages for everything concerning the controller part of the application.
 
 ## Packages :
-### DalBackEndServices :
+
+### UCC :
 <p>
-This interface is part of the DAL (Data Access Layer). It is only exposed to the DAOs (Data
-Access Objects) and is used to fetch prepared statements in order to execute queries. It
-shouldn't be used by UCCs (Use-case controllers).
+The UCC or "Use Case Controllers" are the controllers. There is one accessible method per use case, the methods are grouped by object they process. 
+(eg. all the use case related to the user are in UserUCC) 
 </p>
 
-### DalServices :
 <p>
-This interface is part of the DAL (Data Access Layer). It is exposed to the UCCs (Use-case
-Controllers) to manage the connections to the database.
+The DTO (Data Transfer Objects)  are used to communicate between the controllers and the view/model. 
+DTO are simple class made only of getters and setters. Using DTO avoid the usage of too many parameters in method call, thus making refactoring easier.  
 </p>
 
-### DAO :
 <p>
-This interface exposes the basic CRUD operations performed on the database that are shared by all
-the DAOs (Data Access Objects). It is intended to by extended by more specific DAOs if those
-operations are not sufficient.
+The factories are classes that return a new instance of the best implementation of a DTO based on the given parameters
 </p>
 
-### ProjectDAO :
 <p>
-Interface for database action regarding projects.
+Canvas: is the link between the shapes on screen and the Tikz editor
 </p>
 
-### UserDOA :
 <p>
-Interface for database action regarding users.
+Shape: is the java model for the code Tikz
 </p>
-
