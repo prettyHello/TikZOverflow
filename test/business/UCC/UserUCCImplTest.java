@@ -5,7 +5,7 @@ import business.factories.UserFactory;
 import exceptions.FatalException;
 import persistence.DALServices;
 import persistence.DAO;
-import utilities.BusinessConfigurationSingleton;
+import utilities.TestBusinessConfigurationSingleton;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,11 +18,11 @@ class UserUCCImplTest {
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-        BusinessConfigurationSingleton.getInstance();
-        this.dalServices = BusinessConfigurationSingleton.getDalServices();
-        this.userDAO = BusinessConfigurationSingleton.getUserDAO();
-        this.userFactory = BusinessConfigurationSingleton.getUserFactory();
-        this.userUcc = BusinessConfigurationSingleton.getUserUcc();
+        TestBusinessConfigurationSingleton.getInstance();
+        this.dalServices = TestBusinessConfigurationSingleton.getDalServices();
+        this.userDAO = TestBusinessConfigurationSingleton.getUserDAO();
+        this.userFactory = TestBusinessConfigurationSingleton.getUserFactory();
+        this.userUcc = TestBusinessConfigurationSingleton.getUserUcc();
     }
 
     @org.junit.jupiter.api.Test
