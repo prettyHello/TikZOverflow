@@ -128,8 +128,7 @@ public class DashboardController {
         optionList.setItems(itemList);
 
         userSetting.setText(user.getFirstName());
-        String userHome = user.getFirstName()+"_"+user.getLastName()+"_"+ user.getUserId() ;
-        rootProject = File.separator + "ProjectTikZ" + File.separator +userHome + File.separator;
+        rootProject = File.separator + "ProjectTikZ" + File.separator +"userid_"+ user.getUserId() + File.separator;
 
 
         projectList.setCellFactory(cell -> new ListCell<ProjectDTO>() {
