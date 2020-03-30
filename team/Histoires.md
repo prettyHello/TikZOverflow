@@ -12,9 +12,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 | Priority/3 | N° | Description | Risk/3 | Hours/? | Points | Status | Introduced in iteration | 
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
 | 1 | [1](#1-create-a-user-login-and-password) | Create a user, login and password | 2 | 38 | 24 | Done | 1 |
-|   | [4](#4-creation-of-diagrams) | Creation of diagrams | 1 | - | 40 | Ongoing | 2
+|   | [4](#4-creation-of-diagrams) | Creation of diagrams | 1 | 26 | 40 | Ongoing | 2
 | 2 | [2](#2-project-management) | Project management: saving, changing the project name, displaying information | 2 | - | 37 | To do | - | 
-|   | [3](#3-importation-and-exportation-of-files) | Importation and exportation of files | 3 | 17 | 10 | Done | 1 |
+|   | [3](#3-importation-and-exportation-of-files) | Importation and exportation of files | 3 | 25 | 10 | Done | 1 |
 |   | [6](#6-overview) | Overview | 2 | - | 15 | To do | - |
 |   | [7](#7-drag-and-drop) | Drag and Drop | 2 | - | 15 | To do | - |
 |   | [10](#10-support-for-specific-tikz-libraries) | Support for specific TikZ libraries | 1 | - | 15 per library | To do | - |
