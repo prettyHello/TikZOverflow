@@ -11,7 +11,8 @@ public class SaveObject {
 
     // Saving the magnificient drawing of the users into a file
     public void save(Canvas canvas, String nameOfTheFile, UserDTO userID) throws IOException, ClassNotFoundException {
-        rootProject = rootProject +"userid_" +userID.getUserId() + File.separator + nameOfTheFile + File.separator;
+        String userHome = userID.getFirstName()+"_"+userID.getLastName()+"_"+ userID.getUserId() ;
+        rootProject = rootProject + userHome + File.separator + nameOfTheFile + File.separator;
         //Creating the file to save to
         ObjectOutputStream objectOutputStream =
                 new ObjectOutputStream(new FileOutputStream(rootProject + nameOfTheFile + ".bin"));
