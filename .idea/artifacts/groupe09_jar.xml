@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="groupe09:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/groupe09_jar</output-path>
+    <output-path>$PROJECT_DIR$/dist</output-path>
     <root id="archive" name="groupe09.jar">
       <element id="module-output" name="groupe09" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/junit-jupiter-api-5.4.2.jar" path-in-jar="/" />
