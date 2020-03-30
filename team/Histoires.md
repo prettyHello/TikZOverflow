@@ -12,9 +12,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 | Priority/3 | N° | Description | Risk/3 | Hours/? | Points | Status | Introduced in iteration | 
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
 | 1 | [1](#1-create-a-user-login-and-password) | Create a user, login and password | 2 | 38 | 24 | Done | 1 |
-|   | [4](#4-creation-of-diagrams) | Creation of diagrams | 1 | - | 40 | Ongoing | -
-| 2 | [2](#2-project-management) | Project management: saving, changing the project name, displaying information | 2 | - | 37 | Done | 2 | 
-|   | [3](#3-importation-and-exportation-of-files) | Importation and exportation of files | 3 | 17 | 10 | Ongoing | 1 |
+|   | [4](#4-creation-of-diagrams) | Creation of diagrams | 1 | - | 40 | Ongoing | 2
+| 2 | [2](#2-project-management) | Project management: saving, changing the project name, displaying information | 2 | - | 37 | To do | - | 
+|   | [3](#3-importation-and-exportation-of-files) | Importation and exportation of files | 3 | 17 | 10 | Done | 1 |
 |   | [6](#6-overview) | Overview | 2 | - | 15 | To do | - |
 |   | [7](#7-drag-and-drop) | Drag and Drop | 2 | - | 15 | To do | - |
 |   | [10](#10-support-for-specific-tikz-libraries) | Support for specific TikZ libraries | 1 | - | 15 per library | To do | - |
@@ -73,11 +73,6 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 - In addition, the user can select a project to open it and enter in the edit mode or to change its title. When a project is in edit mode, the system keeps track of all changes made and automatically records them when the file itself is closed.
 
 **Tasks:** 
-
-- Create a view to manage projects.
-- Create a new project.
-- Edit an existing project.
-- Delete an existing project.
 
 **Extra Tasks:**
 
