@@ -2,15 +2,13 @@ package business.shape;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class LineTest {
+class ArrowTest {
 
     @Test
     void printLine() {
-        Line line = new Line(new Coordinates(0,0),new Coordinates(2,2),1);
-        assertEquals("\\draw [black] (0.0,0.0) -- (2.0,2.0) ;",line.print());
+        Arrow arrow = new Arrow(new Coordinates(0,0),new Coordinates(2,2),1);
+        assertEquals("\\draw [black,->] (0.0,0.0) -- (2.0,2.0) ;",arrow.print());
     }
 }
