@@ -1,28 +1,35 @@
 # Controller package :
 
-Here you will find the packages for everything concerning the controller part of the applicaiton.
+Here you will find the packages for everything concerning the controller part of the application.
 
 ## Packages :
-### Canvas :
+### DalBackEndServices :
 <p>
-The canvas is the link between of the shapes on the screen and the tikz editor. 
-It translate between the two.
+This interface is part of the DAL (Data Access Layer). It is only exposed to the DAOs (Data
+Access Objects) and is used to fetch prepared statements in order to execute queries. It
+shouldn't be used by UCCs (Use-case controllers).
 </p>
 
-### DTO :
+### DalServices :
 <p>
-The Data Transfer Object, they are dumb classes without logic only used to transfer data between the MVC Layers.
+This interface is part of the DAL (Data Access Layer). It is exposed to the UCCs (Use-case
+Controllers) to manage the connections to the database.
 </p>
 
-### factories :
+### DAO :
 <p>
-Factories are used to hide the implementations.
+This interface exposes the basic CRUD operations performed on the database that are shared by all
+the DAOs (Data Access Objects). It is intended to by extended by more specific DAOs if those
+operations are not sufficient.
 </p>
 
-### shape :
+### ProjectDAO :
 <p>
-Shapes are the representation of tikz code in java, they are used in the canvas.
+Interface for database action regarding projects.
 </p>
 
-### UCC :
-Use Case Controller are the logic of the application.
+### UserDOA :
+<p>
+Interface for database action regarding users.
+</p>
+

@@ -74,6 +74,11 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 
 **Tasks:** 
 
+- create project project [6]
+- modify project [16]
+- visually manipulate ...(can't read the scan) [6]
+- open edit mode for selected project [9]
+
 **Extra Tasks:**
 
 :question: **Question:** 
@@ -140,6 +145,8 @@ To do this, the system performs a LATEX compilation of the TkiZ code described i
  
 **Tasks:** 
 
+- render pdf [8]
+- show pdf [7]
 
 **Extra Tasks:**
 
@@ -157,6 +164,9 @@ When the drag and drop has been completed, the code corresponding to the diagram
  
 **Tasks:** 
 
+- left/right click [3]
+- drag new shape [6]
+- drag existing shape[6]
 
 **Extra Tasks:**
 
@@ -174,6 +184,8 @@ When the drag and drop has been completed, the code corresponding to the diagram
  
 **Tasks:** 
 
+- Base code [8]
+- Per additional platform [6]
 
 **Extra Tasks:**
 
@@ -226,6 +238,8 @@ When the drag and drop has been completed, the code corresponding to the diagram
 
 **Tasks:** 
 
+- Color code [6]
+- Highlight the code when the mouse is over the shape [14]
 
 **Extra Tasks:**
 
@@ -239,6 +253,8 @@ When the drag and drop has been completed, the code corresponding to the diagram
 
 **Tasks:** 
 
+- help portal [8]
+- tutorial [5]
 
 **Extra Tasks:**
 
@@ -254,7 +270,6 @@ When the drag and drop has been completed, the code corresponding to the diagram
 
 **Tasks:** 
 
-
 **Extra Tasks:**
 
 :question: **Question:**  
@@ -267,6 +282,7 @@ When the drag and drop has been completed, the code corresponding to the diagram
 
 **Tasks:** 
 
+- Hash
 
 **Extra Tasks:**
 
@@ -281,6 +297,8 @@ When the drag and drop has been completed, the code corresponding to the diagram
 
 **Tasks:** 
 
+- Copy-paste
+- Keyboard shortcut
 
 **Extra Tasks:**
 

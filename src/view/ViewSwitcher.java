@@ -17,7 +17,7 @@ import view.registration.RegistrationController;
 import java.io.IOException;
 
 /**
- * CLass that handles the switching from one screen to another during interaction with the application
+ * Class that handles the switching from one screen to another during interaction with the application
  */
 public class ViewSwitcher {
     /**
