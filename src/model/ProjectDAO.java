@@ -11,7 +11,6 @@ import java.util.ArrayList;
  */
 public interface ProjectDAO extends DAO<ProjectDTO> {
 
-
     /**
      * Retrieve a project from the database
      *
@@ -27,8 +26,4 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
      * @throws FatalException
      */
     ProjectDTO getSelectedProject(int userID, String projectName) throws BizzException;
-
-
-
-
 }

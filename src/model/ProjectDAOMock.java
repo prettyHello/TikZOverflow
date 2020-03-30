@@ -42,7 +42,6 @@ public class ProjectDAOMock implements ProjectDAO {
             }
         }
         throw new BizzException("Failed to load the project: " + projectName);
-
     }
 
     @Override
@@ -71,8 +70,4 @@ public class ProjectDAOMock implements ProjectDAO {
     public void update(ProjectDTO obj) {
 
     }
-
-
-
-
 }

@@ -25,7 +25,6 @@ import java.util.zip.GZIPOutputStream;
 //TODO once MVC compliant move into projectUCC
 public class ViewOptionUCCImpl implements ViewOptionUCC {
 
-
     private String ContentTextExport = "the project does not exist on the path: ";
 
 
@@ -134,6 +133,5 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
             dashboard.delete(project);
         }
     }
-
 }
 

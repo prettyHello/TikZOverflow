@@ -43,5 +43,4 @@ public class Triangle extends Shape {
         returnValue += this.originPoint.print() + "-- " + this.secondPoint.print() + "-- " + this.thirdPoint.print() + "-- cycle;";
         return returnValue;
     }
-
 }

@@ -26,10 +26,8 @@ public enum Color {
     WHITE("white");
     public final String value;
 
-
     Color(String value) {
         this.value = value;
     }
-
 }
 

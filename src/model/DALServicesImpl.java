@@ -81,7 +81,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
         String scriptFilePath = "script.sql";
         BufferedReader reader = null;
         Statement statement = null;
-        String text = "";
+        StringBuilder text = new StringBuilder();
         try {
             this.openConnection();
             statement = this.connection.createStatement();
@@ -91,10 +91,10 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
             // read script line by line
             while ((line = reader.readLine()) != null) {
                 // execute query
-                text += line;
-                text += '\n';
+                text.append(line);
+                text.append('\n');
             }
-            statement.executeUpdate(text);
+            statement.executeUpdate(text.toString());
         } catch (Exception e) {
             throw new FatalException("Database creation impossible: \n\t"+e.getMessage());
         } finally {

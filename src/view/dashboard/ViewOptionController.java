@@ -50,7 +50,6 @@ public class ViewOptionController extends HBox {
     private Button deleteBtn = null;
     @FXML
     private ImageView deleteIcon = null;
-
     @FXML
     private ImageView editIcon = null;
     @FXML

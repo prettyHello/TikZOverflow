@@ -116,60 +116,66 @@ public class Utility {
 
     /**
      * Decompress file ".tar.gz"
-     * @param tarFile path to source file ".tar.gz"
+     *
+     * @param tarFile  path to source file ".tar.gz"
      * @param destFile destination directory of decompressed file
      */
-
-
     public static String unTarFile(File tarFile, Path destFile) {
         TarArchiveInputStream tis = null;
         try {
-            FileOutputStream fos = null ;
-            String untaredNameFolder =null;
+            FileOutputStream fos = null;
+            String untaredNameFolder = null;
             TarArchiveEntry tarEntry = null;
             tis = new TarArchiveInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarFile))));
             tis.getNextTarEntry();
 
             while ((tarEntry = tis.getNextTarEntry()) != null) {
 
-                int it =0;
-                if (it <= 0) {
-                    String name = tarEntry.getName();
-                    untaredNameFolder = name.substring(0, name.indexOf("/"));
-                }
+                int it = 0;
+                String name = tarEntry.getName();
+                untaredNameFolder = name.substring(0, name.indexOf("/"));
 
                 if (tarEntry.isDirectory()) {
                     continue;
                 } else {
-                    File outputFile =  new File(destFile.toFile(), tarEntry.getName());
+                    File outputFile = new File(destFile.toFile(), tarEntry.getName());
                     outputFile.getParentFile().mkdirs();
                     fos = new FileOutputStream(outputFile);
 
-                    byte [] fileRead = new byte[1024];
+                    byte[] fileRead = new byte[1024];
                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
 
                     int len = 0;
-                    while((len = tis.read(fileRead)) != -1) { bos.write(fileRead,0,len); }
+                    while ((len = tis.read(fileRead)) != -1) {
+                        bos.write(fileRead, 0, len);
+                    }
                     bos.close();
                     fileRead = null;
                     fos.close();
                 }
             }
-            return untaredNameFolder ;
-        }catch(IOException ex) {
+            return untaredNameFolder;
+        } catch (IOException ex) {
             new Alert(Alert.AlertType.ERROR, "File decompression error").showAndWait();
-            return  null ;
-        }finally { if(tis != null) { try {
-            tis.close(); } catch (IOException e) { e.printStackTrace(); } } }
+            return null;
+        } finally {
+            if (tis != null) {
+                try {
+                    tis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 
-    public static void copy(File dirSrc, File dirDest) throws IOException{
+    public static void copy(File dirSrc, File dirDest) throws IOException {
 
-        if(dirSrc.isDirectory()){
-            if(!dirDest.exists()){
+        if (dirSrc.isDirectory()) {
+            if (!dirDest.exists()) {
                 dirDest.mkdir();
-                System.out.println("Dossier "+ dirSrc + "  > " + dirDest);
+                System.out.println("Dossier " + dirSrc + "  > " + dirDest);
             }
             String files[] = dirSrc.list();
 
@@ -178,13 +184,13 @@ public class Utility {
                 File destF = new File(dirDest, f);
                 copy(srcF, destF);
             }
-        }else{
+        } else {
             InputStream in = new FileInputStream(dirSrc);
             OutputStream out = new FileOutputStream(dirDest);
 
             byte[] buffer = new byte[1024];
             int length;
-            while ((length = in.read(buffer)) > 0){
+            while ((length = in.read(buffer)) > 0) {
                 out.write(buffer, 0, length);
             }
 
@@ -192,7 +198,6 @@ public class Utility {
             out.close();
         }
     }
-
 
 
     /**
@@ -281,27 +286,24 @@ public class Utility {
 
     public static void deleteFile(File dir) {
 
-        if (dir.isDirectory()){
+        if (dir.isDirectory()) {
             File[] listFiles = dir.listFiles();
-            if(listFiles!=null) {
+            if (listFiles != null) {
                 for (File entry : listFiles) {
                     deleteFile(entry);
                 }
                 dir.delete();
             }
-        }
-        else {
+        } else {
             try {
                 Files.delete(dir.toPath());
             } catch (NoSuchFileException e) {
-                new Alert(Alert.AlertType.ERROR, dir+" no such file or directory").showAndWait();
+                new Alert(Alert.AlertType.ERROR, dir + " no such file or directory").showAndWait();
             } catch (DirectoryNotEmptyException e) {
-                new Alert(Alert.AlertType.ERROR, dir+" not empty").showAndWait();
+                new Alert(Alert.AlertType.ERROR, dir + " not empty").showAndWait();
             } catch (IOException e) {
-                new Alert(Alert.AlertType.ERROR, " File permission problems for delete " +dir).showAndWait();
+                new Alert(Alert.AlertType.ERROR, " File permission problems for delete " + dir).showAndWait();
             }
-
         }
     }
-
 }

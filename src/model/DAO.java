@@ -39,7 +39,5 @@ public interface DAO<T> {
      */
     void delete(T obj);
 
-
     T get(T obj);
-
 }

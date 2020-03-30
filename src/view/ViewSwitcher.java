@@ -20,6 +20,7 @@ import java.io.IOException;
  * Class that handles the switching from one screen to another during interaction with the application
  */
 public class ViewSwitcher {
+
     /**
      * The stage containing the different scenes
      */
@@ -137,6 +138,3 @@ public class ViewSwitcher {
         this.user = user;
     }
 }
-
-
-

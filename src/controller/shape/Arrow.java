@@ -11,14 +11,14 @@ public class Arrow extends Path {
     }
 
     public String print() {
-        String returnValue = "\\draw ["+super.getDrawColor().value+",->] ";
+        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().value + ",->] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
-        returnValue += iterator.next().print();
+        returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {
-            returnValue += "-- ";
-            returnValue += iterator.next().print();
+            returnValue.append("-- ");
+            returnValue.append(iterator.next().print());
         }
-        returnValue += ";";
-        return returnValue;
+        returnValue.append(";");
+        return returnValue.toString();
     }
 }

@@ -38,11 +38,9 @@ import static utilities.ColorUtils.getColorNameFromRgb;
  */
 public class EditorController {
 
-
     /**
      * TODO We need to divide teh fxml so that we have separate controller for this one and the other view
      */
-
     private static final String SQUARE = "SQUARE";
     private static final String TRIANGLE = "TRIANGLE";
     private static final String TRIANGLE_POINT2 = "TRIANGLE2";
@@ -55,7 +53,6 @@ public class EditorController {
     private UserUCC userUcc;
 
     private ViewSwitcher viewSwitcher;
-
 
     @FXML
     Pane toolbar;
@@ -92,6 +89,8 @@ public class EditorController {
     private boolean waitingForMoreCoordinate = false;
     private Canvas canvas;
 
+    ContextMenu menu = new ContextMenu();
+
     private ContextMenu shapeContextMenu;
     private ChoiceBox contextMenuFillColorPicker;
     private ChoiceBox contextMenuDrawColorPicker;
@@ -100,6 +99,7 @@ public class EditorController {
         this.userUcc = ConfigurationSingleton.getUserUcc();
         this.canvas = ActiveCanvas.getActiveCanvas();
     }
+
     /**
      * Required to load view
      *
@@ -359,8 +359,6 @@ public class EditorController {
         canvas.addShape(addToController); //warn the model
         translateToTikz();
     }
-
-    ContextMenu menu = new ContextMenu();
 
     /**
      * Listener leftclick select or unselect

@@ -160,7 +160,6 @@ public class ProfileController {
      * Filter for the phone number field to only allow integers.
      */
     public void allowIntegersOnly() {
-
         UnaryOperator<TextFormatter.Change> filter = change -> {
             String text = change.getText();
 
@@ -172,7 +171,6 @@ public class ProfileController {
         };
         TextFormatter<String> textFormatter = new TextFormatter<>(filter);
         phoneTF.setTextFormatter(textFormatter);
-
     }
 
     /**
@@ -183,5 +181,4 @@ public class ProfileController {
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
     }
-
 }

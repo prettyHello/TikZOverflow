@@ -1,15 +1,18 @@
 
+config
 controller
+controller.Canvas
 controller.DTO
 controller.UCC
+controller.canvas
 controller.factories
-controller.view
-config
-utilities.exceptions
+controller.shape
 model
 utilities
+utilities.exceptions
 view
 view.dashboard
+view.editor
 view.login
 view.profile
 view.registration

@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * {@inheritDoc}
  */
 public class ProjectDAOImpl implements ProjectDAO {
+
     PreparedStatement prstmt;
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
@@ -150,8 +151,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         return null;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -159,8 +158,6 @@ public class ProjectDAOImpl implements ProjectDAO {
     public void update(ProjectDTO obj) {
 
     }
-
-
 
     private ProjectDTO fillDTO(ResultSet rs) throws SQLException {
         ProjectDTO projectDTO = new ProjectDTO();
