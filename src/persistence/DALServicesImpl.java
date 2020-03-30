@@ -1,5 +1,7 @@
 package persistence;
 
+import exceptions.FatalException;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,57 +13,72 @@ import java.sql.*;
  */
 public class DALServicesImpl implements DALServices, DALBackEndServices {
     private static Connection connection;
-    private static String db_name = "database";
-    private static String db_path;
+    private static String DBName = "database";
+    private static String DBPath;
 
     public DALServicesImpl() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PreparedStatement prepareStatement(String query) throws SQLException {
         this.openConnection();
         return this.connection.prepareStatement(query);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void startTransaction() {
+    public void startTransaction() throws  FatalException {
         this.openConnection();
         try {
             this.connection.setAutoCommit(false);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new FatalException("DalServices error - transaction: \n\t"+e.getMessage());
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void commit() {
+    public void commit() throws  FatalException {
         try {
             this.connection.commit();
             this.connection.setAutoCommit(true);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new FatalException("DalServices error - unable to commit: \n\t"+e.getMessage());
         }
         this.closeConnection();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void rollback() {
+    public void rollback() throws FatalException {
         if (this.connection == null)
             return;
         try {
             this.connection.rollback();
             this.connection.setAutoCommit(true);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new FatalException("DalServices error - impossible to rollback: \n\t"+e.getMessage());
         }
         this.closeConnection();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void createTables(String name) throws IOException {
-        this.db_name = name;
-        this.db_path = "jdbc:sqlite:" + this.db_name + ".db";
+    public void createTables(String name) throws IOException, FatalException {
+        this.DBName = name;
+        this.DBPath = "jdbc:sqlite:" + this.DBName + ".db";
         String scriptFilePath = "script.sql";
         BufferedReader reader = null;
         Statement statement = null;
@@ -80,7 +97,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
             }
             statement.executeUpdate(text);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new FatalException("Database creation impossible: \n\t"+e.getMessage());
         } finally {
             // close file reader
             if (reader != null) {
@@ -90,22 +107,28 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void createTables() throws IOException {
-        createTables(this.db_name);
+    public void createTables() throws IOException, FatalException {
+        createTables(this.DBName);
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void deleteDB(String name) {
+    public void deleteDB(String name) throws FatalException {
         this.closeConnection();
         try {
-            File f = new File("./" + this.db_name + ".db");
+            File f = new File("./" + this.DBName + ".db");
             if (!f.delete()) {
-                System.out.println("./" + this.db_name + ".db can't be deleted");
+                throw new FatalException("Database ./"+this.DBName + " deletion impossible: \n\t");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new FatalException("Database ./"+this.DBName + " deletion impossible: \n\t: "+e.getMessage());
         }
     }
 
@@ -113,13 +136,12 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      * This private method open a connexion with the database
      * Note that if the file doesn't exist, SQLite will create one
      */
-    private void openConnection() {
+    private void openConnection() throws FatalException {
         if (this.connection == null) {
             try {
-                this.connection = DriverManager.getConnection(this.db_path);
+                this.connection = DriverManager.getConnection(this.DBPath);
             } catch (Exception e) {
-                System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                System.exit(0);
+                throw new FatalException("Database ./"+this.DBName + " open connection impossible: \n\t: "+e.getMessage());
             }
 
         }
@@ -128,14 +150,13 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     /**
      * This private method safely close the connexion with the database
      */
-    private void closeConnection() {
+    private void closeConnection() throws FatalException {
         if (this.connection != null) {
             try {
                 this.connection.close();
                 this.connection = null;
             } catch (Exception e) {
-                System.err.println(e.getClass().getName() + ": " + e.getMessage());
-                System.exit(0);
+                throw new FatalException("Database ./"+this.DBName + " close connection impossible: \n\t: "+e.getMessage());
             }
         }
     }
