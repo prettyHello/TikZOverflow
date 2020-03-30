@@ -10,8 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import persistence.DALServices;
-import utilities.ProductionConfigurationSingleton;
+import utilities.ConfigurationSingleton;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -74,8 +73,8 @@ public class RegistrationController {
     private UserUCC userUcc;
 
     public RegistrationController() {
-        this.userFactory = ProductionConfigurationSingleton.getUserFactory();
-        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
+        this.userFactory = ConfigurationSingleton.getUserFactory();
+        this.userUcc = ConfigurationSingleton.getUserUcc();
     }
 
     @FXML

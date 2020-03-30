@@ -8,8 +8,6 @@ import business.DTO.UserDTO;
 import business.UCC.*;
 import business.factories.ProjectFactory;
 import business.factories.ProjectFactoryImpl;
-import business.factories.UserFactory;
-import business.factories.UserFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -20,7 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import persistence.*;
-import utilities.ProductionConfigurationSingleton;
+import utilities.ConfigurationSingleton;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -63,8 +61,8 @@ public class ViewOptionController extends HBox {
     private ViewSwitcher viewSwitcher;
 
     public ViewOptionController(DashboardController dashboard, UserDTO userDTO, int project_id) {
-        this.projectUCC = ProductionConfigurationSingleton.getProjectUCC();
-        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
+        this.projectUCC = ConfigurationSingleton.getProjectUCC();
+        this.userUcc = ConfigurationSingleton.getUserUcc();
         this.viewOptionUCC = new ViewOptionUCCImpl();
         this.project_id = project_id;
         this.dashboard = dashboard;

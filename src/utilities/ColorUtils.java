@@ -4,15 +4,11 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
+ * This class is to be removed during the next refactor
  * Java Code to get a color name from rgb/hex value/awt color
- *
- * The part of looking up a color name from the rgb values is edited from
- * https://gist.github.com/nightlark/6482130#file-gistfile1-java (that has some errors) by Ryan Mast (nightlark)
- *
- * @author Xiaoxiao Li
- * https://stackoverflow.com/questions/4126029/convert-rgb-values-to-color-name
- *
+ * This is basically a slightly modified copy paste of stack overflow https://stackoverflow.com/questions/4126029/convert-rgb-values-to-color-name
  */
+//TODO remove this class during the next refactor
 public class ColorUtils {
 
     static ArrayList<ColorUtils.ColorName> colorList = new ArrayList<ColorUtils.ColorName>();

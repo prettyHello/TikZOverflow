@@ -4,7 +4,6 @@ import business.DTO.ProjectDTO;
 import business.DTO.UserDTO;
 import business.UCC.ProjectUCC;
 import business.UCC.UserUCC;
-import business.UCC.UserUCCImpl;
 import business.factories.ProjectFactory;
 import business.factories.UserFactory;
 import exceptions.BizzException;
@@ -16,8 +15,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import persistence.*;
-import utilities.DAOConfigurationSingleton;
-import utilities.ProductionConfigurationSingleton;
+import utilities.ConfigurationSingleton;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -71,11 +69,11 @@ public class DashboardController {
     public DashboardController() {;
         projectList = new ListView<>();
         //load the configuration
-        this.dal = ProductionConfigurationSingleton.getDalServices(); //TODO remove once the code was refactored and dal is not used in view anymore
-        this.userFactory = ProductionConfigurationSingleton.getUserFactory();
-        this.userUcc = ProductionConfigurationSingleton.getUserUcc();
-        this.projectUCC = ProductionConfigurationSingleton.getProjectUCC();
-        this.projectFactory = ProductionConfigurationSingleton.getProjectFactory();
+        this.dal = ConfigurationSingleton.getDalServices(); //TODO remove once the code was refactored and dal is not used in view anymore
+        this.userFactory = ConfigurationSingleton.getUserFactory();
+        this.userUcc = ConfigurationSingleton.getUserUcc();
+        this.projectUCC = ConfigurationSingleton.getProjectUCC();
+        this.projectFactory = ConfigurationSingleton.getProjectFactory();
     }
 
     /**
