@@ -36,7 +36,7 @@ public class UserUCCImpl implements UserUCC {
             throw new BizzException("Wrong Password");
         }
         ConnectedUser.setConnectedUser(userDb);
-        File file = new File(rootProject +"userid_" +userDb.getUserId());
+        File file = new File(rootProject +userDb.getFirstName()+"_"+userDb.getLastName()+"_"+ userDb.getUserId());
         if (!file.exists()) {
             if (file.mkdir()) {
                 System.out.println("Directory is created!");
