@@ -3,6 +3,8 @@ package controller.shape;
 import utilities.Utility;
 import utilities.exceptions.FatalException;
 
+import java.util.ArrayList;
+
 public class Triangle extends Shape {
     private Coordinates originPoint;
     private Coordinates secondPoint;
@@ -42,5 +44,14 @@ public class Triangle extends Shape {
         String returnValue = super.print();
         returnValue += this.originPoint.print() + "-- " + this.secondPoint.print() + "-- " + this.thirdPoint.print() + "-- cycle;";
         return returnValue;
+    }
+
+    public ArrayList<Coordinates> getPoints() {
+        ArrayList<Coordinates> points = new ArrayList<>();
+        points.add(this.originPoint);
+        points.add(this.secondPoint);
+        points.add(this.thirdPoint);
+
+        return points;
     }
 }
