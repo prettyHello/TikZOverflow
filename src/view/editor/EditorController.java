@@ -278,7 +278,12 @@ public class EditorController {
                 waitingForMoreCoordinate = true;
                 break;
             case TRIANGLE_POINT3:
-                addToController = new controller.shape.Triangle(new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                //addToController = new controller.shape.Triangle(new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                Coordinates point1 = new Coordinates(selectedX, selectedY);
+                Coordinates point2 = new Coordinates(previouslySelectedX, previouslySelectedY);
+                Coordinates point3 = new Coordinates(thirdSelectedX, thirdSelectedY);
+
+                addToController = new controller.shape.Triangle(true, true, (controller.shape.Color) strokeColour.getValue(), (controller.shape.Color) fillColour.getValue(), point1, point2, point3, canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
@@ -566,35 +571,62 @@ public class EditorController {
      */
     private void handleDraw (controller.shape.Shape shape) {
         Shape shapeDrawing = null;
+
         switch (shape.getClass().toString()) {
-            case "class controller.shape.Circle":
+            case "class controller.shape.Circle": {
                 Coordinates circleCenter = ((controller.shape.Circle) shape).getCoordinates();
                 double circleRadius = ((controller.shape.Circle) shape).getRadius();
 
-                Circle circle = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
-                shapeDrawing = circle;
+                shapeDrawing = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
                 break;
-            case "class controller.shape.Square":
+            }
+            case "class controller.shape.Square": {
                 double squareX = ((controller.shape.Square) shape).getOriginCoordinates().getX();
                 double squareY = ((controller.shape.Square) shape).getOriginCoordinates().getY();
                 double squareSize = ((controller.shape.Square) shape).getSize();
 
-                Rectangle rectangle = new Rectangle(squareX, squareY, squareSize, squareSize);
-                shapeDrawing = rectangle;
+                shapeDrawing = new Rectangle(squareX, squareY, squareSize, squareSize);
                 break;
-            case "class controller.shape.Triangle":
+            }
+            case "class controller.shape.Triangle": {
+                ArrayList<Coordinates>  points = ((controller.shape.Triangle) shape).getPoints();
+                Coordinates point1 = points.get(0);
+                Coordinates point2 = points.get(1);
+                Coordinates point3 = points.get(2);
+
+                Polygon polygon = new Polygon();
+                polygon.getPoints().addAll(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY());
+                shapeDrawing = polygon;
                 break;
-            case "class controller.shape.Line":
+            }
+            case "class controller.shape.Line": {
+                ArrayList<Coordinates> points = ((controller.shape.Line) shape).getPathPoints();
+                Coordinates point1 = points.get(0);
+                Coordinates point2 = points.get(1);
+
+                shapeDrawing = new Line(point1.getX(), point1.getY(), point2.getX(), point2.getY());
                 break;
-            case "class controller.shape.Arrow":
+            }
+            case "class controller.shape.Arrow": {
+                ArrayList<Coordinates> points = ((controller.shape.Arrow) shape).getPathPoints();
+                Coordinates point1 = points.get(0);
+                Coordinates point2 = points.get(1);
+
+                previouslySelectedX = point1.getX();
+                previouslySelectedY = point1.getY();
+                selectedX = point2.getX();
+                selectedY = point2.getY();
+
+                shapeDrawing = constructArrow();
                 break;
+            }
         }
         if (shapeDrawing != null) {
             shapeDrawing.setId(Integer.toString(shape.getId()));
             shapeDrawing.setFill(Color.valueOf(shape.getFillColor().toString()));
             shapeDrawing.setStroke(Color.valueOf(shape.getDrawColor().toString()));
             pane.getChildren().add(shapeDrawing);
-            shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
+            shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
         }
     }
 
