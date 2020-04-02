@@ -20,8 +20,7 @@ public class Rectangle extends Shape {
      */
     public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
         super(true, false, id);
-        Utility.checkObject(originCoordinates);
-        Utility.checkObject(endCoordinates);
+        Utility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;
     }
@@ -38,8 +37,7 @@ public class Rectangle extends Shape {
      */
     public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, id);
-        Utility.checkObject(originCoordinates);
-        Utility.checkObject(endCoordinates);
+        Utility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;
     }

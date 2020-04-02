@@ -28,7 +28,7 @@ public class UserUCCImpl implements UserUCC {
      * {@inheritDoc}
      */
     public void login(UserDTO user) throws BizzException, FatalException {
-        utilities.Utility.checkObject(user);
+        utilities.Utility.checkObjects(user);
         User userDb = (User) userDAO.get(user);
         /* The salt is incorporated into the hash (encoded in a base64-style format).
          * That's why the salt shouldn't actually be saved */
@@ -53,7 +53,7 @@ public class UserUCCImpl implements UserUCC {
     public void updateUserInfo(UserDTO userDTO) throws BizzException, FatalException {
         //TODO need to check userDTO with utils
         //good implementation, a little bit empty
-        utilities.Utility.checkObject(userDTO);
+        utilities.Utility.checkObjects(userDTO);
         try {
             dal.startTransaction();
             //TODO add business constrains here or remove the transaction/rollback/commit
@@ -93,7 +93,7 @@ public class UserUCCImpl implements UserUCC {
      */
     @Override
     public UserDTO getUserInfo(UserDTO user) throws BizzException, FatalException {
-        utilities.Utility.checkObject(user);
+        utilities.Utility.checkObjects(user);
         return userDAO.get(user);
     }
 
@@ -102,7 +102,7 @@ public class UserUCCImpl implements UserUCC {
      */
     @Override
     public void register(UserDTO userDTO) throws FatalException {
-        utilities.Utility.checkObject(userDTO);
+        utilities.Utility.checkObjects(userDTO);
         try {
             dal.startTransaction();
             //TODO add business constrains here or remove the transaction/rollback/commit

@@ -278,12 +278,10 @@ public class EditorController {
                 waitingForMoreCoordinate = true;
                 break;
             case TRIANGLE_POINT3:
-                //addToController = new controller.shape.Triangle(new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
-                Coordinates point1 = new Coordinates(selectedX, selectedY);
-                Coordinates point2 = new Coordinates(previouslySelectedX, previouslySelectedY);
-                Coordinates point3 = new Coordinates(thirdSelectedX, thirdSelectedY);
-
-                addToController = new controller.shape.Triangle(true, true, (controller.shape.Color) strokeColour.getValue(), (controller.shape.Color) fillColour.getValue(), point1, point2, point3, canvas.getIdForNewShape());
+                Coordinates pt1 = new Coordinates(selectedX, selectedY);
+                Coordinates pt2 = new Coordinates(previouslySelectedX, previouslySelectedY);
+                Coordinates pt3 = new Coordinates(thirdSelectedX, thirdSelectedY);
+                addToController = new controller.shape.Triangle(pt1, pt2, pt3, canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;

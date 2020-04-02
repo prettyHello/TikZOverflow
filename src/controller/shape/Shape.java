@@ -45,11 +45,11 @@ public abstract class Shape implements Serializable {
         this.draw = draw;
         this.fill = fill;
         if (fill) {
-            Utility.checkObject(fillColor);
+            Utility.checkObjects(fillColor);
             this.fillColor = fillColor;
         }
         if (draw) {
-            Utility.checkObject(drawColor);
+            Utility.checkObjects(drawColor);
             this.drawColor = drawColor;
         }
         this.id = id;

@@ -27,7 +27,7 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, int id) throws FatalException {
         super(true, false, id);
-        Utility.checkObject(pathPoints);
+        Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
@@ -45,7 +45,7 @@ import java.util.Iterator;
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
         pathPoints.add(origin);
         pathPoints.add(end);
-        Utility.checkObject(pathPoints);
+        Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
 
     }
@@ -62,7 +62,7 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
         super(true, false, drawColor, Color.WHITE, id);
-        Utility.checkObject(pathPoints);
+        Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
@@ -88,12 +88,12 @@ import java.util.Iterator;
     }
 
     public void addCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObject(coordinates);
+        Utility.checkObjects(coordinates);
         this.pathPoints.add(coordinates);
     }
 
     public void rmCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObject(coordinates);
+        Utility.checkObjects(coordinates);
         this.pathPoints.remove(coordinates);
         //Todo check if it works like that, 50% it won't, let's pray.
     }

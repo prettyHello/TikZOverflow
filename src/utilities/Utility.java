@@ -90,14 +90,15 @@ public class Utility {
     }
 
     /**
-     * Check if an object is null.
+     * Checks if any Object in a series is null
      *
-     * @param obj
-     * @throws FatalException If the object is null.
+     * @param obj the series of Objects
      */
-    public static void checkObject(Object obj) throws FatalException {
-        if (obj == null) {
-            throw new FatalException("Object is null");
+    public static void checkObjects(Object... obj) {
+        for (Object o : obj) {
+            if (o == null) {
+                throw new FatalException("Object is null");
+            }
         }
     }
 

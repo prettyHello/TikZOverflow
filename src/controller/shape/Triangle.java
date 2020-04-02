@@ -18,10 +18,26 @@ public class Triangle extends Shape {
      */
     public Triangle(Coordinates originPoint, int id) {
         super(true, false, id);
-        Utility.checkObject(originPoint);
+        Utility.checkObjects(originPoint);
         this.originPoint = originPoint;
         this.secondPoint = new Coordinates(originPoint.getX() + 1, originPoint.getY());
         this.thirdPoint = new Coordinates(originPoint.getX(), originPoint.getY() + 1);
+    }
+
+    /**
+     * Creates a triangle from three given points and an id
+     *
+     * @param pt1 the first point of the triangle
+     * @param pt2 the second point of the triangle
+     * @param pt3 the third point of the triangle
+     * @param id  the id of the shape
+     */
+    public Triangle(Coordinates pt1, Coordinates pt2, Coordinates pt3, int id) {
+        super(true, false, id);
+        Utility.checkObjects(pt1, pt2, pt3);
+        this.originPoint = pt1;
+        this.secondPoint = pt2;
+        this.thirdPoint = pt3;
     }
 
     /**
@@ -32,9 +48,7 @@ public class Triangle extends Shape {
      */
     public Triangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originPoint, Coordinates secondPoint, Coordinates thirdPoint, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, id);
-        Utility.checkObject(originPoint);
-        Utility.checkObject(secondPoint);
-        Utility.checkObject(thirdPoint);
+        Utility.checkObjects(originPoint, secondPoint, thirdPoint);
         this.originPoint = originPoint;
         this.secondPoint = secondPoint;
         this.thirdPoint = thirdPoint;
