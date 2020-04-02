@@ -8,7 +8,7 @@ import utilities.exceptions.FatalException;
  * 0,0 is the origin coordinate, 1,1 is the end coordinate.
  */
 public class Rectangle extends Shape {
-    private Coordinates orginCoordinates = null;
+    private Coordinates originCoordinates = null;
     private Coordinates endCoordinates = null;
 
     /**
@@ -22,25 +22,25 @@ public class Rectangle extends Shape {
         super(true, false, id);
         Utility.checkObject(originCoordinates);
         Utility.checkObject(endCoordinates);
-        this.orginCoordinates = originCoordinates;
+        this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;
     }
 
     /**
      * Personalised rectangle.
      *
-     * @param orginCoordinates
+     * @param originCoordinates
      * @param endCoordinates
      * @param draw             Is the shape have a outer line, can be combined with fill.
      * @param fill             Is the shape filled with a color, can be combined with draw.
      * @param fillColor        Color to fill the shape with, color list in Color enum.
      * @param drawColor        Outer line color, color list in Color enum.
      */
-    public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates orginCoordinates, Coordinates endCoordinates, int id) throws FatalException {
+    public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, id);
-        Utility.checkObject(orginCoordinates);
+        Utility.checkObject(originCoordinates);
         Utility.checkObject(endCoordinates);
-        this.orginCoordinates = orginCoordinates;
+        this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;
     }
 
@@ -50,7 +50,21 @@ public class Rectangle extends Shape {
      */
     public String print() {
         String returnValue = super.print();
-        returnValue += this.orginCoordinates.print() + "rectangle " + this.endCoordinates.print() + ";";
+        returnValue += this.originCoordinates.print() + "rectangle " + this.endCoordinates.print() + ";";
         return returnValue;
+    }
+
+    /**
+     * @return the origin coordinates of the rectangle.
+     */
+    public Coordinates getOriginCoordinates () {
+        return this.originCoordinates;
+    }
+
+    /**
+     * @return the end coordinates of the rectangle.
+     */
+    public Coordinates getEndCoordinates () {
+        return this.endCoordinates;
     }
 }
