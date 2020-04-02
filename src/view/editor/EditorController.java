@@ -94,6 +94,7 @@ public class EditorController {
     private ContextMenu shapeContextMenu;
     private ChoiceBox contextMenuFillColorPicker;
     private ChoiceBox contextMenuDrawColorPicker;
+    private ChoiceBox contextMenuWeight;
 
     public EditorController() {
         this.userUcc = ConfigurationSingleton.getUserUcc();
@@ -131,6 +132,7 @@ public class EditorController {
 
         contextMenuFillColorPicker = new ChoiceBox();
         contextMenuDrawColorPicker = new ChoiceBox();
+        contextMenuWeight = new ChoiceBox();
 
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
@@ -152,7 +154,11 @@ public class EditorController {
         fillColorMenu.setOnAction(t -> setFillColor());
         MenuItem drawColorMenu = new MenuItem("Stroke color", contextMenuDrawColorPicker);
         drawColorMenu.setOnAction(t -> setDrawColor());
-        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu);
+
+        MenuItem shapeWeightMenu = new MenuItem("Shape Weight", contextMenuWeight);
+        shapeWeightMenu.setOnAction(t-> setShapeWeight());
+
+        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeWeightMenu);
 
         // show shapes at the start(don't have to interact to have thel show up)
         translateToTikz();
@@ -203,6 +209,9 @@ public class EditorController {
         translateToTikz();
     }
 
+    private void setShapeWeight(){
+        System.out.println("Inside shape weight");
+    }
     @FXML
     void drawLine() {
         if (!checkIfMoreCoordinateRequired()) {
@@ -240,6 +249,8 @@ public class EditorController {
 
     @FXML
     void delete() {
+
+        System.out.println("Test!!!");
         if (!checkIfMoreCoordinateRequired()) {
             if (!selectedShapes.isEmpty()) {
                 Iterator<Shape> it = selectedShapes.iterator();

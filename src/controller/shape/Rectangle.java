@@ -11,6 +11,7 @@ public class Rectangle extends Shape {
     private Coordinates orginCoordinates = null;
     private Coordinates endCoordinates = null;
 
+
     /**
      * Default rectangle, drawn with a black line.
      *
