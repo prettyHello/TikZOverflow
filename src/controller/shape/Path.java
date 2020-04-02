@@ -113,4 +113,11 @@ import java.util.Iterator;
     public void setArrowEnd(boolean arrowEnd) {
         this.arrowEnd = arrowEnd;
     }
+
+    /**
+     * @return origin and end of Path.
+     */
+    public ArrayList<Coordinates> getPathPoints() {
+        return this.pathPoints;
+    }
 }
