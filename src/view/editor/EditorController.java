@@ -568,15 +568,19 @@ public class EditorController {
         Shape shapeDrawing = null;
         switch (shape.getClass().toString()) {
             case "class controller.shape.Circle":
-                Circle circle = new Circle();
-                circle.setCenterX(((controller.shape.Circle) shape).getCoordinates().getX());
-                circle.setCenterY(((controller.shape.Circle) shape).getCoordinates().getY());
-                circle.setRadius(((controller.shape.Circle) shape).getRadius());
+                Coordinates circleCenter = ((controller.shape.Circle) shape).getCoordinates();
+                double circleRadius = ((controller.shape.Circle) shape).getRadius();
+
+                Circle circle = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
                 shapeDrawing = circle;
                 break;
             case "class controller.shape.Square":
-                int size = 75;
-                Rectangle rectangle = new Rectangle(selectedX, selectedY, 75, 75);
+                double squareX = ((controller.shape.Square) shape).getOriginCoordinates().getX();
+                double squareY = ((controller.shape.Square) shape).getOriginCoordinates().getY();
+                double squareSize = ((controller.shape.Square) shape).getSize();
+
+                Rectangle rectangle = new Rectangle(squareX, squareY, squareSize, squareSize);
+                shapeDrawing = rectangle;
                 break;
             case "class controller.shape.Triangle":
                 break;
