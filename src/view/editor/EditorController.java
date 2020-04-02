@@ -314,7 +314,7 @@ public class EditorController {
                 waitingForMoreCoordinate = false;
                 break;
             case SQUARE:
-                int size = 75;
+                double size = 75;
                 shape = new Rectangle(selectedX, selectedY, 75, 75);
                 addToController = new Square(new Coordinates(selectedX, selectedY), size, canvas.getIdForNewShape());
                 break;
