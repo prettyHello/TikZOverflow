@@ -156,6 +156,7 @@ public class EditorController {
 
         // show shapes at the start(don't have to interact to have thel show up)
         translateToTikz();
+        translateToDraw();
     }
 
     /**
@@ -556,6 +557,52 @@ public class EditorController {
      */
     private void translateToTikz() {
         tikzTA.setText(canvas.toTikZ());
+    }
+
+    /**
+     * Draw controller shape in diagram.
+     *
+     * @param shape
+     */
+    private void handleDraw (controller.shape.Shape shape) {
+        Shape shapeDrawing = null;
+        switch (shape.getClass().toString()) {
+            case "class controller.shape.Circle":
+                Circle circle = new Circle();
+                circle.setCenterX(((controller.shape.Circle) shape).getCoordinates().getX());
+                circle.setCenterY(((controller.shape.Circle) shape).getCoordinates().getY());
+                circle.setRadius(((controller.shape.Circle) shape).getRadius());
+                shapeDrawing = circle;
+                break;
+            case "class controller.shape.Square":
+                int size = 75;
+                Rectangle rectangle = new Rectangle(selectedX, selectedY, 75, 75);
+                break;
+            case "class controller.shape.Triangle":
+                break;
+            case "class controller.shape.Line":
+                break;
+            case "class controller.shape.Arrow":
+                break;
+        }
+        if (shapeDrawing != null) {
+            shapeDrawing.setId(Integer.toString(shape.getId()));
+            shapeDrawing.setFill(Color.valueOf(shape.getFillColor().toString()));
+            shapeDrawing.setStroke(Color.valueOf(shape.getDrawColor().toString()));
+            pane.getChildren().add(shapeDrawing);
+            shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
+        }
+    }
+
+    /**
+     * Translate controller shapes in diagram.
+     */
+    private void translateToDraw () {
+
+        for (controller.shape.Shape shape : canvas.getShapes()) {
+            handleDraw(shape);
+        }
+
     }
 }
 
