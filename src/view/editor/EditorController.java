@@ -15,6 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -25,10 +27,15 @@ import model.SaveObject;
 import view.ViewName;
 import view.ViewSwitcher;
 
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
 
@@ -51,7 +58,7 @@ public class EditorController {
     private static final String ARROW = "ARROW";
     private static final String ARROW_POINT2 = "ARROW_POINT2";
     private UserUCC userUcc;
-
+    private String lineTikz = "";
     private ViewSwitcher viewSwitcher;
 
     @FXML
@@ -158,6 +165,7 @@ public class EditorController {
         translateToTikz();
         translateToDraw();
     }
+
 
     /**
      * Rightclick dropdown menu, change FillColor
@@ -632,11 +640,56 @@ public class EditorController {
      * Translate controller shapes in diagram.
      */
     private void translateToDraw () {
-
         for (controller.shape.Shape shape : canvas.getShapes()) {
             handleDraw(shape);
         }
+    }
 
+    /**
+     * We'll need to check if the key "Enter" is pressed later on.
+     * @param keyEvent
+     * \draw [black] (332.0,63.0) -- (130.0,152.0) ;
+     * \filldraw[fill=yellow, draw=black] (71.0,276.0) rectangle (146.0,351.0) ;
+     */
+    public void checkTikzCode(KeyEvent keyEvent) {
+        if(keyEvent.getCode() == KeyCode.ENTER) {
+            for (String line : tikzTA.getText().split("\\n")) sendTikzCode(line);
+        }
+    }
+    //Regex the textArea to then draw the Tikz into Shapes
+    private void sendTikzCode(String line){
+        System.out.println(line);
+        String pattern = "\\\\(filldraw)\\[fill=(yellow|blue),draw=(yellow|blue)\\]\\((\\d+.\\d+),(\\d+.\\d+)\\)(rectangle|circle)\\((\\d+.\\d+),(\\d+.\\d+)\\)|\\[radius=(\\d+.\\d+)\\]";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(line);
+        if (m.find( )) {
+            System.out.println("Found value: " + m.group(1) );
+            System.out.println("Found value: " + m.group(2) );
+            System.out.println("Found value: " + m.group(3) );
+            System.out.println("Found value: " + m.group(4) );
+            System.out.println("Found value: " + m.group(5) );
+            System.out.println("Found value: " + m.group(6) );
+            System.out.println("Found value: " + m.group(7) );
+            if( m.group(1) == "filldraw"){
+                if(m.group(6) =="rectangle"){
+                    System.out.println("Found rectangle");
+                    Coordinates start = new Coordinates(Double.parseDouble(m.group(4)),Double.parseDouble(m.group(5)));
+                    Coordinates end = new Coordinates(Double.parseDouble(m.group(7)),Double.parseDouble(m.group(8)));
+                    controller.shape.Rectangle rectangle = new controller.shape.Rectangle(start,end,5);
+                    rectangle.setFillColor(controller.shape.Color.GREEN); //How to translate string to color ?
+                    rectangle.setDrawColor(controller.shape.Color.GREEN); //Same here
+
+                    handleDraw(rectangle);
+                }
+            }
+        } else {
+            System.out.println("NO MATCH");
+        }
+    }
+    private String peek(String search, String line){
+        String x ="";
+        x = line.substring(line.indexOf(search)+1);
+        return x;
     }
 }
 
