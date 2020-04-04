@@ -9,6 +9,7 @@ import controller.DTO.UserDTO;
 import controller.UCC.UserUCC;
 import controller.shape.Coordinates;
 import controller.shape.Square;
+import controller.shape.Thickness;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -77,6 +78,8 @@ public class EditorController {
     @FXML
     ChoiceBox strokeColour;
     @FXML
+    ChoiceBox shapeThickness;
+    @FXML
     SplitPane mainSplitPane;
     @FXML
     AnchorPane leftAnchorPane;
@@ -94,7 +97,7 @@ public class EditorController {
     private ContextMenu shapeContextMenu;
     private ChoiceBox contextMenuFillColorPicker;
     private ChoiceBox contextMenuDrawColorPicker;
-    private ChoiceBox contextMenuWeight;
+    private ChoiceBox contextMenuChangeThickness;
 
     public EditorController() {
         this.userUcc = ConfigurationSingleton.getUserUcc();
@@ -132,7 +135,7 @@ public class EditorController {
 
         contextMenuFillColorPicker = new ChoiceBox();
         contextMenuDrawColorPicker = new ChoiceBox();
-        contextMenuWeight = new ChoiceBox();
+        contextMenuChangeThickness = new ChoiceBox();
 
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
@@ -142,11 +145,19 @@ public class EditorController {
             contextMenuFillColorPicker.getItems().add(colour);
             contextMenuDrawColorPicker.getItems().add(colour);
         }
+
+        for (controller.shape.Thickness thickness : controller.shape.Thickness.values()) {
+            shapeThickness.getItems().add(thickness);
+            contextMenuChangeThickness.getItems().add(thickness);
+        }
+
         // Set start value dropdown to black
         fillColour.setValue(controller.shape.Color.BLACK);
         strokeColour.setValue(controller.shape.Color.BLACK);
+        shapeThickness.setValue(Thickness.THIN);
         contextMenuFillColorPicker.setValue(controller.shape.Color.BLACK);
         contextMenuDrawColorPicker.setValue(controller.shape.Color.BLACK);
+        contextMenuChangeThickness.setValue(Thickness.THIN);
 
         MenuItem delete = new MenuItem("delete");
         delete.setOnAction(t -> rightClickDeleteShape());
@@ -154,11 +165,10 @@ public class EditorController {
         fillColorMenu.setOnAction(t -> setFillColor());
         MenuItem drawColorMenu = new MenuItem("Stroke color", contextMenuDrawColorPicker);
         drawColorMenu.setOnAction(t -> setDrawColor());
+        MenuItem shapeThicknessMenu = new MenuItem("Shape thickness", contextMenuChangeThickness);
+        shapeThicknessMenu.setOnAction(t-> setShapeThickness());
 
-        MenuItem shapeWeightMenu = new MenuItem("Shape Weight", contextMenuWeight);
-        shapeWeightMenu.setOnAction(t-> setShapeWeight());
-
-        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeWeightMenu);
+        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu);
 
         // show shapes at the start(don't have to interact to have thel show up)
         translateToTikz();
@@ -209,9 +219,13 @@ public class EditorController {
         translateToTikz();
     }
 
-    private void setShapeWeight(){
-        System.out.println("Inside shape weight");
+    private void setShapeThickness(){
+        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            shape.setStrokeWidth(Thickness.valueOf(contextMenuChangeThickness.getValue().toString()).thicknessValue());
+        }
     }
+
     @FXML
     void drawLine() {
         if (!checkIfMoreCoordinateRequired()) {
@@ -249,8 +263,6 @@ public class EditorController {
 
     @FXML
     void delete() {
-
-        System.out.println("Test!!!");
         if (!checkIfMoreCoordinateRequired()) {
             if (!selectedShapes.isEmpty()) {
                 Iterator<Shape> it = selectedShapes.iterator();
@@ -337,6 +349,7 @@ public class EditorController {
         } else {
             shape.setFill(Color.valueOf(fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(strokeColour.getValue().toString()));
+            //shape.setStrokeWidth(Thickness.valueOf(contextMenuChangeThickness.getValue().toString()).thicknessValue());
             pane.getChildren().add(shape);
             notifyController(addToController, shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
