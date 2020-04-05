@@ -20,20 +20,18 @@ import java.util.zip.GZIPInputStream;
 /**
  * Collection of utility functions used in the view
  */
+//TODO DIVIDE ENTRE VIEWUTILITY ET CONTROLLERUTILITY
 public class Utility {
 
     public static String ALLOWED_CHARACTERS_PATTERN = "^[_,A-Z|a-z|0-9]+";
 
     public static final String UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
 
-
     public static final String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
     private static String nameArchive1;
 
-
     //TODO Change capital letters
     public static final String EMAIL_PATTERN = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
-
 
     private Utility() {
     }
@@ -121,6 +119,7 @@ public class Utility {
      * @param tarFile  path to source file ".tar.gz"
      * @param destFile destination directory of decompressed file
      */
+    //TODO CLEAN EVERYTHING,
     public static String unTarFile(File tarFile, Path destFile) {
         TarArchiveInputStream tis = null;
         try {
@@ -157,6 +156,7 @@ public class Utility {
             }
             return untaredNameFolder;
         } catch (IOException ex) {
+            //TODO IS CATCH APROPRIATE, WHY A FUCKING ALERT HERE
             new Alert(Alert.AlertType.ERROR, "File decompression error").showAndWait();
             return null;
         } finally {
@@ -164,22 +164,21 @@ public class Utility {
                 try {
                     tis.close();
                 } catch (IOException e) {
+                    //TODO MAIS PUTAAAAINN
                     e.printStackTrace();
                 }
             }
         }
     }
 
-
+    //TODO CHECK IF NEEDS CATCH AND DIVIDE IN 2
     public static void copy(File dirSrc, File dirDest) throws IOException {
-
         if (dirSrc.isDirectory()) {
             if (!dirDest.exists()) {
                 dirDest.mkdir();
-                System.out.println("Dossier " + dirSrc + "  > " + dirDest);
+                //System.out.println("Dossier " + dirSrc + "  > " + dirDest);
             }
             String files[] = dirSrc.list();
-
             for (String f : files) {
                 File srcF = new File(dirSrc, f);
                 File destF = new File(dirDest, f);
@@ -284,7 +283,7 @@ public class Utility {
         checkString(password2, "password");
     }
 
-
+//TODO JAVADOC, EST ce bon endroit, codé correctement, ajoute les exeption, pas d'alerte
     public static void deleteFile(File dir) {
 
         if (dir.isDirectory()) {

@@ -31,6 +31,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
     /**
      * {@inheritDoc}
      */
+    //TODO CLEAN AND SIMPLIFY
     public void ExportProject(File dir, File selectedFile) {
         try {
             if ( selectedFile != null ) {
@@ -59,6 +60,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
      * @return
      */
     @Override
+    //TODO CLEAN ET MOVE DANS UTILS
     public Boolean createTarGz(String folderProject, String fileTarDestination) throws IOException, BizzException {
         File root = new File(folderProject);
         // create tar archive
@@ -83,6 +85,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
     /**
      * {@inheritDoc}
      */
+    //TODO CLEAN ET MOVE DANS UTILS
     @Override
     public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz){
         File file = new File(folderProject);
@@ -107,6 +110,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
         }
     }
 
+    //TODO CLEAN ET MOVE DANS PROJECT, SMIPLIFY, DIVIDE
     public void deleteProject(ProjectDTO project, DashboardController dashboard ) {
         File dir = new File(project.getProjectPath()) ;
         if (dir.exists()) {
@@ -119,6 +123,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
                 DALServices dal = new DALServicesImpl();
                 ProjectFactory projectFactory = new ProjectFactoryImpl();
                 ProjectDAO dao = new ProjectDAOImpl(dal, projectFactory);
+                //TODO WHHHHYYYYYYY
                 ((ProjectDAO) dao).delete(project);
                 Utility.deleteFile(dir);
                 dashboard.delete(project);

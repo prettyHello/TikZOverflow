@@ -20,6 +20,7 @@ public interface ProjectUCC {
      */
     void renameFolderProject(File projectName, File NewProjectName);
 
+    //TODO DOUBLONS
     /**
      * retrieve information for a given project & user
      *
@@ -30,6 +31,7 @@ public interface ProjectUCC {
      */
     ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId);
 
+    //TODO DOUBLONS
     /**
      * retrieve information for a given project id
      *
@@ -38,6 +40,7 @@ public interface ProjectUCC {
      */
     ProjectDTO get(ProjectDTO projet);
 
+    //TODO JUST CREATE IS FINE SINCE ITS THE PROJECT CONTEXT
     /**
      * Creates a new project on disk and stores its path in the database
      *

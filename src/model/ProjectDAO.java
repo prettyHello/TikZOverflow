@@ -25,5 +25,6 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
      * @return
      * @throws FatalException
      */
-    ProjectDTO getSelectedProject(int userID, String projectName) throws BizzException;
+    //TODO CHECK is if bizzexception is the right one
+    ProjectDTO getSelectedProject(ProjectDTO dto) throws BizzException;
 }

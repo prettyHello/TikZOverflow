@@ -6,6 +6,10 @@ import controller.DTO.UserDTO;
 
 import java.io.*;
 
+//TODO MOVE TO PROJECTDAO
+//TODO ADD ACTUAL JAVADOC
+//TODO MOVE THE TEST ACORDIGLY
+
 public class SaveObject {
     private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator  ;
 

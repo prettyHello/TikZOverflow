@@ -1,10 +1,13 @@
 package controller.DTO;
 
+//TODO create interface -> crée projet
+
 /**
  * The project DTO contains all the data related to the project and is serializable
  * the project DTO travels between the mvc layers of the application
  */
 public class ProjectDTO {
+    //TODO DIFFERENCE ENTRE PROJECTID ET PROJECTREFERENCE
     private int projectId;
     private int projectOwnerId;
     private String projectName;
@@ -13,6 +16,7 @@ public class ProjectDTO {
     private String createDate;
     private String modificationDate;
 
+    //TODO WHY
     public ProjectDTO() {
     }
 

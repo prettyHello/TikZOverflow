@@ -20,7 +20,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import model.*;
+//TODO WTF
+//import model.*;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -30,6 +31,9 @@ import java.io.IOException;
 
 
 //TODO refactor to be MVC compliant
+//TODO CLASS : rename to something actually correct and not meaningless,
+//TODO REFACTOR TO USE SINGLETON CONFIGURATION (check dashboardController)
+
 public class ViewOptionController extends HBox {
 
     private ProjectUCC projectUCC;
@@ -61,6 +65,7 @@ public class ViewOptionController extends HBox {
     private ViewOptionUCCImpl viewOptionUCC;
     private ViewSwitcher viewSwitcher;
 
+    //TODO project id  -> dto
     public ViewOptionController(DashboardController dashboard, UserDTO userDTO, int project_id) {
         this.projectUCC = ConfigurationSingleton.getProjectUCC();
         this.userUcc = ConfigurationSingleton.getUserUcc();
@@ -74,12 +79,13 @@ public class ViewOptionController extends HBox {
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
+            //TODO pas ça please
             e.printStackTrace();
         }
     }
 
     public void initialize() {
-
+        //TODO SORTIR LES HANDLER DE INIT
         exportBtn.setOnAction(event -> {
             DALServices dal = new DALServicesImpl();
             ProjectFactory projectFactory = new ProjectFactoryImpl();
@@ -121,6 +127,7 @@ public class ViewOptionController extends HBox {
         });
     }
 
+    //Todo SUSPECT
     public ViewOptionController setProject(ProjectDTO projectDTO) {
         projectDTO.setProjectOwnerId(user.getUserId());
         this.projectDTO = projectDTO;
@@ -142,6 +149,7 @@ public class ViewOptionController extends HBox {
         this.editIcon.setImage(new Image("images/edit.png"));
     }
 
+    //Todo SUSPECT ?
     public HBox getProjectRowHbox() {
         return projectRowHbox;
     }

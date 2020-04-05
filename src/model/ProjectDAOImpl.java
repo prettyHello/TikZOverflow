@@ -12,28 +12,33 @@ import java.util.ArrayList;
 
 // creer une interface pour projetDAO, ensuite modifier la classe ProjectDAO en ProjectDAOImpl
 
+//TODO CLASSE : variable camecase, Implementé dao correctement.
+//
+
 /**
  * {@inheritDoc}
  */
 public class ProjectDAOImpl implements ProjectDAO {
 
+    //TODO PREPAREDSTAT dois venir du dal je,crois
     PreparedStatement prstmt;
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
     private static final String SQL_SELECT_BY_PROJECTID = "SELECT * FROM projects WHERE project_id = ?";
     private static final String SQL_SELECT_PROJECT_OF_USER = "SELECT * FROM projects WHERE project_owner_id = ?  AND name = ?";
     private static final String SQL_DELETE_PROJECT_OF_USER = "DELETE FROM projects WHERE project_owner_id = ? AND name = ?";
-    // gerer les connections en s'appuyant sur l'implementation dans UserUCCImpl pour les fermetures et Exceptions
+    //TODO CONMPRENDRE CE QUE 9A VOUSLAIS DIRE : gerer les connections en s'appuyant sur l'implementation dans UserUCCImpl pour les fermetures et Exceptions
 
     private final DALBackEndServices dal;
     private final ProjectFactory projectFactory;
 
+    //TODO check si on utilise le bon dal.
     public ProjectDAOImpl(DALServices dalServices, ProjectFactory projectFactory) {
         this.dal = (DALBackEndServices) dalServices;
         this.projectFactory = projectFactory;
     }
 
-    // lever des utilities.exceptions de type FATAL...
+
 
     /**
      * {@inheritDoc}
@@ -48,6 +53,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             prstmt.setString(5, project.getModificationDate());
             prstmt.executeUpdate();
         } catch (SQLException e) {
+            //TODO : lever des utilities.exceptions de type FATAL...
             throw new BizzException("Project already exists");
         }
     }
@@ -55,6 +61,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     /**
      * {@inheritDoc}
      */
+    //TODO change en projetdto
     @Override
     public ArrayList<ProjectDTO> getProjects(int userID) {
         PreparedStatement pr;
@@ -69,7 +76,9 @@ public class ProjectDAOImpl implements ProjectDAO {
                 projects.add(project);
             }
             return projects;
+            //TODO CATCH PLUS PRECIS
         } catch (Exception e) {
+            //TODO FATAL
             throw new BizzException("Failed to load project list");
         }
     }
@@ -90,14 +99,17 @@ public class ProjectDAOImpl implements ProjectDAO {
             rs.next();
             return fillDTO(rs);
         } catch (Exception e) {
+            //TODO PUE
             e.printStackTrace();
         }
+        //TODO PAS RETURN NULL
         return null;
     }
 
     /**
      * {@inheritDoc}
      */
+    //TODO CHECK SI PAS UN DOUBLE DE METHODE AU DESSU
     @Override
     public ProjectDTO getSelectedProject(int userID, String projectName) throws BizzException {
         PreparedStatement pr;
@@ -109,14 +121,12 @@ public class ProjectDAOImpl implements ProjectDAO {
             pr.setString(2, projectName);
             rs = pr.executeQuery();
             while (rs.next()) {
-
                 project.setProjectId(rs.getInt("project_id"));
                 project.setProjectOwnerId(rs.getInt("project_owner_id"));
                 project.setProjectName(rs.getString("name"));
                 project.setCreateDate(rs.getString("creation_date"));
                 project.setModificationDate(rs.getString("modification_date"));
                 project.setProjectPath(rs.getString("path"));
-
             }
             return project;
         } catch (Exception e) {
@@ -130,7 +140,6 @@ public class ProjectDAOImpl implements ProjectDAO {
     @Override
     public void delete(ProjectDTO project) {
         PreparedStatement pr;
-
         try {
             pr = this.dal.prepareStatement(SQL_DELETE_PROJECT_OF_USER);
             pr.setInt(1, project.getProjectOwnerId());

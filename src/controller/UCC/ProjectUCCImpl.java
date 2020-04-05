@@ -23,6 +23,7 @@ import java.nio.file.Paths;
  */
 public class ProjectUCCImpl implements ProjectUCC {
 
+    //TODO WHAT USAGE ?
     private final String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
 
@@ -34,6 +35,7 @@ public class ProjectUCCImpl implements ProjectUCC {
         this.projectDAO = projectDAO;
     }
 
+    //TODO WHY PUBLIC ?
     /**
      * {@inheritDoc}
      */
@@ -42,6 +44,7 @@ public class ProjectUCCImpl implements ProjectUCC {
         projectName.renameTo(NewProjectName);
     }
 
+    //TODO DOUBLON
     /**
      * {@inheritDoc}
      */
@@ -55,6 +58,7 @@ public class ProjectUCCImpl implements ProjectUCC {
                 .setModificationDate(Utility.getTimeStamp());
     }
 
+    //TODO DOUBLON
     /**
      * {@inheritDoc}
      */
@@ -63,6 +67,7 @@ public class ProjectUCCImpl implements ProjectUCC {
         return ((ProjectDAO) projectDAO).get(project);
     }
 
+    //TODO rename
     /**
      * {@inheritDoc}
      */
@@ -80,7 +85,8 @@ public class ProjectUCCImpl implements ProjectUCC {
                 String now = Utility.getTimeStamp();
                 String projectPath = System.getProperty("user.home") + rootProject +"userid_" +owner.getUserId() + File.separator + projectName;
                 ProjectDTO projectDTO = new ProjectFactoryImpl().createProject(0, owner.getUserId(), projectName, "", projectPath, now, now);
-                ((ProjectDAO) projectDAO).create(projectDTO);
+
+                this.projectDAO.create(projectDTO);
 
                 // filesystem
                 Files.createDirectories(Paths.get(projectPath));
@@ -88,6 +94,7 @@ public class ProjectUCCImpl implements ProjectUCC {
                 ActiveProject.setActiveProject(projectDTO);
                 ActiveCanvas.setNewEmptyCanvas(-1, -1);
             } catch (BizzException e) {
+                //TODO CATCH ET RENVOIE LA MÊME ?!?!?!?
                 throw new BizzException("Couldn't create project. Project name already in use");
             } catch (IOException e) {
                 throw new BizzException("Couldn't create project. Error during project folder creation");

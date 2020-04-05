@@ -8,6 +8,8 @@ import view.dashboard.DashboardController;
 import java.io.File;
 import java.io.IOException;
 
+//TODO LES FAMEUX USECASE THE VEIWOPTION, TU FAIS UNE VIEWOPTION, ILS FONT DES VIEWOPTIONS....
+//TODO MERGE AVEC PROJECT...
 public interface ViewOptionUCC {
 
     /**
@@ -27,6 +29,7 @@ public interface ViewOptionUCC {
      * @throws BizzException
      * @return
      */
+    //TODO UTILS ?
     public Boolean createTarGz(String folderProject, String fileTarDestination) throws IOException, BizzException;
 
     /**
@@ -36,7 +39,9 @@ public interface ViewOptionUCC {
      * @param parent        parent folder of the file to be added
      * @param archiveTarGz  destination of the file
      */
+    //TODO UTILS ?
     public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) throws RuntimeException ;
 
+    //TODO BIEN SUR, DANS UN AUTRE USECASECONTROLLER, C'EST EVIDENT
     public void deleteProject (ProjectDTO project, DashboardController dashboard ) ;
 }

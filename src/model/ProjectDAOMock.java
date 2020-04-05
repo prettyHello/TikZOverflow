@@ -6,6 +6,8 @@ import utilities.exceptions.BizzException;
 
 import java.util.ArrayList;
 
+//TODO CHANGE APRES LE REFACTOR
+
 public class ProjectDAOMock implements ProjectDAO {
 
     private ArrayList<ProjectDTO> projects;
