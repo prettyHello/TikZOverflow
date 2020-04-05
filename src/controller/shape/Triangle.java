@@ -28,8 +28,8 @@ public class Triangle extends Shape {
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public Triangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originPoint, Coordinates secondPoint, Coordinates thirdPoint, int id) throws FatalException {
-        super(draw, fill, drawColor, fillColor, id);
+    public Triangle(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, Coordinates originPoint, Coordinates secondPoint, Coordinates thirdPoint, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, shapeThickness, id);
         Utility.checkObject(originPoint);
         Utility.checkObject(secondPoint);
         Utility.checkObject(thirdPoint);

@@ -21,6 +21,7 @@ public abstract class Shape implements Serializable {
     private boolean fill = false;
     private Color fillColor = Color.BLACK;
     private Color drawColor = Color.BLACK;
+    private String shapeThickness = Thickness.valueOf("THIN").name().toLowerCase();
     private int id;
 
     /**
@@ -32,6 +33,7 @@ public abstract class Shape implements Serializable {
         this.fill = fill;
         this.fillColor = Color.BLACK;
         this.drawColor = Color.BLACK;
+        this.shapeThickness = Thickness.valueOf("THIN").name().toLowerCase();
         this.id = id;
     }
 
@@ -41,9 +43,10 @@ public abstract class Shape implements Serializable {
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor, int id) throws FatalException {
+    public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, int id) throws FatalException {
         this.draw = draw;
         this.fill = fill;
+
         if (fill) {
             Utility.checkObject(fillColor);
             this.fillColor = fillColor;
@@ -52,6 +55,7 @@ public abstract class Shape implements Serializable {
             Utility.checkObject(drawColor);
             this.drawColor = drawColor;
         }
+        this.shapeThickness = shapeThickness;
         this.id = id;
     }
 
@@ -110,19 +114,29 @@ public abstract class Shape implements Serializable {
         this.drawColor = drawColor;
     }
 
+    public String getShapeThickness() {
+        System.out.println("on getteur "+shapeThickness);
+        return shapeThickness;
+    }
+    public void setShapeThickness(String shapeThickness) {
+        this.shapeThickness = shapeThickness.toLowerCase().replace("_"," ");
+    }
+
     public String print() {
         String returnValue = "";
         if (this.fill && this.draw) {
             returnValue += "\\filldraw";
-            returnValue += "[fill=" + this.fillColor.value + ", draw=" + this.drawColor.value + "] ";
+            returnValue += "[fill=" + this.fillColor.value + ", draw=" + this.drawColor.value + ", thickness= "+ this.shapeThickness + "] " ;
         } else {
             if (this.fill) {
                 returnValue += "\\fill";
                 returnValue += "[fill=" + this.fillColor.value + "] ";
+                System.out.println("Inside FILL !!!");
             }
             if (this.draw) {
                 returnValue += "\\draw";
                 returnValue += "[draw=" + this.drawColor.value + "] ";
+                System.out.println("Inside DRAW !!!");
             }
         }
         return returnValue;

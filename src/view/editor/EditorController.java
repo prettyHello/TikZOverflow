@@ -145,7 +145,7 @@ public class EditorController {
             contextMenuFillColorPicker.getItems().add(colour);
             contextMenuDrawColorPicker.getItems().add(colour);
         }
-
+        //Fill ChoiceBox of thickness on contextMenu
         for (controller.shape.Thickness thickness : controller.shape.Thickness.values()) {
             shapeThickness.getItems().add(thickness);
             contextMenuChangeThickness.getItems().add(thickness);
@@ -170,7 +170,7 @@ public class EditorController {
 
         shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu);
 
-        // show shapes at the start(don't have to interact to have thel show up)
+        // show shapes at the start(don't have to interact to have the show up)
         translateToTikz();
     }
 
@@ -223,7 +223,9 @@ public class EditorController {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             shape.setStrokeWidth(Thickness.valueOf(contextMenuChangeThickness.getValue().toString()).thicknessValue());
+            canvas.changeShapeThickness(Integer.parseInt(shape.getId()), contextMenuChangeThickness.getValue().toString());
         }
+        translateToTikz();
     }
 
     @FXML
@@ -349,7 +351,7 @@ public class EditorController {
         } else {
             shape.setFill(Color.valueOf(fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(strokeColour.getValue().toString()));
-            //shape.setStrokeWidth(Thickness.valueOf(contextMenuChangeThickness.getValue().toString()).thicknessValue());
+            shape.setStrokeWidth(Thickness.valueOf(shapeThickness.getValue().toString()).thicknessValue());
             pane.getChildren().add(shape);
             notifyController(addToController, shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected

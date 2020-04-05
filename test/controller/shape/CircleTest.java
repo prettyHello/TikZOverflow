@@ -16,7 +16,7 @@ class CircleTest {
 
     @Test
     void printComplexCircle() {
-        Circle circle = new Circle(true,true,Color.BLUE,Color.RED,new Coordinates(1,2),3,1);
+        Circle circle = new Circle(true,true,Color.BLUE,Color.RED, "THIN", new Coordinates(1,2),3,1);
         assertEquals("\\filldraw[fill=red, draw=blue] (1.0,2.0) circle [radius=3.0];",circle.print());
     }
 

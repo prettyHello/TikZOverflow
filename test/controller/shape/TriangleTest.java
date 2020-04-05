@@ -14,7 +14,7 @@ class TriangleTest {
 
     @Test
     void printComplexComplex() {
-        Triangle triangle = new Triangle(true,true,Color.BLUE,Color.RED,new Coordinates(0,0),new Coordinates(2,0),new Coordinates(0,3), 1);
+        Triangle triangle = new Triangle(true,true,Color.BLUE,Color.RED,"THIN", new Coordinates(0,0),new Coordinates(2,0),new Coordinates(0,3), 1);
         assertEquals("\\filldraw[fill=red, draw=blue] (0.0,0.0) -- (2.0,0.0) -- (0.0,3.0) -- cycle;",triangle.print());
     }
 }

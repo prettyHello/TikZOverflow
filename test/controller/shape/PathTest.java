@@ -33,7 +33,7 @@ class PathTest {
         coordinates.add(new Coordinates(0,0));
         coordinates.add(new Coordinates(2,2));
         coordinates.add(new Coordinates(0,4));
-        Path path = new Path(coordinates,false,false,Color.RED,1);
+        Path path = new Path(coordinates,false,false,Color.RED,"THIN", 1);
         assertEquals("\\draw [red] (0.0,0.0) -- (2.0,2.0) -- (0.0,4.0) ;",path.print());
     }
 

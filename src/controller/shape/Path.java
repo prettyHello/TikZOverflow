@@ -60,8 +60,8 @@ import java.util.Iterator;
      * @param drawColor
      * @throws FatalException
      */
-    public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
-        super(true, false, drawColor, Color.WHITE, id);
+    public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
+        super(true, false, drawColor, Color.WHITE, shapeThickness, id);
         Utility.checkObject(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -76,7 +76,8 @@ import java.util.Iterator;
      * /!\ Print always add an exta " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
-        String returnValue = "\\draw ["+super.getDrawColor().value+"] ";
+        String returnValue = "\\draw ["+super.getDrawColor().value+ ", "+ super.getShapeThickness() +"] ";
+        System.out.println(super.getShapeThickness());
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
         returnValue += iterator.next().print();
         while (iterator.hasNext()) {
