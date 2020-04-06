@@ -32,5 +32,11 @@ public interface ProjectUCC {
      */
     void create(ProjectDTO dto) throws BizzException, IOException;
 
+    /**
+     * compress and export a selected project
+     * @param dto use the id in dto to get the values through the model
+     */
+    void ExportProject(ProjectDTO dto);
+
 
 }

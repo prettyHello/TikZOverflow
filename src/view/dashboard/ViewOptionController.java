@@ -4,6 +4,7 @@ import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.ActiveProject;
 import controller.Canvas.Canvas;
+import controller.DTO.ProjectDTO;
 import controller.ProjectImpl;
 import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
@@ -22,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 //TODO WTF
 //import model.*;
+import model.ProjectDAO;
 import utilities.Utility;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -40,6 +42,8 @@ public class ViewOptionController extends HBox {
     private UserUCC userUcc;
     private DashboardController dashboard;
     private ProjectImpl projectDTO;
+    private ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
+
 
 
     @FXML
@@ -87,19 +91,9 @@ public class ViewOptionController extends HBox {
     public void initialize() {
         //TODO SORTIR LES HANDLER DE INIT
         exportBtn.setOnAction(event -> {
-            DALServices dal = new DALServicesImpl();
-            ProjectFactory projectFactory = new ProjectFactoryImpl();
-            ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
-            ProjectImpl chooserProject = ((ProjectDAO) new ProjectDAOImpl(new DALServicesImpl(), new ProjectFactoryImpl())).getSelectedProject(user.getUserId(), projectName.getText());
-
-            FileChooser fc = new FileChooser();
-            fc.setTitle("Save project as...");
-            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
-            fc.setInitialDirectory(new File(System.getProperty("user.home") + rootProject));
-            fc.setInitialFileName(projectName.getText());
-            File exportDirectory = fc.showSaveDialog(null);
-            File dir = new File(chooserProject.getProjectPath());
-            viewOptionUCC.ExportProject(dir, exportDirectory);
+            ProjectDTO dto = projectFactory.createProject();
+            dto.setProjectId(project_id);
+            projectUCC.ExportProject(dto);
         });
 
         deleteBtn.setOnAction(event -> {

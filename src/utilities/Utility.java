@@ -4,6 +4,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.utils.IOUtils;
 import utilities.exceptions.BizzException;
 import utilities.exceptions.FatalException;
 
@@ -16,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Collection of utility functions used in the view
@@ -304,6 +307,65 @@ public class Utility {
             } catch (IOException e) {
                 new Alert(Alert.AlertType.ERROR, " File permission problems for delete " + dir).showAndWait();
             }
+        }
+    }
+
+
+    /**
+     * create an empty ".tar.gz" folder in which compressed files will be added
+     *
+     * @param folderProject      path to the folder we need to compress
+     * @param fileTarDestination path to destination of the compressed file
+     * @throws IOException
+     * @throws BizzException
+     * @return
+     */
+
+    //TODO CLEAN ET MOVE DANS UTILS
+    public static Boolean createTarGz(String folderProject, String fileTarDestination) throws IOException, BizzException {
+        FileOutputStream fileOutputStream = new FileOutputStream(new File(fileTarDestination));
+        GZIPOutputStream outputGZip = new GZIPOutputStream(new BufferedOutputStream(fileOutputStream));//TODO check if it still works when  new BufferedOutputStream(fileOutputStream) => fileOutputStream
+        TarArchiveOutputStream archiveTarGz = new TarArchiveOutputStream(outputGZip);
+        try {
+            addFileToArchiveTarGz(folderProject, "", archiveTarGz);
+            return true;
+        }
+        catch ( RuntimeException e) {
+            return false ;
+        }
+        finally {
+            archiveTarGz.close();
+        }
+    }
+
+    /**
+     * Add a file into an existing ".tar.gz" file
+     *
+     * @param folderProject file to be added
+     * @param parent        parent folder of the file to be added
+     * @param archiveTarGz  destination of the file
+     */
+    //TODO CLEAN ET MOVE DANS UTILS
+    private static void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz){
+        File file = new File(folderProject);
+        String entryName = parent + file.getName();
+        // add tar ArchiveEntry
+        try {
+            archiveTarGz.putArchiveEntry(new TarArchiveEntry(file, entryName));
+
+            if (file.isFile()) {
+                BufferedInputStream fileSelected = new BufferedInputStream(new FileInputStream(file));
+                IOUtils.copy(fileSelected, archiveTarGz);  // copy file in archive
+                archiveTarGz.closeArchiveEntry();
+                fileSelected.close();
+            } else if (file.isDirectory()) {
+                archiveTarGz.closeArchiveEntry();
+                for (File fileInSubFolder : file.listFiles()) {
+                    addFileToArchiveTarGz(fileInSubFolder.getAbsolutePath(), entryName + "/", archiveTarGz);
+                }
+            }
+        } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, "Impossible to export the project").showAndWait();
         }
     }
 }

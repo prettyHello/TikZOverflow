@@ -5,6 +5,8 @@ import controller.Canvas.ActiveProject;
 import controller.DTO.ProjectDTO;
 import controller.ProjectImpl;
 import controller.DTO.UserDTO;
+import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
 import model.DALServices;
 import model.DAO;
 import utilities.Utility;
@@ -24,8 +26,7 @@ import static utilities.Utility.checkString;
  */
 public class ProjectUCCImpl implements ProjectUCC {
 
-    //TODO WHAT USAGE ?
-    private final String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
+
     private String rootProject = File.separator + "ProjectTikZ" + File.separator;
 
     private final DALServices dal;
@@ -77,6 +78,43 @@ public class ProjectUCCImpl implements ProjectUCC {
             dal.rollback();
         }
 
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    //TODO file in dao
+    public void ExportProject(ProjectDTO dto) {
+        dto = projectDAO.get(dto);
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save project as...");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
+        fc.setInitialDirectory(new File(System.getProperty("user.home") + this.rootProject));
+        fc.setInitialFileName(dto.getProjectName());
+        File selectedFile = fc.showSaveDialog(null);
+        File dir = new File(dto.getProjectPath());
+
+        try {
+            if ( selectedFile != null ) {
+                if (dir.exists()) {
+                    if ( Utility.createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") ) ) {
+                        new Alert(Alert.AlertType.CONFIRMATION, "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz")).showAndWait();
+                    }
+                    else {
+                        Utility.deleteFile(new File(selectedFile.getAbsolutePath().concat(".tar.gz") ) );
+                        new Alert(Alert.AlertType.ERROR, "Too long path to a certain file ( > 100 bytes)").showAndWait();
+                    }
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Error Export the project does not exist on the path: " +dir ).showAndWait();
+                }
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (BizzException e){
+            e.getMessage();
+        }
     }
 
 }
