@@ -555,6 +555,7 @@ public class EditorController {
      * Translate canvas to tikz and fill textarea
      */
     private void translateToTikz() {
+
         tikzTA.setText(canvas.toTikZ());
     }
 }
