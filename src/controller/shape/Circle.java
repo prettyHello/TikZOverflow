@@ -15,8 +15,8 @@ public class Circle extends Shape {
      * @param coordinates
      * @param radius
      */
-    public Circle(Coordinates coordinates, float radius, int id) throws FatalException {
-        super(true, false, id);
+    public Circle(Coordinates coordinates, float radius, String shapeThickness, int id) throws FatalException {
+        super(true, false, shapeThickness, id);
         if (radius <= 0) {
             throw new BizzException("Radius is negative or null");
         }

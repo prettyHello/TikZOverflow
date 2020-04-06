@@ -302,7 +302,7 @@ public class EditorController {
                 waitingForMoreCoordinate = true;
                 break;
             case TRIANGLE_POINT3:
-                addToController = new controller.shape.Triangle(new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                addToController = new controller.shape.Triangle(new Coordinates(selectedX, selectedY), shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
@@ -312,7 +312,7 @@ public class EditorController {
                 circle.setCenterX(selectedX);
                 circle.setCenterY(selectedY);
                 circle.setRadius(radius);
-                addToController = new controller.shape.Circle(new Coordinates(selectedX, selectedY), radius, canvas.getIdForNewShape());
+                addToController = new controller.shape.Circle(new Coordinates(selectedX, selectedY), radius, shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = circle;
                 break;
             case ARROW:
@@ -322,7 +322,7 @@ public class EditorController {
                 waitingForMoreCoordinate = true;
                 break;
             case ARROW_POINT2:
-                addToController = new controller.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                addToController = new controller.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = constructArrow();
                 waitingForMoreCoordinate = false;
                 break;
@@ -333,7 +333,7 @@ public class EditorController {
                 waitingForMoreCoordinate = true;
                 break;
             case LINE_POINT2:
-                addToController = new controller.shape.Line(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                addToController = new controller.shape.Line(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), shapeThickness.getValue().toString(),canvas.getIdForNewShape());
                 shape = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
                 shape.setStroke(Color.valueOf(fillColour.getValue().toString()));
                 waitingForMoreCoordinate = false;
@@ -341,7 +341,7 @@ public class EditorController {
             case SQUARE:
                 int size = 75;
                 shape = new Rectangle(selectedX, selectedY, 75, 75);
-                addToController = new Square(new Coordinates(selectedX, selectedY), size, canvas.getIdForNewShape());
+                addToController = new Square(new Coordinates(selectedX, selectedY), size, shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 break;
         }
         if (waitingForMoreCoordinate) {

@@ -6,12 +6,12 @@ import java.util.Iterator;
 
 public class Arrow extends Path {
 
-    public Arrow(Coordinates origin, Coordinates end, int id) throws FatalException {
-        super(origin, end, id, false, true);
+    public Arrow(Coordinates origin, Coordinates end, String shapeThickness, int id) throws FatalException {
+        super(origin, end, shapeThickness, id, false, true);
     }
 
     public String print() {
-        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().value + ",->] ");
+        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().value + ",-> , "+super.getShapeThickness()+"] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
         returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {

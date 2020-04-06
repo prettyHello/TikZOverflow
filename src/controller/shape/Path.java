@@ -25,21 +25,21 @@ import java.util.Iterator;
      * @param pathPoints List of points the path goes trough.
      * @throws FatalException
      */
-    public Path(ArrayList<Coordinates> pathPoints, int id) throws FatalException {
-        super(true, false, id);
+    public Path(ArrayList<Coordinates> pathPoints, String shapeThickness, int id) throws FatalException {
+        super(true, false, shapeThickness, id);
         Utility.checkObject(pathPoints);
         this.pathPoints = pathPoints;
     }
 
     /**
-     * Personalised path with only 2 points, with arrows and specified color.
+     * Personalised path with only 2 points, with arrows and specified color.  et shapethickness a probablement ajouter si ca marche
      * @param origin
      * @param end
      * @param id
      * @throws FatalException
      */
-    public Path(Coordinates origin, Coordinates end, int id,boolean arrowStart,boolean arrowEnd) throws FatalException {
-        super(true, false, id);
+    public Path(Coordinates origin, Coordinates end, String shapeThickness,int id,boolean arrowStart,boolean arrowEnd) throws FatalException {
+        super(true, false, shapeThickness, id);
         this.arrowStart = arrowStart;
         this.arrowEnd = arrowEnd;
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
@@ -62,6 +62,7 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
         super(true, false, drawColor, Color.WHITE, shapeThickness, id);
+        System.out.println("Inside Constructor : "+shapeThickness);
         Utility.checkObject(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -77,7 +78,6 @@ import java.util.Iterator;
      */
     public String print() {
         String returnValue = "\\draw ["+super.getDrawColor().value+ ", "+ super.getShapeThickness() +"] ";
-        System.out.println(super.getShapeThickness());
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
         returnValue += iterator.next().print();
         while (iterator.hasNext()) {

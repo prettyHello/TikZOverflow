@@ -14,8 +14,8 @@ public class Triangle extends Shape {
      *
      * @param originPoint
      */
-    public Triangle(Coordinates originPoint, int id) {
-        super(true, false, id);
+    public Triangle(Coordinates originPoint,String shapeThickness, int id) {
+        super(true, false, shapeThickness, id);
         Utility.checkObject(originPoint);
         this.originPoint = originPoint;
         this.secondPoint = new Coordinates(originPoint.getX() + 1, originPoint.getY());

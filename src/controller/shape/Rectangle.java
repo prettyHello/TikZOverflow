@@ -19,8 +19,8 @@ public class Rectangle extends Shape {
      * @param endCoordinates
      * @throws FatalException
      */
-    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
-        super(true, false, id);
+    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness,int id) throws FatalException {
+        super(true, false, shapeThickness,id);
         Utility.checkObject(originCoordinates);
         Utility.checkObject(endCoordinates);
         this.orginCoordinates = originCoordinates;
