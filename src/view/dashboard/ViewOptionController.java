@@ -4,7 +4,7 @@ import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.ActiveProject;
 import controller.Canvas.Canvas;
-import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
 import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
 import controller.UCC.UserUCC;
@@ -39,7 +39,7 @@ public class ViewOptionController extends HBox {
     private ProjectUCC projectUCC;
     private UserUCC userUcc;
     private DashboardController dashboard;
-    private ProjectDTO projectDTO;
+    private ProjectImpl projectDTO;
 
 
     @FXML
@@ -90,7 +90,7 @@ public class ViewOptionController extends HBox {
             DALServices dal = new DALServicesImpl();
             ProjectFactory projectFactory = new ProjectFactoryImpl();
             ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
-            ProjectDTO chooserProject = ((ProjectDAO) new ProjectDAOImpl(new DALServicesImpl(), new ProjectFactoryImpl())).getSelectedProject(user.getUserId(), projectName.getText());
+            ProjectImpl chooserProject = ((ProjectDAO) new ProjectDAOImpl(new DALServicesImpl(), new ProjectFactoryImpl())).getSelectedProject(user.getUserId(), projectName.getText());
 
             FileChooser fc = new FileChooser();
             fc.setTitle("Save project as...");
@@ -107,10 +107,10 @@ public class ViewOptionController extends HBox {
         });
 
         editBtn.setOnAction(event -> {
-            ProjectDTO project= new ProjectDTO();
+            ProjectImpl project= new ProjectImpl();
             project.setProjectId(project_id);
             UserDTO user = userUcc.getConnectedUser();
-            ProjectDTO activeProject = projectUCC.get(project);
+            ProjectImpl activeProject = projectUCC.get(project);
 
             ActiveProject.setActiveProject(activeProject);
             SaveObject loader = new SaveObject();
@@ -128,7 +128,7 @@ public class ViewOptionController extends HBox {
     }
 
     //Todo SUSPECT
-    public ViewOptionController setProject(ProjectDTO projectDTO) {
+    public ViewOptionController setProject(ProjectImpl projectDTO) {
         projectDTO.setProjectOwnerId(user.getUserId());
         this.projectDTO = projectDTO;
         this.projectName.setText(projectDTO.getProjectName());

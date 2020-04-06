@@ -1,6 +1,6 @@
 package model;
 
-import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
 import controller.factories.ProjectFactory;
 import utilities.exceptions.BizzException;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ProjectDAOMock implements ProjectDAO {
 
-    private ArrayList<ProjectDTO> projects;
+    private ArrayList<ProjectImpl> projects;
     private DALBackEndServices dal;
     private ProjectFactory projectFactory;
 
@@ -22,8 +22,8 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public void create(ProjectDTO project) {
-        for (ProjectDTO dto : projects) {
+    public void create(ProjectImpl project) {
+        for (ProjectImpl dto : projects) {
             if(dto.getProjectPath().equals(project.getProjectPath())){
                 throw new BizzException("Project already exists");
             }
@@ -32,13 +32,13 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public ArrayList<ProjectDTO> getProjects(int userID) {
+    public ArrayList<ProjectImpl> getProjects(int userID) {
         return projects;
     }
 
     @Override
-    public ProjectDTO getSelectedProject(int userID, String projectName) throws BizzException {
-        for (ProjectDTO proj : projects) {
+    public ProjectImpl getSelectedProject(int userID, String projectName) throws BizzException {
+        for (ProjectImpl proj : projects) {
             if(proj.getProjectOwnerId() == userID && proj.getProjectName().equals(projectName)){
                 return proj;
             }
@@ -47,9 +47,9 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public ProjectDTO get(ProjectDTO p) {
+    public ProjectImpl get(ProjectImpl p) {
         int project_id = p.getProjectId();
-        for (ProjectDTO proj : projects) {
+        for (ProjectImpl proj : projects) {
             if(proj.getProjectId() == project_id){
                 return proj;
             }
@@ -58,18 +58,18 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public void delete(ProjectDTO project) {
+    public void delete(ProjectImpl project) {
         projects.remove(project);
     }
 
     @Override
-    public ProjectDTO find(ProjectDTO obj) {
+    public ProjectImpl find(ProjectImpl obj) {
         return null;
     }
 
 
     @Override
-    public void update(ProjectDTO obj) {
+    public void update(ProjectImpl obj) {
 
     }
 }

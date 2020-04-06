@@ -1,6 +1,7 @@
 package controller.Canvas;
 
 import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
 
 /**
  * Singleton that contains the only active project.

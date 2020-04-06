@@ -1,6 +1,6 @@
 package controller.UCC;
 
-import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import utilities.exceptions.BizzException;
 import view.dashboard.DashboardController;
@@ -43,5 +43,5 @@ public interface ViewOptionUCC {
     public void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) throws RuntimeException ;
 
     //TODO BIEN SUR, DANS UN AUTRE USECASECONTROLLER, C'EST EVIDENT
-    public void deleteProject (ProjectDTO project, DashboardController dashboard ) ;
+    public void deleteProject (ProjectImpl project, DashboardController dashboard ) ;
 }

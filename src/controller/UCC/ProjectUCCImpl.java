@@ -3,11 +3,10 @@ package controller.UCC;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.ActiveProject;
 import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
 import controller.DTO.UserDTO;
-import controller.factories.ProjectFactoryImpl;
 import model.DALServices;
 import model.DAO;
-import model.ProjectDAO;
 import utilities.Utility;
 import utilities.exceptions.BizzException;
 import utilities.exceptions.FatalException;
@@ -15,8 +14,10 @@ import utilities.exceptions.FatalException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static utilities.Utility.checkObjects;
+import static utilities.Utility.checkString;
 
 /**
  * {@inheritDoc}
@@ -44,73 +45,39 @@ public class ProjectUCCImpl implements ProjectUCC {
         projectName.renameTo(NewProjectName);
     }
 
-    //TODO DOUBLON
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId) {
-        return new ProjectDTO().
-                setProjectOwnerId(userId)
-                .setProjectName(projectName)
-                .setProjectPath(folderDestination.toString()+ File.separator +projectName)
-                .setCreateDate(Utility.getTimeStamp())
-                .setModificationDate(Utility.getTimeStamp());
-    }
 
-    //TODO DOUBLON
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ProjectDTO get(ProjectDTO project) {
-        return ((ProjectDAO) projectDAO).get(project);
-    }
 
-    //TODO rename
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createNewProject(String projectName) throws BizzException, FatalException {
-        if(projectName == null || projectName.isEmpty()){
-            throw new IllegalArgumentException("project name can't be null nor empty");
-        }
+    public void create(ProjectDTO dto) throws BizzException, FatalException {
+        checkObjects(dto);
+        String projectName = dto.getProjectName();
+        checkString(projectName, "project Name");
 
         try {
             dal.startTransaction();
-            try {
-                // database
-                UserDTO owner = ConnectedUser.getConnectedUser();
-                String now = Utility.getTimeStamp();
-                String projectPath = System.getProperty("user.home") + rootProject +"userid_" +owner.getUserId() + File.separator + projectName;
-                ProjectDTO projectDTO = new ProjectFactoryImpl().createProject(0, owner.getUserId(), projectName, "", projectPath, now, now);
+            UserDTO owner = ConnectedUser.getConnectedUser();
+            String projectPath = System.getProperty("user.home") + rootProject +"userid_" +owner.getUserId() + File.separator + projectName;
+            dto.setProjectOwnerId(owner.getUserId());
+            dto.setCreateDate(Utility.getTimeStamp());
+            dto.setModificationDate(Utility.getTimeStamp());
+            dto.setProjectPath(projectPath);
+            this.projectDAO.create(dto);
+            //TODO move in dao
+            Files.createDirectories(Paths.get(projectPath));
+            ActiveProject.setActiveProject(dto);
+            ActiveCanvas.setNewCanvas(-1, -1);
 
-                this.projectDAO.create(projectDTO);
-
-                // filesystem
-                Files.createDirectories(Paths.get(projectPath));
-
-                ActiveProject.setActiveProject(projectDTO);
-                ActiveCanvas.setNewEmptyCanvas(-1, -1);
-            } catch (BizzException e) {
-                //TODO CATCH ET RENVOIE LA MÊME ?!?!?!?
-                throw new BizzException("Couldn't create project. Project name already in use");
-            } catch (IOException e) {
-                throw new BizzException("Couldn't create project. Error during project folder creation");
-            }
             dal.commit();
+        } catch (IOException e) { //TODO move once file in dao
+            throw new FatalException("Couldn't create project. Error failed to create a new directory.");
         } finally {
             dal.rollback();
         }
+
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void createFromImport(ProjectDTO projectDTO) throws BizzException, IOException {
-         projectDAO.create(projectDTO);
-    }
 }
 

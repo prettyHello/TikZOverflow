@@ -1,7 +1,7 @@
 package model;
 
 import config.TestDAOConfigurationSingleton;
-import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
 import controller.factories.ProjectFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,9 +41,9 @@ class ProjectDAOImplTest {
 
     @Test
     void testBasicInsertion(){
-        ProjectDTO dto = generateBasicProjectDTO();
+        ProjectImpl dto = generateBasicProjectDTO();
         projectDAO.create( dto);
-        ProjectDTO result = projectDAO.get( dto);
+        ProjectImpl result = projectDAO.get( dto);
         assertEquals(dto.getProjectName(),result.getProjectName());
         assertEquals(dto.getProjectPath(),result.getProjectPath());
         assertEquals(dto.getProjectId(),result.getProjectId());
@@ -54,7 +54,7 @@ class ProjectDAOImplTest {
 
     @Test
     void testInsertionOFExistingProject() {
-        ProjectDTO dto = generateBasicProjectDTO();
+        ProjectImpl dto = generateBasicProjectDTO();
         assertThrows(BizzException.class, () -> {
             projectDAO.create( dto);
             projectDAO.create( dto);
@@ -62,8 +62,8 @@ class ProjectDAOImplTest {
     }
 
 
-    ProjectDTO generateBasicProjectDTO(){
-        ProjectDTO dto = new ProjectDTO();
+    ProjectImpl generateBasicProjectDTO(){
+        ProjectImpl dto = new ProjectImpl();
         dto.setProjectId(1);
         dto.setCreateDate("date");
         dto.setProjectOwnerId(1);
@@ -74,8 +74,8 @@ class ProjectDAOImplTest {
         return dto;
     }
 
-    ProjectDTO generateBasicProjectDTO2(){
-        ProjectDTO dto = new ProjectDTO();
+    ProjectImpl generateBasicProjectDTO2(){
+        ProjectImpl dto = new ProjectImpl();
         dto.setProjectId(2);
         dto.setCreateDate("date2");
         dto.setProjectOwnerId(2);
@@ -86,8 +86,8 @@ class ProjectDAOImplTest {
         return dto;
     }
 
-    ProjectDTO generateBasicProjectDTO3(){
-        ProjectDTO dto = new ProjectDTO();
+    ProjectImpl generateBasicProjectDTO3(){
+        ProjectImpl dto = new ProjectImpl();
         dto.setProjectId(3);
         dto.setCreateDate("date3");
         dto.setProjectOwnerId(3);

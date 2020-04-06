@@ -1,7 +1,8 @@
 package model;
 
 import controller.DTO.ProjectDTO;
-import utilities.exceptions.BizzException;
+import controller.ProjectImpl;
+import controller.DTO.UserDTO;
 import utilities.exceptions.FatalException;
 
 import java.util.ArrayList;
@@ -14,17 +15,11 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
     /**
      * Retrieve a project from the database
      *
-     * @param userID the id of the owner of the project to retrieve
-     * @return the project DTO
+     * @param dto In the UserDTO,
+     *            the id  will be used to retrieve the list of projects that the user own
+     * @return an array list of project DTO related to that owner
      */
-    ArrayList<ProjectDTO> getProjects(int userID);
+    ArrayList<ProjectImpl> getOwnedProjects(UserDTO dto) throws FatalException;
 
-    /**
-     * @param userID
-     * @param projectName
-     * @return
-     * @throws FatalException
-     */
-    //TODO CHECK is if bizzexception is the right one
-    ProjectDTO getSelectedProject(ProjectDTO dto) throws BizzException;
+
 }

@@ -64,14 +64,6 @@ public class UserDAOImpl implements UserDAO {
      * {@inheritDoc}
      */
     @Override
-    public UserDTO find(UserDTO obj) {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void create(UserDTO userDTO) throws FatalException {
         PreparedStatement ps = null;
         try {
@@ -86,7 +78,6 @@ public class UserDAOImpl implements UserDAO {
             ps.executeUpdate();
 
         } catch (SQLException exc) {
-            exc.printStackTrace();
             switch (exc.getErrorCode()) {
                 case 19:
                     throw new FatalException("Email address or telephone number already in use.");

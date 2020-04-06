@@ -1,38 +1,34 @@
 package model;
 
 import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
+import controller.DTO.UserDTO;
 import controller.factories.ProjectFactory;
-import javafx.scene.control.Alert;
 import utilities.exceptions.BizzException;
+import utilities.exceptions.FatalException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-// creer une interface pour projetDAO, ensuite modifier la classe ProjectDAO en ProjectDAOImpl
-
-//TODO CLASSE : variable camecase, Implementé dao correctement.
-//
+import static utilities.Utility.checkObjects;
 
 /**
  * {@inheritDoc}
  */
 public class ProjectDAOImpl implements ProjectDAO {
 
-    //TODO PREPAREDSTAT dois venir du dal je,crois
-    PreparedStatement prstmt;
+
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
     private static final String SQL_SELECT_BY_PROJECTID = "SELECT * FROM projects WHERE project_id = ?";
-    private static final String SQL_SELECT_PROJECT_OF_USER = "SELECT * FROM projects WHERE project_owner_id = ?  AND name = ?";
     private static final String SQL_DELETE_PROJECT_OF_USER = "DELETE FROM projects WHERE project_owner_id = ? AND name = ?";
-    //TODO CONMPRENDRE CE QUE 9A VOUSLAIS DIRE : gerer les connections en s'appuyant sur l'implementation dans UserUCCImpl pour les fermetures et Exceptions
 
     private final DALBackEndServices dal;
     private final ProjectFactory projectFactory;
 
-    //TODO check si on utilise le bon dal.
+
     public ProjectDAOImpl(DALServices dalServices, ProjectFactory projectFactory) {
         this.dal = (DALBackEndServices) dalServices;
         this.projectFactory = projectFactory;
@@ -43,133 +39,106 @@ public class ProjectDAOImpl implements ProjectDAO {
     /**
      * {@inheritDoc}
      */
-    public void create(ProjectDTO project) {
+    public void create(ProjectDTO dto) throws FatalException {
+        checkObjects(dto);
+        PreparedStatement pr;
         try {
-            prstmt = dal.prepareStatement(SQL_INSERT_PROJECT);
-            prstmt.setInt(1, project.getProjectOwnerId());
-            prstmt.setString(2, project.getProjectName());
-            prstmt.setString(3, project.getProjectPath());
-            prstmt.setString(4, project.getCreateDate());
-            prstmt.setString(5, project.getModificationDate());
-            prstmt.executeUpdate();
+            pr = dal.prepareStatement(SQL_INSERT_PROJECT);
+            pr.setInt(1, dto.getProjectOwnerId());
+            pr.setString(2, dto.getProjectName());
+            pr.setString(3, dto.getProjectPath());
+            pr.setString(4, dto.getCreateDate());
+            pr.setString(5, dto.getModificationDate());
+            pr.executeUpdate();
         } catch (SQLException e) {
-            //TODO : lever des utilities.exceptions de type FATAL...
-            throw new BizzException("Project already exists");
+            throw new FatalException("Project already exists");
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    //TODO change en projetdto
     @Override
-    public ArrayList<ProjectDTO> getProjects(int userID) {
+    public ArrayList<ProjectImpl> getOwnedProjects(UserDTO dto) throws FatalException {
+        checkObjects(dto);
         PreparedStatement pr;
         ResultSet rs;
-        ArrayList<ProjectDTO> projects = new ArrayList<>();
+        ArrayList<ProjectImpl> projects = new ArrayList<>();
+
         try {
             pr = this.dal.prepareStatement(SQL_SELECT_PROJECT);
-            pr.setInt(1, userID);
+            pr.setInt(1, dto.getUserId());
             rs = pr.executeQuery();
             while (rs.next()) {
-                ProjectDTO project = fillDTO(rs);
+                ProjectImpl project = fillDTO(rs);
                 projects.add(project);
             }
-            return projects;
-            //TODO CATCH PLUS PRECIS
-        } catch (Exception e) {
-            //TODO FATAL
-            throw new BizzException("Failed to load project list");
+        } catch (SQLException e) {
+            throw new FatalException("SQLException in projectDAOImpl: impossible to load the project list");
         }
+        return projects;
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO get(ProjectDTO p) {
-        int project_id = p.getProjectId();
+    public ProjectImpl get(ProjectDTO dto) throws FatalException {
+        checkObjects(dto);
         PreparedStatement pr;
         ResultSet rs;
+        ProjectImpl result;
+
         try {
             pr = this.dal.prepareStatement(SQL_SELECT_BY_PROJECTID);
-            pr.setInt(1, project_id);
+            pr.setInt(1, dto.getProjectId());
             rs = pr.executeQuery();
-            //TODO le resultSet est potentielement vide, donc fermé, ce qui crée un bug.
-            rs.next();
-            return fillDTO(rs);
-        } catch (Exception e) {
-            //TODO PUE
-            e.printStackTrace();
-        }
-        //TODO PAS RETURN NULL
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    //TODO CHECK SI PAS UN DOUBLE DE METHODE AU DESSU
-    @Override
-    public ProjectDTO getSelectedProject(int userID, String projectName) throws BizzException {
-        PreparedStatement pr;
-        ResultSet rs;
-        ProjectDTO project = new ProjectDTO();
-        try {
-            pr = this.dal.prepareStatement(SQL_SELECT_PROJECT_OF_USER);
-            pr.setInt(1, userID);
-            pr.setString(2, projectName);
-            rs = pr.executeQuery();
-            while (rs.next()) {
-                project.setProjectId(rs.getInt("project_id"));
-                project.setProjectOwnerId(rs.getInt("project_owner_id"));
-                project.setProjectName(rs.getString("name"));
-                project.setCreateDate(rs.getString("creation_date"));
-                project.setModificationDate(rs.getString("modification_date"));
-                project.setProjectPath(rs.getString("path"));
+            if(rs.next()){
+                result = fillDTO(rs);
+            } else {
+                throw new BizzException("Project with id : " + dto.getProjectId() + " does not exist");
             }
-            return project;
-        } catch (Exception e) {
-            throw new BizzException("Failed to load the project: " + project.getProjectName());
+        } catch (SQLException e) {
+            throw new FatalException("SQLException in projectDAOImpl:"+e.getMessage());
         }
+        return result;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void delete(ProjectDTO project) {
+    public void delete(ProjectDTO dto) throws FatalException {
+        checkObjects(dto);
         PreparedStatement pr;
         try {
             pr = this.dal.prepareStatement(SQL_DELETE_PROJECT_OF_USER);
-            pr.setInt(1, project.getProjectOwnerId());
-            pr.setString(2, project.getProjectName());
+            pr.setInt(1, dto.getProjectOwnerId());
+            pr.setString(2, dto.getProjectName());
             pr.executeUpdate();
-        } catch (Exception e) {
-            //TODO this is not MVC, should throw a bizzException and not use javafx in the model
-            new Alert(Alert.AlertType.ERROR, "Failed to Delete the project '" + project.getProjectName() + "' in Database").showAndWait();
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new FatalException("Failed to Delete the project '" + dto.getProjectName() + "' in Database");
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ProjectDTO find(ProjectDTO obj) {
-        return null;
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void update(ProjectDTO obj) {
-
+        //TODO
     }
 
-    private ProjectDTO fillDTO(ResultSet rs) throws SQLException {
-        ProjectDTO projectDTO = new ProjectDTO();
+    /**
+     * Fill a new DTO with the data from the result set
+     * @param rs result set
+     * @return The newly created DTO
+     * @throws SQLException
+     */
+    private ProjectImpl fillDTO(ResultSet rs) throws SQLException {
+        ProjectImpl projectDTO = projectFactory.createProject();
         projectDTO.setProjectId(rs.getInt("project_id"));
         projectDTO.setProjectOwnerId(rs.getInt("project_owner_id"));
         projectDTO.setProjectName(rs.getString("name"));

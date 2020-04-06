@@ -1,6 +1,6 @@
 package controller.UCC;
 
-import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
 import controller.factories.ProjectFactory;
 import controller.factories.ProjectFactoryImpl;
 import javafx.scene.control.Alert;
@@ -111,7 +111,7 @@ public class ViewOptionUCCImpl implements ViewOptionUCC {
     }
 
     //TODO CLEAN ET MOVE DANS PROJECT, SMIPLIFY, DIVIDE
-    public void deleteProject(ProjectDTO project, DashboardController dashboard ) {
+    public void deleteProject(ProjectImpl project, DashboardController dashboard ) {
         File dir = new File(project.getProjectPath()) ;
         if (dir.exists()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

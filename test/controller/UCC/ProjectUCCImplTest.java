@@ -33,8 +33,8 @@ public class ProjectUCCImplTest {
     void createTest() {
         ConnectedUser.setConnectedUser(userDTO);
         assertThrows(BizzException.class, () -> {
-            projectUCC.createNewProject("test");
-            projectUCC.createNewProject("test");
+            projectUCC.create("test");
+            projectUCC.create("test");
         }, "Error if a project name is already in use");
     }
 
@@ -42,7 +42,7 @@ public class ProjectUCCImplTest {
     void createTest_NullArg() {
         ConnectedUser.setConnectedUser(userDTO);
         assertThrows(IllegalArgumentException.class, () -> {
-            projectUCC.createNewProject(null);
+            projectUCC.create(null);
         }, "Error if a project name argument is null");
     }
 
@@ -50,7 +50,7 @@ public class ProjectUCCImplTest {
     void createTest_EmptyArg() {
         ConnectedUser.setConnectedUser(userDTO);
         assertThrows(IllegalArgumentException.class, () -> {
-            projectUCC.createNewProject("");
+            projectUCC.create("");
         }, "Error if a project name argument is empty");
     }    
 }

@@ -92,7 +92,7 @@ public class Utility {
      *
      * @param obj the series of Objects
      */
-    public static void checkObjects(Object... obj) {
+    public static void checkObjects(Object... obj) throws FatalException {
         for (Object o : obj) {
             if (o == null) {
                 throw new FatalException("Object is null");

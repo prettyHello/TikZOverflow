@@ -1,23 +1,23 @@
 package controller.factories;
 
-import controller.DTO.ProjectDTO;
-//TODO CHECK IF CORRECT AFTER REFACTOR
+import controller.ProjectImpl;
+
 /**
  * {@inheritDoc}
  */
 public class ProjectFactoryImpl implements ProjectFactory {
     @Override
-    public ProjectDTO createProject() {
-        return new ProjectDTO();
+    public ProjectImpl createProject() {
+        return new ProjectImpl();
     }
 
     @Override
-    public ProjectDTO createProject(String projectName) {
-        return new ProjectDTO(projectName);
+    public ProjectImpl createProject(String projectName) {
+        return new ProjectImpl(projectName);
     }
 
     @Override
-    public ProjectDTO createProject(int project_id, int projectOwnerId, String projectName, String projectReference, String projectPath, String creationDate, String modificationDate) {
-        return new ProjectDTO(project_id, projectOwnerId, projectName, projectReference, projectPath, creationDate, modificationDate);
+    public ProjectImpl createProject(int project_id, int projectOwnerId, String projectName, String projectPath, String creationDate, String modificationDate) {
+        return new ProjectImpl(project_id, projectOwnerId, projectName, projectPath, creationDate, modificationDate);
     }
 }

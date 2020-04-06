@@ -4,7 +4,7 @@ import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.ActiveProject;
 import controller.Canvas.Canvas;
-import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
 import controller.DTO.UserDTO;
 import controller.UCC.UserUCC;
 import controller.shape.Coordinates;
@@ -513,7 +513,7 @@ public class EditorController {
      * @throws ClassNotFoundException
      */
     public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
-        ProjectDTO projectDTO = ActiveProject.getActiveProject();
+        ProjectImpl projectDTO = ActiveProject.getActiveProject();
         UserDTO user = userUcc.getConnectedUser();
         SaveObject saveObject = new SaveObject();
         saveObject.save(canvas, projectDTO.getProjectName(),user);
@@ -547,7 +547,7 @@ public class EditorController {
         }
         if (result.get() == buttonTypeOne) {
             SaveObject saveObject = new SaveObject();
-            ProjectDTO projectDTO = ActiveProject.getActiveProject();
+            ProjectImpl projectDTO = ActiveProject.getActiveProject();
             saveObject.save(canvas, projectDTO.getProjectName(), user);
         }
 

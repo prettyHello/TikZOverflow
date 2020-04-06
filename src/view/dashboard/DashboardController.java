@@ -1,7 +1,7 @@
 package view.dashboard;
 
 import config.ConfigurationSingleton;
-import controller.DTO.ProjectDTO;
+import controller.ProjectImpl;
 import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
 import controller.UCC.UserUCC;
@@ -54,7 +54,7 @@ public class DashboardController {
     private MenuItem userSetting;
 
     @FXML
-    private ListView<ProjectDTO> projectList;
+    private ListView<ProjectImpl> projectList;
 
     @FXML
     private HBox editView;
@@ -64,7 +64,7 @@ public class DashboardController {
 
     private ObservableList<String> itemList;
 
-    private ObservableList<ProjectDTO> projectObsList;
+    private ObservableList<ProjectImpl> projectObsList;
 
     private UserDTO user;
 
@@ -104,7 +104,7 @@ public class DashboardController {
 
         this.user = user;
         userSetting.setText(user.getFirstName());
-        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUserId()); //TODO this should be in a real controller, can't call model from view
+        ArrayList<ProjectImpl> listOfProject = projectDAO.getOwnedProjects(user); //TODO this should be in a real controller, can't call model from view
         projectObsList = FXCollections.observableArrayList(listOfProject);
         projectList.setItems(projectObsList);
     }
@@ -131,9 +131,9 @@ public class DashboardController {
         rootProject = File.separator + "ProjectTikZ" + File.separator +"userid_"+ user.getUserId() + File.separator;
 
 
-        projectList.setCellFactory(cell -> new ListCell<ProjectDTO>() {
+        projectList.setCellFactory(cell -> new ListCell<ProjectImpl>() {
             @Override
-            protected void updateItem(ProjectDTO item, boolean empty) {
+            protected void updateItem(ProjectImpl item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
@@ -156,6 +156,7 @@ public class DashboardController {
      *
      * @throws BizzException
      */
+    //TODO file in models, some stuff elwhere blabla
     @FXML
     public void ImportProject() throws BizzException {
         FileChooser fc = new FileChooser();
@@ -190,7 +191,7 @@ public class DashboardController {
                             projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+Dst+".bin"), new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+projectName+".bin"));
 
 
-                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUserId());
+                            ProjectImpl newProjectImport = this.getProjectDTO(projectName, folderDestination, user.getUserId());
                             projectObsList.add(newProjectImport);
 
                             Path delFile =   Paths.get(folderDestination.resolve("tmp"+File.separator).toString()) ;
@@ -198,7 +199,7 @@ public class DashboardController {
                             System.out.println(delFile);
 
                             Utility.deleteFile(delFile.toFile());
-                            this.projectUCC.createFromImport(newProjectImport);
+                            this.createFromImport(newProjectImport);
                             setUserProjectView(this.user);
                         } catch (IOException e) {
                             throw new BizzException("Could not locate files to import");
@@ -213,13 +214,25 @@ public class DashboardController {
             }
         }
     }
+    //TODO some shit that was in the controller
+    private ProjectImpl getProjectDTO(String projectName, Path folderDestination, int userId) {
+        return new ProjectImpl().
+                setProjectOwnerId(userId)
+                .setProjectName(projectName)
+                .setProjectPath(folderDestination.toString()+ File.separator +projectName)
+                .setCreateDate(Utility.getTimeStamp())
+                .setModificationDate(Utility.getTimeStamp());
+    }
+    private void createFromImport(ProjectImpl projectDTO) throws BizzException, IOException {
+        ConfigurationSingleton.getProjectDAO().create(projectDTO);
+    }
 
     /**
      * Delete an existing project.
      *
      * @param data
      */
-    public void delete(ProjectDTO data) {
+    public void delete(ProjectImpl data) {
         projectObsList.remove(data);
     }
 
@@ -236,11 +249,11 @@ public class DashboardController {
 
         if (projectName != null && projectName.matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
             try {
-                ProjectDTO newProject = new ProjectDTO();
+                ProjectImpl newProject = new ProjectImpl();
                 newProject.setProjectName(projectName);
                 newProject.setCreateDate(Utility.getTimeStamp());
 
-                projectUCC.createNewProject(projectName);
+                projectUCC.create(projectName);
                 toEditorView();
             } catch (BizzException e) {
                 Utility.showAlert(Alert.AlertType.WARNING, "Creation impossible", "Duplicate project name", "A project with ths name already exists. Please specify another one");
