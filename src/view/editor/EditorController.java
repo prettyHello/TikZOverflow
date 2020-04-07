@@ -15,6 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -23,18 +25,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import model.SaveObject;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.StyleClassedTextArea;
-import org.fxmisc.richtext.demo.JavaKeywords;
-import org.fxmisc.richtext.model.StyleSpans;
-import org.fxmisc.richtext.model.StyleSpansBuilder;
 import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.IntFunction;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
 
@@ -65,8 +60,8 @@ public class EditorController {
     @FXML
     private Pane pane;
     @FXML
-    private StyleClassedTextArea tikzTA = new StyleClassedTextArea();
-    //private TextArea tikzTA;
+    private CodeArea tikzTA = new CodeArea();
+    private TextArea textArea;
     @FXML
     Button square;
     @FXML
@@ -564,17 +559,50 @@ public class EditorController {
     /**
      * Translate canvas to tikz and fill textarea
      */
+    String[] keyWord = {"filldraw","draw"};
+    String[] keyCharacter = {"\\", ",", "[", "]", "(", ")"} ;
+
     private void translateToTikz() {
-        String[] tikzWords = {"filldraw","draw"};
+
+
+
+
         tikzTA.replaceText(canvas.toTikZ());
 
-        if(!canvas.toTikZ().isEmpty()){
-            for(int x = 0; x < tikzWords.length; x ++){
-                List<Integer> positions = findWordUpgrade(canvas.toTikZ(), tikzWords[x]);
-                for(int y = 0; y < positions.size(); y++){
-                    tikzTA.setStyleClass(positions.get(y), positions.get(y)+tikzWords[x].length(), "red");
-                }
+        if(!tikzTA.getText().isEmpty()){
+            colorWord(keyWord, "red");
+            colorWord(keyCharacter, "chara");
+        }
+    }
+
+    private void colorWord( String[] wordList, String color) {
+        for(int x = 0; x < wordList.length; x ++){
+            List<Integer> positions = findWordUpgrade(tikzTA.getText(), wordList[x]);
+            for(int y = 0; y < positions.size(); y++){
+                tikzTA.setStyleClass(positions.get(y), positions.get(y)+ wordList[x].length(), color);
             }
+        }
+    }
+
+    @FXML
+    private void keyValidation(KeyEvent key) {
+        System.out.println(key.getCode() );
+        if (key.getCode().isDigitKey() ||
+                key.getCode().isFunctionKey() ||
+                key.getCode().isArrowKey() ||
+                key.getCode().isKeypadKey() ||
+                key.getCode().isLetterKey() ||
+                key.getCode().isMediaKey() ||
+                key.getCode().isModifierKey() ||
+                key.getCode().isNavigationKey() ||
+                key.getCode().isWhitespaceKey() ||
+                key.getCode() == KeyCode.BACK_SPACE )  {
+
+            tikzTA.setStyleClass(0, tikzTA.getText().length(), "black");
+
+            colorWord(keyWord, "red");
+            colorWord(keyCharacter, "chara");
+
         }
     }
 
