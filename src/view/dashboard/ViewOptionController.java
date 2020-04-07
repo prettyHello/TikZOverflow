@@ -5,7 +5,6 @@ import controller.Canvas.ActiveCanvas;
 import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
-import controller.ProjectImpl;
 import controller.UCC.ProjectUCC;
 import controller.factories.ProjectFactory;
 import javafx.fxml.FXML;
@@ -120,7 +119,7 @@ public class ViewOptionController extends HBox {
         });
     }
 
-    public void setProject(ProjectImpl projectDTO) {
+    public void setProject(ProjectDTO projectDTO) {
         projectDTO.setProjectOwnerId(userDTO.getUserId());
         this.projectDTO = projectDTO;
         this.projectName.setText(projectDTO.getProjectName());

@@ -1,9 +1,9 @@
 package view.dashboard;
 
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import config.ConfigurationSingleton;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
-import controller.ProjectImpl;
 import controller.UCC.ProjectUCC;
 import controller.UCC.UserUCC;
 import controller.factories.ProjectFactory;
@@ -23,6 +23,7 @@ import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.File;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -65,7 +66,6 @@ public class DashboardController {
     private UserDTO user;
 
     public DashboardController() {
-        projectList = new ListView<>();
     }
 
     /**
@@ -112,8 +112,10 @@ public class DashboardController {
         itemList.add("Shared with you");
         optionList.setItems(itemList);
         userSetting.setText(userDto.getFirstName());
+
         projectList.setCellFactory(cell -> new ListCell<ProjectDTO>() {
-            protected void updateItem(ProjectImpl item, boolean empty) {
+            @Override
+            protected void updateItem(ProjectDTO item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
@@ -141,17 +143,17 @@ public class DashboardController {
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
         File selectedFile = fc.showOpenDialog(null);
         String projectName;
-        ProjectDTO ProjectDto = null;
+        ProjectDTO projectDTO = null;
         try{
             projectName = askProjectName();
-            ProjectDto = this.projectFactory.createProject(projectName);
-            ProjectDto = this.projectUCC.load(selectedFile,ProjectDto);
+            projectDTO = this.projectFactory.createProject(projectName);
+            projectDTO = this.projectUCC.load(selectedFile,projectDTO);
         }catch (BizzException e){
             showAlert(Alert.AlertType.WARNING, "Load", "Business Error", e.getMessage());
         }catch (FatalException e){
             showAlert(Alert.AlertType.WARNING, "Load", "Unexpected Error", e.getMessage());
         }
-        this.projectObsList.add(ProjectDto);
+        this.projectObsList.add(projectDTO);
         setUserProjectView(this.user);
     }
 
@@ -169,10 +171,12 @@ public class DashboardController {
      */
     @FXML
     public void newProject() {
-        //TODO SUSPECT
         this.useAskedName = false;
+        String projectName = askProjectName();
+        if(projectName == null) // askProjectName return null if user cancelled the action
+            return;
+
         try {
-            String projectName = askProjectName();
             ProjectDTO projectDto = this.projectFactory.createProject();
             projectDto.setProjectName(projectName);
             projectUCC.create(projectDto);

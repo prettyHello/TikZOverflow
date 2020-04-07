@@ -150,11 +150,12 @@ public class Utility {
                     }
                     bos.close();
                     fos.close();
-                    tis.close();
                 }
             }
+            tis.close();
             return untaredNameFolder;
         } catch (IOException ex) {
+            ex.printStackTrace();
             throw new FatalException("File decompression error");
         }
     }
@@ -302,7 +303,7 @@ public class Utility {
             } catch (NoSuchFileException e) {
                 throw new BizzException(dir + " no such file or directory");
             } catch (DirectoryNotEmptyException e) {
-                throw new BizzException(dir + " not empty");
+                throw new FatalException("What we thought was a file was a directory"); //should never happen as we check if dir is a directory in the if
             } catch (IOException e) {
                 throw new FatalException(" File permission problems for delete " + dir);
             }

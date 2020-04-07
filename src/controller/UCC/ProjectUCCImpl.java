@@ -78,11 +78,12 @@ public class ProjectUCCImpl implements ProjectUCC {
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO load(File selectedFile, ProjectDTO projectDto) throws FatalException {
-        projectDto.setCreateDate(Utility.getTimeStamp());
-        projectDto.setModificationDate(Utility.getTimeStamp());
-        projectDto.setProjectOwnerId(this.userUcc.getConnectedUser().getUserId());
-        return this.projectDAO.load(selectedFile,projectDto);
+    public ProjectDTO load(File selectedFile, ProjectDTO projectDTO) throws FatalException {
+        projectDTO.setCreateDate(Utility.getTimeStamp());
+        projectDTO.setModificationDate(Utility.getTimeStamp());
+        projectDTO.setProjectOwnerId(this.userUcc.getConnectedUser().getUserId());
+        UserDTO userDTO = ConnectedUser.getConnectedUser();
+        return this.projectDAO.load(selectedFile,projectDTO, userDTO);
     }
 
     /**

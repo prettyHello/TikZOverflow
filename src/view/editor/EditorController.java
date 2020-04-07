@@ -530,7 +530,7 @@ public class EditorController {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void close(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+    public void close(ActionEvent actionEvent){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Close project");
         alert.setHeaderText("Do you want to save your project?");

@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 import static utilities.Utility.*;
@@ -85,7 +86,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             pr.setInt(1, dto.getUserId());
             rs = pr.executeQuery();
             while (rs.next()) {
-                ProjectImpl project = fillDTO(rs);
+                ProjectDTO project = fillDTO(rs);
                 projects.add(project);
             }
         } catch (SQLException e) {
@@ -148,9 +149,15 @@ public class ProjectDAOImpl implements ProjectDAO {
             pr.setInt(1, dto.getProjectOwnerId());
             pr.setString(2, dto.getProjectName());
             pr.executeUpdate();
-            deleteFile(new File(dto.getProjectPath()));
         } catch (SQLException e) {
             throw new FatalException("Failed to Delete the project '" + dto.getProjectName() + "' in Database");
+        }
+        try {
+            deleteFile(new File(dto.getProjectPath()));
+        }catch (BizzException e){
+            //delete file only launch a BizzException if the file doesn't exist
+            //in our case it means the user deleted it himself so we can ignore it
+            //TODO maybe we can create an exception to use as an alert?
         }
     }
 
@@ -182,11 +189,10 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator  ;
 
-    public void save(Canvas canvas, UserDTO userDto) throws FatalException {
+    public void save(Canvas canvas, UserDTO userDTO) throws FatalException {
         String nameOfProject = ActiveProject.getActiveProject().getProjectName();
-        rootProject = rootProject +"userid_" +userDto.getUserId() + File.separator + nameOfProject + File.separator;
         try{
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(rootProject + nameOfProject + ".bin"));
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(rootProject +"userid_" +userDTO.getUserId() + File.separator + nameOfProject + File.separator + nameOfProject + ".bin"));
             objectOutputStream.writeObject(canvas);
             objectOutputStream.close();
         }catch (IOException e){
@@ -194,12 +200,12 @@ public class ProjectDAOImpl implements ProjectDAO {
         }
     }
 
-    public Canvas loadSavedCanvas(UserDTO userDto) throws FatalException {
+    public Canvas loadSavedCanvas(UserDTO userDTO) throws FatalException {
         String nameOfProject = ActiveProject.getActiveProject().getProjectName();
         FileInputStream fileInputStream = null;
         Canvas canvas = null;
         try {
-            fileInputStream = new FileInputStream(rootProject +"userid_" +userDto.getUserId() + File.separator + nameOfProject + File.separator + nameOfProject + ".bin");
+            fileInputStream = new FileInputStream(rootProject +"userid_" +userDTO.getUserId() + File.separator + nameOfProject + File.separator + nameOfProject + ".bin");
             ObjectInputStream in = new ObjectInputStream(fileInputStream);
             canvas = (Canvas) in.readObject();
             in.close();
@@ -208,43 +214,48 @@ public class ProjectDAOImpl implements ProjectDAO {
         } catch (IOException e) {
             throw new FatalException("Error while opening the project " + e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new FatalException("Error while saving the project " + e.getMessage());
+            throw new FatalException("Error while loading the project " + e.getMessage());
         }
         return canvas;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void renameFolderProject(File projectName, File NewProjectName) {
+    //TODO remove
+    private void renameFolderProject(File projectName, File NewProjectName) {
         projectName.renameTo(NewProjectName);
     }
 
-    public ProjectDTO load(File selectedFile, ProjectDTO projectDto) throws FatalException {
-        checkObjects(selectedFile);
-        String projectName = projectDto.getProjectName();
+    /**
+     *
+     * @param selectedArchive The archive to import
+     * @param projectDTO DTO with the name of the new project once imported
+     * @param userDTO Active user
+     * @return
+     * @throws FatalException
+     */
+    public ProjectDTO load(File selectedArchive, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException {
+        checkObjects(projectDTO.getProjectName());
+        String projectName = projectDTO.getProjectName();
         checkString(projectName,"Project Name ");
-        Path folderDestination = Paths.get(System.getProperty("user.home") + rootFolder);
-        if (!Files.exists(folderDestination.resolve(projectName))) {
+        Path folderDestination = Paths.get(System.getProperty("user.home") + rootFolder  + File.separator +"userid_" +userDTO.getUserId() + File.separator);
+        if (!Files.exists(folderDestination.resolve(projectName))) { // check if the project name is already taken
             try {
-                Files.createDirectories(folderDestination);
-                Files.createDirectories(folderDestination.resolve("tmp"));
-                Files.createDirectories(folderDestination.resolve(projectName)) ;
-                String destination = Utility.unTarFile(selectedFile, folderDestination.resolve("tmp"));
+                Files.createDirectories(folderDestination); //create user dir if doesn't exists
+                Files.createDirectories(folderDestination.resolve("tmp")); //create a temp dir
+                Files.createDirectories(folderDestination.resolve(projectName)) ; //create a dir with real project name
+                String destination = Utility.unTarFile(selectedArchive, folderDestination.resolve("tmp")); //untar the archive in tmp
                 Utility.copy(folderDestination.resolve("tmp"+ File.separator+ destination).toFile(), folderDestination.resolve(projectName).toFile() );
                 renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+destination), new File(folderDestination.toString() + File.separator + File.separator+projectName));
                 renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+destination+".bin"), new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+projectName+".bin"));
                 Path delFile = Paths.get(folderDestination.resolve("tmp"+File.separator).toString()) ;
                 Utility.deleteFile(delFile.toFile());
-                projectDto.setProjectPath(folderDestination.toString()+ File.separator +projectName);
-                this.create(projectDto);
+                projectDTO.setProjectPath(folderDestination.toString()+ File.separator +projectName);
+                this.create(projectDTO);
             } catch (IOException e) {
                 throw new FatalException("IO exception : Can't find the file to import");
             }
         } else {
-            throw new FatalException("Can't find the file to import");
+            throw new FatalException("The user home directory doesn't seem to exists, import failed");
         }
-        return projectDto;
+        return projectDTO;
     }
 }

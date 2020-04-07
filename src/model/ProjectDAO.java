@@ -28,17 +28,9 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
      */
     void export(File selectedFile, ProjectDTO dto) throws FatalException;
 
-    void save(Canvas canvas, UserDTO userDto) throws FatalException;
+    void save(Canvas canvas, UserDTO userDTO) throws FatalException;
 
-    Canvas loadSavedCanvas(UserDTO userDto) throws FatalException;
+    Canvas loadSavedCanvas(UserDTO userDTO) throws FatalException;
 
-    /**
-     * Rename imported project with input provided by the user
-     *
-     * @param projectName    folder to be rename
-     * @param NewProjectName new folder name
-     */
-    void renameFolderProject(File projectName, File NewProjectName);
-
-    ProjectDTO load(File selectedFile, ProjectDTO projectDto) throws FatalException ;
+    ProjectDTO load(File selectedFile, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException ;
 }
