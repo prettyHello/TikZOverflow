@@ -21,21 +21,25 @@ public abstract class Shape implements Serializable {
     private boolean fill = false;
     private Color fillColor = Color.BLACK;
     private Color drawColor = Color.BLACK;
-    private String shapeThickness = Thickness.valueOf("THIN").name().toLowerCase();
+    private String shapeThicknessKey;
     private int id;
+    private  double shapeThicknessValue;
 
     /**
      * @param draw Is the shape have a outer line, can be combined with fill.
      * @param fill Is the shape filled with a color, can be combined with draw.
      */
-    public Shape(boolean draw, boolean fill, String shapeThickness,int id) {
+    public Shape(boolean draw, boolean fill, String shapeThicknessKey, int id) {
         this.draw = draw;
         this.fill = fill;
         this.fillColor = Color.BLACK;
         this.drawColor = Color.BLACK;
-        this.shapeThickness = shapeThickness.toLowerCase().replace("_", " ");
+        this.shapeThicknessKey = shapeThicknessKey.toLowerCase().replace("_", " ");
+        this.shapeThicknessValue = Thickness.valueOf("THIN").thicknessValue();
         this.id = id;
     }
+
+
 
     /**
      * @param draw      Is the shape have a outer line, can be combined with fill.
@@ -43,7 +47,7 @@ public abstract class Shape implements Serializable {
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, int id) throws FatalException {
+    public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
         this.draw = draw;
         this.fill = fill;
 
@@ -55,7 +59,7 @@ public abstract class Shape implements Serializable {
             Utility.checkObject(drawColor);
             this.drawColor = drawColor;
         }
-        this.shapeThickness = shapeThickness.toLowerCase().replace("_", " ");
+        this.shapeThicknessKey = shapeThicknessKey.toLowerCase().replace("_", " ");
         this.id = id;
     }
 
@@ -114,26 +118,33 @@ public abstract class Shape implements Serializable {
         this.drawColor = drawColor;
     }
 
-    public String getShapeThickness() {
-        return shapeThickness.toLowerCase().replace("_", " ");
+    public String getShapeThicknessKey() {
+        return shapeThicknessKey.toLowerCase().replace("_", " ");
     }
-    public void setShapeThickness(String shapeThickness) {
-        this.shapeThickness = shapeThickness.toLowerCase().replace("_"," ");
+    public Shape setShapeThicknessKey(String shapeThicknessKey) {
+        this.shapeThicknessKey = shapeThicknessKey.toLowerCase().replace("_"," ");
+        this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
+        return  this;
     }
+
+    public double getShapeThicknessValue() {
+        return shapeThicknessValue;
+    }
+
 
     public String print() {
         String returnValue = "";
         if (this.fill && this.draw) {
             returnValue += "\\filldraw";
-            returnValue += "[fill=" + this.fillColor.value + ", draw=" + this.drawColor.value + ", thickness="+ this.shapeThickness + "] " ;
+            returnValue += "[fill=" + this.fillColor.value + ", draw=" + this.drawColor.value + ", "+ this.shapeThicknessKey + "] " ;
         } else {
             if (this.fill) {
                 returnValue += "\\fill";
-                returnValue += "[fill=" + this.fillColor.value + "] ";
+                returnValue += "[fill=" + this.fillColor.value + ", "+ this.shapeThicknessKey + "] ";
             }
             if (this.draw) {
                 returnValue += "\\draw";
-                returnValue += "[draw=" + this.drawColor.value + "] ";
+                returnValue += "[draw=" + this.drawColor.value + ", "+ this.shapeThicknessKey + "] ";
             }
         }
         return returnValue;

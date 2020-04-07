@@ -11,7 +11,7 @@ public enum Thickness {
     SEMI_THICK(0.6),
     THICK(0.8),
     VERY_THICK(1.2),
-    ULTRA_THICK(1.6);
+    ULTRA_THICK(4);
     public final double value;
 
     Thickness(double value) {

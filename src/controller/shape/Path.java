@@ -77,7 +77,7 @@ import java.util.Iterator;
      * /!\ Print always add an exta " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
-        String returnValue = "\\draw ["+super.getDrawColor().value+ ", "+ super.getShapeThickness() +"] ";
+        String returnValue = "\\draw ["+super.getDrawColor().value+ ", "+ super.getShapeThicknessKey() +"] ";
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
         returnValue += iterator.next().print();
         while (iterator.hasNext()) {

@@ -11,7 +11,7 @@ public class Arrow extends Path {
     }
 
     public String print() {
-        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().value + ",-> , "+super.getShapeThickness()+"] ");
+        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().value + ",-> , "+super.getShapeThicknessKey()+"] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
         returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {

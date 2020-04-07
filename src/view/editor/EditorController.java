@@ -166,7 +166,7 @@ public class EditorController {
         MenuItem drawColorMenu = new MenuItem("Stroke color", contextMenuDrawColorPicker);
         drawColorMenu.setOnAction(t -> setDrawColor());
         MenuItem shapeThicknessMenu = new MenuItem("Shape thickness", contextMenuChangeThickness);
-        shapeThicknessMenu.setOnAction(t-> setShapeThickness());
+        shapeThicknessMenu.setOnAction(t-> updateShapeThickness());
 
         shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu);
 
@@ -219,11 +219,11 @@ public class EditorController {
         translateToTikz();
     }
 
-    private void setShapeThickness(){
+    private void updateShapeThickness(){
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             shape.setStrokeWidth(Thickness.valueOf(contextMenuChangeThickness.getValue().toString()).thicknessValue());
-            canvas.changeShapeThickness(Integer.parseInt(shape.getId()), contextMenuChangeThickness.getValue().toString());
+            canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(contextMenuChangeThickness.getValue().toString());
         }
         translateToTikz();
     }
@@ -404,7 +404,7 @@ public class EditorController {
                         disableToolbar(false);
                 } else {                                 //if not selected => add to the list
                     disableToolbar(true);
-                    shape.setStrokeWidth(2);
+                    shape.setStrokeWidth(canvas.getShapeById(Integer.parseInt(shape.getId())).getShapeThicknessValue());
                     DropShadow borderEffect = new DropShadow(
                             BlurType.THREE_PASS_BOX, Color.GREEN, 2, 1, 0, 0
                     );
