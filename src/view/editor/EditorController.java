@@ -65,7 +65,8 @@ public class EditorController {
     @FXML
     private Pane pane;
     @FXML
-    private CodeArea tikzTA;
+    private StyleClassedTextArea tikzTA = new StyleClassedTextArea();
+    //private TextArea tikzTA;
     @FXML
     Button square;
     @FXML
@@ -86,27 +87,6 @@ public class EditorController {
     SplitPane mainSplitPane;
     @FXML
     AnchorPane leftAnchorPane;
-
-
-    private String exampleString = "\\filldraw[fill=black, draw=black] circle=(553.0,313.0)-- cycle;\n";
-
-    private static final String[] KEYWORDS = new String[] { "filldraw", "circle" };
-    /* This keyword could get another color by css */
-    private static final String[] DEBUG_KEYWORD = new String[] { "DEBUG" };
-
-    private static final String KEYWORD_PATTERN = "\\b("
-            + String.join("|", KEYWORDS) + ")\\b";
-    private static final String PAREN_PATTERN = "\\(|\\)";
-    private static final String BRACE_PATTERN = "\\{|\\}";
-    private static final String BRACKET_PATTERN = "\\[|\\]";
-    private static final String SEMICOLON_PATTERN = "\\;";
-    private static final String STRING_PATTERN = "\"([^\"]|\\\")*\"";
-    private static final Pattern PATTERN = Pattern.compile("(?<KEYWORD>"
-            + KEYWORD_PATTERN + ")" + "|(?<PAREN>" + PAREN_PATTERN + ")"
-            + "|(?<BRACE>" + BRACE_PATTERN + ")" + "|(?<BRACKET>"
-            + BRACKET_PATTERN + ")" + "|(?<SEMICOLON>" + SEMICOLON_PATTERN
-            + ")" + "|(?<STRING>" + STRING_PATTERN + ")");
-
 
 
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
@@ -585,40 +565,37 @@ public class EditorController {
      * Translate canvas to tikz and fill textarea
      */
     private void translateToTikz() {
-        String stylesheet = JavaKeywords.class.getResource("java-keywords.css").toExternalForm();
-        IntFunction<String> format = (digits -> " %" + digits + "d ");
-        //codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea, format, stylesheet));
-        tikzTA.textProperty().addListener((obs, oldText, newText) -> {
-            tikzTA.setStyleSpans(0, computeHighlighting(newText));
-        });
-        tikzTA.replaceText(0, 0, canvas.toTikZ());
+        String[] tikzWords = {"filldraw","draw"};
+        tikzTA.replaceText(canvas.toTikZ());
 
-       // tikzTA.replaceText(canvas.toTikZ()) ;
-    }
-
-    private static StyleSpans<Collection<String>> computeHighlighting(
-            String text) {
-        System.out.println("1");
-        Matcher matcher = PATTERN.matcher(text);
-        int lastKwEnd = 0;
-        StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
-        while (matcher.find()) {
-            System.out.println("2");
-            String styleClass = matcher.group("KEYWORD") != null ? "keyword"
-                    : matcher.group("PAREN") != null ? "paren" : matcher
-                    .group("BRACE") != null ? "brace" : matcher
-                    .group("BRACKET") != null ? "bracket" : matcher
-                    .group("SEMICOLON") != null ? "semicolon" : matcher
-                    .group("STRING") != null ? "string" : null; /* never happens */
-            assert styleClass != null;
-            spansBuilder.add(Collections.emptyList(), matcher.start()
-                    - lastKwEnd);
-            spansBuilder.add(Collections.singleton(styleClass), matcher.end()
-                    - matcher.start());
-            lastKwEnd = matcher.end();
+        if(!canvas.toTikZ().isEmpty()){
+            for(int x = 0; x < tikzWords.length; x ++){
+                List<Integer> positions = findWordUpgrade(canvas.toTikZ(), tikzWords[x]);
+                for(int y = 0; y < positions.size(); y++){
+                    tikzTA.setStyleClass(positions.get(y), positions.get(y)+tikzWords[x].length(), "red");
+                }
+            }
         }
-        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
-        return spansBuilder.create();
     }
+
+    public List<Integer> findWordUpgrade(String textString, String word) {
+        List<Integer> indexes = new ArrayList<Integer>();
+        StringBuilder output = new StringBuilder();
+        String lowerCaseTextString = textString.toLowerCase();
+        String lowerCaseWord = word.toLowerCase();
+        int wordLength = 0;
+
+        int index = 0;
+        while(index != -1){
+            index = lowerCaseTextString.indexOf(lowerCaseWord, index + wordLength);  // Slight improvement
+            if (index != -1) {
+                indexes.add(index);
+            }
+            wordLength = word.length();
+        }
+        return indexes;
+    }
+
+
 }
 

@@ -1,28 +1,13 @@
 
-.code-area {
-    -fx-text-fill: #4325ff;
-    -fx-fill: #f045ff;
-}
 
-.text-area {
-    -fx-text-fill: #4325ff;
-    -fx-fill: #f045ff;
-}
+.red { -fx-fill: red;-fx-font-weight: bold; }
 
 
-.root {
-    -fx-font-size: 20px;
-    -fx-font-family: "Comic Sans MS";
-}
 
 .list-cell {
     -fx-background-color: azure;
 }
 
-.styled-text-area {
-    -fx-text-fill: #4325ff;
-    -fx-fill: #f045ff;
-}
 
 
 .debug {-fx-fill: #8346F2;-fx-font-weight: bold;}
