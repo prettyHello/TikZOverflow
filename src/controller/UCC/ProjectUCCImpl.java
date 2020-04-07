@@ -1,22 +1,20 @@
 package controller.UCC;
 
+import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.ActiveProject;
+import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
-import controller.ProjectImpl;
 import controller.DTO.UserDTO;
-import javafx.scene.control.Alert;
-import javafx.stage.FileChooser;
 import model.DALServices;
 import model.DAO;
+import model.ProjectDAO;
 import utilities.Utility;
 import utilities.exceptions.BizzException;
 import utilities.exceptions.FatalException;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static utilities.Utility.checkObjects;
 import static utilities.Utility.checkString;
@@ -25,28 +23,24 @@ import static utilities.Utility.checkString;
  * {@inheritDoc}
  */
 public class ProjectUCCImpl implements ProjectUCC {
+    private String rootFolder = File.separator + "ProjectTikZ" + File.separator;
 
-
-    private String rootProject = File.separator + "ProjectTikZ" + File.separator;
-
+    private UserUCC userUcc = ConfigurationSingleton.getUserUcc();
     private final DALServices dal;
-    private final DAO<ProjectDTO> projectDAO;
+    private final ProjectDAO projectDAO;
 
     public ProjectUCCImpl(DALServices dalServices, DAO<ProjectDTO> projectDAO) {
         this.dal = dalServices;
-        this.projectDAO = projectDAO;
+        this.projectDAO = (ProjectDAO) projectDAO;
     }
 
-    //TODO WHY PUBLIC ?
     /**
      * {@inheritDoc}
      */
     @Override
-    public void renameFolderProject(File projectName, File NewProjectName) {
-        projectName.renameTo(NewProjectName);
+    public void setActive(ProjectDTO dto) throws FatalException {
+        ActiveProject.setActiveProject(this.projectDAO.get(dto));
     }
-
-
 
     /**
      * {@inheritDoc}
@@ -56,66 +50,67 @@ public class ProjectUCCImpl implements ProjectUCC {
         checkObjects(dto);
         String projectName = dto.getProjectName();
         checkString(projectName, "project Name");
-
         try {
             dal.startTransaction();
             UserDTO owner = ConnectedUser.getConnectedUser();
-            String projectPath = System.getProperty("user.home") + rootProject +"userid_" +owner.getUserId() + File.separator + projectName;
             dto.setProjectOwnerId(owner.getUserId());
             dto.setCreateDate(Utility.getTimeStamp());
             dto.setModificationDate(Utility.getTimeStamp());
+            String projectPath = System.getProperty("user.home") + rootFolder +"userid_" +owner.getUserId() + File.separator + projectName;
             dto.setProjectPath(projectPath);
             this.projectDAO.create(dto);
-            //TODO move in dao
-            Files.createDirectories(Paths.get(projectPath));
-            ActiveProject.setActiveProject(dto);
-            ActiveCanvas.setNewCanvas(-1, -1);
-
             dal.commit();
-        } catch (IOException e) { //TODO move once file in dao
-            throw new FatalException("Couldn't create project. Error failed to create a new directory.");
-        } finally {
+        }finally {
             dal.rollback();
         }
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void export(File selectedFile, ProjectDTO dto) throws FatalException {
+        this.projectDAO.export(selectedFile,dto);
+    }
 
     /**
      * {@inheritDoc}
      */
-    //TODO file in dao
-    public void ExportProject(ProjectDTO dto) {
-        dto = projectDAO.get(dto);
-        FileChooser fc = new FileChooser();
-        fc.setTitle("Save project as...");
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
-        fc.setInitialDirectory(new File(System.getProperty("user.home") + this.rootProject));
-        fc.setInitialFileName(dto.getProjectName());
-        File selectedFile = fc.showSaveDialog(null);
-        File dir = new File(dto.getProjectPath());
-
-        try {
-            if ( selectedFile != null ) {
-                if (dir.exists()) {
-                    if ( Utility.createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz") ) ) {
-                        new Alert(Alert.AlertType.CONFIRMATION, "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz")).showAndWait();
-                    }
-                    else {
-                        Utility.deleteFile(new File(selectedFile.getAbsolutePath().concat(".tar.gz") ) );
-                        new Alert(Alert.AlertType.ERROR, "Too long path to a certain file ( > 100 bytes)").showAndWait();
-                    }
-                } else {
-                    new Alert(Alert.AlertType.ERROR, "Error Export the project does not exist on the path: " +dir ).showAndWait();
-                }
-            }
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (BizzException e){
-            e.getMessage();
-        }
+    @Override
+    public ProjectDTO load(File selectedFile, ProjectDTO projectDto) throws FatalException {
+        projectDto.setCreateDate(Utility.getTimeStamp());
+        projectDto.setModificationDate(Utility.getTimeStamp());
+        projectDto.setProjectOwnerId(this.userUcc.getConnectedUser().getUserId());
+        return this.projectDAO.load(selectedFile,projectDto);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void delete(ProjectDTO dto) {
+        this.projectDAO.delete(dto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Canvas loadSavedCanvas()throws FatalException {
+        return this.projectDAO.loadSavedCanvas( this.userUcc.getConnectedUser());
+    }
+
+    public void save() throws FatalException{
+        this.projectDAO.save(ActiveCanvas.getActiveCanvas(),this.userUcc.getConnectedUser());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<ProjectDTO> getOwnedProjects(UserDTO dto) throws FatalException{
+        return this.projectDAO.getOwnedProjects(dto);
+    }
 }
 

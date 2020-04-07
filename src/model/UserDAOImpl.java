@@ -39,7 +39,7 @@ public class UserDAOImpl implements UserDAO {
             pr = dal.prepareStatement(SQL_LOGIN_USER);
             pr.setString(1, usrAuth.getEmail());
             rs = pr.executeQuery();
-            usr = (UserDTO) this.userFactory.createUser();
+            usr = this.userFactory.createUser();
             if (rs.next()) {
                 usr.setEmail(rs.getString("email"));
                 usr.setFirstName(rs.getString("first_name"));

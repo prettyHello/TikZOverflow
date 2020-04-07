@@ -1,7 +1,6 @@
 package controller.factories;
 
 import controller.ProjectImpl;
-//TODO CHECK IF CORRECT AFTER REFACTOR
 
 /**
  * This interface is meant to be used by the front end or the persistence by giving them the DTO they need

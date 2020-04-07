@@ -2,10 +2,9 @@ package view.editor;
 
 import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
-import controller.Canvas.ActiveProject;
 import controller.Canvas.Canvas;
-import controller.ProjectImpl;
 import controller.DTO.UserDTO;
+import controller.UCC.ProjectUCC;
 import controller.UCC.UserUCC;
 import controller.shape.Coordinates;
 import controller.shape.Square;
@@ -21,7 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import model.SaveObject;
+import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -31,6 +30,7 @@ import java.util.Iterator;
 import java.util.Optional;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
+import static utilities.Utility.showAlert;
 
 /**
  * This class is used to handle drawings and their corresponding tikz translation.
@@ -53,6 +53,8 @@ public class EditorController {
     private UserUCC userUcc;
 
     private ViewSwitcher viewSwitcher;
+
+    private ProjectUCC projectUcc = ConfigurationSingleton.getProjectUCC();
 
     @FXML
     Pane toolbar;
@@ -512,11 +514,13 @@ public class EditorController {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void save(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
-        ProjectImpl projectDTO = ActiveProject.getActiveProject();
+    public void save(ActionEvent actionEvent) {
         UserDTO user = userUcc.getConnectedUser();
-        SaveObject saveObject = new SaveObject();
-        saveObject.save(canvas, projectDTO.getProjectName(),user);
+        try{
+            this.projectUcc.save();
+        }catch (FatalException e){
+            showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
+        }
     }
 
     /**
@@ -546,9 +550,11 @@ public class EditorController {
             return;
         }
         if (result.get() == buttonTypeOne) {
-            SaveObject saveObject = new SaveObject();
-            ProjectImpl projectDTO = ActiveProject.getActiveProject();
-            saveObject.save(canvas, projectDTO.getProjectName(), user);
+            try{
+                this.projectUcc.save();
+            }catch (FatalException e){
+                showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
+            }
         }
 
         ActiveCanvas.deleteActiveCanvas();

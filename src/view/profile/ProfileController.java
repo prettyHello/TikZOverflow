@@ -139,7 +139,7 @@ public class ProfileController {
             lastnameText = lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             firstnameText = firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
 
-            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());;
+            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
             userUcc.updateUserInfo(user);
             showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information succesfully updated");
         } catch (BizzException e) {

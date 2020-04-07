@@ -31,7 +31,6 @@ public class Utility {
     public static final String UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
 
     public static final String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
-    private static String nameArchive1;
 
     //TODO Change capital letters
     public static final String EMAIL_PATTERN = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
@@ -39,11 +38,14 @@ public class Utility {
     private Utility() {
     }
 
+    /**
+     *
+     * @return the timeStamp
+     */
     public static String getTimeStamp() {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         return formatter.format(date);
-
     }
 
     /**
@@ -122,25 +124,19 @@ public class Utility {
      * @param tarFile  path to source file ".tar.gz"
      * @param destFile destination directory of decompressed file
      */
-    //TODO CLEAN EVERYTHING,
-    public static String unTarFile(File tarFile, Path destFile) {
-        TarArchiveInputStream tis = null;
+    public static String unTarFile(File tarFile, Path destFile) throws FatalException{
+        TarArchiveInputStream tis;
         try {
-            FileOutputStream fos = null;
+            FileOutputStream fos;
             String untaredNameFolder = null;
-            TarArchiveEntry tarEntry = null;
+            TarArchiveEntry tarEntry;
+            //TODO CAN E MAKE IT SEMPLER
             tis = new TarArchiveInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarFile))));
             tis.getNextTarEntry();
-
             while ((tarEntry = tis.getNextTarEntry()) != null) {
-
-                int it = 0;
                 String name = tarEntry.getName();
                 untaredNameFolder = name.substring(0, name.indexOf("/"));
-
-                if (tarEntry.isDirectory()) {
-                    continue;
-                } else {
+                if (!tarEntry.isDirectory()) {
                     File outputFile = new File(destFile.toFile(), tarEntry.getName());
                     outputFile.getParentFile().mkdirs();
                     fos = new FileOutputStream(outputFile);
@@ -148,57 +144,56 @@ public class Utility {
                     byte[] fileRead = new byte[1024];
                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
 
-                    int len = 0;
+                    int len;
                     while ((len = tis.read(fileRead)) != -1) {
                         bos.write(fileRead, 0, len);
                     }
                     bos.close();
-                    fileRead = null;
                     fos.close();
+                    tis.close();
                 }
             }
             return untaredNameFolder;
         } catch (IOException ex) {
-            //TODO IS CATCH APROPRIATE, WHY A FUCKING ALERT HERE
-            new Alert(Alert.AlertType.ERROR, "File decompression error").showAndWait();
-            return null;
-        } finally {
-            if (tis != null) {
-                try {
-                    tis.close();
-                } catch (IOException e) {
-                    //TODO MAIS PUTAAAAINN
-                    e.printStackTrace();
-                }
-            }
+            throw new FatalException("File decompression error");
         }
     }
 
-    //TODO CHECK IF NEEDS CATCH AND DIVIDE IN 2
-    public static void copy(File dirSrc, File dirDest) throws IOException {
-        if (dirSrc.isDirectory()) {
-            if (!dirDest.exists()) {
-                dirDest.mkdir();
-                //System.out.println("Dossier " + dirSrc + "  > " + dirDest);
-            }
-            String files[] = dirSrc.list();
-            for (String f : files) {
-                File srcF = new File(dirSrc, f);
-                File destF = new File(dirDest, f);
-                copy(srcF, destF);
-            }
-        } else {
+    private static void copyDirectory(File dirSrc, File dirDest){
+        if (!dirDest.exists()) {
+            dirDest.mkdir();
+        }
+        String[] files = dirSrc.list();
+        for (String f : files) {
+            File srcF = new File(dirSrc, f);
+            File destF = new File(dirDest, f);
+            copy(srcF, destF);
+        }
+    }
+
+    private static void copyFile(File dirSrc, File dirDest) throws FatalException{
+        try {
             InputStream in = new FileInputStream(dirSrc);
             OutputStream out = new FileOutputStream(dirDest);
-
             byte[] buffer = new byte[1024];
             int length;
             while ((length = in.read(buffer)) > 0) {
                 out.write(buffer, 0, length);
             }
-
             in.close();
             out.close();
+        }catch (FileNotFoundException e){
+            throw new FatalException("Couldn't copy file");
+        }catch(IOException e){
+            throw new FatalException("IOException in copyFile");
+        }
+    }
+
+    public static void copy(File dirSrc, File dirDest) throws FatalException {
+        if (dirSrc.isDirectory()) {
+            copyDirectory(dirSrc,dirDest);
+        } else {
+            copyFile(dirSrc,dirDest);
         }
     }
 
@@ -286,9 +281,13 @@ public class Utility {
         checkString(password2, "password");
     }
 
-//TODO JAVADOC, EST ce bon endroit, codé correctement, ajoute les exeption, pas d'alerte
-    public static void deleteFile(File dir) {
-
+    /**
+     * Delete the give file/directory
+     * @param dir
+     * @throws FatalException File permission problem
+     * @throws BizzException No file or directory not empty
+     */
+    public static void deleteFile(File dir) throws FatalException ,BizzException{
         if (dir.isDirectory()) {
             File[] listFiles = dir.listFiles();
             if (listFiles != null) {
@@ -301,11 +300,11 @@ public class Utility {
             try {
                 Files.delete(dir.toPath());
             } catch (NoSuchFileException e) {
-                new Alert(Alert.AlertType.ERROR, dir + " no such file or directory").showAndWait();
+                throw new BizzException(dir + " no such file or directory");
             } catch (DirectoryNotEmptyException e) {
-                new Alert(Alert.AlertType.ERROR, dir + " not empty").showAndWait();
+                throw new BizzException(dir + " not empty");
             } catch (IOException e) {
-                new Alert(Alert.AlertType.ERROR, " File permission problems for delete " + dir).showAndWait();
+                throw new FatalException(" File permission problems for delete " + dir);
             }
         }
     }
@@ -320,21 +319,18 @@ public class Utility {
      * @throws BizzException
      * @return
      */
-
-    //TODO CLEAN ET MOVE DANS UTILS
-    public static Boolean createTarGz(String folderProject, String fileTarDestination) throws IOException, BizzException {
-        FileOutputStream fileOutputStream = new FileOutputStream(new File(fileTarDestination));
-        GZIPOutputStream outputGZip = new GZIPOutputStream(new BufferedOutputStream(fileOutputStream));//TODO check if it still works when  new BufferedOutputStream(fileOutputStream) => fileOutputStream
-        TarArchiveOutputStream archiveTarGz = new TarArchiveOutputStream(outputGZip);
+    public static void createTarGz(String folderProject, String fileTarDestination) throws FatalException {
+        TarArchiveOutputStream archiveTarGz = null;
         try {
+            FileOutputStream fileOutputStream = new FileOutputStream(new File(fileTarDestination));
+            //TODO check if it still works when  new BufferedOutputStream(fileOutputStream) => fileOutputStream
+            GZIPOutputStream outputGZip = new GZIPOutputStream(new BufferedOutputStream(fileOutputStream));
+            archiveTarGz = new TarArchiveOutputStream(outputGZip);
             addFileToArchiveTarGz(folderProject, "", archiveTarGz);
-            return true;
-        }
-        catch ( RuntimeException e) {
-            return false ;
-        }
-        finally {
             archiveTarGz.close();
+        }
+        catch (IOException e) {
+            throw new FatalException("Impossible to export the project");
         }
     }
 
@@ -345,14 +341,11 @@ public class Utility {
      * @param parent        parent folder of the file to be added
      * @param archiveTarGz  destination of the file
      */
-    //TODO CLEAN ET MOVE DANS UTILS
-    private static void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz){
+    private static void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz)throws FatalException{
         File file = new File(folderProject);
         String entryName = parent + file.getName();
-        // add tar ArchiveEntry
         try {
             archiveTarGz.putArchiveEntry(new TarArchiveEntry(file, entryName));
-
             if (file.isFile()) {
                 BufferedInputStream fileSelected = new BufferedInputStream(new FileInputStream(file));
                 IOUtils.copy(fileSelected, archiveTarGz);  // copy file in archive
@@ -365,7 +358,7 @@ public class Utility {
                 }
             }
         } catch (IOException e) {
-            new Alert(Alert.AlertType.ERROR, "Impossible to export the project").showAndWait();
+            throw new FatalException("Impossible to export the project");
         }
     }
 }
