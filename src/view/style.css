@@ -1,6 +1,10 @@
 
 
-.red { -fx-fill: red;-fx-font-weight: bold; }
+.red { -fx-fill: #4325ff; }
+
+.black { -fx-fill: #020202; }
+
+.chara { -fx-fill: #f045ff; }
 
 
 
