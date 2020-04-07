@@ -22,13 +22,19 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import model.SaveObject;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.StyleClassedTextArea;
+import org.fxmisc.richtext.demo.JavaKeywords;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
 import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.IntFunction;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
 
@@ -59,7 +65,7 @@ public class EditorController {
     @FXML
     private Pane pane;
     @FXML
-    private TextArea tikzTA;
+    private CodeArea tikzTA;
     @FXML
     Button square;
     @FXML
@@ -80,6 +86,28 @@ public class EditorController {
     SplitPane mainSplitPane;
     @FXML
     AnchorPane leftAnchorPane;
+
+
+    private String exampleString = "\\filldraw[fill=black, draw=black] circle=(553.0,313.0)-- cycle;\n";
+
+    private static final String[] KEYWORDS = new String[] { "filldraw", "circle" };
+    /* This keyword could get another color by css */
+    private static final String[] DEBUG_KEYWORD = new String[] { "DEBUG" };
+
+    private static final String KEYWORD_PATTERN = "\\b("
+            + String.join("|", KEYWORDS) + ")\\b";
+    private static final String PAREN_PATTERN = "\\(|\\)";
+    private static final String BRACE_PATTERN = "\\{|\\}";
+    private static final String BRACKET_PATTERN = "\\[|\\]";
+    private static final String SEMICOLON_PATTERN = "\\;";
+    private static final String STRING_PATTERN = "\"([^\"]|\\\")*\"";
+    private static final Pattern PATTERN = Pattern.compile("(?<KEYWORD>"
+            + KEYWORD_PATTERN + ")" + "|(?<PAREN>" + PAREN_PATTERN + ")"
+            + "|(?<BRACE>" + BRACE_PATTERN + ")" + "|(?<BRACKET>"
+            + BRACKET_PATTERN + ")" + "|(?<SEMICOLON>" + SEMICOLON_PATTERN
+            + ")" + "|(?<STRING>" + STRING_PATTERN + ")");
+
+
 
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
     private double selectedX, selectedY;
@@ -112,6 +140,8 @@ public class EditorController {
 
     @FXML
     public void initialize() {
+
+
 
         // Get coordinate of click in canvas and draw selected shape
         pane.setOnMouseClicked((MouseEvent event) ->
@@ -555,8 +585,40 @@ public class EditorController {
      * Translate canvas to tikz and fill textarea
      */
     private void translateToTikz() {
+        String stylesheet = JavaKeywords.class.getResource("java-keywords.css").toExternalForm();
+        IntFunction<String> format = (digits -> " %" + digits + "d ");
+        //codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea, format, stylesheet));
+        tikzTA.textProperty().addListener((obs, oldText, newText) -> {
+            tikzTA.setStyleSpans(0, computeHighlighting(newText));
+        });
+        tikzTA.replaceText(0, 0, canvas.toTikZ());
 
-        tikzTA.setText(canvas.toTikZ());
+       // tikzTA.replaceText(canvas.toTikZ()) ;
+    }
+
+    private static StyleSpans<Collection<String>> computeHighlighting(
+            String text) {
+        System.out.println("1");
+        Matcher matcher = PATTERN.matcher(text);
+        int lastKwEnd = 0;
+        StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+        while (matcher.find()) {
+            System.out.println("2");
+            String styleClass = matcher.group("KEYWORD") != null ? "keyword"
+                    : matcher.group("PAREN") != null ? "paren" : matcher
+                    .group("BRACE") != null ? "brace" : matcher
+                    .group("BRACKET") != null ? "bracket" : matcher
+                    .group("SEMICOLON") != null ? "semicolon" : matcher
+                    .group("STRING") != null ? "string" : null; /* never happens */
+            assert styleClass != null;
+            spansBuilder.add(Collections.emptyList(), matcher.start()
+                    - lastKwEnd);
+            spansBuilder.add(Collections.singleton(styleClass), matcher.end()
+                    - matcher.start());
+            lastKwEnd = matcher.end();
+        }
+        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+        return spansBuilder.create();
     }
 }
 

@@ -131,7 +131,9 @@ public class ViewSwitcher {
         Parent root = loader.load();
         EditorController editorController = loader.getController();
         editorController.setViewSwitcher(this);
-        this.stage.setScene(new Scene(root));
+        Scene scene = new Scene(root) ;
+        scene.getStylesheets().add(String.valueOf(getClass().getResource("style.css")));
+        this.stage.setScene(scene);
     }
 
     public void setUser(UserDTO user) {
