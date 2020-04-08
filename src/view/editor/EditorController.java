@@ -15,6 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -384,6 +386,7 @@ public class EditorController {
                 if (selectedShapes.contains(shape)) { //if already selected => unselect
                     shape.setEffect(null);
                     selectedShapes.remove(shape);
+                    translateToTikz();
                     if (selectedShapes.isEmpty())
                         disableToolbar(false);
                 } else {                                 //if not selected => add to the list
@@ -394,6 +397,8 @@ public class EditorController {
                     );
                     shape.setEffect(borderEffect);
                     selectedShapes.add(shape);
+                    translateToTikz();
+
                 }
             } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                 shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, mouseEvent.getScreenX(), mouseEvent.getScreenY()));
@@ -572,13 +577,26 @@ public class EditorController {
         tikzTA.replaceText(canvas.toTikZ());
         tikzTA.clearStyle(0,tikzTA.getText().length());
         if(!tikzTA.getText().isEmpty()){ // Check if the canvas isn't empty (for example at start). Because if the canvas is empty it will make an error.
-            colorWord(keyWord, "red");
+            colorWord(keyWord, "blue");
             colorWord(keyCharacter, "chara");
             }
 
         if(!tikzTA.getText().isEmpty()){
-            colorWord(keyWord, "red");
+            colorWord(keyWord, "blue");
             colorWord(keyCharacter, "chara");
+        }
+        if(!selectedShapes.isEmpty()) // If user select a shape.
+        {
+            for(int z = 0 ; z < selectedShapes.size(); z ++) // Loop for every shape selected.
+            {
+                String myShape = selectedShapes.get(selectedShapes.size() - (z+1)).toString(); // Selection of the actual selected shape.
+                int id = Integer.parseInt(printMatches(myShape,"(id=)[0-9]*").substring(3)); // Take the id of the shape from the var selectedShapes.
+                controller.shape.Shape mySelectedShape = canvas.getShapeById(id);   // Take the shape with the id.
+                List<Integer> positions = findWordUpgrade(canvas.toTikZ(), mySelectedShape.print()); // Get the line position in the canvas of the selected shape.
+                for(int y = 0; y < positions.size(); y++){
+                    tikzTA.setStyleClass(positions.get(y), positions.get(y)+mySelectedShape.print().length(), "highlight"); // Highlight the position of the shape.
+                }
+            }
         }
     }
 
@@ -593,7 +611,6 @@ public class EditorController {
 
     @FXML
     private void keyValidation(KeyEvent key) {
-        System.out.println(key.getCode() );
         if (key.getCode().isDigitKey() ||
                 key.getCode().isFunctionKey() ||
                 key.getCode().isArrowKey() ||
@@ -607,26 +624,11 @@ public class EditorController {
 
             tikzTA.setStyleClass(0, tikzTA.getText().length(), "black");
 
-            colorWord(keyWord, "red");
+            colorWord(keyWord, "blue");
             colorWord(keyCharacter, "chara");
 
         }
-        System.out.println(selectedShapes.size());
-        if(!selectedShapes.isEmpty()) // If user select a shape.
-        {
-            for(int z = 0 ; z < selectedShapes.size(); z ++) // Loop for every shape selected.
-            {
-                String myShape = selectedShapes.get(selectedShapes.size() - (z+1)).toString(); // Selection of the actual selected shape.
-                System.out.println(myShape);
-                int id = Integer.parseInt(printMatches(myShape,"(id=)[0-9]*").substring(3)); // Take the id of the shape from the var selectedShapes.
-                System.out.println("id = "+id);
-                controller.shape.Shape mySelectedShape = canvas.getShapeById(id);   // Take the shape with the id.
-                List<Integer> positions = findWordUpgrade(canvas.toTikZ(), mySelectedShape.print()); // Get the line position in the canvas of the selected shape.
-                for(int y = 0; y < positions.size(); y++){
-                    tikzTA.setStyleClass(positions.get(y), positions.get(y)+mySelectedShape.print().length(), "highlight"); // Highlight the position of the shape.
-                }
-            }
-        }
+
     }
     /**
      * Apply a regex on a string
