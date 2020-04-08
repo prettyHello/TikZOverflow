@@ -39,6 +39,7 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public void setActive(ProjectDTO dto) throws FatalException {
+        checkObjects(dto);
         ActiveProject.setActiveProject(this.projectDAO.get(dto));
     }
 

@@ -1,150 +1,117 @@
 package controller.UCC;
 
+import config.TestBusinessConfigurationSingleton;
+import controller.Canvas.ActiveProject;
+import controller.factories.ProjectFactory;
+import controller.factories.UserFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import utilities.exceptions.FatalException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProjectUCCImplTest {
 
-    @BeforeEach
-    void setUp() {
+    ProjectFactory projectFactory;
+    ProjectUCC projectUcc;
+
+    @BeforeAll
+    void setUpStart() {
+        TestBusinessConfigurationSingleton.getInstance();
+        this.projectFactory = TestBusinessConfigurationSingleton.getProjectFactory();
+        this.projectUcc = TestBusinessConfigurationSingleton.getProjectUCC();
+    }
+
+    @Test
+    void createFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.create(null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void exportFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.export(null,null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void loadFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.load(null,null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void deleteFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.delete(null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void saveFatal(){
+        assertThrows(FatalException.class, () -> {
+            ActiveProject.setActiveProject(null);
+            projectUcc.save();
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void loadSavedCanvasFatal(){
+        assertThrows(FatalException.class, () -> {
+            ActiveProject.setActiveProject(null);
+            projectUcc.loadSavedCanvas();
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void setActiveFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.setActive(null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void getOwnedProjectsFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.create(null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
     }
 
     /*
     @Test
-    void setActiveNullArg(){
+    void setActiveFatal(){
 
     }
 
     @Test
-    void createProject(){
-
-    }
-    ------
-
-    @Test
-    void createProject(){
+    void setActiveFatal(){
 
     }
 
     @Test
-    void createNullArg(){
+    void setActiveFatal(){
 
     }
 
     @Test
-    void createEmptyProjectname(){
+    void setActiveFatal(){
 
     }
 
     @Test
-    void createExistingProjectName(){
+    void setActiveFatal(){
 
     }
 
     @Test
-    void exportNullArg(){
+    void setActiveFatal(){
 
     }
-
-    @Test
-    void exportEmptyDto(){
-
-    }
-
-    @Test
-    void exportNonExistingFile(){
-
-    }
-
-    @Test
-    void exportProject(){
-
-    }
-
-    @Test
-    void loadNullArg(){
-
-    }
-
-    @Test
-    void loadEmptyDto(){
-
-    }
-
-    @Test
-    void loadNonExistingFile(){
-
-    }
-
-    @Test
-    void loadExistingNameProject(){
-
-    }
-
-    @Test
-    void loadProject(){
-
-    }
-
-    @Test
-    void deleteNullArg(){
-
-    }
-
-    @Test
-    void deleteNoOwnerIdDto(){
-
-    }
-
-    @Test
-    void deleteNoProjectNameDto(){
-
-    }
-
-    @Test
-    void deleteNonExistingProject(){
-
-    }
-
-    @Test
-    void createAndDelete(){
-
-    }
-
-    @Test
-    void saveProject(){
-
-    }
-
-    @Test
-    void(){
-
-    }
-
-    @Test
-    void(){
-
-    }
-
-    @Test
-    void(){
-
-    }
-
-    @Test
-    void(){
-
-    }
-
-    @Test
-    void(){
-
-    }
-*/
-    @AfterEach
-    void tearDown() {
-    }
+    */
 }
