@@ -33,7 +33,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
     private static final String SQL_SELECT_BY_PROJECTID = "SELECT * FROM projects WHERE project_id = ?";
-    private static final String SQL_DELETE_PROJECT_OF_USER = "DELETE FROM projects WHERE project_owner_id = ? AND name = ?";
+    private static final String SQL_DELETE_PROJECT_OF_USER = "DELETE FROM projects WHERE project_id = ?";
 
     private final DALBackEndServices dal;
     private final ProjectFactory projectFactory;
@@ -67,7 +67,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         } catch (SQLException e) {
             throw new FatalException("Project already exists");
         } catch (IOException e){
-            //TODO, a tester
             throw new FatalException("Couldn't create folder");
         }
     }
@@ -116,11 +115,11 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public ProjectImpl get(ProjectDTO dto) throws FatalException {
+    public ProjectDTO get(ProjectDTO dto) throws FatalException {
         checkObjects(dto);
         PreparedStatement pr;
         ResultSet rs;
-        ProjectImpl result;
+        ProjectDTO result;
 
         try {
             pr = this.dal.prepareStatement(SQL_SELECT_BY_PROJECTID);
@@ -146,8 +145,7 @@ public class ProjectDAOImpl implements ProjectDAO {
         PreparedStatement pr;
         try {
             pr = this.dal.prepareStatement(SQL_DELETE_PROJECT_OF_USER);
-            pr.setInt(1, dto.getProjectOwnerId());
-            pr.setString(2, dto.getProjectName());
+            pr.setInt(1, dto.getProjectId());
             pr.executeUpdate();
         } catch (SQLException e) {
             throw new FatalException("Failed to Delete the project '" + dto.getProjectName() + "' in Database");
