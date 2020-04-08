@@ -140,14 +140,15 @@ public class DashboardController {
     @FXML
     public void ImportProject(){
         FileChooser fc = new FileChooser();
+        ProjectDTO projectDTO = null;
         //fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
         File selectedFile = fc.showOpenDialog(null);
+        String projectName = askProjectName();
         if(selectedFile == null)
             return;
-        String projectName;
-        ProjectDTO projectDTO = null;
+        if(projectName == null)
+            return;
         try{
-            projectName = askProjectName();
             projectDTO = this.projectFactory.createProject(projectName);
             projectDTO = this.projectUCC.load(selectedFile,projectDTO);
         }catch (BizzException e){
@@ -201,7 +202,6 @@ public class DashboardController {
 
         final Button confirm = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         confirm.addEventFilter(ActionEvent.ACTION, event -> this.useAskedName = true);
-
         dialog.setTitle("Project name");
         dialog.setHeaderText(popupMessage);
         dialog.setContentText("Name :");
