@@ -193,7 +193,7 @@ public class DashboardController {
      *
      * @return a String with the new name or null
      */
-    private String askProjectName()throws BizzException {
+    private String askProjectName() {
         Optional<String> projectName;
         TextInputDialog dialog = new TextInputDialog();
 
@@ -209,7 +209,7 @@ public class DashboardController {
             return projectName.get();
         } else {
             if (this.useAskedName) {
-                throw new BizzException("Please enter a valid name");
+                showAlert(Alert.AlertType.WARNING, "newProject", "Please enter a valid name", "Please enter a valid name");
             }
         }
         return null;
