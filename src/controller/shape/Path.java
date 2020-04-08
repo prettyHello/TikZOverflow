@@ -14,7 +14,7 @@ import java.util.Iterator;
  * eg : \draw [<->]
  * for now, we only support one type of arrow.
  */
- class Path extends Shape {
+ public class Path extends Shape {
     private ArrayList<Coordinates> pathPoints = null;
     private boolean arrowStart = false;
     private boolean arrowEnd = false;
@@ -83,6 +83,7 @@ import java.util.Iterator;
             returnValue += "-- ";
             returnValue += iterator.next().print();
         }
+        returnValue += super.printLabel();
         returnValue += ";";
         return returnValue;
     }
@@ -119,5 +120,10 @@ import java.util.Iterator;
      */
     public ArrayList<Coordinates> getPathPoints() {
         return this.pathPoints;
+    }
+
+    @Override
+    Coordinates calcLabelOffset() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

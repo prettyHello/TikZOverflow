@@ -21,6 +21,7 @@ public abstract class Shape implements Serializable {
     private boolean fill = false;
     private Color fillColor = Color.BLACK;
     private Color drawColor = Color.BLACK;
+    private String label = "";
     private int id;
 
     /**
@@ -110,6 +111,14 @@ public abstract class Shape implements Serializable {
         this.drawColor = drawColor;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     public String print() {
         String returnValue = "";
         if (this.fill && this.draw) {
@@ -127,4 +136,15 @@ public abstract class Shape implements Serializable {
         }
         return returnValue;
     }
+
+    public String printLabel() {
+        if (this.label != null && this.label.length() > 0){
+            Coordinates labelOffset = this.calcLabelOffset();
+            return "node[align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.label + "}";
+        }else{
+            return "";
+        }
+    }
+
+    abstract Coordinates calcLabelOffset();
 }

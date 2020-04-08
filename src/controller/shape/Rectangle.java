@@ -30,10 +30,10 @@ public class Rectangle extends Shape {
      *
      * @param originCoordinates
      * @param endCoordinates
-     * @param draw             Is the shape have a outer line, can be combined with fill.
-     * @param fill             Is the shape filled with a color, can be combined with draw.
-     * @param fillColor        Color to fill the shape with, color list in Color enum.
-     * @param drawColor        Outer line color, color list in Color enum.
+     * @param draw              Is the shape have a outer line, can be combined with fill.
+     * @param fill              Is the shape filled with a color, can be combined with draw.
+     * @param fillColor         Color to fill the shape with, color list in Color enum.
+     * @param drawColor         Outer line color, color list in Color enum.
      */
     public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, id);
@@ -48,21 +48,30 @@ public class Rectangle extends Shape {
      */
     public String print() {
         String returnValue = super.print();
-        returnValue += this.originCoordinates.print() + "rectangle " + this.endCoordinates.print() + ";";
+        returnValue += this.originCoordinates.print() + "rectangle " + this.endCoordinates.print();
+        returnValue += super.printLabel();
+        returnValue += ";";
         return returnValue;
     }
 
     /**
      * @return the origin coordinates of the rectangle.
      */
-    public Coordinates getOriginCoordinates () {
+    public Coordinates getOriginCoordinates() {
         return this.originCoordinates;
     }
 
     /**
      * @return the end coordinates of the rectangle.
      */
-    public Coordinates getEndCoordinates () {
+    public Coordinates getEndCoordinates() {
         return this.endCoordinates;
+    }
+
+    @Override
+    public Coordinates calcLabelOffset() {
+        double xDiff = endCoordinates.getX() - originCoordinates.getX();
+        double yDiff = endCoordinates.getY() - originCoordinates.getY();
+        return new Coordinates(-xDiff / 2, -yDiff / 2);
     }
 }

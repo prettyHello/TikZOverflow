@@ -26,9 +26,7 @@ import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
 
@@ -132,27 +130,28 @@ public class EditorController {
         contextMenuFillColorPicker = new ChoiceBox();
         contextMenuDrawColorPicker = new ChoiceBox();
 
-
         // Fill dropdowns (fill & stroke & context) with appropriate colors
-        for (controller.shape.Color colour : controller.shape.Color.values()) {
-            fillColour.getItems().add(colour);
-            strokeColour.getItems().add(colour);
-            contextMenuFillColorPicker.getItems().add(colour);
-            contextMenuDrawColorPicker.getItems().add(colour);
-        }
+        List<controller.shape.Color> colours = Arrays.asList(controller.shape.Color.values());
+        fillColour.getItems().addAll(colours);
+        strokeColour.getItems().addAll(colours);
+        contextMenuFillColorPicker.getItems().addAll(colours);
+        contextMenuDrawColorPicker.getItems().addAll(colours);
+
         // Set start value dropdown to black
         fillColour.setValue(controller.shape.Color.BLACK);
         strokeColour.setValue(controller.shape.Color.BLACK);
         contextMenuFillColorPicker.setValue(controller.shape.Color.BLACK);
         contextMenuDrawColorPicker.setValue(controller.shape.Color.BLACK);
 
-        MenuItem delete = new MenuItem("delete");
+        MenuItem delete = new MenuItem("Delete");
         delete.setOnAction(t -> rightClickDeleteShape());
         MenuItem fillColorMenu = new MenuItem("Fill color", contextMenuFillColorPicker);
         fillColorMenu.setOnAction(t -> setFillColor());
         MenuItem drawColorMenu = new MenuItem("Stroke color", contextMenuDrawColorPicker);
         drawColorMenu.setOnAction(t -> setDrawColor());
-        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu);
+        MenuItem setLabel = new MenuItem("Set label");
+        setLabel.setOnAction(t -> handleSetLabel());
+        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, setLabel);
 
         // show shapes at the start(don't have to interact to have thel show up)
         translateToTikz();
@@ -203,6 +202,26 @@ public class EditorController {
         }
         translateToTikz();
     }
+
+    private void handleSetLabel() {
+        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            int shapeId = Integer.parseInt(shape.getId());
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setHeaderText("New shape label: ");
+            Optional<String> result = dialog.showAndWait();
+            String label = result.orElse("");
+            canvas.setShapeLabel(shapeId, label);
+
+            if (selectedShapes.contains(shape)) {
+                selectedShapes.remove(shape);
+                if (selectedShapes.isEmpty())
+                    disableToolbar(false);
+            }
+        }
+        translateToTikz();
+    }
+
 
     @FXML
     void drawLine() {
@@ -278,9 +297,9 @@ public class EditorController {
                 waitingForMoreCoordinate = true;
                 break;
             case TRIANGLE_POINT3:
-                Coordinates pt1 = new Coordinates(selectedX, selectedY);
+                Coordinates pt1 = new Coordinates(thirdSelectedX, thirdSelectedY);
                 Coordinates pt2 = new Coordinates(previouslySelectedX, previouslySelectedY);
-                Coordinates pt3 = new Coordinates(thirdSelectedX, thirdSelectedY);
+                Coordinates pt3 = new Coordinates(selectedX, selectedY);
                 addToController = new controller.shape.Triangle(pt1, pt2, pt3, canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
@@ -516,7 +535,7 @@ public class EditorController {
         ProjectDTO projectDTO = ActiveProject.getActiveProject();
         UserDTO user = userUcc.getConnectedUser();
         SaveObject saveObject = new SaveObject();
-        saveObject.save(canvas, projectDTO.getProjectName(),user);
+        saveObject.save(canvas, projectDTO.getProjectName(), user);
     }
 
     /**
@@ -567,7 +586,7 @@ public class EditorController {
      *
      * @param shape
      */
-    private void handleDraw (controller.shape.Shape shape) {
+    private void handleDraw(controller.shape.Shape shape) {
         Shape shapeDrawing = null;
 
         switch (shape.getClass().toString()) {
@@ -587,7 +606,7 @@ public class EditorController {
                 break;
             }
             case "class controller.shape.Triangle": {
-                ArrayList<Coordinates>  points = ((controller.shape.Triangle) shape).getPoints();
+                ArrayList<Coordinates> points = ((controller.shape.Triangle) shape).getPoints();
                 Coordinates point1 = points.get(0);
                 Coordinates point2 = points.get(1);
                 Coordinates point3 = points.get(2);
@@ -631,7 +650,7 @@ public class EditorController {
     /**
      * Translate controller shapes in diagram.
      */
-    private void translateToDraw () {
+    private void translateToDraw() {
 
         for (controller.shape.Shape shape : canvas.getShapes()) {
             handleDraw(shape);

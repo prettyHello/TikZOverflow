@@ -66,6 +66,13 @@ public interface Canvas extends Serializable {
     void changeShapeFillColor(int id, Color fillColor);
 
     /**
+     * Sets the label of the shape with that id
+     * @param shapeId the id of the shape
+     * @param label the label to set
+     */
+    void setShapeLabel(int shapeId, String label);
+
+    /**
      * Get the id for the next shape
      *
      * @return id for the next shape

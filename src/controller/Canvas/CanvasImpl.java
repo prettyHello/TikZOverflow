@@ -102,6 +102,26 @@ public class CanvasImpl implements Canvas {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setShapeLabel(int shapeId, String label) {
+        Shape toChange = null;
+        for (Shape shape : shapes) {
+            if (shape.getId() == shapeId) {
+                toChange = shape;
+                break;
+            }
+        }
+
+        if (toChange == null) {
+            throw new IllegalArgumentException("canvas does not contain a shape with the specified id");
+        }
+
+        toChange.setLabel(label);
+    }
+
+    /**
      * Change the draw color of a shape
      *
      * @param id        id of the shape

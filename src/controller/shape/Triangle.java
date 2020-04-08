@@ -56,7 +56,9 @@ public class Triangle extends Shape {
 
     public String print() {
         String returnValue = super.print();
-        returnValue += this.originPoint.print() + "-- " + this.secondPoint.print() + "-- " + this.thirdPoint.print() + "-- cycle;";
+        returnValue += this.originPoint.print() + "-- " + this.secondPoint.print() + "-- " + this.thirdPoint.print() + "-- cycle ";
+        returnValue += super.printLabel();
+        returnValue += ";";
         return returnValue;
     }
 
@@ -67,5 +69,12 @@ public class Triangle extends Shape {
         points.add(this.thirdPoint);
 
         return points;
+    }
+
+    @Override
+    Coordinates calcLabelOffset() {
+        Coordinates o1 = originPoint, o2 = secondPoint, o3 = thirdPoint;
+        Coordinates centroid = new Coordinates((o1.getX() + o2.getX() + o3.getX())/3, (o1.getY() + o2.getY() + o3.getY())/3);
+        return new Coordinates(centroid.getX() - o1.getX(), centroid.getY() - o1.getY());
     }
 }
