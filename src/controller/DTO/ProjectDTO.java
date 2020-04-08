@@ -1,5 +1,7 @@
 package controller.DTO;
 
+import controller.shape.Shape;
+
 /**
  * The project DTO contains all the data related to the project and is serializable
  * the project DTO travels between the mvc layers of the application
@@ -28,4 +30,8 @@ public interface ProjectDTO {
     String getModificationDate();
 
     void setModificationDate(String modificationDate);
+
+    int hashCode();
+
+    boolean equals(Object obj);
 }

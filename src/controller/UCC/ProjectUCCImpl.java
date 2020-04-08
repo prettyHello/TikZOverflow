@@ -50,19 +50,13 @@ public class ProjectUCCImpl implements ProjectUCC {
         checkObjects(dto);
         String projectName = dto.getProjectName();
         checkString(projectName, "project Name");
-        try {
-            dal.startTransaction();
-            UserDTO owner = ConnectedUser.getConnectedUser();
-            dto.setProjectOwnerId(owner.getUserId());
-            dto.setCreateDate(Utility.getTimeStamp());
-            dto.setModificationDate(Utility.getTimeStamp());
-            String projectPath = System.getProperty("user.home") + rootFolder +"userid_" +owner.getUserId() + File.separator + projectName;
-            dto.setProjectPath(projectPath);
-            this.projectDAO.create(dto);
-            dal.commit();
-        }finally {
-            dal.rollback();
-        }
+        UserDTO owner = ConnectedUser.getConnectedUser();
+        dto.setProjectOwnerId(owner.getUserId());
+        dto.setCreateDate(Utility.getTimeStamp());
+        dto.setModificationDate(Utility.getTimeStamp());
+        String projectPath = System.getProperty("user.home") + rootFolder +"userid_" +owner.getUserId() + File.separator + projectName;
+        dto.setProjectPath(projectPath);
+        this.projectDAO.create(dto);
 
     }
 
@@ -90,7 +84,7 @@ public class ProjectUCCImpl implements ProjectUCC {
      * {@inheritDoc}
      */
     @Override
-    public void delete(ProjectDTO dto) {
+    public void delete(ProjectDTO dto) throws FatalException {
         this.projectDAO.delete(dto);
     }
 
@@ -102,6 +96,10 @@ public class ProjectUCCImpl implements ProjectUCC {
         return this.projectDAO.loadSavedCanvas( this.userUcc.getConnectedUser());
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void save() throws FatalException{
         this.projectDAO.save(ActiveCanvas.getActiveCanvas(),this.userUcc.getConnectedUser());
     }
