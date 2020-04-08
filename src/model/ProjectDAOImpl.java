@@ -254,7 +254,7 @@ public class ProjectDAOImpl implements ProjectDAO {
                 throw new FatalException("IO exception : Can't find the file to import");
             }
         } else {
-            throw new FatalException("The user home directory doesn't seem to exists, import failed");
+            throw new FatalException("A project with this name already exists");
         }
         return projectDTO;
     }
