@@ -22,8 +22,8 @@ public abstract class Shape implements Serializable {
     private Color fillColor = Color.BLACK;
     private Color drawColor = Color.BLACK;
     private String shapeThicknessKey;
-    private int id;
     private  double shapeThicknessValue;
+    private int id;
 
     /**
      * @param draw Is the shape have a outer line, can be combined with fill.
@@ -35,7 +35,7 @@ public abstract class Shape implements Serializable {
         this.fillColor = Color.BLACK;
         this.drawColor = Color.BLACK;
         this.shapeThicknessKey = shapeThicknessKey.toLowerCase().replace("_", " ");
-        this.shapeThicknessValue = Thickness.valueOf("THIN").thicknessValue();
+        this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
         this.id = id;
     }
 
