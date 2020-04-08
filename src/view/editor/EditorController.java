@@ -384,6 +384,8 @@ public class EditorController {
                 if (selectedShapes.contains(shape)) { //if already selected => unselect
                     shape.setEffect(null);
                     selectedShapes.remove(shape);
+                    translateToTikz();
+
                     if (selectedShapes.isEmpty())
                         disableToolbar(false);
                 } else {                                 //if not selected => add to the list
@@ -394,6 +396,7 @@ public class EditorController {
                     );
                     shape.setEffect(borderEffect);
                     selectedShapes.add(shape);
+                    translateToTikz();
                 }
             } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                 shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, mouseEvent.getScreenX(), mouseEvent.getScreenY()));
@@ -562,25 +565,54 @@ public class EditorController {
     }
 
     /**
-     * Translate canvas to tikz and fill textarea
+     * Translate canvas to tikz and fill textarea with corresponding style
      */
     private void translateToTikz() {
-        String[] tikzWords = {"filldraw","draw"};
+        String[] tikzCodeWords = {"filldraw","draw","path","node","begin","tikzstyle","fill","end"}; // Words use by tikz and that will be highlight.
         tikzTA.replaceText(canvas.toTikZ());
-
-        if(!canvas.toTikZ().isEmpty()){
-            for(int x = 0; x < tikzWords.length; x ++){
-                List<Integer> positions = findWordUpgrade(canvas.toTikZ(), tikzWords[x]);
+        tikzTA.clearStyle(0,canvas.toTikZ().length());
+        if(!canvas.toTikZ().isEmpty()){ // Check if the canvas isn't empty (for example at start). Because if the canvas is empty it will make an error.
+            for(int x = 0; x < tikzCodeWords.length; x ++){ // Loop to find EVERY tikzCodeWords in the canvas.
+                List<Integer> positions = findWordUpgrade(canvas.toTikZ(), tikzCodeWords[x]); // Positions where the word start and end in the canvas.
                 for(int y = 0; y < positions.size(); y++){
-                    tikzTA.setStyleClass(positions.get(y), positions.get(y)+tikzWords[x].length(), "red");
+                    tikzTA.setStyleClass(positions.get(y), positions.get(y)+tikzCodeWords[x].length(), "blue"); // Apply the highlight or font to the canvas.
+                }
+            }
+        }
+        System.out.println(selectedShapes.size());
+        if(!selectedShapes.isEmpty()) // If user select a shape.
+        {
+            for(int z = 0 ; z < selectedShapes.size(); z ++) // Loop for every shape selected.
+            {
+                String myShape = selectedShapes.get(selectedShapes.size() - (z+1)).toString(); // Selection of the actual selected shape.
+                System.out.println(myShape);
+                int id = Integer.parseInt(printMatches(myShape,"(id=)[0-9]*").substring(3)); // Take the id of the shape from the var selectedShapes.
+                System.out.println("id = "+id);
+                controller.shape.Shape mySelectedShape = canvas.getShapeById(id);   // Take the shape with the id.
+                List<Integer> positions = findWordUpgrade(canvas.toTikZ(), mySelectedShape.print()); // Get the line position in the canvas of the selected shape.
+                for(int y = 0; y < positions.size(); y++){
+                    tikzTA.setStyleClass(positions.get(y), positions.get(y)+mySelectedShape.print().length(), "highlight"); // Highlight the position of the shape.
                 }
             }
         }
     }
-
+    /**
+     * Apply a regex on a string
+     */
+    public static String printMatches(String text, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+        // Check all occurrences
+        while (matcher.find()) {
+            break;
+        }
+        return matcher.group();
+    }
+    /**
+     * Return the positions of each given word in a string
+     */
     public List<Integer> findWordUpgrade(String textString, String word) {
         List<Integer> indexes = new ArrayList<Integer>();
-        StringBuilder output = new StringBuilder();
         String lowerCaseTextString = textString.toLowerCase();
         String lowerCaseWord = word.toLowerCase();
         int wordLength = 0;

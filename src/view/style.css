@@ -1,8 +1,8 @@
 
 
-.red { -fx-fill: red;-fx-font-weight: bold; }
+.blue { -fx-fill: #03bafc;-fx-font-weight: bold; }
 
-
+.highlight {-rtfx-background-color: #fcde8b; }
 
 .list-cell {
     -fx-background-color: azure;
