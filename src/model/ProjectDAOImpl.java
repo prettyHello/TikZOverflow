@@ -152,13 +152,7 @@ public class ProjectDAOImpl implements ProjectDAO {
         } catch (SQLException e) {
             throw new FatalException("Failed to Delete the project '" + dto.getProjectName() + "' in Database");
         }
-        try {
-            deleteFile(new File(dto.getProjectPath()));
-        }catch (BizzException e){
-            //delete file only launch a BizzException if the file doesn't exist
-            //in our case it means the user deleted it himself so we can ignore it
-            //TODO maybe we can create an exception to use as an alert?
-        }
+        deleteFileSilent(new File(dto.getProjectPath()));
     }
 
 
@@ -252,6 +246,10 @@ public class ProjectDAOImpl implements ProjectDAO {
                 this.create(projectDTO);
             } catch (IOException e) {
                 throw new FatalException("IO exception : Can't find the file to import");
+            } catch (FatalException fatale){
+                Utility.deleteFileSilent(new File(folderDestination.resolve("tmp").toString()));
+                Utility.deleteFileSilent(new File(folderDestination.resolve(projectName).toString()));
+                throw new BizzException("Please select a .tar.gz file");
             }
         } else {
             throw new FatalException("A project with this name already exists");

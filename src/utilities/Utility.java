@@ -310,6 +310,19 @@ public class Utility {
         }
     }
 
+    /**
+     * Try to Delete the give file/directory, and do nothing if it doesnt exist
+     * @param dir
+     * @throws FatalException File permission problem
+     * @throws BizzException No file or directory not empty
+     */
+    public static void deleteFileSilent(File dir){
+        try{
+            deleteFile(dir);
+        }catch (BizzException e){
+            //delete file only launch a BizzException if the file doesn't exist
+        }
+    }
 
     /**
      * create an empty ".tar.gz" folder in which compressed files will be added
