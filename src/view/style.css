@@ -1,7 +1,11 @@
 
 
-.blue { -fx-fill: #03bafc;-fx-font-weight: bold; }
+.red { -fx-fill: #4325ff; }
 
+.black { -fx-fill: #020202; }
+
+.chara { -fx-fill: #f045ff; }
+.blue { -fx-fill: #03bafc;-fx-font-weight: bold; }
 .highlight {-rtfx-background-color: #fcde8b; }
 
 .list-cell {

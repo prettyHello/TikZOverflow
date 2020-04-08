@@ -133,6 +133,7 @@ public class ViewSwitcher {
         editorController.setViewSwitcher(this);
         Scene scene = new Scene(root) ;
         scene.getStylesheets().add(String.valueOf(getClass().getResource("style.css")));
+        //scene.setOnKeyPressed();
         this.stage.setScene(scene);
     }
 

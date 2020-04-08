@@ -384,8 +384,6 @@ public class EditorController {
                 if (selectedShapes.contains(shape)) { //if already selected => unselect
                     shape.setEffect(null);
                     selectedShapes.remove(shape);
-                    translateToTikz();
-
                     if (selectedShapes.isEmpty())
                         disableToolbar(false);
                 } else {                                 //if not selected => add to the list
@@ -396,7 +394,6 @@ public class EditorController {
                     );
                     shape.setEffect(borderEffect);
                     selectedShapes.add(shape);
-                    translateToTikz();
                 }
             } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                 shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, mouseEvent.getScreenX(), mouseEvent.getScreenY()));
@@ -567,17 +564,52 @@ public class EditorController {
     /**
      * Translate canvas to tikz and fill textarea with corresponding style
      */
+    String[] keyWord = {"filldraw","draw","path","node","begin","tikzstyle","fill","end"}; // Words use by tikz and that will be highlight.
+    String[] keyCharacter = {"\\", ",", "[", "]", "(", ")"} ;
+
     private void translateToTikz() {
-        String[] tikzCodeWords = {"filldraw","draw","path","node","begin","tikzstyle","fill","end"}; // Words use by tikz and that will be highlight.
+
         tikzTA.replaceText(canvas.toTikZ());
-        tikzTA.clearStyle(0,canvas.toTikZ().length());
-        if(!canvas.toTikZ().isEmpty()){ // Check if the canvas isn't empty (for example at start). Because if the canvas is empty it will make an error.
-            for(int x = 0; x < tikzCodeWords.length; x ++){ // Loop to find EVERY tikzCodeWords in the canvas.
-                List<Integer> positions = findWordUpgrade(canvas.toTikZ(), tikzCodeWords[x]); // Positions where the word start and end in the canvas.
-                for(int y = 0; y < positions.size(); y++){
-                    tikzTA.setStyleClass(positions.get(y), positions.get(y)+tikzCodeWords[x].length(), "blue"); // Apply the highlight or font to the canvas.
-                }
+        tikzTA.clearStyle(0,tikzTA.getText().length());
+        if(!tikzTA.getText().isEmpty()){ // Check if the canvas isn't empty (for example at start). Because if the canvas is empty it will make an error.
+            colorWord(keyWord, "red");
+            colorWord(keyCharacter, "chara");
             }
+
+        if(!tikzTA.getText().isEmpty()){
+            colorWord(keyWord, "red");
+            colorWord(keyCharacter, "chara");
+        }
+    }
+
+    private void colorWord( String[] wordList, String color) {
+        for(int x = 0; x < wordList.length; x ++){
+            List<Integer> positions = findWordUpgrade(tikzTA.getText(), wordList[x]);
+            for(int y = 0; y < positions.size(); y++){
+                tikzTA.setStyleClass(positions.get(y), positions.get(y)+ wordList[x].length(), color);
+            }
+        }
+    }
+
+    @FXML
+    private void keyValidation(KeyEvent key) {
+        System.out.println(key.getCode() );
+        if (key.getCode().isDigitKey() ||
+                key.getCode().isFunctionKey() ||
+                key.getCode().isArrowKey() ||
+                key.getCode().isKeypadKey() ||
+                key.getCode().isLetterKey() ||
+                key.getCode().isMediaKey() ||
+                key.getCode().isModifierKey() ||
+                key.getCode().isNavigationKey() ||
+                key.getCode().isWhitespaceKey() ||
+                key.getCode() == KeyCode.BACK_SPACE )  {
+
+            tikzTA.setStyleClass(0, tikzTA.getText().length(), "black");
+
+            colorWord(keyWord, "red");
+            colorWord(keyCharacter, "chara");
+
         }
         System.out.println(selectedShapes.size());
         if(!selectedShapes.isEmpty()) // If user select a shape.
@@ -613,6 +645,7 @@ public class EditorController {
      */
     public List<Integer> findWordUpgrade(String textString, String word) {
         List<Integer> indexes = new ArrayList<Integer>();
+        StringBuilder output = new StringBuilder();
         String lowerCaseTextString = textString.toLowerCase();
         String lowerCaseWord = word.toLowerCase();
         int wordLength = 0;
