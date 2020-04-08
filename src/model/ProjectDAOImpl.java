@@ -100,6 +100,7 @@ public class ProjectDAOImpl implements ProjectDAO {
      */
     public void export(File selectedFile,ProjectDTO dto) throws FatalException{
         checkObjects(selectedFile);
+        checkObjects(dto);
         File dir = new File(dto.getProjectPath());
         if (!dir.exists()) {
             throw new FatalException("Error the project does not exist on the path: " +dir);
@@ -129,7 +130,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             if(rs.next()){
                 result = fillDTO(rs);
             } else {
-                throw new BizzException("Project with id : " + dto.getProjectId() + " does not exist");
+                throw new FatalException("Project with id : " + dto.getProjectId() + " does not exist");
             }
         } catch (SQLException e) {
             throw new FatalException("SQLException in projectDAOImpl:"+e.getMessage());
@@ -226,8 +227,10 @@ public class ProjectDAOImpl implements ProjectDAO {
      * @return
      * @throws FatalException
      */
-    public ProjectDTO load(File selectedArchive, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException {
+    public ProjectDTO load(File selectedArchive, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException, BizzException {
         checkObjects(projectDTO.getProjectName());
+        checkObjects(selectedArchive);
+        checkObjects(userDTO);
         String projectName = projectDTO.getProjectName();
         checkString(projectName,"Project Name ");
         Path folderDestination = Paths.get(System.getProperty("user.home") + rootFolder  + File.separator +"userid_" +userDTO.getUserId() + File.separator);

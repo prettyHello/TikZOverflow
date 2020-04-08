@@ -17,7 +17,7 @@ public interface ProjectUCC {
     /**
      * Creates a new project on disk and stores its path in the database
      *
-     * @param dto containing the projectName the name of the project
+     * @param dto containing the projectName
      * @throws BizzException
      * @throws FatalException
      */
@@ -33,11 +33,21 @@ public interface ProjectUCC {
     /**
      * Import the selected file as a project
      * @param selectedFile
+     * @throws FatalException
      */
     ProjectDTO load(File selectedFile, ProjectDTO projectDto) throws FatalException;
 
-    void delete(ProjectDTO dto);
+    /**
+     * Delete the given project
+     * @param dto with the ownerId and the projectName
+     * @throws FatalException
+     */
+    void delete(ProjectDTO dto) throws FatalException;
 
+    /**
+     * Save the ActiveCanvas
+     * @throws FatalException
+     */
     void save() throws FatalException;
 
     Canvas loadSavedCanvas()throws FatalException;

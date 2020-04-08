@@ -2,6 +2,7 @@ package controller;
 
 
 import controller.DTO.ProjectDTO;
+import controller.shape.Shape;
 
 /**
  * The project DTO contains all the data related to the project and is serializable
@@ -90,5 +91,20 @@ public class ProjectImpl implements ProjectDTO {
     @Override
     public void setModificationDate(String modificationDate) {
         this.modificationDate = modificationDate;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.projectId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean retVal = false;
+        if (obj instanceof Shape){
+            Shape ptr = (Shape) obj;
+            retVal = ptr.getId() == this.projectId;
+        }
+        return retVal;
     }
 }

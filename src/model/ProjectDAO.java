@@ -3,6 +3,7 @@ package model;
 import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
+import utilities.exceptions.BizzException;
 import utilities.exceptions.FatalException;
 
 import java.io.File;
@@ -32,5 +33,5 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
 
     Canvas loadSavedCanvas(UserDTO userDTO) throws FatalException;
 
-    ProjectDTO load(File selectedFile, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException ;
+    ProjectDTO load(File selectedFile, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException, BizzException;
 }
