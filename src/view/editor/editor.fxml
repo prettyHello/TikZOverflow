@@ -10,6 +10,7 @@
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.MenuItem?>
 
+<?import model.HighlightTextColor?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="931.0" prefWidth="1267.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.editor.EditorController">
     <center>
         <SplitPane fx:id="mainSplitPane" dividerPositions="0.5"  prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -95,7 +96,7 @@
                 </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                            <CodeArea fx:id="tikzTA" onKeyReleased="#keyValidation" prefHeight="833.0" prefWidth="581.0" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-8.0" AnchorPane.topAnchor="0.0" />
+                        <HighlightTextColor fx:id="tikzTA" stylesheets="@../style.css"  prefHeight="833.0" prefWidth="581.0" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-8.0" AnchorPane.topAnchor="0.0" />
                     </children>
                 </AnchorPane>
             </items>
