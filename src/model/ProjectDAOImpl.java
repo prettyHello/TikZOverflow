@@ -18,7 +18,6 @@ import java.nio.file.Paths;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 import static utilities.Utility.*;
@@ -182,7 +181,7 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator  ;
 
-    public void save(Canvas canvas, UserDTO userDTO,  ProjectDTO dto) throws FatalException {
+    public void save(Canvas canvas, ProjectDTO dto) throws FatalException {
         try{
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
             objectOutputStream.writeObject(canvas);
@@ -248,7 +247,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             } catch (FatalException fatale){
                 Utility.deleteFileSilent(new File(folderDestination.resolve("tmp").toString()));
                 Utility.deleteFileSilent(new File(folderDestination.resolve(projectName).toString()));
-                throw new BizzException("Please select a .tar.gz file");
+                throw new BizzException("Please select a .tar.gz file not empty");
             }
         } else {
             throw new FatalException("A project with this name already exists");

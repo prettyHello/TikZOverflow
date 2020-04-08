@@ -7,9 +7,7 @@ import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
 import controller.factories.ProjectFactory;
 import controller.factories.UserFactory;
-import controller.shape.Shape;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utilities.Utility;
@@ -22,8 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,6 +29,7 @@ class ProjectDAOImplTest {
     ProjectFactory projectFactory;
     ProjectDAO projectDAO;
     UserFactory userFactory;
+    DAO<UserDTO> userDAO;
     private String rootFolder = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator + "tests" + File.separator ;
 
     @BeforeEach
@@ -42,6 +39,7 @@ class ProjectDAOImplTest {
         this.projectFactory = TestDAOConfigurationSingleton.getProjectFactory();
         this.projectDAO = TestDAOConfigurationSingleton.getProjectDAO();
         this.userFactory = TestDAOConfigurationSingleton.getUserFactory();
+        this.userDAO = TestDAOConfigurationSingleton.getUserDAO();
 
         try {
             dalServices.createTables("dao_test");
@@ -113,12 +111,77 @@ class ProjectDAOImplTest {
 
     @Test
     void saveNonexistingProject(){
-
+        ProjectDTO projectDTO = generateBasicProjectDTO();
         UserDTO userDTO = generateBasicUserDTO();
         Canvas c = generateDummyCanvas();
-        /*assertThrows(FatalException.class, () -> {
-            projectDAO.save(c,userDTO);
-        }, "saving an innexisting project works");*/
+        assertThrows(FatalException.class, () -> {
+            projectDAO.save(c, projectDTO);
+        }, "saving an innexisting project works");
+    }
+
+    @Test
+    void saveExistingProject(){
+        ProjectDTO projectDTO = generateBasicProjectDTO();
+        UserDTO userDTO = generateBasicUserDTO();
+        Canvas c = generateDummyCanvas();
+        projectDAO.create(projectDTO);
+        projectDAO.save(c, projectDTO);
+        Path destination = Paths.get(projectDTO.getProjectPath()+ File.separator + projectDTO.getProjectName() + ".bin");
+        assertTrue(Files.exists(destination), "project folder wasn't deleted after delete was called");
+    }
+
+    @Test
+    void exportExistingProject(){
+        String exportPath = rootFolder+"export";
+        File fileToBeCreated = new File(exportPath);
+        ProjectDTO projectDTO = generateBasicProjectDTO();
+        projectDAO.create(projectDTO);
+        projectDAO.export(fileToBeCreated, projectDTO);
+        Path destination = Paths.get(exportPath+".tar.gz");
+        assertTrue(Files.exists(destination), "archive was not created");
+
+    }
+
+    @Test
+    void exportNonExistingProject(){
+        String exportPath = rootFolder+"export";
+        File fileToBeCreated = new File(exportPath);
+        ProjectDTO projectDTO = generateBasicProjectDTO();
+        assertThrows(FatalException.class, () -> {
+            projectDAO.export(fileToBeCreated, projectDTO);
+        }, "exporting an nonexisting project should have raised a fatalexception");
+
+        Path destination = Paths.get(exportPath+".tar.gz");
+        assertFalse(Files.exists(destination), "archive was created while the project doesn't exist");
+    }
+
+    @Test
+    void importEmptyArchive(){
+        UserDTO userDTO = generateBasicUserDTO();
+        userDTO.setUserId(666666); //TODO move the rootFolderInPorjectDAOImpl vers la conf
+        userDAO.create(userDTO);
+        ProjectDTO projectDTO = projectFactory.createProject();
+        projectDTO.setProjectName("test");
+        File archive = new File(generateExportedEmptyPorject(generateBasicProjectDTO2()));//TODO ??
+        assertThrows(BizzException.class, () -> {
+            projectDAO.load(archive,projectDTO,userDTO);
+        }, "we expect that an exception is launch if the archive is empty");
+        cleanImport(userDTO.getUserId());
+    }
+
+    @Test
+    void workingImport(){
+        UserDTO userDTO = generateBasicUserDTO();
+        userDTO.setUserId(666666); //TODO move the rootFolderInPorjectDAOImpl vers la conf
+        userDAO.create(userDTO);
+        ProjectDTO projectDTO = projectFactory.createProject();
+        projectDTO.setProjectName("test");
+        File archive = new File(generateExportedFilledProject(userDTO,generateBasicProjectDTO2()));
+        projectDAO.load(archive,projectDTO,userDTO);
+        Path ExpectedResult = Paths.get(System.getProperty("user.home")  + File.separator +"userid_" +userDTO.getUserId() + File.separator
+                + projectDTO.getProjectName() + File.separator + projectDTO.getProjectName()+".bin");
+        assertTrue(Files.exists(ExpectedResult));
+        cleanImport(userDTO.getUserId());
     }
 
     Canvas generateDummyCanvas(){
@@ -147,17 +210,6 @@ class ProjectDAOImplTest {
         return dto;
     }
 
-    ProjectDTO generateBasicProjectDTO3(){
-        ProjectDTO dto = projectFactory.createProject();
-        dto.setProjectId(3);
-        dto.setCreateDate("date3");
-        dto.setProjectOwnerId(3);
-        dto.setProjectName("project3");
-        dto.setModificationDate("mod date3");
-        dto.setProjectPath(rootFolder+"project3");
-        return dto;
-    }
-
     private UserDTO generateBasicUserDTO() {
         UserDTO user = userFactory.createUser();
         user.setFirstName("ben");
@@ -168,5 +220,42 @@ class ProjectDAOImplTest {
         user.setPhone("123");
         user.setRegisterDate(LocalDateTime.now().toString());
         return user;
+    }
+
+    /**
+     * create a empty tar.gz
+     * @return the path of the tar.gz
+     */
+    String generateExportedEmptyPorject(ProjectDTO projectDTO){
+        String exportPath = rootFolder+"export";
+        File fileToBeCreated = new File(exportPath);
+        projectDAO.create(projectDTO);
+        projectDAO.export(fileToBeCreated, projectDTO);
+        return exportPath+".tar.gz";
+    }
+
+    /**
+     * create a tar.gz with a canvas saved inside (.bin)
+     * @return the path of the tar.gz
+     */
+    String generateExportedFilledProject(UserDTO userDTO, ProjectDTO projectDTO){
+        String exportPath = rootFolder+"export";
+        File fileToBeCreated = new File(exportPath);
+        Canvas c = generateDummyCanvas();
+        projectDAO.create(projectDTO);
+        projectDAO.save(c, projectDTO);
+        projectDAO.export(fileToBeCreated, projectDTO);
+        return exportPath+".tar.gz";
+    }
+
+
+
+    /**
+     * the import is different than the rest as he is not given the path
+     *  clean the dummy folder
+     * @param userId name of the dummy folder
+     */
+    private void cleanImport(int userId){
+        Utility.deleteFileSilent(new File(System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator +"userid_"+ userId));
     }
 }

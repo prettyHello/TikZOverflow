@@ -29,7 +29,7 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
      */
     void export(File selectedFile, ProjectDTO dto) throws FatalException;
 
-    void save(Canvas canvas, UserDTO userDTO, ProjectDTO dto) throws FatalException;
+    void save(Canvas canvas, ProjectDTO dto) throws FatalException;
 
     Canvas loadSavedCanvas(UserDTO userDTO, ProjectDTO dto) throws FatalException;
 

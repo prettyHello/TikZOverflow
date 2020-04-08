@@ -102,7 +102,7 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public void save() throws FatalException{
-        this.projectDAO.save(ActiveCanvas.getActiveCanvas(),this.userUcc.getConnectedUser(),ActiveProject.getActiveProject());
+        this.projectDAO.save(ActiveCanvas.getActiveCanvas(),ActiveProject.getActiveProject());
     }
 
     /**
