@@ -140,8 +140,10 @@ public class DashboardController {
     @FXML
     public void ImportProject(){
         FileChooser fc = new FileChooser();
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
+        //fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
         File selectedFile = fc.showOpenDialog(null);
+        if(selectedFile == null)
+            return;
         String projectName;
         ProjectDTO projectDTO = null;
         try{
