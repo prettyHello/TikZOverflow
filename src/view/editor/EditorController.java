@@ -515,7 +515,6 @@ public class EditorController {
      * @throws ClassNotFoundException
      */
     public void save(ActionEvent actionEvent) {
-        UserDTO user = userUcc.getConnectedUser();
         try{
             this.projectUcc.save();
         }catch (FatalException e){

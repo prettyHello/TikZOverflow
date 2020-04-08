@@ -93,7 +93,7 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public Canvas loadSavedCanvas()throws FatalException {
-        return this.projectDAO.loadSavedCanvas( this.userUcc.getConnectedUser());
+        return this.projectDAO.loadSavedCanvas( this.userUcc.getConnectedUser(),ActiveProject.getActiveProject());
     }
 
     /**
@@ -101,7 +101,7 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public void save() throws FatalException{
-        this.projectDAO.save(ActiveCanvas.getActiveCanvas(),this.userUcc.getConnectedUser());
+        this.projectDAO.save(ActiveCanvas.getActiveCanvas(),this.userUcc.getConnectedUser(),ActiveProject.getActiveProject());
     }
 
     /**

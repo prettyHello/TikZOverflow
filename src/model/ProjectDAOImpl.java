@@ -182,10 +182,9 @@ public class ProjectDAOImpl implements ProjectDAO {
 
     private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator  ;
 
-    public void save(Canvas canvas, UserDTO userDTO) throws FatalException {
-        String nameOfProject = ActiveProject.getActiveProject().getProjectName();
+    public void save(Canvas canvas, UserDTO userDTO,  ProjectDTO dto) throws FatalException {
         try{
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(rootProject +"userid_" +userDTO.getUserId() + File.separator + nameOfProject + File.separator + nameOfProject + ".bin"));
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
             objectOutputStream.writeObject(canvas);
             objectOutputStream.close();
         }catch (IOException e){
@@ -193,12 +192,11 @@ public class ProjectDAOImpl implements ProjectDAO {
         }
     }
 
-    public Canvas loadSavedCanvas(UserDTO userDTO) throws FatalException {
-        String nameOfProject = ActiveProject.getActiveProject().getProjectName();
+    public Canvas loadSavedCanvas(UserDTO userDTO, ProjectDTO dto) throws FatalException {
         FileInputStream fileInputStream = null;
         Canvas canvas = null;
         try {
-            fileInputStream = new FileInputStream(rootProject +"userid_" +userDTO.getUserId() + File.separator + nameOfProject + File.separator + nameOfProject + ".bin");
+            fileInputStream = new FileInputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin");
             ObjectInputStream in = new ObjectInputStream(fileInputStream);
             canvas = (Canvas) in.readObject();
             in.close();

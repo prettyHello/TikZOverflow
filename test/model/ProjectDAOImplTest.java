@@ -1,9 +1,15 @@
 package model;
 
 import config.TestDAOConfigurationSingleton;
+import controller.Canvas.Canvas;
+import controller.Canvas.CanvasImpl;
 import controller.DTO.ProjectDTO;
+import controller.DTO.UserDTO;
 import controller.factories.ProjectFactory;
+import controller.factories.UserFactory;
+import controller.shape.Shape;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utilities.Utility;
@@ -15,6 +21,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,6 +32,7 @@ class ProjectDAOImplTest {
     DALServices dalServices;
     ProjectFactory projectFactory;
     ProjectDAO projectDAO;
+    UserFactory userFactory;
     private String rootFolder = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator + "tests" + File.separator ;
 
     @BeforeEach
@@ -31,6 +41,8 @@ class ProjectDAOImplTest {
         this.dalServices = TestDAOConfigurationSingleton.getDalServices();
         this.projectFactory = TestDAOConfigurationSingleton.getProjectFactory();
         this.projectDAO = TestDAOConfigurationSingleton.getProjectDAO();
+        this.userFactory = TestDAOConfigurationSingleton.getUserFactory();
+
         try {
             dalServices.createTables("dao_test");
         } catch (IOException e) {
@@ -41,7 +53,7 @@ class ProjectDAOImplTest {
     @AfterEach
     void tearDown() {
         dalServices.deleteDB("dao_test");
-        //Utility.deleteFileSilent(new File(rootFolder));
+        Utility.deleteFileSilent(new File(rootFolder));
     }
 
 
@@ -83,7 +95,6 @@ class ProjectDAOImplTest {
         projectDAO.create( dto);
         assertThrows(FatalException.class, () -> {
             projectDAO.create( dto2);
-
         }, "two project with same path can be created");
     }
 
@@ -98,6 +109,20 @@ class ProjectDAOImplTest {
 
         Path destination = Paths.get(dto.getProjectPath());
         assertFalse(Files.exists(destination), "project folder wasn't deleted after delete was called");
+    }
+
+    @Test
+    void saveNonexistingProject(){
+
+        UserDTO userDTO = generateBasicUserDTO();
+        Canvas c = generateDummyCanvas();
+        /*assertThrows(FatalException.class, () -> {
+            projectDAO.save(c,userDTO);
+        }, "saving an innexisting project works");*/
+    }
+
+    Canvas generateDummyCanvas(){
+        return new CanvasImpl(1,1);
     }
 
     ProjectDTO generateBasicProjectDTO(){
@@ -131,5 +156,17 @@ class ProjectDAOImplTest {
         dto.setModificationDate("mod date3");
         dto.setProjectPath(rootFolder+"project3");
         return dto;
+    }
+
+    private UserDTO generateBasicUserDTO() {
+        UserDTO user = userFactory.createUser();
+        user.setFirstName("ben");
+        user.setPassword("pass");
+        user.setSalt("salt");
+        user.setEmail("mail@mail.be");
+        user.setLastName("ber");
+        user.setPhone("123");
+        user.setRegisterDate(LocalDateTime.now().toString());
+        return user;
     }
 }
