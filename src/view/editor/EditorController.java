@@ -15,28 +15,19 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import model.HighlightTextColor;
 import model.SaveObject;
-import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.StyleClassedTextArea;
-import org.fxmisc.richtext.demo.JavaKeywords;
-import org.fxmisc.richtext.model.StyleSpans;
-import org.fxmisc.richtext.model.StyleSpansBuilder;
 import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.IntFunction;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
 
@@ -45,7 +36,6 @@ import static utilities.ColorUtils.getColorNameFromRgb;
  * Could be split in two classes, one for translation, one for drawing if this controller gets too long
  */
 public class EditorController {
-
     /**
      * TODO We need to divide teh fxml so that we have separate controller for this one and the other view
      */
@@ -58,17 +48,16 @@ public class EditorController {
     private static final String LINE_POINT2 = "LINE_POINT2";
     private static final String ARROW = "ARROW";
     private static final String ARROW_POINT2 = "ARROW_POINT2";
+
+
     private UserUCC userUcc;
-
     private ViewSwitcher viewSwitcher;
-
+    @FXML
+    public HighlightTextColor tikzTA = new HighlightTextColor() ;
     @FXML
     Pane toolbar;
     @FXML
     private Pane pane;
-    @FXML
-    private StyleClassedTextArea tikzTA = new StyleClassedTextArea();
-    //private TextArea tikzTA;
     @FXML
     Button square;
     @FXML
@@ -122,8 +111,6 @@ public class EditorController {
 
     @FXML
     public void initialize() {
-
-
 
         // Get coordinate of click in canvas and draw selected shape
         pane.setOnMouseClicked((MouseEvent event) ->
@@ -566,102 +553,14 @@ public class EditorController {
         viewSwitcher.switchView(ViewName.DASHBOARD);
     }
 
-    /**
-     * Translate canvas to tikz and fill textarea with corresponding style
-     */
-    String[] keyWord = {"filldraw","draw","path","node","begin","tikzstyle","fill","end"}; // Words use by tikz and that will be highlight.
-    String[] keyCharacter = {"\\", ",", "[", "]", "(", ")"} ;
-
     private void translateToTikz() {
-
         tikzTA.replaceText(canvas.toTikZ());
         tikzTA.clearStyle(0,tikzTA.getText().length());
-        if(!tikzTA.getText().isEmpty()){ // Check if the canvas isn't empty (for example at start). Because if the canvas is empty it will make an error.
-            colorWord(keyWord, "blue");
-            colorWord(keyCharacter, "chara");
-            }
-
-        if(!tikzTA.getText().isEmpty()){
-            colorWord(keyWord, "blue");
-            colorWord(keyCharacter, "chara");
-        }
-        if(!selectedShapes.isEmpty()) // If user select a shape.
-        {
-            for(int z = 0 ; z < selectedShapes.size(); z ++) // Loop for every shape selected.
-            {
-                String myShape = selectedShapes.get(selectedShapes.size() - (z+1)).toString(); // Selection of the actual selected shape.
-                int id = Integer.parseInt(printMatches(myShape,"(id=)[0-9]*").substring(3)); // Take the id of the shape from the var selectedShapes.
-                controller.shape.Shape mySelectedShape = canvas.getShapeById(id);   // Take the shape with the id.
-                List<Integer> positions = findWordUpgrade(canvas.toTikZ(), mySelectedShape.print()); // Get the line position in the canvas of the selected shape.
-                for(int y = 0; y < positions.size(); y++){
-                    tikzTA.setStyleClass(positions.get(y), positions.get(y)+mySelectedShape.print().length(), "highlight"); // Highlight the position of the shape.
-                }
-            }
-        }
+        tikzTA.setSelectedShapes(this.selectedShapes).highlightOnSelect();
     }
 
-    private void colorWord( String[] wordList, String color) {
-        for(int x = 0; x < wordList.length; x ++){
-            List<Integer> positions = findWordUpgrade(tikzTA.getText(), wordList[x]);
-            for(int y = 0; y < positions.size(); y++){
-                tikzTA.setStyleClass(positions.get(y), positions.get(y)+ wordList[x].length(), color);
-            }
-        }
-    }
 
-    @FXML
-    private void keyValidation(KeyEvent key) {
-        if (key.getCode().isDigitKey() ||
-                key.getCode().isFunctionKey() ||
-                key.getCode().isArrowKey() ||
-                key.getCode().isKeypadKey() ||
-                key.getCode().isLetterKey() ||
-                key.getCode().isMediaKey() ||
-                key.getCode().isModifierKey() ||
-                key.getCode().isNavigationKey() ||
-                key.getCode().isWhitespaceKey() ||
-                key.getCode() == KeyCode.BACK_SPACE )  {
 
-            tikzTA.setStyleClass(0, tikzTA.getText().length(), "black");
-
-            colorWord(keyWord, "blue");
-            colorWord(keyCharacter, "chara");
-
-        }
-
-    }
-    /**
-     * Apply a regex on a string
-     */
-    public static String printMatches(String text, String regex) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(text);
-        // Check all occurrences
-        while (matcher.find()) {
-            break;
-        }
-        return matcher.group();
-    }
-    /**
-     * Return the positions of each given word in a string
-     */
-    public List<Integer> findWordUpgrade(String textString, String word) {
-        List<Integer> indexes = new ArrayList<Integer>();
-        StringBuilder output = new StringBuilder();
-        String lowerCaseTextString = textString.toLowerCase();
-        String lowerCaseWord = word.toLowerCase();
-        int wordLength = 0;
-
-        int index = 0;
-        while(index != -1){
-            index = lowerCaseTextString.indexOf(lowerCaseWord, index + wordLength);  // Slight improvement
-            if (index != -1) {
-                indexes.add(index);
-            }
-            wordLength = word.length();
-        }
-        return indexes;
-    }
 
 
 }
