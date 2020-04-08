@@ -42,29 +42,22 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public void save(Canvas canvas, UserDTO userDTO, ProjectDTO dto) throws FatalException {
-
-    }
-
-    @Override
-    public Canvas loadSavedCanvas(UserDTO userDTO, ProjectDTO dto) throws FatalException {
-        return null;
-    }
-
-   //@Override
-    public void save(Canvas canvas, UserDTO userDto) throws FatalException {
+    public void save(Canvas canvas, UserDTO userDTO,  ProjectDTO projectDTO) throws FatalException {
         checkObjects(canvas);
-        checkObjects(userDto);
-        checkObjects(userDto.getUserId());
+        checkObjects(userDTO);
+        checkObjects(projectDTO);
+        checkObjects(projectDTO.getProjectName());
+        checkObjects(userDTO.getUserId());
         if(isNull(ActiveProject.getActiveProject())){
             throw new FatalException("test no active project");
         }
         this.activeCanvas = canvas;
     }
 
-    //@Override
-    public Canvas loadSavedCanvas(UserDTO userDto) throws FatalException {
-        checkObjects(userDto);
+    @Override
+    public Canvas loadSavedCanvas(UserDTO userDTO, ProjectDTO dto) throws FatalException {
+        checkObjects(userDTO);
+        checkObjects(dto);
         if(isNull(ActiveProject.getActiveProject())){
             throw new FatalException("test no active project");
         }
@@ -76,7 +69,7 @@ public class ProjectDAOMock implements ProjectDAO {
         checkObjects(projectDTO.getProjectName());
         checkObjects(selectedFile);
         checkObjects(userDTO);
-        return null;
+        return projectDTO;
     }
 
     @Override
