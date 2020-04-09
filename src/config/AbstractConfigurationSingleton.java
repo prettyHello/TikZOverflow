@@ -75,18 +75,15 @@ public abstract class AbstractConfigurationSingleton {
 
     /**
      * Load the configuration specified in the Main's arguments
+     * This is launch at the beginning of the application, in the Main
+     * This method is called before JavaFX is launched, thus the error handling can only be a print stack trace
      * @param args
      */
     protected void loadConfiguration(String[] args){
-        //Load the configuration file (if 'dev' is given in argument load the src/config/dev.properties), load the production configuration otherwise
         try {
             configuration = (Configuration) Class.forName("config.Configuration").getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
-            System.exit(1);
-        }
+            configuration.initProperties(args);
 
-        configuration.initProperties(args);
-        try {
             dalServices = (DALServices) configuration.getClassFor(("DALServices")).getDeclaredConstructor().newInstance();
             userFactory = (UserFactory) configuration.getClassFor(("UserFactory")).getDeclaredConstructor().newInstance();
             userDAO = (DAO<UserDTO>) configuration.getClassFor(("UserDAO")).getDeclaredConstructor(DALServices.class, UserFactory.class).newInstance(dalServices, userFactory);
@@ -94,8 +91,9 @@ public abstract class AbstractConfigurationSingleton {
             projectFactory = (ProjectFactory) configuration.getClassFor("ProjectFactory").getConstructor().newInstance();
             projectDAO = (ProjectDAO) configuration.getClassFor(("ProjectDAO")).getDeclaredConstructor(DALServices.class, ProjectFactory.class).newInstance(dalServices, projectFactory);
             projectUCC = (ProjectUCC) configuration.getClassFor(("ProjectUCC")).getDeclaredConstructor(DALServices.class, DAO.class).newInstance(dalServices, projectDAO);
-
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
+            //The reason behind this error handling is that this method is called before JavaFX is launched
+            exc.printStackTrace();
             System.exit(1);
         }
     }
