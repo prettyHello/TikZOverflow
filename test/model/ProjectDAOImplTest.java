@@ -103,7 +103,7 @@ class ProjectDAOImplTest {
         projectDAO.delete(dto);
         assertThrows(BizzException.class, () -> {
             projectDAO.get(dto);
-        }, "the project is accessible after delete");
+        }, "the project is accessible via getter after delete");
 
         Path destination = Paths.get(dto.getProjectPath());
         assertFalse(Files.exists(destination), "project folder wasn't deleted after delete was called");
@@ -158,11 +158,11 @@ class ProjectDAOImplTest {
     @Test
     void importEmptyArchive(){
         UserDTO userDTO = generateBasicUserDTO();
-        userDTO.setUserId(666666); //TODO move the rootFolderInPorjectDAOImpl vers la conf
+        userDTO.setUserId(666666); //TODO move the rootFolderInPorjectDAOImpl vers la conf (in case we have more user than taht)
         userDAO.create(userDTO);
         ProjectDTO projectDTO = projectFactory.createProject();
         projectDTO.setProjectName("test");
-        File archive = new File(generateExportedEmptyPorject(generateBasicProjectDTO2()));//TODO ??
+        File archive = new File(generateExportedEmptyPorject(generateBasicProjectDTO2()));
         assertThrows(BizzException.class, () -> {
             projectDAO.load(archive,projectDTO,userDTO);
         }, "we expect that an exception is launch if the archive is empty");
@@ -174,13 +174,14 @@ class ProjectDAOImplTest {
         UserDTO userDTO = generateBasicUserDTO();
         userDTO.setUserId(666666); //TODO move the rootFolderInPorjectDAOImpl vers la conf
         userDAO.create(userDTO);
-        ProjectDTO projectDTO = projectFactory.createProject();
+        ProjectDTO projectDTO = generateBasicProjectDTO();
         projectDTO.setProjectName("test");
         File archive = new File(generateExportedFilledProject(userDTO,generateBasicProjectDTO2()));
         projectDAO.load(archive,projectDTO,userDTO);
-        Path ExpectedResult = Paths.get(System.getProperty("user.home")  + File.separator +"userid_" +userDTO.getUserId() + File.separator
+        Path expectedResult = Paths.get(System.getProperty("user.home") + File.separator + "ProjectTikZ"  + File.separator +"userid_" +userDTO.getUserId() + File.separator
                 + projectDTO.getProjectName() + File.separator + projectDTO.getProjectName()+".bin");
-        assertTrue(Files.exists(ExpectedResult));
+        System.out.println(expectedResult);
+        assertTrue(Files.exists(expectedResult));
         cleanImport(userDTO.getUserId());
     }
 
