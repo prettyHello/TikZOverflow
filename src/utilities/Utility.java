@@ -160,6 +160,11 @@ public class Utility {
         }
     }
 
+    /**
+     * Copy a folder and it's content recursively
+     * @param dirSrc The folder to copy
+     * @param dirDest It's new location
+     */
     private static void copyDirectory(File dirSrc, File dirDest){
         if (!dirDest.exists()) {
             dirDest.mkdir();
@@ -172,6 +177,12 @@ public class Utility {
         }
     }
 
+    /**
+     * Copy a simple file
+     * @param dirSrc The file to copy
+     * @param dirDest The new location
+     * @throws FatalException if file was deleted or if I/O Exception
+     */
     private static void copyFile(File dirSrc, File dirDest) throws FatalException{
         try {
             InputStream in = new FileInputStream(dirSrc);
@@ -190,6 +201,13 @@ public class Utility {
         }
     }
 
+    /**
+     * Copy a folder with all it's files recursively
+     * Can copy simple file as well
+     * @param dirSrc The file or folder to copy
+     * @param dirDest The location in which to copy said file/folder
+     * @throws FatalException if file was deleted or if I/O Exception
+     */
     public static void copy(File dirSrc, File dirDest) throws FatalException {
         if (dirSrc.isDirectory()) {
             copyDirectory(dirSrc,dirDest);

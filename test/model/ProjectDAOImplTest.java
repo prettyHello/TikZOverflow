@@ -101,7 +101,7 @@ class ProjectDAOImplTest {
         ProjectDTO dto = generateBasicProjectDTO();
         projectDAO.create( dto);
         projectDAO.delete(dto);
-        assertThrows(BizzException.class, () -> {
+        assertThrows(FatalException.class, () -> {
             projectDAO.get(dto);
         }, "the project is accessible via getter after delete");
 
@@ -176,13 +176,31 @@ class ProjectDAOImplTest {
         userDAO.create(userDTO);
         ProjectDTO projectDTO = generateBasicProjectDTO();
         projectDTO.setProjectName("test");
-        File archive = new File(generateExportedFilledProject(userDTO,generateBasicProjectDTO2()));
+        File archive = new File(generateExportedFilledProject(generateBasicProjectDTO2()));
         projectDAO.load(archive,projectDTO,userDTO);
         Path expectedResult = Paths.get(System.getProperty("user.home") + File.separator + "ProjectTikZ"  + File.separator +"userid_" +userDTO.getUserId() + File.separator
                 + projectDTO.getProjectName() + File.separator + projectDTO.getProjectName()+".bin");
-        System.out.println(expectedResult);
-        assertTrue(Files.exists(expectedResult));
+        assertTrue(Files.exists(expectedResult),"The import doesn't seems to generate the .bin");
+        assertNotNull(this.projectDAO.get(projectDTO), "The import hasn't created the project in the database");
         cleanImport(userDTO.getUserId());
+    }
+
+    @Test
+    void workingLoadSavedProject(){
+        ProjectDTO projectDTO = generateFilledProject(generateBasicProjectDTO());
+        Canvas c = this.projectDAO.loadSavedCanvas(projectDTO);
+        assertNotNull(c, "The canvas return for an existing .bin is empty");
+    }
+
+    @Test
+    /**
+     * This test ensure that if the file .bin was never saved or was deleted, the method create a new canvas
+     */
+    void workingLoadUnsavedProject(){
+        ProjectDTO projectDTO = generateBasicProjectDTO();
+        projectDAO.create(projectDTO);
+        Canvas c = this.projectDAO.loadSavedCanvas(projectDTO);
+        assertNotNull(c, "if the .bin was deleted or not saved, the method is supposed to create a new Canvas");
     }
 
     Canvas generateDummyCanvas(){
@@ -239,7 +257,7 @@ class ProjectDAOImplTest {
      * create a tar.gz with a canvas saved inside (.bin)
      * @return the path of the tar.gz
      */
-    String generateExportedFilledProject(UserDTO userDTO, ProjectDTO projectDTO){
+    String generateExportedFilledProject(ProjectDTO projectDTO){
         String exportPath = rootFolder+"export";
         File fileToBeCreated = new File(exportPath);
         Canvas c = generateDummyCanvas();
@@ -247,6 +265,13 @@ class ProjectDAOImplTest {
         projectDAO.save(c, projectDTO);
         projectDAO.export(fileToBeCreated, projectDTO);
         return exportPath+".tar.gz";
+    }
+
+    ProjectDTO generateFilledProject(ProjectDTO projectDTO){
+        Canvas c = generateDummyCanvas();
+        projectDAO.create(projectDTO);
+        projectDAO.save(c, projectDTO);
+        return projectDTO;
     }
 
 

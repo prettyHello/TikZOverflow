@@ -41,7 +41,7 @@ public class ProjectUCCImpl implements ProjectUCC {
     public void setActive(ProjectDTO dto) throws FatalException {
         checkObjects(dto);
         ActiveProject.setActiveProject(this.projectDAO.get(dto));
-        Canvas canvas =  this.projectDAO.loadSavedCanvas( this.userUcc.getConnectedUser(),ActiveProject.getActiveProject());
+        Canvas canvas =  this.projectDAO.loadSavedCanvas(ActiveProject.getActiveProject());
         ActiveCanvas.setActiveCanvas(canvas);
     }
 

@@ -5,7 +5,6 @@ import controller.Canvas.ActiveProject;
 import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
-import utilities.Utility;
 import utilities.exceptions.FatalException;
 
 import java.io.File;
@@ -16,6 +15,10 @@ import static utilities.Utility.checkObjects;
 
 //TODO CHANGE APRES LE REFACTOR
 
+/**
+ * Implementation used for the tests of the controllers
+ * Using a mock allow to test the controllers independently from the model implementation
+ */
 public class ProjectDAOMock implements ProjectDAO {
 
     private ArrayList<ProjectDTO> projectList;
@@ -53,8 +56,7 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public Canvas loadSavedCanvas(UserDTO userDTO, ProjectDTO dto) throws FatalException {
-        checkObjects(userDTO);
+    public Canvas loadSavedCanvas(ProjectDTO dto) throws FatalException {
         checkObjects(dto);
         if(isNull(ActiveProject.getActiveProject())){
             throw new FatalException("test no active project");

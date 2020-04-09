@@ -29,9 +29,31 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
      */
     void export(File selectedFile, ProjectDTO dto) throws FatalException;
 
+    /**
+     * Save the canvas into a .bin file
+     * @param canvas the canvas that needs to be saved
+     * @param dto the project concerned
+     * @throws FatalException in case of I/O exception
+     */
     void save(Canvas canvas, ProjectDTO dto) throws FatalException;
 
-    Canvas loadSavedCanvas(UserDTO userDTO, ProjectDTO dto) throws FatalException;
+    /**
+     * Load a canvas previously saved into a .bin file
+     * If the .bin file has been deleted or never saved, a new Canvas is created
+     * @param dto of project concerned
+     * @return the Canvas
+     * @throws FatalException in case of I/O exception
+     */
+    Canvas loadSavedCanvas(ProjectDTO dto) throws FatalException;
 
-    ProjectDTO load(File selectedFile, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException, BizzException;
+    /**
+     * Load a project previously exported in a tar.gz
+     * @param selectedArchive The archive to import
+     * @param projectDTO DTO with the name of the new project once imported
+     * @param userDTO Active user
+     * @return the projectDTO of the newly loaded project
+     * @throws FatalException in case of I/O Exception or if a project of that name already exists
+     * @throws BizzException in case of invalid or emppty tar.gz
+     */
+    ProjectDTO load(File selectedArchive, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException, BizzException;
 }

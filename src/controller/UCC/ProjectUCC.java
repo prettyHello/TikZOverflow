@@ -50,8 +50,18 @@ public interface ProjectUCC {
      */
     void save() throws FatalException;
 
-
+    /**
+     * Tell to ActiveProject which project is active and send to ActiveCanvas the corresponding canvas
+     * @param dto project to be marked as active
+     * @throws FatalException Transmit the eventual FatalException sent by the Model to the view
+     */
     void setActive(ProjectDTO dto) throws FatalException;
 
+    /**
+     * Return the list of projects owned by a user
+     * @param dto the User whose project list we wants
+     * @return the list of projects owned by that user
+     * @throws FatalException Transmit the eventual FatalException sent by the Model to the view
+     */
     ArrayList<ProjectDTO> getOwnedProjects(UserDTO dto) throws FatalException;
 }

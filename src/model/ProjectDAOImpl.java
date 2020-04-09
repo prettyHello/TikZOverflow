@@ -180,6 +180,10 @@ public class ProjectDAOImpl implements ProjectDAO {
         return projectDTO;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void save(Canvas canvas, ProjectDTO dto) throws FatalException {
         try{
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
@@ -190,7 +194,11 @@ public class ProjectDAOImpl implements ProjectDAO {
         }
     }
 
-    public Canvas loadSavedCanvas(UserDTO userDTO, ProjectDTO dto) throws FatalException {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Canvas loadSavedCanvas(ProjectDTO dto) throws FatalException {
         FileInputStream fileInputStream = null;
         Canvas canvas = null;
         try {
@@ -217,13 +225,9 @@ public class ProjectDAOImpl implements ProjectDAO {
     }
 
     /**
-     *
-     * @param selectedArchive The archive to import
-     * @param projectDTO DTO with the name of the new project once imported
-     * @param userDTO Active user
-     * @return
-     * @throws FatalException
+     * {@inheritDoc}
      */
+    @Override
     public ProjectDTO load(File selectedArchive, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException, BizzException {
         checkObjects(projectDTO.getProjectName());
         checkObjects(selectedArchive);
