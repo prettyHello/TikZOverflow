@@ -88,8 +88,6 @@ public class EditorController {
     protected boolean waitingForMoreCoordinate = false;
     protected Canvas canvas;
 
-    ContextMenu menu = new ContextMenu();
-
     private ContextMenu shapeContextMenu;
     private ChoiceBox contextMenuFillColorPicker;
     private ChoiceBox contextMenuDrawColorPicker;

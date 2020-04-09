@@ -1,10 +1,8 @@
 package view.editor;
 
 import controller.Canvas.Canvas;
-import controller.UCC.UserUCC;
 import controller.shape.Coordinates;
 import controller.shape.Square;
-import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
