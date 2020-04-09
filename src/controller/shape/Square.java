@@ -1,5 +1,6 @@
 package controller.shape;
 
+import utilities.Utility;
 import utilities.exceptions.FatalException;
 
 public class Square extends Rectangle{
@@ -28,6 +29,22 @@ public class Square extends Rectangle{
     public Square(Coordinates originCoordinates, double size, int id) throws FatalException {
         this(originCoordinates, new Coordinates(originCoordinates.getX()+size,originCoordinates.getY()+size), id);
         this.size = size;
+    }
+
+    /**
+     * Personalised square.
+     *
+     * @param originCoordinates
+     * @param endCoordinates
+     * @param draw             Is the shape have a outer line, can be combined with fill.
+     * @param fill             Is the shape filled with a color, can be combined with draw.
+     * @param fillColor        Color to fill the shape with, color list in Color enum.
+     * @param drawColor        Outer line color, color list in Color enum.
+     */
+    public Square (boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, originCoordinates, endCoordinates, id);
+        Utility.checkObjects(originCoordinates, endCoordinates);
+        this.size = endCoordinates.getX() - originCoordinates.getX();
     }
 
     /**

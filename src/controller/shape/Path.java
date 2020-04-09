@@ -38,7 +38,7 @@ import java.util.Iterator;
      * @param id
      * @throws FatalException
      */
-    public Path(Coordinates origin, Coordinates end, int id,boolean arrowStart,boolean arrowEnd) throws FatalException {
+    public Path(Coordinates origin, Coordinates end, int id, boolean arrowStart, boolean arrowEnd) throws FatalException {
         super(true, false, id);
         this.arrowStart = arrowStart;
         this.arrowEnd = arrowEnd;
@@ -62,6 +62,25 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
         super(true, false, drawColor, Color.WHITE, id);
+        Utility.checkObjects(pathPoints);
+        this.pathPoints = pathPoints;
+    }
+
+    /**
+     * Personalised path with multiple points, with arrows and specified color.
+     *
+     * @param origin
+     * @param end
+     * @param arrowStart
+     * @param arrowEnd
+     * @param drawColor
+     * @throws FatalException
+     */
+    public Path(Coordinates origin, Coordinates end, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
+        super(true, false, drawColor, Color.WHITE, id);
+        ArrayList<Coordinates> pathPoints = new ArrayList<>();
+        pathPoints.add(origin);
+        pathPoints.add(end);
         Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }

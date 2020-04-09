@@ -7,8 +7,10 @@ import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
 import controller.UCC.UserUCC;
+import controller.shape.Arrow;
 import controller.shape.Coordinates;
 import controller.shape.Square;
+import controller.shape.Triangle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -23,7 +25,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.util.Pair;
 import model.SaveObject;
+import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 
@@ -32,6 +36,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -646,46 +651,114 @@ public class EditorController {
     }
 
     /**
-     * We'll need to check if the key "Enter" is pressed later on.
+     * Control events in TextArea.
      * @param keyEvent
-     * \draw [black] (332.0,63.0) -- (130.0,152.0) ;
-     * \filldraw[fill=yellow, draw=black] (71.0,276.0) rectangle (146.0,351.0) ;
      */
     public void checkTikzCode(KeyEvent keyEvent) {
         if(keyEvent.getCode() == KeyCode.ENTER) {
-            for (String line : tikzTA.getText().split("\\n")) sendTikzCode(line);
+            String [] lines = tikzTA.getText().split("\\n");
+            String line = lines[lines.length - 1];
+            sendTikzCode(line);
         }
     }
-    //Regex the textArea to then draw the Tikz into Shapes
-    private void sendTikzCode(String line){
-        System.out.println(line);
-        String pattern = "\\\\(filldraw)\\[fill=(yellow|blue),draw=(yellow|blue)\\]\\((\\d+.\\d+),(\\d+.\\d+)\\)(rectangle|circle)\\((\\d+.\\d+),(\\d+.\\d+)\\)|\\[radius=(\\d+.\\d+)\\]";
-        Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher(line);
-        if (m.find( )) {
-            System.out.println("Found value: " + m.group(1) );
-            System.out.println("Found value: " + m.group(2) );
-            System.out.println("Found value: " + m.group(3) );
-            System.out.println("Found value: " + m.group(4) );
-            System.out.println("Found value: " + m.group(5) );
-            System.out.println("Found value: " + m.group(6) );
-            System.out.println("Found value: " + m.group(7) );
-            if( m.group(1) == "filldraw"){
-                if(m.group(6) =="rectangle"){
-                    System.out.println("Found rectangle");
-                    Coordinates start = new Coordinates(Double.parseDouble(m.group(4)),Double.parseDouble(m.group(5)));
-                    Coordinates end = new Coordinates(Double.parseDouble(m.group(7)),Double.parseDouble(m.group(8)));
-                    controller.shape.Rectangle rectangle = new controller.shape.Rectangle(start,end,5);
-                    rectangle.setFillColor(controller.shape.Color.GREEN); //How to translate string to color ?
-                    rectangle.setDrawColor(controller.shape.Color.GREEN); //Same here
 
-                    handleDraw(rectangle);
-                }
+    /*
+     * \filldraw[fill=black, draw=black] (319.0,75.0) circle [radius=50.0];
+     * \filldraw[fill=red, draw=black] (102.0,199.0) rectangle (177.0,274.0) ;
+     * \filldraw[fill=green, draw=black] (258.0,191.0) -- (167.0,191.0) -- (175.0,96.0) -- cycle;
+     * \draw [black] (292.0,192.0) -- (375.0,347.0) ;
+     * \draw [black,->] (432.0,191.0) -- (509.0,372.0) ;
+     */
+
+    /**
+     * Translate code line to controller shape and draw it.
+     * @param line
+     */
+    private void sendTikzCode(String line){
+        // Regular expressions of the different shapes
+        String coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
+        String squarePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] "+ coordinatePattern +" (\\w+) " + coordinatePattern;
+        String circlePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] "+ coordinatePattern +" (\\w+) \\[radius=(\\d+\\.\\d+)\\]";
+        String trianglePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle";
+        String pathPattern = "\\\\draw \\[(\\w+)(,->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
+
+        ArrayList<Pair<String, String>> patternsArray = new ArrayList<Pair<String, String>>(Arrays.asList(
+                new Pair<>(squarePattern, SQUARE),
+                new Pair<>(circlePattern, CIRCLE),
+                new Pair<>(trianglePattern, TRIANGLE),
+                new Pair<>(pathPattern, "PATH")
+        ));
+
+        // Find what shape has been created
+        String shapeType = null;
+        Pattern p = null;
+        Matcher m = null;
+        for (Pair<String, String> pattern: patternsArray) {
+            p = Pattern.compile(pattern.getKey());
+            m = p.matcher(line);
+            if (m.find()) {
+                shapeType = pattern.getValue();
+                break;
             }
-        } else {
-            System.out.println("NO MATCH");
+        }
+
+        if (shapeType != null) {
+            controller.shape.Color fillColor = null, drawColor = null;
+            if (shapeType.equals(SQUARE) || shapeType.equals(CIRCLE) || shapeType.equals(TRIANGLE)) {
+                fillColor = controller.shape.Color.get(m.group(1));
+                drawColor = controller.shape.Color.get(m.group(2));
+            }
+            else if (shapeType.equals("PATH")) {
+                drawColor = controller.shape.Color.get(m.group(1));
+            }
+
+            // Process new shape
+            controller.shape.Shape shapeToDraw = null;
+            switch (shapeType) {
+                case SQUARE: {
+                    Coordinates origin = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
+                    Coordinates end = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
+
+                    shapeToDraw = new Square(true, true, drawColor, fillColor, origin, end, canvas.getIdForNewShape());
+                    break;
+                }
+                case CIRCLE: {
+                    Coordinates center = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
+                    Float radius = Float.parseFloat(m.group(6));
+
+                    shapeToDraw = new controller.shape.Circle(true, true, drawColor, fillColor, center, radius, canvas.getIdForNewShape());
+                    break;
+                }
+                case TRIANGLE: {
+                    Coordinates p1 = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
+                    Coordinates p2 = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
+                    Coordinates p3 = new Coordinates(Double.parseDouble(m.group(7)), Double.parseDouble(m.group(8)));
+
+                    shapeToDraw = new controller.shape.Triangle(true, true, drawColor, fillColor, p1, p2, p3, canvas.getIdForNewShape());
+                    break;
+                }
+                case "PATH": {
+                    Coordinates begin = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
+                    Coordinates end = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
+
+                    if (m.group(2) == null) {
+                        shapeToDraw = new controller.shape.Line(begin, end, drawColor, canvas.getIdForNewShape());
+                    }
+                    else {
+                        shapeToDraw = new controller.shape.Arrow(begin, end, drawColor, canvas.getIdForNewShape());
+                    }
+                    break;
+                }
+                default:
+                    break;
+            };
+            if (shapeToDraw != null) {
+                handleDraw(shapeToDraw);
+                canvas.addShape(shapeToDraw);
+            }
         }
     }
+
     private String peek(String search, String line){
         String x ="";
         x = line.substring(line.indexOf(search)+1);
