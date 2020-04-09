@@ -1,7 +1,7 @@
 package controller.shape;
 
 /**
- * NOT USED FOR NO, but, could be used in the future, tikz is vast
+ * All different shape thickness in Tikz.
  */
 //TODO right value
 public enum Thickness {

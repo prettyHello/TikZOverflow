@@ -145,7 +145,7 @@ public class EditorController {
             contextMenuFillColorPicker.getItems().add(colour);
             contextMenuDrawColorPicker.getItems().add(colour);
         }
-        //Fill ChoiceBox of thickness on contextMenu
+        //Fill the thickness ChoiceBox on contextMenu
         for (controller.shape.Thickness thickness : controller.shape.Thickness.values()) {
             shapeThickness.getItems().add(thickness);
             contextMenuChangeThickness.getItems().add(thickness);
@@ -219,6 +219,9 @@ public class EditorController {
         translateToTikz();
     }
 
+    /**
+     * Rightclick dropdown menu, change shape thickness
+     */
     private void updateShapeThickness(){
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();

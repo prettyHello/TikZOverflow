@@ -66,12 +66,6 @@ public interface Canvas extends Serializable {
     void changeShapeFillColor(int id, Color fillColor);
 
     /**
-     * Change the thickness of a shape
-     * @param id               id of the shape
-     * @param shapeThickness   thickness value
-     */
-    void changeShapeThickness(int id, String shapeThickness);
-    /**
      * Get the id for the next shape
      *
      * @return id for the next shape

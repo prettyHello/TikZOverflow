@@ -116,21 +116,6 @@ public class CanvasImpl implements Canvas {
         }
     }
 
-
-
-    /**
-     * Change the thickness of a shape
-     * @param id               id of the shape
-     * @param shapeThickness   thickness value
-     */
-    public void changeShapeThickness(int id, String shapeThickness) {
-        for (Shape shape : shapes) {
-            if (shape.getId() == id) {
-                shape.setShapeThicknessKey(shapeThickness);
-            }
-        }
-    }
-
     /**
      * Get an unique id for a new shape
      *

@@ -28,14 +28,14 @@ public abstract class Shape implements Serializable {
     /**
      * @param draw Is the shape have a outer line, can be combined with fill.
      * @param fill Is the shape filled with a color, can be combined with draw.
+     * @param shapeThicknessKey Thickness starting value.
      */
     public Shape(boolean draw, boolean fill, String shapeThicknessKey, int id) {
         this.draw = draw;
         this.fill = fill;
         this.fillColor = Color.BLACK;
         this.drawColor = Color.BLACK;
-        this.shapeThicknessKey = shapeThicknessKey.toLowerCase().replace("_", " ");
-        this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
+        setShapeThicknessKey(shapeThicknessKey);
         this.id = id;
     }
 
@@ -46,6 +46,7 @@ public abstract class Shape implements Serializable {
      * @param fill      Is the shape filled with a color, can be combined with draw.
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
+     * @param shapeThicknessKey Thickness starting value.
      */
     public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
         this.draw = draw;
@@ -59,7 +60,7 @@ public abstract class Shape implements Serializable {
             Utility.checkObject(drawColor);
             this.drawColor = drawColor;
         }
-        this.shapeThicknessKey = shapeThicknessKey.toLowerCase().replace("_", " ");
+        setShapeThicknessKey(shapeThicknessKey);
         this.id = id;
     }
 
@@ -121,6 +122,7 @@ public abstract class Shape implements Serializable {
     public String getShapeThicknessKey() {
         return shapeThicknessKey.toLowerCase().replace("_", " ");
     }
+
     public Shape setShapeThicknessKey(String shapeThicknessKey) {
         this.shapeThicknessKey = shapeThicknessKey.toLowerCase().replace("_"," ");
         this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
