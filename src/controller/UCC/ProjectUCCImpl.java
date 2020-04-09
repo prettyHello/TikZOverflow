@@ -41,6 +41,8 @@ public class ProjectUCCImpl implements ProjectUCC {
     public void setActive(ProjectDTO dto) throws FatalException {
         checkObjects(dto);
         ActiveProject.setActiveProject(this.projectDAO.get(dto));
+        Canvas canvas =  this.projectDAO.loadSavedCanvas( this.userUcc.getConnectedUser(),ActiveProject.getActiveProject());
+        ActiveCanvas.setActiveCanvas(canvas);
     }
 
     /**
@@ -87,14 +89,6 @@ public class ProjectUCCImpl implements ProjectUCC {
     @Override
     public void delete(ProjectDTO dto) throws FatalException {
         this.projectDAO.delete(dto);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Canvas loadSavedCanvas()throws FatalException {
-        return this.projectDAO.loadSavedCanvas( this.userUcc.getConnectedUser(),ActiveProject.getActiveProject());
     }
 
     /**

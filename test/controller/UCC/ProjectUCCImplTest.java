@@ -79,14 +79,6 @@ class ProjectUCCImplTest {
     }
 
     @Test
-    void loadSavedCanvasFatal(){
-        assertThrows(FatalException.class, () -> {
-            ActiveProject.setActiveProject(null);
-            projectUcc.loadSavedCanvas();
-        }, "check that the ucc don't catch the fatalException coming from the Dao");
-    }
-
-    @Test
     void createProjectAndGetCanvas(){
         //todo
     }

@@ -3,6 +3,7 @@ package controller.Canvas;
 /**
  * Singleton for the canvas that is currently being worked on
  */
+//TODO why is canvas not a field in ProjectDTO (and thus just part of active project?)
 public class ActiveCanvas {
     private static Canvas INSTANCE = null;
 

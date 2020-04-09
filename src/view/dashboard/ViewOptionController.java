@@ -105,16 +105,11 @@ public class ViewOptionController extends HBox {
         editBtn.setOnAction(event -> {
             ProjectDTO dto = this.projectFactory.createProject();
             dto.setProjectId(this.projectDTO.getProjectId());
-            Canvas canvas = null;
             try {
                 this.projectUCC.setActive(dto);
-                canvas = this.projectUCC.loadSavedCanvas();
+                viewSwitcher.switchView(ViewName.EDITOR);
             } catch (FatalException e) {
                 showAlert(Alert.AlertType.WARNING, "Project openning", "Unexpected Error", e.getMessage());
-            }
-            if (canvas != null) {
-                ActiveCanvas.setActiveCanvas(canvas);
-                viewSwitcher.switchView(ViewName.EDITOR);
             }
         });
     }

@@ -3,6 +3,7 @@ package model;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.ActiveProject;
 import controller.Canvas.Canvas;
+import controller.Canvas.CanvasImpl;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
 import controller.ProjectImpl;
@@ -179,8 +180,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         return projectDTO;
     }
 
-    private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator  ;
-
     public void save(Canvas canvas, ProjectDTO dto) throws FatalException {
         try{
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
@@ -200,7 +199,10 @@ public class ProjectDAOImpl implements ProjectDAO {
             canvas = (Canvas) in.readObject();
             in.close();
         } catch (FileNotFoundException e) {
-            throw new FatalException("Error File not found " + e.getMessage());
+            //There is no canvas in this project, this can happen in two case:
+            // 1) the user might have quit without ever saving <= which used to create a bug
+            // 2) he deleted the file manually
+            return new CanvasImpl(-1, -1); //TODO I copied the -1,-1, but why is it done this way?
         } catch (IOException e) {
             throw new FatalException("Error while opening the project " + e.getMessage());
         } catch (ClassNotFoundException e) {

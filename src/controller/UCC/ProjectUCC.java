@@ -50,7 +50,6 @@ public interface ProjectUCC {
      */
     void save() throws FatalException;
 
-    Canvas loadSavedCanvas()throws FatalException;
 
     void setActive(ProjectDTO dto) throws FatalException;
 
