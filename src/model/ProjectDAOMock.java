@@ -5,6 +5,7 @@ import controller.Canvas.ActiveProject;
 import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
+import controller.factories.ProjectFactory;
 import utilities.exceptions.FatalException;
 
 import java.io.File;
@@ -20,6 +21,9 @@ import static utilities.Utility.checkObjects;
  * Using a mock allow to test the controllers independently from the model implementation
  */
 public class ProjectDAOMock implements ProjectDAO {
+
+    public ProjectDAOMock(DALServices dalServices, ProjectFactory projectFactory) {
+    }
 
     private ArrayList<ProjectDTO> projectList;
     private Canvas activeCanvas;
