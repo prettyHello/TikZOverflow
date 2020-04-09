@@ -131,8 +131,7 @@ public class ViewSwitcher {
         Parent root = loader.load();
         EditorController editorController = loader.getController();
         editorController.setViewSwitcher(this);
-        Scene scene = new Scene(root) ;
-        this.stage.setScene(scene);
+        this.stage.setScene(new Scene(root));
     }
 
     public void setUser(UserDTO user) {
