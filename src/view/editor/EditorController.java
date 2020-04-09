@@ -9,12 +9,15 @@ import controller.DTO.UserDTO;
 import controller.UCC.UserUCC;
 import controller.shape.Coordinates;
 import controller.shape.Square;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -23,11 +26,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import model.HighlightTextColor;
 import model.SaveObject;
+import org.fxmisc.richtext.LineNumberFactory;
 import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
 
@@ -111,6 +117,9 @@ public class EditorController {
 
     @FXML
     public void initialize() {
+
+        //add a column of numbers in front of each line of the text box
+        tikzTA.setParagraphGraphicFactory(LineNumberFactory.get(tikzTA));
 
         // Get coordinate of click in canvas and draw selected shape
         pane.setOnMouseClicked((MouseEvent event) ->
@@ -558,10 +567,6 @@ public class EditorController {
         tikzTA.clearStyle(0,tikzTA.getText().length());
         tikzTA.setSelectedShapes(this.selectedShapes).highlightOnSelect();
     }
-
-
-
-
 
 }
 
