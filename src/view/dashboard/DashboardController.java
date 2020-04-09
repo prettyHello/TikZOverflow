@@ -167,6 +167,7 @@ public class DashboardController {
      */
     public void delete(ProjectDTO dto) {
         projectObsList.remove(dto);
+        setUserProjectView(this.user);
     }
 
     /**
