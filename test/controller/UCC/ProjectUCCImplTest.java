@@ -15,6 +15,8 @@ import utilities.exceptions.FatalException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO fix later
+
 class ProjectUCCImplTest {
 
     ProjectFactory projectFactory;
@@ -22,7 +24,7 @@ class ProjectUCCImplTest {
     ProjectUCC projectUcc;
     UserUCC userUcc;
 
-    @BeforeAll
+    @BeforeEach
     void setUpStart() {
         TestBusinessConfigurationSingleton.getInstance();
         this.projectFactory = TestBusinessConfigurationSingleton.getProjectFactory();
