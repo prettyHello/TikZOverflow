@@ -1,6 +1,8 @@
 package model;
 import controller.Canvas.ActiveCanvas;
+import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.CodeArea;
 import java.util.ArrayList;
@@ -23,6 +25,12 @@ public class HighlightTextColor  extends CodeArea{
        keyValidation();
     }
 
+    /**
+     * color an identical word by its position, in a text field
+     * @param wordListOption word list for coloring
+     * @param color          Style to apply to the word
+     */
+
     public void colorWord(String wordListOption, String color) {
         String[] wordList = getWordList(wordListOption);
         for(int x = 0; x < wordList.length; x ++){
@@ -33,15 +41,31 @@ public class HighlightTextColor  extends CodeArea{
         }
     }
 
+    /**
+     * select a word list
+     * @param wordListOption
+     * @return
+     */
     private String[] getWordList(String wordListOption) {
         String[] keyWord = {"filldraw","draw","path","node","begin","tikzstyle","fill","end"}; // Words use by tikz and that will be highlight.
         String[] keyCharacter = {"\\", ",", "[", "]", "(", ")"} ;
+        String[] shapes = {"circle", "rectangle", "cycle", "->"} ;
+        String[] digit = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"} ;
         String[] wordList=null;
 
-        if(wordListOption == "keyWord"){
-            wordList=  keyWord ;
-        } else  if (wordListOption == "keyCharacter"){
-            wordList=  keyCharacter ;
+        switch (wordListOption) {
+            case "keyWord":
+                wordList=  keyWord ;
+                break;
+            case "keyCharacter":
+                wordList=  keyCharacter ;
+                break;
+            case "shapes":
+                wordList=  shapes ;
+                break;
+            case "digit":
+                wordList=  digit ;
+                break;
         }
         return wordList;
     }
@@ -82,8 +106,10 @@ public class HighlightTextColor  extends CodeArea{
 
     public void highlightOnSelect(){
         if(!getText().isEmpty()){ // Check if the canvas isn't empty (for example at start) Because if the canvas is empty it will make an error.
-            colorWord("keyWord", "blue");
-            colorWord("keyCharacter", "chara");
+            colorWord("keyWord", "keyWord");
+            colorWord("keyCharacter", "keyCharacter");
+            colorWord("shapes", "shapes");
+            colorWord("digit", "digit");
         }
 
         if(!selectedShapes.isEmpty()) // If user select a shape.
@@ -101,9 +127,16 @@ public class HighlightTextColor  extends CodeArea{
         }
     }
 
+    /**
+     * action which is triggered each time entered on the keyboard
+     */
+
     private void keyValidation() {
         setOnKeyReleased(key ->
         {
+            final Pattern whiteSpace = Pattern.compile( "^\\s+" );
+
+            //allows you to re-color the keyword: redetermine the positions each time you enter the keyboard
             if (key.getCode().isDigitKey() ||
                     key.getCode().isFunctionKey() ||
                     key.getCode().isArrowKey() ||
@@ -115,10 +148,21 @@ public class HighlightTextColor  extends CodeArea{
                     key.getCode().isWhitespaceKey() ||
                     key.getCode() == KeyCode.BACK_SPACE )
             {
-                setStyleClass(0, getText().length(), "black");
-                colorWord("keyWord", "blue");
-                colorWord("keyCharacter", "chara");
+                setStyleClass(0, getText().length(), "resetColor");
+                colorWord("keyWord", "keyWord");
+                colorWord("keyCharacter", "keyCharacter");
+                colorWord("shapes", "shapes");
+                colorWord("digit", "digit");
+            }
+
+            //allows to add a line number
+            if ( key.getCode() == KeyCode.ENTER ) {
+                int caretPosition = getCaretPosition();
+                int currentParagraph = getCurrentParagraph();
+                Matcher lineNumber = whiteSpace.matcher( getParagraph( currentParagraph-1 ).getSegments().get( 0 ) );
+                if ( lineNumber.find() ) Platform.runLater( () -> insertText( caretPosition, lineNumber.group() ) );
             }
         });
     }
+
 }
