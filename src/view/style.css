@@ -1,7 +1,9 @@
 
 
-.black { -fx-fill: #020202; }
-.chara { -fx-fill: #f045ff; }
-.blue { -fx-fill: #03bafc; -fx-font-weight: bold; }
+.resetColor { -fx-fill: #020202; }
+.keyCharacter { -fx-fill: #f045ff; }
+.keyWord { -fx-fill: #03bafc; -fx-font-weight: bold; }
 .highlight {-rtfx-background-color: #fcde8b; }
+.shapes {-fx-fill: #fc5970; -fx-font-style: italic; }
+.digit {-fx-fill: #474bfc; -fx-font-style: italic; }
 
