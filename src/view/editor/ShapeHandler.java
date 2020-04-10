@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
 
+import java.util.ArrayList;
+
 import static utilities.ColorUtils.getColorNameFromRgb;
 
 public class ShapeHandler {
@@ -26,6 +28,7 @@ public class ShapeHandler {
     protected static final String ARROW = "ARROW";
     protected static final String ARROW_POINT2 = "ARROW_POINT2";
 
+    protected double selectedX, selectedY;
     protected double previouslySelectedX, previouslySelectedY; // a line needs 2 points so last choice is saved
     protected double thirdSelectedX, thirdSelectedY; // since a triangle need three points
     protected boolean waitingForMoreCoordinate = false;
@@ -89,7 +92,7 @@ public class ShapeHandler {
     /**
      * Draw selected shape
      */
-    public void handleDrawCall(double selectedX, double selectedY) {
+    public void handleDrawCall() {
         Shape shape = null;
         controller.shape.Shape addToController = null;
 
@@ -108,7 +111,7 @@ public class ShapeHandler {
                 break;
             case TRIANGLE_POINT3:
                 addToController = new controller.shape.Triangle(new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
-                shape = constructTriangle(selectedX, selectedY);
+                shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
             case CIRCLE:
@@ -128,7 +131,7 @@ public class ShapeHandler {
                 break;
             case ARROW_POINT2:
                 addToController = new controller.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
-                shape = constructArrow(selectedX, selectedY);
+                shape = constructArrow();
                 waitingForMoreCoordinate = false;
                 break;
             case LINE:
@@ -165,11 +168,77 @@ public class ShapeHandler {
     }
 
     /**
+     * Draw controller shape in diagram.
+     *
+     * @param shape
+     */
+    public void handleDraw (controller.shape.Shape shape) {
+        Shape shapeDrawing = null;
+
+        switch (shape.getClass().toString()) {
+            case "class controller.shape.Circle": {
+                Coordinates circleCenter = ((controller.shape.Circle) shape).getCoordinates();
+                double circleRadius = ((controller.shape.Circle) shape).getRadius();
+
+                shapeDrawing = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
+                break;
+            }
+            case "class controller.shape.Square": {
+                double squareX = ((controller.shape.Square) shape).getOriginCoordinates().getX();
+                double squareY = ((controller.shape.Square) shape).getOriginCoordinates().getY();
+                double squareSize = ((controller.shape.Square) shape).getSize();
+
+                shapeDrawing = new Rectangle(squareX, squareY, squareSize, squareSize);
+                break;
+            }
+            case "class controller.shape.Triangle": {
+                ArrayList<Coordinates> points = ((controller.shape.Triangle) shape).getPoints();
+                Coordinates point1 = points.get(0);
+                Coordinates point2 = points.get(1);
+                Coordinates point3 = points.get(2);
+
+                Polygon polygon = new Polygon();
+                polygon.getPoints().addAll(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY());
+                shapeDrawing = polygon;
+                break;
+            }
+            case "class controller.shape.Line": {
+                ArrayList<Coordinates> points = ((controller.shape.Line) shape).getPathPoints();
+                Coordinates point1 = points.get(0);
+                Coordinates point2 = points.get(1);
+
+                shapeDrawing = new Line(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+                break;
+            }
+            case "class controller.shape.Arrow": {
+                ArrayList<Coordinates> points = ((controller.shape.Arrow) shape).getPathPoints();
+                Coordinates point1 = points.get(0);
+                Coordinates point2 = points.get(1);
+
+                previouslySelectedX = point1.getX();
+                previouslySelectedY = point1.getY();
+                selectedX = point2.getX();
+                selectedY = point2.getY();
+
+                shapeDrawing = constructArrow();
+                break;
+            }
+        }
+        if (shapeDrawing != null) {
+            shapeDrawing.setId(Integer.toString(shape.getId()));
+            shapeDrawing.setFill(Color.valueOf(shape.getFillColor().toString()));
+            shapeDrawing.setStroke(Color.valueOf(shape.getDrawColor().toString()));
+            editorController.pane.getChildren().add(shapeDrawing);
+            shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
+        }
+    }
+
+    /**
      * Construct triangle from polygon
      *
      * @return triangle JavaFX shape
      */
-    private Shape constructTriangle(double selectedX, double selectedY) {
+    private Shape constructTriangle() {
         Polygon polygon = new Polygon();
         polygon.getPoints().addAll(selectedX, selectedY,
                 previouslySelectedX, previouslySelectedY,
@@ -182,7 +251,7 @@ public class ShapeHandler {
      *
      * @return arrow JavaFX shape
      */
-    private Shape constructArrow(double selectedX, double selectedY) {
+    private Shape constructArrow() {
         double arrowLength = 5;
         double arrowWidth = 3;
         Line main_line = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);

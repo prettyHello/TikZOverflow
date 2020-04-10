@@ -87,6 +87,7 @@ public class EditorController {
     @FXML
     AnchorPane leftAnchorPane;
 
+
     public ArrayList<Shape> selectedShapes = new ArrayList<>();
     protected String shapeToDraw = "";
     protected boolean waitingForMoreCoordinate = false;
@@ -119,7 +120,9 @@ public class EditorController {
         {
             // No shapes must be selected and a drawing shape has to be selected
             if (selectedShapes.isEmpty() && !shapeToDraw.equals("")) {
-                shapeHandler.handleDrawCall(event.getX(), event.getY());
+                shapeHandler.selectedX = event.getX();
+                shapeHandler.selectedY = event.getY();
+                shapeHandler.handleDrawCall();
             }
         });
 
@@ -352,71 +355,6 @@ public class EditorController {
         tikzTA.setText(canvas.toTikZ());
     }
 
-    /**
-     * Draw controller shape in diagram.
-     *
-     * @param shape
-     */
-    private void handleDraw (controller.shape.Shape shape) {
-        Shape shapeDrawing = null;
-
-        switch (shape.getClass().toString()) {
-            case "class controller.shape.Circle": {
-                Coordinates circleCenter = ((controller.shape.Circle) shape).getCoordinates();
-                double circleRadius = ((controller.shape.Circle) shape).getRadius();
-
-                shapeDrawing = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
-                break;
-            }
-            case "class controller.shape.Square": {
-                double squareX = ((controller.shape.Square) shape).getOriginCoordinates().getX();
-                double squareY = ((controller.shape.Square) shape).getOriginCoordinates().getY();
-                double squareSize = ((controller.shape.Square) shape).getSize();
-
-                shapeDrawing = new Rectangle(squareX, squareY, squareSize, squareSize);
-                break;
-            }
-            case "class controller.shape.Triangle": {
-                ArrayList<Coordinates>  points = ((controller.shape.Triangle) shape).getPoints();
-                Coordinates point1 = points.get(0);
-                Coordinates point2 = points.get(1);
-                Coordinates point3 = points.get(2);
-
-                Polygon polygon = new Polygon();
-                polygon.getPoints().addAll(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY());
-                shapeDrawing = polygon;
-                break;
-            }
-            case "class controller.shape.Line": {
-                ArrayList<Coordinates> points = ((controller.shape.Line) shape).getPathPoints();
-                Coordinates point1 = points.get(0);
-                Coordinates point2 = points.get(1);
-
-                shapeDrawing = new Line(point1.getX(), point1.getY(), point2.getX(), point2.getY());
-                break;
-            }
-            case "class controller.shape.Arrow": {
-                ArrayList<Coordinates> points = ((controller.shape.Arrow) shape).getPathPoints();
-                Coordinates point1 = points.get(0);
-                Coordinates point2 = points.get(1);
-
-                previouslySelectedX = point1.getX();
-                previouslySelectedY = point1.getY();
-                selectedX = point2.getX();
-                selectedY = point2.getY();
-
-                shapeDrawing = constructArrow();
-                break;
-            }
-        }
-        if (shapeDrawing != null) {
-            shapeDrawing.setId(Integer.toString(shape.getId()));
-            shapeDrawing.setFill(Color.valueOf(shape.getFillColor().toString()));
-            shapeDrawing.setStroke(Color.valueOf(shape.getDrawColor().toString()));
-            pane.getChildren().add(shapeDrawing);
-            shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
-        }
-    }
 
     /**
      * Translate controller shapes in diagram.
@@ -424,7 +362,7 @@ public class EditorController {
     private void translateToDraw () {
 
         for (controller.shape.Shape shape : canvas.getShapes()) {
-            handleDraw(shape);
+            shapeHandler.handleDraw(shape);
         }
 
     }
