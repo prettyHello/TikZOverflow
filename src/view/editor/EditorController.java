@@ -2,7 +2,9 @@ package view.editor;
 
 import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
+import controller.Canvas.ActiveProject;
 import controller.Canvas.Canvas;
+import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
 import controller.UCC.UserUCC;
@@ -41,25 +43,27 @@ public class EditorController {
     /**
      * TODO We need to divide teh fxml so that we have separate controller for this one and the other view
      */
-    private static final String SQUARE = "SQUARE";
-    private static final String TRIANGLE = "TRIANGLE";
-    private static final String TRIANGLE_POINT2 = "TRIANGLE2";
-    private static final String TRIANGLE_POINT3 = "TRIANGLE3";
-    private static final String CIRCLE = "CIRCLE";
-    private static final String LINE = "LINE";
-    private static final String LINE_POINT2 = "LINE_POINT2";
-    private static final String ARROW = "ARROW";
-    private static final String ARROW_POINT2 = "ARROW_POINT2";
+    protected static final String SQUARE = "SQUARE";
+    protected static final String TRIANGLE = "TRIANGLE";
+    protected static final String TRIANGLE_POINT2 = "TRIANGLE2";
+    protected static final String TRIANGLE_POINT3 = "TRIANGLE3";
+    protected static final String CIRCLE = "CIRCLE";
+    protected static final String LINE = "LINE";
+    protected static final String LINE_POINT2 = "LINE_POINT2";
+    protected static final String ARROW = "ARROW";
+    protected static final String ARROW_POINT2 = "ARROW_POINT2";
     private UserUCC userUcc;
 
     private ViewSwitcher viewSwitcher;
+
+    private ShapeHandler shapeHandler;
 
     private ProjectUCC projectUcc = ConfigurationSingleton.getProjectUCC();
 
     @FXML
     Pane toolbar;
     @FXML
-    private Pane pane;
+    public Pane pane;
     @FXML
     private TextArea tikzTA;
     @FXML
@@ -83,15 +87,10 @@ public class EditorController {
     @FXML
     AnchorPane leftAnchorPane;
 
-    private ArrayList<Shape> selectedShapes = new ArrayList<>();
-    private double selectedX, selectedY;
-    private double previouslySelectedX, previouslySelectedY; // a line needs 2 points so last choice is saved
-    private double thirdSelectedX, thirdSelectedY; // since a triangle need three points
-    private String shapeToDraw = "";
-    private boolean waitingForMoreCoordinate = false;
-    private Canvas canvas;
-
-    ContextMenu menu = new ContextMenu();
+    public ArrayList<Shape> selectedShapes = new ArrayList<>();
+    protected String shapeToDraw = "";
+    protected boolean waitingForMoreCoordinate = false;
+    protected Canvas canvas;
 
     private ContextMenu shapeContextMenu;
     private ChoiceBox contextMenuFillColorPicker;
@@ -120,9 +119,7 @@ public class EditorController {
         {
             // No shapes must be selected and a drawing shape has to be selected
             if (selectedShapes.isEmpty() && !shapeToDraw.equals("")) {
-                selectedX = event.getX();
-                selectedY = event.getY();
-                handleDrawCall();
+                shapeHandler.handleDrawCall(event.getX(), event.getY());
             }
         });
 
@@ -149,61 +146,18 @@ public class EditorController {
         contextMenuDrawColorPicker.setValue(controller.shape.Color.BLACK);
 
         MenuItem delete = new MenuItem("delete");
-        delete.setOnAction(t -> rightClickDeleteShape());
+        delete.setOnAction(t -> shapeHandler.rightClickDeleteShape());
         MenuItem fillColorMenu = new MenuItem("Fill color", contextMenuFillColorPicker);
-        fillColorMenu.setOnAction(t -> setFillColor());
+        fillColorMenu.setOnAction(t -> shapeHandler.setFillColor(Color.valueOf(contextMenuFillColorPicker.getValue().toString())));
         MenuItem drawColorMenu = new MenuItem("Stroke color", contextMenuDrawColorPicker);
-        drawColorMenu.setOnAction(t -> setDrawColor());
+        drawColorMenu.setOnAction(t -> shapeHandler.setDrawColor(Color.valueOf(contextMenuDrawColorPicker.getValue().toString())));
         shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu);
+
+        shapeHandler = new ShapeHandler(shapeContextMenu, canvas, this);
 
         // show shapes at the start(don't have to interact to have thel show up)
         translateToTikz();
         translateToDraw();
-    }
-
-    /**
-     * Rightclick dropdown menu, change FillColor
-     */
-    private void setFillColor() {
-        //TODO use canvas.updateShape to update the shape.
-        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
-            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            shape.setFill(Color.valueOf(contextMenuFillColorPicker.getValue().toString()));
-            Color fillColor = (Color) shape.getFill();
-            canvas.changeShapeFillColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
-        }
-        translateToTikz();
-    }
-
-    /**
-     * Rightclick dropdown menu, change StokeColor
-     */
-    private void setDrawColor() {
-        //TODO use canvas.updateShape to update the shape.
-        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
-            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            shape.setStroke(Color.valueOf(contextMenuDrawColorPicker.getValue().toString()));
-            Color drawColor = (Color) shape.getStroke();
-            canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
-        }
-        translateToTikz();
-    }
-
-    /**
-     * Rightclick dropdown menu, delete shape
-     */
-    private void rightClickDeleteShape() {
-        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
-            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            pane.getChildren().remove(shape);
-            canvas.rmShapeById(Integer.parseInt(shape.getId()));
-            if (selectedShapes.contains(shape)) {
-                selectedShapes.remove(shape);
-                if (selectedShapes.isEmpty())
-                    disableToolbar(false);
-            }
-        }
-        translateToTikz();
     }
 
     @FXML
@@ -260,93 +214,12 @@ public class EditorController {
     }
 
     /**
-     * Draw selected shape
-     */
-    private void handleDrawCall() {
-        Shape shape = null;
-        controller.shape.Shape addToController = null;
-
-        switch (shapeToDraw) {
-            case TRIANGLE:
-                thirdSelectedX = selectedX;
-                thirdSelectedY = selectedY;
-                shapeToDraw = TRIANGLE_POINT2;
-                waitingForMoreCoordinate = true;
-                break;
-            case TRIANGLE_POINT2:
-                previouslySelectedX = selectedX;
-                previouslySelectedY = selectedY;
-                shapeToDraw = TRIANGLE_POINT3;
-                waitingForMoreCoordinate = true;
-                break;
-            case TRIANGLE_POINT3:
-                Coordinates pt1 = new Coordinates(selectedX, selectedY);
-                Coordinates pt2 = new Coordinates(previouslySelectedX, previouslySelectedY);
-                Coordinates pt3 = new Coordinates(thirdSelectedX, thirdSelectedY);
-                addToController = new controller.shape.Triangle(pt1, pt2, pt3, canvas.getIdForNewShape());
-                shape = constructTriangle();
-                waitingForMoreCoordinate = false;
-                break;
-            case CIRCLE:
-                float radius = 50.0f;
-                Circle circle = new Circle();
-                circle.setCenterX(selectedX);
-                circle.setCenterY(selectedY);
-                circle.setRadius(radius);
-                addToController = new controller.shape.Circle(new Coordinates(selectedX, selectedY), radius, canvas.getIdForNewShape());
-                shape = circle;
-                break;
-            case ARROW:
-                previouslySelectedX = selectedX;
-                previouslySelectedY = selectedY;
-                shapeToDraw = ARROW_POINT2;
-                waitingForMoreCoordinate = true;
-                break;
-            case ARROW_POINT2:
-                addToController = new controller.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
-                shape = constructArrow();
-                waitingForMoreCoordinate = false;
-                break;
-            case LINE:
-                previouslySelectedX = selectedX;
-                previouslySelectedY = selectedY;
-                shapeToDraw = LINE_POINT2;
-                waitingForMoreCoordinate = true;
-                break;
-            case LINE_POINT2:
-                addToController = new controller.shape.Line(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
-                shape = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
-                shape.setStroke(Color.valueOf(fillColour.getValue().toString()));
-                waitingForMoreCoordinate = false;
-                break;
-            case SQUARE:
-                double size = 75;
-                shape = new Rectangle(selectedX, selectedY, 75, 75);
-                addToController = new Square(new Coordinates(selectedX, selectedY), size, canvas.getIdForNewShape());
-                break;
-        }
-        if (waitingForMoreCoordinate) {
-            return;
-        } else if (shape == null) { //No shape was previously selected
-            alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
-        } else {
-            shape.setFill(Color.valueOf(fillColour.getValue().toString()));
-            shape.setStroke(Color.valueOf(strokeColour.getValue().toString()));
-            pane.getChildren().add(shape);
-            notifyController(addToController, shape);
-            shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
-            shapeToDraw = "";
-        }
-        disableButtonOverlay();
-    }
-
-    /**
      * Notify Shape controller of javafx shape creation
      *
      * @param addToController
      * @param shape           JavaFX shape
      */
-    private void notifyController(controller.shape.Shape addToController, Shape shape) {
+    public void notifyController(controller.shape.Shape addToController, Shape shape) {
         Color fillColor = (Color) shape.getFill();
         Color drawColor = (Color) shape.getStroke();
         shape.setId(Integer.toString(addToController.getId()));
@@ -367,43 +240,12 @@ public class EditorController {
     }
 
     /**
-     * Listener leftclick select or unselect
-     * Listener rightclick dropdown delete + change color
-     *
-     * @param mouseEvent
-     */
-    private void onShapeSelected(MouseEvent mouseEvent) {
-        if (!waitingForMoreCoordinate && shapeToDraw == "") {
-            Shape shape = (Shape) mouseEvent.getSource();
-
-            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                if (selectedShapes.contains(shape)) { //if already selected => unselect
-                    shape.setEffect(null);
-                    selectedShapes.remove(shape);
-                    if (selectedShapes.isEmpty())
-                        disableToolbar(false);
-                } else {                                 //if not selected => add to the list
-                    disableToolbar(true);
-                    shape.setStrokeWidth(2);
-                    DropShadow borderEffect = new DropShadow(
-                            BlurType.THREE_PASS_BOX, Color.GREEN, 2, 1, 0, 0
-                    );
-                    shape.setEffect(borderEffect);
-                    selectedShapes.add(shape);
-                }
-            } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-                shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, mouseEvent.getScreenX(), mouseEvent.getScreenY()));
-            }
-        }
-    }
-
-    /**
      * Disables all the buttons except delete button when shape is selected
      * Gets all children in case new buttons are added
      *
      * @param isDisabled disables the buttons when true
      */
-    private void disableToolbar(boolean isDisabled) {
+    public void disableToolbar(boolean isDisabled) {
         for (Node node : toolbar.getChildren()) {
             node.setDisable(isDisabled);
         }
@@ -413,83 +255,12 @@ public class EditorController {
     /**
      * Disable the buttons highlight
      */
-    private void disableButtonOverlay() {
+    public void disableButtonOverlay() {
         square.setStyle("-fx-focus-color: transparent;");
         circle.setStyle("-fx-focus-color: transparent;");
         line.setStyle("-fx-focus-color: transparent;");
         arrow.setStyle("-fx-focus-color: transparent;");
         triangle.setStyle("-fx-focus-color: transparent;");
-    }
-
-    /**
-     * Check if drawing is finished
-     *
-     * @return if not show error
-     */
-    private boolean checkIfMoreCoordinateRequired() {
-        if (waitingForMoreCoordinate) {
-            alert("Finish your action", "You need to select a second point", "You need to select a second point to finish the last shape!");
-            disableButtonOverlay();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Construct three lines and merge to make an arrow
-     *
-     * @return arrow JavaFX shape
-     */
-    private Shape constructArrow() {
-        double arrowLength = 5;
-        double arrowWidth = 3;
-        Line main_line = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
-        Line arrow1 = new Line();
-        Line arrow2 = new Line();
-
-        arrow1.setEndX(selectedX);
-        arrow1.setEndY(selectedY);
-        arrow2.setEndX(selectedX);
-        arrow2.setEndY(selectedY);
-
-        if (selectedX == previouslySelectedX && selectedY == previouslySelectedY) {
-            // arrow parts of length 0
-            arrow1.setStartX(selectedX);
-            arrow1.setStartY(selectedY);
-            arrow2.setStartX(selectedX);
-            arrow2.setStartY(selectedY);
-        } else {
-            double factor = arrowLength / Math.hypot(previouslySelectedX - selectedX, previouslySelectedY - selectedY);
-            double factorO = arrowWidth / Math.hypot(previouslySelectedX - selectedX, previouslySelectedY - selectedY);
-
-            // part in direction of main line
-            double dx = (previouslySelectedX - selectedX) * factor;
-            double dy = (previouslySelectedY - selectedY) * factor;
-
-            // part ortogonal to main line
-            double ox = (previouslySelectedX - selectedX) * factorO;
-            double oy = (previouslySelectedY - selectedY) * factorO;
-
-            arrow1.setStartX(selectedX + dx - oy);
-            arrow1.setStartY(selectedY + dy + ox);
-            arrow2.setStartX(selectedX + dx + oy);
-            arrow2.setStartY(selectedY + dy - ox);
-        }
-
-        return Shape.union(main_line, Shape.union(arrow1, arrow2));
-    }
-
-    /**
-     * Construct triangle from polygon
-     *
-     * @return triangle JavaFX shape
-     */
-    private Shape constructTriangle() {
-        Polygon polygon = new Polygon();
-        polygon.getPoints().addAll(selectedX, selectedY,
-                previouslySelectedX, previouslySelectedY,
-                thirdSelectedX, thirdSelectedY);
-        return polygon;
     }
 
     /**
@@ -499,7 +270,7 @@ public class EditorController {
      * @param header
      * @param Content
      */
-    private void alert(String title, String header, String Content) {
+    public void alert(String title, String header, String Content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -561,9 +332,23 @@ public class EditorController {
     }
 
     /**
+     * Check if drawing is finished
+     *
+     * @return if not show error
+     */
+    private boolean checkIfMoreCoordinateRequired() {
+        if (waitingForMoreCoordinate) {
+            alert("Finish your action", "You need to select a second point", "You need to select a second point to finish the last shape!");
+            disableButtonOverlay();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Translate canvas to tikz and fill textarea
      */
-    private void translateToTikz() {
+    public void translateToTikz() {
         tikzTA.setText(canvas.toTikZ());
     }
 
