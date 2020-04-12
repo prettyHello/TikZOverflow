@@ -156,4 +156,10 @@ public class CanvasImpl implements Canvas {
         }
         return tikz.toString();
     }
+
+    @Override
+    public void clear() {
+        this.shapes.clear();
+        this.idCounter = 0;
+    }
 }

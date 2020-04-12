@@ -11,6 +11,9 @@ import controller.shape.Arrow;
 import controller.shape.Coordinates;
 import controller.shape.Square;
 import controller.shape.Triangle;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -169,6 +172,11 @@ public class EditorController {
         // show shapes at the start(don't have to interact to have thel show up)
         translateToTikz();
         translateToDraw();
+
+        tikzTA.textProperty().addListener(this.handleCodeChange);
+        /*tikzTA.textProperty().addListener((obs,old,niu)-> {
+
+        });*/
     }
 
 
@@ -661,6 +669,48 @@ public class EditorController {
             sendTikzCode(line);
         }
     }
+
+    private ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
+        if (!oldValue.equals(newValue)) System.out.println("Nada que cambiar");
+
+        String coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
+        String squarePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] "+ coordinatePattern +" (\\w+) " + coordinatePattern;
+        String circlePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] "+ coordinatePattern +" (\\w+) \\[radius=(\\d+\\.\\d+)\\]";
+        String trianglePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle";
+        String pathPattern = "\\\\draw \\[(\\w+)(,->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
+
+        ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(
+                squarePattern, circlePattern, trianglePattern, pathPattern));
+
+        String [] lines = newValue.split("\\n");
+        // boolean textCorrect = true;
+        boolean lineCorrect = false;
+        Pattern p;
+        Matcher m;
+        for (String line : lines) {
+            p = null;
+            m = null;
+            lineCorrect = false;
+            for (String pattern: patternsArray) {
+                p = Pattern.compile(pattern);
+                m = p.matcher(line);
+                if (m.find())
+                    lineCorrect = true;
+            }
+            if (!lineCorrect)
+                break;
+        }
+        if (lineCorrect) {
+            System.out.println("Se puede crear canvas");
+            canvas.clear();
+            pane.getChildren().clear();
+            for (String line : lines) {
+                sendTikzCode(line);
+            }
+        }
+        else
+            System.out.println("Todo mal");
+    };
 
     /*
      * \filldraw[fill=black, draw=black] (319.0,75.0) circle [radius=50.0];

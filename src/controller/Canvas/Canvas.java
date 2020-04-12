@@ -92,4 +92,10 @@ public interface Canvas extends Serializable {
      * @return the TikZ code
      */
     String toTikZ();
+
+    /**
+     * Empty the current shapes in the canvas
+     *
+     */
+    void clear();
 }
