@@ -38,10 +38,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -103,6 +100,8 @@ public class EditorController {
     private String shapeToDraw = "";
     private boolean waitingForMoreCoordinate = false;
     private Canvas canvas;
+    private boolean drawnFromToolbar = false;
+    private String colorsPattern = "";
 
     ContextMenu menu = new ContextMenu();
 
@@ -149,12 +148,16 @@ public class EditorController {
 
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
+        ArrayList<String> colors = new ArrayList<>();
         for (controller.shape.Color colour : controller.shape.Color.values()) {
             fillColour.getItems().add(colour);
             strokeColour.getItems().add(colour);
             contextMenuFillColorPicker.getItems().add(colour);
             contextMenuDrawColorPicker.getItems().add(colour);
+            colors.add(colour.getValue());
         }
+        colorsPattern = String.join("|", colors);
+
         // Set start value dropdown to black
         fillColour.setValue(controller.shape.Color.BLACK);
         strokeColour.setValue(controller.shape.Color.BLACK);
@@ -170,10 +173,11 @@ public class EditorController {
         shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu);
 
         // show shapes at the start(don't have to interact to have thel show up)
-        translateToTikz();
-        translateToDraw();
-
         tikzTA.textProperty().addListener(this.handleCodeChange);
+        translateToTikz();
+        //translateToDraw();
+
+
         /*tikzTA.textProperty().addListener((obs,old,niu)-> {
 
         });*/
@@ -352,6 +356,7 @@ public class EditorController {
             shape.setFill(Color.valueOf(fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(strokeColour.getValue().toString()));
             pane.getChildren().add(shape);
+            drawnFromToolbar = true;
             notifyController(addToController, shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
             shapeToDraw = "";
@@ -660,56 +665,70 @@ public class EditorController {
 
     /**
      * Control events in TextArea.
+     *
      * @param keyEvent
      */
-    public void checkTikzCode(KeyEvent keyEvent) {
+    /*public void checkTikzCode(KeyEvent keyEvent) {
         if(keyEvent.getCode() == KeyCode.ENTER) {
             String [] lines = tikzTA.getText().split("\\n");
             String line = lines[lines.length - 1];
             sendTikzCode(line);
         }
-    }
+    }*/
 
+    /**
+     * Detects and handles changes in the TextArea
+     *
+     */
     private ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
-        if (!oldValue.equals(newValue)) System.out.println("Nada que cambiar");
+        System.out.println("Patata");
+        if (!drawnFromToolbar) {
+            String coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
+            String squarePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern;
+            String circlePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(\\d+\\.\\d+)\\]";
+            String trianglePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle";
+            String pathPattern = "\\\\draw \\[(" + colorsPattern + ")(,->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
 
-        String coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
-        String squarePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] "+ coordinatePattern +" (\\w+) " + coordinatePattern;
-        String circlePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] "+ coordinatePattern +" (\\w+) \\[radius=(\\d+\\.\\d+)\\]";
-        String trianglePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle";
-        String pathPattern = "\\\\draw \\[(\\w+)(,->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
+            ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(
+                    squarePattern, circlePattern, trianglePattern, pathPattern));
 
-        ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(
-                squarePattern, circlePattern, trianglePattern, pathPattern));
+            String[] lines = newValue.split("\\n");
+            List<String> al = Arrays.asList(lines);
 
-        String [] lines = newValue.split("\\n");
-        // boolean textCorrect = true;
-        boolean lineCorrect = false;
-        Pattern p;
-        Matcher m;
-        for (String line : lines) {
-            p = null;
-            m = null;
-            lineCorrect = false;
-            for (String pattern: patternsArray) {
-                p = Pattern.compile(pattern);
-                m = p.matcher(line);
-                if (m.find())
-                    lineCorrect = true;
-            }
-            if (!lineCorrect)
-                break;
-        }
-        if (lineCorrect) {
-            System.out.println("Se puede crear canvas");
-            canvas.clear();
-            pane.getChildren().clear();
+            boolean lineCorrect = false;
+            int incorrectLineNum = -1;
+            Pattern p;
+            Matcher m;
             for (String line : lines) {
-                sendTikzCode(line);
+                p = null;
+                m = null;
+                lineCorrect = false;
+                for (String pattern : patternsArray) {
+                    p = Pattern.compile(pattern);
+                    m = p.matcher(line);
+                    if (m.find())
+                        lineCorrect = true;
+                }
+                if (!lineCorrect) {
+                    incorrectLineNum = al.indexOf(line);
+                    break;
+                }
+            }
+            if (lineCorrect) {
+                canvas.clear();
+                pane.getChildren().clear();
+                for (String line : lines) {
+                    sendTikzCode(line);
+                }
+            }
+            else {
+                // TODO: Highlight wrong line
+                System.out.println("Incorrect line: " + incorrectLineNum);
             }
         }
-        else
-            System.out.println("Todo mal");
+        else {
+            drawnFromToolbar = false;
+        }
     };
 
     /*
