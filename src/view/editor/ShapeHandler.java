@@ -32,6 +32,7 @@ public class ShapeHandler {
     protected double previouslySelectedX, previouslySelectedY; // a line needs 2 points so last choice is saved
     protected double thirdSelectedX, thirdSelectedY; // since a triangle need three points
     protected boolean waitingForMoreCoordinate = false;
+    protected boolean drawnFromToolbar = false;
 
     ContextMenu shapeContextMenu;
     Canvas canvas;
@@ -159,6 +160,7 @@ public class ShapeHandler {
         } else {
             shape.setFill(Color.valueOf(editorController.fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(editorController.strokeColour.getValue().toString()));
+            drawnFromToolbar = true;
             editorController.pane.getChildren().add(shape);
             editorController.notifyController(addToController, shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected

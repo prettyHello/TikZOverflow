@@ -1,6 +1,5 @@
 package view.dashboard;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import config.ConfigurationSingleton;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
