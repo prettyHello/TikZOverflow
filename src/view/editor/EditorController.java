@@ -664,21 +664,11 @@ public class EditorController {
     }
 
     /**
-     * Control events in TextArea.
-     *
-     * @param keyEvent
-     */
-    /*public void checkTikzCode(KeyEvent keyEvent) {
-        if(keyEvent.getCode() == KeyCode.ENTER) {
-            String [] lines = tikzTA.getText().split("\\n");
-            String line = lines[lines.length - 1];
-            sendTikzCode(line);
-        }
-    }*/
-
-    /**
      * Detects and handles changes in the TextArea
      *
+     * @param observableValue
+     * @param oldValue
+     * @param newValue
      */
     private ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
         System.out.println("Patata");
@@ -730,14 +720,6 @@ public class EditorController {
             drawnFromToolbar = false;
         }
     };
-
-    /*
-     * \filldraw[fill=black, draw=black] (319.0,75.0) circle [radius=50.0];
-     * \filldraw[fill=red, draw=black] (102.0,199.0) rectangle (177.0,274.0) ;
-     * \filldraw[fill=green, draw=black] (258.0,191.0) -- (167.0,191.0) -- (175.0,96.0) -- cycle;
-     * \draw [black] (292.0,192.0) -- (375.0,347.0) ;
-     * \draw [black,->] (432.0,191.0) -- (509.0,372.0) ;
-     */
 
     /**
      * Translate code line to controller shape and draw it.
