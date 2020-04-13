@@ -96,6 +96,12 @@ public class EditorController {
     private ChoiceBox contextMenuFillColorPicker;
     private ChoiceBox contextMenuDrawColorPicker;
 
+    protected String coordinatePattern;
+    protected String squarePattern;
+    protected String circlePattern;
+    protected String trianglePattern;
+    protected String pathPattern;
+
     public EditorController() {
         this.userUcc = ConfigurationSingleton.getUserUcc();
         this.canvas = ActiveCanvas.getActiveCanvas();
@@ -143,7 +149,14 @@ public class EditorController {
             contextMenuDrawColorPicker.getItems().add(colour);
             colors.add(colour.getValue());
         }
-        colorsPattern = String.join("|", colors);
+
+        // Initialize TikZ regex patterns
+        this.colorsPattern = String.join("|", colors);
+        this.coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
+        this.squarePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern;
+        this.circlePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(\\d+\\.\\d+)\\]";
+        this.trianglePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle";
+        this.pathPattern = "\\\\draw \\[(" + colorsPattern + ")(,->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
 
         // Set start value dropdown to black
         fillColour.setValue(controller.shape.Color.BLACK);
@@ -161,17 +174,11 @@ public class EditorController {
 
         shapeHandler = new ShapeHandler(shapeContextMenu, canvas, this);
 
-        // show shapes at the start(don't have to interact to have thel show up)
+        // show shapes at the start(don't have to interact to have them show up)
         tikzTA.textProperty().addListener(this.handleCodeChange);
         translateToTikz();
         //translateToDraw();
-
-
-        /*tikzTA.textProperty().addListener((obs,old,niu)-> {
-
-        });*/
     }
-
 
     @FXML
     void drawLine() {
@@ -361,57 +368,44 @@ public class EditorController {
     /**
      * Translate canvas to tikz and fill textarea
      */
-    public void translateToTikz() {
-        tikzTA.setText(canvas.toTikZ());
-    }
+    public void translateToTikz() { tikzTA.setText(canvas.toTikZ()); }
 
 
     /**
      * Detects and handles changes in the TextArea
      *
-     * @param observableValue
-     * @param oldValue
-     * @param newValue
      */
     private ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
-        System.out.println("Patata");
+
         if (!shapeHandler.drawnFromToolbar) {
-            String coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
-            String squarePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern;
-            String circlePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(\\d+\\.\\d+)\\]";
-            String trianglePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle";
-            String pathPattern = "\\\\draw \\[(" + colorsPattern + ")(,->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
-
-            ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(
-                    squarePattern, circlePattern, trianglePattern, pathPattern));
-
+            ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
             String[] lines = newValue.split("\\n");
             List<String> al = Arrays.asList(lines);
 
-            boolean lineCorrect = false;
+            boolean linesCorrect = false;
             int incorrectLineNum = -1;
             Pattern p;
             Matcher m;
             for (String line : lines) {
                 p = null;
                 m = null;
-                lineCorrect = false;
+                linesCorrect = false;
                 for (String pattern : patternsArray) {
                     p = Pattern.compile(pattern);
                     m = p.matcher(line);
                     if (m.find())
-                        lineCorrect = true;
+                        linesCorrect = true;
                 }
-                if (!lineCorrect) {
+                if (!linesCorrect) {
                     incorrectLineNum = al.indexOf(line);
                     break;
                 }
             }
-            if (lineCorrect) {
+            if (linesCorrect) {
                 canvas.clear();
                 pane.getChildren().clear();
                 for (String line : lines) {
-                    sendTikzCode(line);
+                    shapeHandler.sendTikzCode(line);
                 }
             }
             else {
@@ -424,93 +418,6 @@ public class EditorController {
         }
     };
 
-    /**
-     * Translate code line to controller shape and draw it.
-     * @param line
-     */
-    private void sendTikzCode(String line){
-        // Regular expressions of the different shapes
-        String coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
-        String squarePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] "+ coordinatePattern +" (\\w+) " + coordinatePattern;
-        String circlePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] "+ coordinatePattern +" (\\w+) \\[radius=(\\d+\\.\\d+)\\]";
-        String trianglePattern = "\\\\filldraw\\[fill=(\\w+), draw=(\\w+)\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle";
-        String pathPattern = "\\\\draw \\[(\\w+)(,->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
 
-        ArrayList<Pair<String, String>> patternsArray = new ArrayList<Pair<String, String>>(Arrays.asList(
-                new Pair<>(squarePattern, SQUARE),
-                new Pair<>(circlePattern, CIRCLE),
-                new Pair<>(trianglePattern, TRIANGLE),
-                new Pair<>(pathPattern, "PATH")
-        ));
-
-        // Find what shape has been created
-        String shapeType = null;
-        Pattern p = null;
-        Matcher m = null;
-        for (Pair<String, String> pattern: patternsArray) {
-            p = Pattern.compile(pattern.getKey());
-            m = p.matcher(line);
-            if (m.find()) {
-                shapeType = pattern.getValue();
-                break;
-            }
-        }
-
-        if (shapeType != null) {
-            controller.shape.Color fillColor = null, drawColor = null;
-            if (shapeType.equals(SQUARE) || shapeType.equals(CIRCLE) || shapeType.equals(TRIANGLE)) {
-                fillColor = controller.shape.Color.get(m.group(1));
-                drawColor = controller.shape.Color.get(m.group(2));
-            }
-            else if (shapeType.equals("PATH")) {
-                drawColor = controller.shape.Color.get(m.group(1));
-            }
-
-            // Process new shape
-            controller.shape.Shape shapeToDraw = null;
-            switch (shapeType) {
-                case SQUARE: {
-                    Coordinates origin = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
-                    Coordinates end = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
-
-                    shapeToDraw = new Square(true, true, drawColor, fillColor, origin, end, canvas.getIdForNewShape());
-                    break;
-                }
-                case CIRCLE: {
-                    Coordinates center = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
-                    Float radius = Float.parseFloat(m.group(6));
-
-                    shapeToDraw = new controller.shape.Circle(true, true, drawColor, fillColor, center, radius, canvas.getIdForNewShape());
-                    break;
-                }
-                case TRIANGLE: {
-                    Coordinates p1 = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
-                    Coordinates p2 = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
-                    Coordinates p3 = new Coordinates(Double.parseDouble(m.group(7)), Double.parseDouble(m.group(8)));
-
-                    shapeToDraw = new controller.shape.Triangle(true, true, drawColor, fillColor, p1, p2, p3, canvas.getIdForNewShape());
-                    break;
-                }
-                case "PATH": {
-                    Coordinates begin = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
-                    Coordinates end = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
-
-                    if (m.group(2) == null) {
-                        shapeToDraw = new controller.shape.Line(begin, end, drawColor, canvas.getIdForNewShape());
-                    }
-                    else {
-                        shapeToDraw = new controller.shape.Arrow(begin, end, drawColor, canvas.getIdForNewShape());
-                    }
-                    break;
-                }
-                default:
-                    break;
-            };
-            if (shapeToDraw != null) {
-                shapeHandler.handleDraw(shapeToDraw);
-                canvas.addShape(shapeToDraw);
-            }
-        }
-    }
 }
 

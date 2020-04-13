@@ -10,9 +10,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.util.Pair;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
 
@@ -111,7 +115,10 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case TRIANGLE_POINT3:
-                addToController = new controller.shape.Triangle(new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                Coordinates pt1 = new Coordinates(selectedX, selectedY);
+                Coordinates pt2 = new Coordinates(previouslySelectedX, previouslySelectedY);
+                Coordinates pt3 = new Coordinates(thirdSelectedX, thirdSelectedY);
+                addToController = new controller.shape.Triangle(pt1, pt2, pt3, canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
@@ -319,6 +326,89 @@ public class ShapeHandler {
                 }
             } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                 shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, mouseEvent.getScreenX(), mouseEvent.getScreenY()));
+            }
+        }
+    }
+
+    /**
+     * Translate code line to controller shape and draw it.
+     * @param line
+     */
+    protected void sendTikzCode(String line){
+
+        ArrayList<Pair<String, String>> patternsArray = new ArrayList<Pair<String, String>>(Arrays.asList(
+                new Pair<>(editorController.squarePattern, SQUARE),
+                new Pair<>(editorController.circlePattern, CIRCLE),
+                new Pair<>(editorController.trianglePattern, TRIANGLE),
+                new Pair<>(editorController.pathPattern, "PATH")
+        ));
+
+        // Find what shape has been created
+        String shapeType = null;
+        Pattern p = null;
+        Matcher m = null;
+        for (Pair<String, String> pattern: patternsArray) {
+            p = Pattern.compile(pattern.getKey());
+            m = p.matcher(line);
+            if (m.find()) {
+                shapeType = pattern.getValue();
+                break;
+            }
+        }
+
+        if (shapeType != null) {
+            controller.shape.Color fillColor = null, drawColor = null;
+            if (shapeType.equals(SQUARE) || shapeType.equals(CIRCLE) || shapeType.equals(TRIANGLE)) {
+                fillColor = controller.shape.Color.get(m.group(1));
+                drawColor = controller.shape.Color.get(m.group(2));
+            }
+            else if (shapeType.equals("PATH")) {
+                drawColor = controller.shape.Color.get(m.group(1));
+            }
+
+            // Process new shape
+            controller.shape.Shape shapeToDraw = null;
+            switch (shapeType) {
+                case SQUARE: {
+                    Coordinates origin = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
+                    Coordinates end = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
+
+                    shapeToDraw = new Square(true, true, drawColor, fillColor, origin, end, canvas.getIdForNewShape());
+                    break;
+                }
+                case CIRCLE: {
+                    Coordinates center = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
+                    Float radius = Float.parseFloat(m.group(6));
+
+                    shapeToDraw = new controller.shape.Circle(true, true, drawColor, fillColor, center, radius, canvas.getIdForNewShape());
+                    break;
+                }
+                case TRIANGLE: {
+                    Coordinates p1 = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
+                    Coordinates p2 = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
+                    Coordinates p3 = new Coordinates(Double.parseDouble(m.group(7)), Double.parseDouble(m.group(8)));
+
+                    shapeToDraw = new controller.shape.Triangle(true, true, drawColor, fillColor, p1, p2, p3, canvas.getIdForNewShape());
+                    break;
+                }
+                case "PATH": {
+                    Coordinates begin = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
+                    Coordinates end = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
+
+                    if (m.group(2) == null) {
+                        shapeToDraw = new controller.shape.Line(begin, end, drawColor, canvas.getIdForNewShape());
+                    }
+                    else {
+                        shapeToDraw = new controller.shape.Arrow(begin, end, drawColor, canvas.getIdForNewShape());
+                    }
+                    break;
+                }
+                default:
+                    break;
+            };
+            if (shapeToDraw != null) {
+                handleDraw(shapeToDraw);
+                canvas.addShape(shapeToDraw);
             }
         }
     }
