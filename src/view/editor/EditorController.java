@@ -2,28 +2,17 @@ package view.editor;
 
 import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
-import controller.Canvas.ActiveProject;
 import controller.Canvas.Canvas;
-import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
 import controller.UCC.UserUCC;
-import controller.shape.Arrow;
 import controller.shape.Coordinates;
 import controller.shape.Square;
-import controller.shape.Triangle;
-import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -31,14 +20,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import utilities.exceptions.FatalException;
 import javafx.util.Pair;
-import model.SaveObject;
-import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -47,10 +31,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static utilities.ColorUtils.getColorNameFromRgb;
+import static utilities.Utility.showAlert;
 
 /**
  * This class is used to handle drawings and their corresponding tikz translation.
- * Could be split in two classes, one for translation, one for drawing if this controller gets too long
+ *
  */
 public class EditorController {
 
@@ -382,16 +367,6 @@ public class EditorController {
 
 
     /**
-     * Translate controller shapes in diagram.
-     */
-    private void translateToDraw () {
-
-        for (controller.shape.Shape shape : canvas.getShapes()) {
-            shapeHandler.handleDraw(shape);
-        }
-    }
-
-    /**
      * Detects and handles changes in the TextArea
      *
      * @param observableValue
@@ -400,7 +375,7 @@ public class EditorController {
      */
     private ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
         System.out.println("Patata");
-        if (!drawnFromToolbar) {
+        if (!shapeHandler.drawnFromToolbar) {
             String coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
             String squarePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern;
             String circlePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(\\d+\\.\\d+)\\]";
@@ -445,7 +420,7 @@ public class EditorController {
             }
         }
         else {
-            drawnFromToolbar = false;
+            shapeHandler.drawnFromToolbar = false;
         }
     };
 
@@ -532,16 +507,10 @@ public class EditorController {
                     break;
             };
             if (shapeToDraw != null) {
-                handleDraw(shapeToDraw);
+                shapeHandler.handleDraw(shapeToDraw);
                 canvas.addShape(shapeToDraw);
             }
         }
-    }
-
-    private String peek(String search, String line){
-        String x ="";
-        x = line.substring(line.indexOf(search)+1);
-        return x;
     }
 }
 
