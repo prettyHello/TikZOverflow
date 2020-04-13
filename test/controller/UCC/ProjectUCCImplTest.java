@@ -1,54 +1,140 @@
 package controller.UCC;
 
 import config.TestBusinessConfigurationSingleton;
+import controller.Canvas.ActiveProject;
+import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
-import model.DALServices;
-import model.ProjectDAO;
+import controller.factories.ProjectFactory;
+import controller.factories.UserFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import utilities.exceptions.BizzException;
+import utilities.exceptions.FatalException;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ProjectUCCImplTest {
+//TODO fix later
 
-    DALServices dalServices;
-    ProjectDAO projectDAO;
-    ProjectUCC projectUCC;
-    UserDTO userDTO;
+class ProjectUCCImplTest {
+
+    ProjectFactory projectFactory;
+    UserFactory userFactory;
+    ProjectUCC projectUcc;
+    UserUCC userUcc;
 
     @BeforeEach
-    void setUp() {
+    void setUpStart() {
         TestBusinessConfigurationSingleton.getInstance();
-        this.dalServices = TestBusinessConfigurationSingleton.getDalServices();
-        this.projectDAO = TestBusinessConfigurationSingleton.getProjectDAO();
-        this.projectUCC = TestBusinessConfigurationSingleton.getProjectUCC();
-        this.userDTO = TestBusinessConfigurationSingleton.getUserFactory().createUser(69, "t", "t","t@wsrdgw.com","0475332116","t","t", "08-03-2020 17:18:00");
+        this.projectFactory = TestBusinessConfigurationSingleton.getProjectFactory();
+        this.userFactory = TestBusinessConfigurationSingleton.getUserFactory();
+        this.projectUcc = TestBusinessConfigurationSingleton.getProjectUCC();
+        this.userUcc = TestBusinessConfigurationSingleton.getUserUcc();
+    }
+
+    @Test
+    void createFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.create(null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void exportFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.export(null,null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void loadFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.load(null,null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void loadConnectedUser(){
+        ConnectedUser.deleteConnectedUser();
+        UserDTO userDto = this.userFactory.createUser(10,"test", "test","e@mail.ulb","0472345261","blablabla","blablabla","blablabla");
+        ConnectedUser.setConnectedUser(userDto);
+        ProjectDTO projectDTO = this.projectFactory.createProject();
+        projectDTO.setProjectName("testProject");
+        ProjectDTO result = projectUcc.load(null,null);
+        assertTrue(result.getProjectId() == projectDTO.getProjectId());
+    }
+
+    @Test
+    void deleteFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.delete(null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void saveFatal(){
+        assertThrows(FatalException.class, () -> {
+            ActiveProject.setActiveProject(null);
+            projectUcc.save();
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void createProjectAndGetCanvas(){
+        //todo
+    }
+
+    @Test
+    void setActiveFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.setActive(null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void getOwnedProjectsFatal(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.create(null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    @Test
+    void getBackListOfProject(){
+        assertThrows(FatalException.class, () -> {
+            projectUcc.create(null);
+        }, "check that the ucc don't catch the fatalException coming from the Dao");
+    }
+
+    /*
+    @Test
+    void setActiveFatal(){
 
     }
 
     @Test
-    void createTest() {
-        ConnectedUser.setConnectedUser(userDTO);
-        assertThrows(BizzException.class, () -> {
-            projectUCC.createNewProject("test");
-            projectUCC.createNewProject("test");
-        }, "Error if a project name is already in use");
+    void setActiveFatal(){
+
     }
 
     @Test
-    void createTest_NullArg() {
-        ConnectedUser.setConnectedUser(userDTO);
-        assertThrows(IllegalArgumentException.class, () -> {
-            projectUCC.createNewProject(null);
-        }, "Error if a project name argument is null");
+    void setActiveFatal(){
+
     }
 
     @Test
-    void createTest_EmptyArg() {
-        ConnectedUser.setConnectedUser(userDTO);
-        assertThrows(IllegalArgumentException.class, () -> {
-            projectUCC.createNewProject("");
-        }, "Error if a project name argument is empty");
-    }    
+    void setActiveFatal(){
+
+    }
+
+    @Test
+    void setActiveFatal(){
+
+    }
+
+    @Test
+    void setActiveFatal(){
+
+    }
+    */
 }

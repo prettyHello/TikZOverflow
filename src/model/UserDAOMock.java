@@ -17,11 +17,6 @@ public class UserDAOMock implements UserDAO {
     }
 
     @Override
-    public UserDTO find(UserDTO obj) {
-        return null;
-    }
-
-    @Override
     public void create(UserDTO obj) {
     }
 

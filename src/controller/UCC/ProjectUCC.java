@@ -1,58 +1,67 @@
 package controller.UCC;
 
+import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
+import controller.DTO.UserDTO;
 import utilities.exceptions.BizzException;
+import utilities.exceptions.FatalException;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
+import java.util.ArrayList;
 
 /**
- * Controller that handles operations on projects
+ * Use Case Controller that handles operations on projects
  */
 public interface ProjectUCC {
 
     /**
-     * Rename imported project with input provided by the user
-     *
-     * @param projectName    folder to be rename
-     * @param NewProjectName new folder name
-     */
-    void renameFolderProject(File projectName, File NewProjectName);
-
-    /**
-     * retrieve information for a given project & user
-     *
-     * @param projectName       project name
-     * @param folderDestination path to the project folder
-     * @param userId            project owner
-     * @return
-     */
-    ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId);
-
-    /**
-     * retrieve information for a given project id
-     *
-     * @param projet the DTO containing the id of the project
-     * @return the associated DTO
-     */
-    ProjectDTO get(ProjectDTO projet);
-
-    /**
      * Creates a new project on disk and stores its path in the database
      *
-     * @param projectName the name of the project
-     * @throws BizzException if the project already exists
-     * @throws IOException   if IO operations fail
+     * @param dto containing the projectName
+     * @throws BizzException
+     * @throws FatalException
      */
-    void createNewProject(String projectName) throws BizzException, IOException;
+    void create(ProjectDTO dto) throws BizzException, FatalException;
 
     /**
-     * Creates a new project on disk and stores its path in the database from a specified import
-     *
-     * @param projectDTO the path to the archive to import
-     * @throws BizzException if the project in the archive has a problem or if a similar project already exists
-     * @throws IOException   if an error occurred during finding/opening the archive
+     * compress and export a selected project
+     * @param dto use the id in dto to get the values through the model
+     * @param selectedFile the selected file
      */
-    void createFromImport(ProjectDTO projectDTO) throws BizzException, IOException;
+    void export(File selectedFile, ProjectDTO dto) throws FatalException;
+
+    /**
+     * Import the selected file as a project
+     * @param selectedFile
+     * @throws FatalException
+     */
+    ProjectDTO load(File selectedFile, ProjectDTO projectDto) throws FatalException;
+
+    /**
+     * Delete the given project
+     * @param dto with the ownerId and the projectName
+     * @throws FatalException
+     */
+    void delete(ProjectDTO dto) throws FatalException;
+
+    /**
+     * Save the ActiveCanvas
+     * @throws FatalException
+     */
+    void save() throws FatalException;
+
+    /**
+     * Tell to ActiveProject which project is active and send to ActiveCanvas the corresponding canvas
+     * @param dto project to be marked as active
+     * @throws FatalException Transmit the eventual FatalException sent by the Model to the view
+     */
+    void setActive(ProjectDTO dto) throws FatalException;
+
+    /**
+     * Return the list of projects owned by a user
+     * @param dto the User whose project list we wants
+     * @return the list of projects owned by that user
+     * @throws FatalException Transmit the eventual FatalException sent by the Model to the view
+     */
+    ArrayList<ProjectDTO> getOwnedProjects(UserDTO dto) throws FatalException;
 }

@@ -1,10 +1,11 @@
 package controller.UCC;
 
+import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.ActiveProject;
+import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
-import controller.factories.ProjectFactoryImpl;
 import model.DALServices;
 import model.DAO;
 import model.ProjectDAO;
@@ -13,97 +14,97 @@ import utilities.exceptions.BizzException;
 import utilities.exceptions.FatalException;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+
+import static utilities.Utility.checkObjects;
+import static utilities.Utility.checkString;
 
 /**
  * {@inheritDoc}
  */
 public class ProjectUCCImpl implements ProjectUCC {
+    private String rootFolder = File.separator + "ProjectTikZ" + File.separator;
 
-    private final String ContentTextImport = "impossible to import, name contains unauthorized characters... ";
-    private String rootProject = File.separator + "ProjectTikZ" + File.separator;
-
+    private UserUCC userUcc = ConfigurationSingleton.getUserUcc();
     private final DALServices dal;
-    private final DAO<ProjectDTO> projectDAO;
+    private final ProjectDAO projectDAO;
 
     public ProjectUCCImpl(DALServices dalServices, DAO<ProjectDTO> projectDAO) {
         this.dal = dalServices;
-        this.projectDAO = projectDAO;
+        this.projectDAO = (ProjectDAO) projectDAO;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void renameFolderProject(File projectName, File NewProjectName) {
-        projectName.renameTo(NewProjectName);
+    public void setActive(ProjectDTO dto) throws FatalException {
+        checkObjects(dto);
+        ActiveProject.setActiveProject(this.projectDAO.get(dto));
+        Canvas canvas =  this.projectDAO.loadSavedCanvas(ActiveProject.getActiveProject());
+        ActiveCanvas.setActiveCanvas(canvas);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO getProjectDTO(String projectName, Path folderDestination, int userId) {
-        return new ProjectDTO().
-                setProjectOwnerId(userId)
-                .setProjectName(projectName)
-                .setProjectPath(folderDestination.toString()+ File.separator +projectName)
-                .setCreateDate(Utility.getTimeStamp())
-                .setModificationDate(Utility.getTimeStamp());
+    public void create(ProjectDTO dto) throws BizzException, FatalException {
+        checkObjects(dto);
+        String projectName = dto.getProjectName();
+        checkString(projectName, "project Name");
+        UserDTO owner = ConnectedUser.getConnectedUser();
+        dto.setProjectOwnerId(owner.getUserId());
+        dto.setCreateDate(Utility.getTimeStamp());
+        dto.setModificationDate(Utility.getTimeStamp());
+        String projectPath = System.getProperty("user.home") + rootFolder +"userid_" +owner.getUserId() + File.separator + projectName;
+        dto.setProjectPath(projectPath);
+        this.projectDAO.create(dto);
+
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO get(ProjectDTO project) {
-        return ((ProjectDAO) projectDAO).get(project);
+    public void export(File selectedFile, ProjectDTO dto) throws FatalException {
+        this.projectDAO.export(selectedFile,dto);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createNewProject(String projectName) throws BizzException, FatalException {
-        if(projectName == null || projectName.isEmpty()){
-            throw new IllegalArgumentException("project name can't be null nor empty");
-        }
-
-        try {
-            dal.startTransaction();
-            try {
-                // database
-                UserDTO owner = ConnectedUser.getConnectedUser();
-                String now = Utility.getTimeStamp();
-                String projectPath = System.getProperty("user.home") + rootProject +"userid_" +owner.getUserId() + File.separator + projectName;
-                ProjectDTO projectDTO = new ProjectFactoryImpl().createProject(0, owner.getUserId(), projectName, "", projectPath, now, now);
-                ((ProjectDAO) projectDAO).create(projectDTO);
-
-                // filesystem
-                Files.createDirectories(Paths.get(projectPath));
-
-                ActiveProject.setActiveProject(projectDTO);
-                ActiveCanvas.setNewEmptyCanvas(-1, -1);
-            } catch (BizzException e) {
-                throw new BizzException("Couldn't create project. Project name already in use");
-            } catch (IOException e) {
-                throw new BizzException("Couldn't create project. Error during project folder creation");
-            }
-            dal.commit();
-        } finally {
-            dal.rollback();
-        }
+    public ProjectDTO load(File selectedFile, ProjectDTO projectDTO) throws FatalException {
+        projectDTO.setCreateDate(Utility.getTimeStamp());
+        projectDTO.setModificationDate(Utility.getTimeStamp());
+        projectDTO.setProjectOwnerId(this.userUcc.getConnectedUser().getUserId());
+        UserDTO userDTO = ConnectedUser.getConnectedUser();
+        return this.projectDAO.load(selectedFile,projectDTO, userDTO);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createFromImport(ProjectDTO projectDTO) throws BizzException, IOException {
-         projectDAO.create(projectDTO);
+    public void delete(ProjectDTO dto) throws FatalException {
+        this.projectDAO.delete(dto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void save() throws FatalException{
+        this.projectDAO.save(ActiveCanvas.getActiveCanvas(),ActiveProject.getActiveProject());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ArrayList<ProjectDTO> getOwnedProjects(UserDTO dto) throws FatalException{
+        return this.projectDAO.getOwnedProjects(dto);
     }
 }
 

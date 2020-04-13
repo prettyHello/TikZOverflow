@@ -39,7 +39,7 @@ public class UserDAOImpl implements UserDAO {
             pr = dal.prepareStatement(SQL_LOGIN_USER);
             pr.setString(1, usrAuth.getEmail());
             rs = pr.executeQuery();
-            usr = (UserDTO) this.userFactory.createUser();
+            usr = this.userFactory.createUser();
             if (rs.next()) {
                 usr.setEmail(rs.getString("email"));
                 usr.setFirstName(rs.getString("first_name"));
@@ -64,14 +64,6 @@ public class UserDAOImpl implements UserDAO {
      * {@inheritDoc}
      */
     @Override
-    public UserDTO find(UserDTO obj) {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void create(UserDTO userDTO) throws FatalException {
         PreparedStatement ps = null;
         try {
@@ -86,7 +78,6 @@ public class UserDAOImpl implements UserDAO {
             ps.executeUpdate();
 
         } catch (SQLException exc) {
-            exc.printStackTrace();
             switch (exc.getErrorCode()) {
                 case 19:
                     throw new FatalException("Email address or telephone number already in use.");
