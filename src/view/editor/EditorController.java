@@ -89,7 +89,6 @@ public class EditorController {
 
     public ArrayList<Shape> selectedShapes = new ArrayList<>();
     protected String shapeToDraw = "";
-    protected boolean waitingForMoreCoordinate = false;
     protected Canvas canvas;
     private String colorsPattern = "";
     private ContextMenu shapeContextMenu;
@@ -357,7 +356,7 @@ public class EditorController {
      * @return if not show error
      */
     private boolean checkIfMoreCoordinateRequired() {
-        if (waitingForMoreCoordinate) {
+        if (shapeHandler.waitingForMoreCoordinate) {
             alert("Finish your action", "You need to select a second point", "You need to select a second point to finish the last shape!");
             disableButtonOverlay();
             return true;
