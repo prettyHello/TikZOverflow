@@ -133,4 +133,11 @@ public class CanvasTest {
         String control = toAdd1.print() + "\n" + toAdd2.print() + "\n";
         assertEquals(control, canvas.toTikZ());
     }
+
+    @Test
+    void clear() {
+        canvas.clear();
+        assertTrue(canvas.getShapes().isEmpty());
+        assertEquals(canvas.getIdForNewShape(), 1);
+    }
 }

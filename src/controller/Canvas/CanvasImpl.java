@@ -178,4 +178,10 @@ public class CanvasImpl implements Canvas {
         tikz.append("\n\\end{tikzpicture}\n\\end{document}");
         return tikz.toString();
     }
+
+    @Override
+    public void clear() {
+        this.shapes.clear();
+        this.idCounter = 0;
+    }
 }
