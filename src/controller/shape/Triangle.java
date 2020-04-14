@@ -72,9 +72,9 @@ public class Triangle extends Shape {
     }
 
     @Override
-    Coordinates calcLabelOffset() {
+    public Coordinates calcLabelOffset() {
         Coordinates o1 = originPoint, o2 = secondPoint, o3 = thirdPoint;
-        Coordinates centroid = new Coordinates((o1.getX() + o2.getX() + o3.getX())/3, (o1.getY() + o2.getY() + o3.getY())/3);
+        Coordinates centroid = new Coordinates((o1.getX() + o2.getX() + o3.getX()) / 3, (o1.getY() + o2.getY() + o3.getY()) / 3);
         return new Coordinates(centroid.getX() - o1.getX(), centroid.getY() - o1.getY());
     }
 }

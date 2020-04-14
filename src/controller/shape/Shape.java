@@ -146,5 +146,5 @@ public abstract class Shape implements Serializable {
         }
     }
 
-    abstract Coordinates calcLabelOffset();
+    public abstract Coordinates calcLabelOffset();
 }

@@ -75,7 +75,7 @@ public class Circle extends Shape {
     }
 
     @Override
-    Coordinates calcLabelOffset() {
-        return new Coordinates(0,0);
+    public Coordinates calcLabelOffset() {
+        return new Coordinates(0, 0);
     }
 }

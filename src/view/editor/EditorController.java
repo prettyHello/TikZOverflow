@@ -6,8 +6,6 @@ import controller.Canvas.Canvas;
 import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
 import controller.UCC.UserUCC;
-import controller.shape.Coordinates;
-import controller.shape.Square;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,25 +15,21 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Shape;
 import utilities.exceptions.FatalException;
-import javafx.util.Pair;
 import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Optional;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import static utilities.ColorUtils.getColorNameFromRgb;
 import static utilities.Utility.showAlert;
 
 /**
  * This class is used to handle drawings and their corresponding tikz translation.
- *
  */
 public class EditorController {
 
@@ -100,6 +94,7 @@ public class EditorController {
     protected String circlePattern;
     protected String trianglePattern;
     protected String pathPattern;
+    protected String labelPattern;
 
     public EditorController() {
         this.userUcc = ConfigurationSingleton.getUserUcc();
@@ -152,9 +147,10 @@ public class EditorController {
         // Initialize TikZ regex patterns
         this.colorsPattern = String.join("|", colors);
         this.coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
-        this.squarePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern;
-        this.circlePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(\\d+\\.\\d+)\\]";
-        this.trianglePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle";
+        this.labelPattern = "(node\\[align=center, right=([-+]?[0-9]\\d*.\\d+)cm, above=([-+]?[0-9]\\d*.\\d+)cm\\] \\{([\\w ]+)\\})";
+        this.squarePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
+        this.circlePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(\\+?[1-9][0-9]*.\\d+)\\]" + labelPattern + "?";
+        this.trianglePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
         this.pathPattern = "\\\\draw \\[(" + colorsPattern + ")(,->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
 
         // Set start value dropdown to black
@@ -163,13 +159,15 @@ public class EditorController {
         contextMenuFillColorPicker.setValue(controller.shape.Color.BLACK);
         contextMenuDrawColorPicker.setValue(controller.shape.Color.BLACK);
 
-        MenuItem delete = new MenuItem("delete");
+        MenuItem delete = new MenuItem("Delete");
         delete.setOnAction(t -> shapeHandler.rightClickDeleteShape());
         MenuItem fillColorMenu = new MenuItem("Fill color", contextMenuFillColorPicker);
         fillColorMenu.setOnAction(t -> shapeHandler.setFillColor(Color.valueOf(contextMenuFillColorPicker.getValue().toString())));
         MenuItem drawColorMenu = new MenuItem("Stroke color", contextMenuDrawColorPicker);
         drawColorMenu.setOnAction(t -> shapeHandler.setDrawColor(Color.valueOf(contextMenuDrawColorPicker.getValue().toString())));
-        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu);
+        MenuItem setLabel = new MenuItem("Set label");
+        setLabel.setOnAction(t -> shapeHandler.handleSetLabel());
+        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, setLabel);
 
         shapeHandler = new ShapeHandler(shapeContextMenu, canvas, this);
 
@@ -305,9 +303,9 @@ public class EditorController {
      * @throws ClassNotFoundException
      */
     public void save(ActionEvent actionEvent) {
-        try{
+        try {
             this.projectUcc.save();
-        }catch (FatalException e){
+        } catch (FatalException e) {
             showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
         }
     }
@@ -319,7 +317,7 @@ public class EditorController {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void close(ActionEvent actionEvent){
+    public void close(ActionEvent actionEvent) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Close project");
         alert.setHeaderText("Do you want to save your project?");
@@ -339,9 +337,9 @@ public class EditorController {
             return;
         }
         if (result.get() == buttonTypeOne) {
-            try{
+            try {
                 this.projectUcc.save();
-            }catch (FatalException e){
+            } catch (FatalException e) {
                 showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
             }
         }
@@ -367,56 +365,65 @@ public class EditorController {
     /**
      * Translate canvas to tikz and fill textarea
      */
-    public void translateToTikz() { tikzTA.setText(canvas.toTikZ()); }
+    public void translateToTikz() {
+        tikzTA.setText(canvas.toTikZ());
+    }
 
 
     /**
      * Detects and handles changes in the TextArea
-     *
      */
     private ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
 
         if (!shapeHandler.drawnFromToolbar) {
             ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
             String[] lines = newValue.split("\\n");
-            List<String> al = Arrays.asList(lines);
+            List<String> al = new ArrayList<>(Arrays.asList(lines));
 
-            boolean linesCorrect = false;
+            // Only handle Tikz shape declarations not general headers/footers
+            List<String> blackList = new ArrayList<>(Arrays.asList(
+                    "\\documentclass{article}",
+                    "\\usepackage[utf8]{inputenc}",
+                    "\\usepackage{tikz}",
+                    "\\begin{document}",
+                    "\\begin{tikzpicture}",
+                    "\\end{tikzpicture}",
+                    "\\end{document}",
+                    ""));
+            al.removeIf(blackList::contains);
+
+            boolean linesCorrect = true;
             int incorrectLineNum = -1;
             Pattern p;
             Matcher m;
-            for (String line : lines) {
+            for (String filteredLine : al) {
                 p = null;
                 m = null;
                 linesCorrect = false;
                 for (String pattern : patternsArray) {
                     p = Pattern.compile(pattern);
-                    m = p.matcher(line);
+                    m = p.matcher(filteredLine);
                     if (m.find())
                         linesCorrect = true;
                 }
                 if (!linesCorrect) {
-                    incorrectLineNum = al.indexOf(line);
+                    incorrectLineNum = al.indexOf(filteredLine);
                     break;
                 }
             }
             if (linesCorrect) {
                 canvas.clear();
                 pane.getChildren().clear();
-                for (String line : lines) {
+                for (String line : al) {
                     shapeHandler.sendTikzCode(line);
                 }
-            }
-            else {
+                System.out.println("No incorrect line");
+            } else {
                 // TODO: Highlight wrong line
                 System.out.println("Incorrect line: " + incorrectLineNum);
             }
-        }
-        else {
+        } else {
             shapeHandler.drawnFromToolbar = false;
         }
     };
-
-
 }
-

@@ -72,6 +72,6 @@ public class Rectangle extends Shape {
     public Coordinates calcLabelOffset() {
         double xDiff = endCoordinates.getX() - originCoordinates.getX();
         double yDiff = endCoordinates.getY() - originCoordinates.getY();
-        return new Coordinates(-xDiff / 2, -yDiff / 2);
+        return new Coordinates(xDiff / 2, yDiff / 2);
     }
 }

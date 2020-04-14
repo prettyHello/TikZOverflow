@@ -171,7 +171,7 @@ public class CanvasImpl implements Canvas {
     @Override
     public String toTikZ() {
         StringBuilder tikz = new StringBuilder();
-        tikz.append("\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}");
+        tikz.append("\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n");
         for (Shape shape : shapes) {
             tikz.append(shape.print()).append("\n");
         }

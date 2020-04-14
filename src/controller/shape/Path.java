@@ -142,7 +142,7 @@ import java.util.Iterator;
     }
 
     @Override
-    Coordinates calcLabelOffset() {
+    public Coordinates calcLabelOffset() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 }

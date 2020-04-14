@@ -3,18 +3,21 @@ package view.editor;
 import controller.Canvas.Canvas;
 import controller.shape.Coordinates;
 import controller.shape.Square;
-import javafx.scene.control.*;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Pair;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,7 +45,7 @@ public class ShapeHandler {
     Canvas canvas;
     EditorController editorController;
 
-    public ShapeHandler(ContextMenu shapeContextMenu, Canvas canvas, EditorController editorController){
+    public ShapeHandler(ContextMenu shapeContextMenu, Canvas canvas, EditorController editorController) {
         this.shapeContextMenu = shapeContextMenu;
         this.canvas = canvas;
         this.editorController = editorController;
@@ -50,6 +53,7 @@ public class ShapeHandler {
 
     /**
      * Rightclick dropdown menu, change FillColor
+     *
      * @param color
      */
     public void setFillColor(Color color) {
@@ -76,6 +80,26 @@ public class ShapeHandler {
         }
         editorController.translateToTikz();
     }
+
+    public void handleSetLabel() {
+        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            int shapeId = Integer.parseInt(shape.getId());
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setHeaderText("New shape label: ");
+            Optional<String> result = dialog.showAndWait();
+            String label = result.orElse("");
+            canvas.setShapeLabel(shapeId, label);
+
+            if (editorController.selectedShapes.contains(shape)) {
+                editorController.selectedShapes.remove(shape);
+                if (editorController.selectedShapes.isEmpty())
+                    editorController.disableToolbar(false);
+            }
+        }
+        editorController.translateToTikz();
+    }
+
 
     /**
      * Rightclick dropdown menu, delete shape
@@ -115,9 +139,9 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case TRIANGLE_POINT3:
-                Coordinates pt1 = new Coordinates(selectedX, selectedY);
+                Coordinates pt1 = new Coordinates(thirdSelectedX, thirdSelectedY);
                 Coordinates pt2 = new Coordinates(previouslySelectedX, previouslySelectedY);
-                Coordinates pt3 = new Coordinates(thirdSelectedX, thirdSelectedY);
+                Coordinates pt3 = new Coordinates(selectedX, selectedY);
                 addToController = new controller.shape.Triangle(pt1, pt2, pt3, canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
@@ -181,23 +205,25 @@ public class ShapeHandler {
      *
      * @param shape
      */
-    public void handleDraw (controller.shape.Shape shape) {
+    public void handleDraw(controller.shape.Shape shape) {
         Shape shapeDrawing = null;
+        Text label = null;
 
         switch (shape.getClass().toString()) {
             case "class controller.shape.Circle": {
                 Coordinates circleCenter = ((controller.shape.Circle) shape).getCoordinates();
                 double circleRadius = ((controller.shape.Circle) shape).getRadius();
-
                 shapeDrawing = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
+                label = createLabel(shape, circleCenter.getX(), circleCenter.getY());
                 break;
             }
             case "class controller.shape.Square": {
                 double squareX = ((controller.shape.Square) shape).getOriginCoordinates().getX();
                 double squareY = ((controller.shape.Square) shape).getOriginCoordinates().getY();
                 double squareSize = ((controller.shape.Square) shape).getSize();
-
                 shapeDrawing = new Rectangle(squareX, squareY, squareSize, squareSize);
+
+                label = createLabel(shape, squareX, squareY);
                 break;
             }
             case "class controller.shape.Triangle": {
@@ -209,6 +235,7 @@ public class ShapeHandler {
                 Polygon polygon = new Polygon();
                 polygon.getPoints().addAll(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY());
                 shapeDrawing = polygon;
+                label = createLabel(shape, point1.getX(), point1.getY());
                 break;
             }
             case "class controller.shape.Line": {
@@ -233,13 +260,42 @@ public class ShapeHandler {
                 break;
             }
         }
+
         if (shapeDrawing != null) {
             shapeDrawing.setId(Integer.toString(shape.getId()));
             shapeDrawing.setFill(Color.valueOf(shape.getFillColor().toString()));
             shapeDrawing.setStroke(Color.valueOf(shape.getDrawColor().toString()));
             editorController.pane.getChildren().add(shapeDrawing);
+            if (label != null) {
+                editorController.pane.getChildren().add(label);
+            }
+
             shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
         }
+    }
+
+    /**
+     * Creates a label and places it at the center of the shape
+     *
+     * @param shape  the shape the label belongs to
+     * @param shapeX the x-coordinate of the shape
+     * @param shapeY the y-coordinate of the shape
+     * @return the constructed label
+     */
+    private Text createLabel(controller.shape.Shape shape, double shapeX, double shapeY) {
+        Text label = null;
+        if (shape.getLabel() != null) {
+            label = new Text(shape.getLabel());
+            final Coordinates offset = shape.calcLabelOffset();
+            label.setX(shapeX + offset.getX());
+            label.setY(shapeY + offset.getY());
+            label.setTextAlignment(TextAlignment.CENTER);
+            label.setOnMouseClicked(event -> {
+            });
+            label.addEventHandler(MouseEvent.ANY, event -> {
+            });
+        }
+        return label;
     }
 
     /**
@@ -332,9 +388,10 @@ public class ShapeHandler {
 
     /**
      * Translate code line to controller shape and draw it.
+     *
      * @param line
      */
-    protected void sendTikzCode(String line){
+    protected void sendTikzCode(String line) {
 
         ArrayList<Pair<String, String>> patternsArray = new ArrayList<Pair<String, String>>(Arrays.asList(
                 new Pair<>(editorController.squarePattern, SQUARE),
@@ -347,7 +404,7 @@ public class ShapeHandler {
         String shapeType = null;
         Pattern p = null;
         Matcher m = null;
-        for (Pair<String, String> pattern: patternsArray) {
+        for (Pair<String, String> pattern : patternsArray) {
             p = Pattern.compile(pattern.getKey());
             m = p.matcher(line);
             if (m.find()) {
@@ -361,8 +418,7 @@ public class ShapeHandler {
             if (shapeType.equals(SQUARE) || shapeType.equals(CIRCLE) || shapeType.equals(TRIANGLE)) {
                 fillColor = controller.shape.Color.get(m.group(1));
                 drawColor = controller.shape.Color.get(m.group(2));
-            }
-            else if (shapeType.equals("PATH")) {
+            } else if (shapeType.equals("PATH")) {
                 drawColor = controller.shape.Color.get(m.group(1));
             }
 
@@ -378,7 +434,14 @@ public class ShapeHandler {
                 }
                 case CIRCLE: {
                     Coordinates center = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
-                    Float radius = Float.parseFloat(m.group(6));
+
+                    float radius;
+                    try {
+                        radius = Float.parseFloat(m.group(6));
+                    } catch (NumberFormatException e) {
+                        //todo handle
+                        throw new Error("handle this");
+                    }
 
                     shapeToDraw = new controller.shape.Circle(true, true, drawColor, fillColor, center, radius, canvas.getIdForNewShape());
                     break;
@@ -397,19 +460,60 @@ public class ShapeHandler {
 
                     if (m.group(2) == null) {
                         shapeToDraw = new controller.shape.Line(begin, end, drawColor, canvas.getIdForNewShape());
-                    }
-                    else {
+                    } else {
                         shapeToDraw = new controller.shape.Arrow(begin, end, drawColor, canvas.getIdForNewShape());
                     }
                     break;
                 }
                 default:
-                    break;
-            };
-            if (shapeToDraw != null) {
-                handleDraw(shapeToDraw);
-                canvas.addShape(shapeToDraw);
+                    throw new UnsupportedOperationException("Unknown shape");
             }
+
+            Node node = getNodeInfo(line);
+            if (node != null) {
+                shapeToDraw.setLabel(node.label);
+            }
+
+            handleDraw(shapeToDraw);
+            canvas.addShape(shapeToDraw);
+        }
+    }
+
+    /**
+     * If the given line corresponds to a valid Tikz instruction and contains a node definition at the end it will
+     * return its information, otherwise return null
+     *
+     * @param line the Tikz code line
+     * @return a Node instance that contains the offsets and the text of the label node
+     */
+    private Node getNodeInfo(String line) {
+        Pattern p = Pattern.compile(editorController.labelPattern);
+        Matcher m = p.matcher(line);
+
+        Node node = null;
+        if (m.find()) {
+            try {
+                double rightOffset = Double.parseDouble(m.group(2));
+                double aboveOffset = Double.parseDouble(m.group(3));
+                String label = m.group(4);
+                node = new Node(rightOffset, aboveOffset, label);
+            } catch (NumberFormatException e) {
+                //TODO do stuff
+            }
+        }
+
+        return node;
+    }
+
+    static class Node {
+        double rightOffset;
+        double aboveOffset;
+        String label;
+
+        public Node(double rightOffset, double aboveOffset, String label) {
+            this.rightOffset = rightOffset;
+            this.aboveOffset = aboveOffset;
+            this.label = label;
         }
     }
 }
