@@ -18,22 +18,21 @@ public class Main extends Application {
     /**
      * The start methods tells which javaFX should be shown first (the login page)
      * and setup the minimum size as well as the title of the window.
-     * @param primaryStage
+     *
+     * @param primaryStage the main stage of the application
      */
     @Override
     public void start(Stage primaryStage) {
         ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage);
         viewSwitcher.switchView(ViewName.LOGIN);
 
-        primaryStage.setMinHeight(500.0);
-        primaryStage.setMinWidth(500.0);
         primaryStage.setTitle("Groupe9");
         primaryStage.show();
     }
 
     /**
      * The main function is the first function called
-     * @param args
+     * @param args the command line argments passed to the application
      */
     public static void main(String[] args) {
 

@@ -3,6 +3,7 @@ package view.editor;
 import controller.Canvas.Canvas;
 import controller.shape.Coordinates;
 import controller.shape.Square;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.BlurType;
@@ -14,6 +15,7 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Pair;
+import utilities.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,9 +54,9 @@ public class ShapeHandler {
     }
 
     /**
-     * Rightclick dropdown menu, change FillColor
+     * Right-click dropdown menu, change FillColor
      *
-     * @param color
+     * @param color the color to set
      */
     public void setFillColor(Color color) {
         //TODO use canvas.updateShape to update the shape.
@@ -187,7 +189,8 @@ public class ShapeHandler {
         if (waitingForMoreCoordinate) {
             return;
         } else if (shape == null) { //No shape was previously selected
-            editorController.alert("Select a shape", "You need to select a shape", "You need to select a shape first!");
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Select a shape",
+                    "You need to select a shape", "You need to select a shape first!");
         } else {
             shape.setFill(Color.valueOf(editorController.fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(editorController.strokeColour.getValue().toString()));
@@ -356,13 +359,13 @@ public class ShapeHandler {
     }
 
     /**
-     * Listener leftclick select or unselect
-     * Listener rightclick dropdown delete + change color
+     * Listener left-click select or unselect
+     * Listener right-click dropdown delete + change color
      *
-     * @param mouseEvent
+     * @param mouseEvent the event fired by the user
      */
     void onShapeSelected(MouseEvent mouseEvent) {
-        if (!waitingForMoreCoordinate && editorController.shapeToDraw == "") {
+        if (!waitingForMoreCoordinate && editorController.shapeToDraw.equals("")) {
             Shape shape = (Shape) mouseEvent.getSource();
 
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
@@ -389,11 +392,11 @@ public class ShapeHandler {
     /**
      * Translate code line to controller shape and draw it.
      *
-     * @param line
+     * @param line the line of Tikz code
      */
     protected void sendTikzCode(String line) {
 
-        ArrayList<Pair<String, String>> patternsArray = new ArrayList<Pair<String, String>>(Arrays.asList(
+        ArrayList<Pair<String, String>> patternsArray = new ArrayList<>(Arrays.asList(
                 new Pair<>(editorController.squarePattern, SQUARE),
                 new Pair<>(editorController.circlePattern, CIRCLE),
                 new Pair<>(editorController.trianglePattern, TRIANGLE),

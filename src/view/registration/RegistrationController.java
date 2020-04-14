@@ -26,49 +26,28 @@ public class RegistrationController {
 
     @FXML
     TextField firstnameTF;
-
     @FXML
     TextField lastnameTF;
-
     @FXML
     TextField emailTF;
-
     @FXML
     TextField phoneTF;
-
     @FXML
     PasswordField passwordTF;
-
     @FXML
     PasswordField secondPasswordTF;
-
     @FXML
     Button buttonRegister;
-
     @FXML
     Button buttonCancel;
-
     @FXML
     BorderPane borderPane;
-
     @FXML
     Button buttonEula;
-
     @FXML
     CheckBox checkboxEula;
 
     private ViewSwitcher viewSwitcher;
-
-    private String firstnameText;
-
-    private String lastnameText;
-
-    private String emailText;
-
-    private String phoneText;
-
-    private String passwordText;
-
     private UserFactory userFactory;
     private UserUCC userUcc;
 
@@ -132,11 +111,11 @@ public class RegistrationController {
                 throw new IllegalStateException("EULA not accepted");
             }
             String salt = BCrypt.gensalt(12);
-            this.phoneText = this.phoneTF.getText();
-            this.emailText = this.emailTF.getText();
-            this.passwordText = this.passwordTF.getText();
-            this.lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            this.firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            String phoneText = this.phoneTF.getText();
+            String emailText = this.emailTF.getText();
+            String passwordText = this.passwordTF.getText();
+            String lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            String firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
             String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
             UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
             userUcc.register(user);
@@ -176,7 +155,7 @@ public class RegistrationController {
     /**
      * Required to load view.
      *
-     * @param viewSwitcher
+     * @param viewSwitcher the object that is responsible for the change in views
      */
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;

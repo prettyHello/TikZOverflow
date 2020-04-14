@@ -20,10 +20,9 @@ public class ConfigurationSingleton extends AbstractConfigurationSingleton {
     /**
      * Point d'accès pour l'instance unique du singleton
      *
-     * @return
+     * @return returns the configuration singleton instance
      */
     public static ConfigurationSingleton getInstance() {
         return INSTANCE;
     }
-
 }

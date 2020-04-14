@@ -3,24 +3,23 @@ package view.editor;
 import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.Canvas;
-import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
-import controller.UCC.UserUCC;
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+import utilities.Utility;
 import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,7 +44,6 @@ public class EditorController {
     protected static final String LINE_POINT2 = "LINE_POINT2";
     protected static final String ARROW = "ARROW";
     protected static final String ARROW_POINT2 = "ARROW_POINT2";
-    private UserUCC userUcc;
 
     private ViewSwitcher viewSwitcher;
 
@@ -72,22 +70,25 @@ public class EditorController {
     @FXML
     Button delete;
     @FXML
-    ChoiceBox fillColour;
+    ChoiceBox<controller.shape.Color> fillColour;
     @FXML
-    ChoiceBox strokeColour;
+    ChoiceBox<controller.shape.Color> strokeColour;
     @FXML
     SplitPane mainSplitPane;
     @FXML
     AnchorPane leftAnchorPane;
-
+    @FXML
+    Label lb_coordinates;
+    @FXML
+    BorderPane bp_rootPane;
 
     public ArrayList<Shape> selectedShapes = new ArrayList<>();
     protected String shapeToDraw = "";
     protected Canvas canvas;
     private String colorsPattern = "";
     private ContextMenu shapeContextMenu;
-    private ChoiceBox contextMenuFillColorPicker;
-    private ChoiceBox contextMenuDrawColorPicker;
+    private ChoiceBox<controller.shape.Color> contextMenuFillColorPicker;
+    private ChoiceBox<controller.shape.Color> contextMenuDrawColorPicker;
 
     protected String coordinatePattern;
     protected String squarePattern;
@@ -97,23 +98,11 @@ public class EditorController {
     protected String labelPattern;
 
     public EditorController() {
-        this.userUcc = ConfigurationSingleton.getUserUcc();
         this.canvas = ActiveCanvas.getActiveCanvas();
     }
 
-    /**
-     * Required to load view
-     *
-     * @param viewSwitcher
-     */
-    public void setViewSwitcher(ViewSwitcher viewSwitcher) {
-        this.viewSwitcher = viewSwitcher;
-    }
-
-
     @FXML
     public void initialize() {
-
         // Get coordinate of click in canvas and draw selected shape
         pane.setOnMouseClicked((MouseEvent event) ->
         {
@@ -129,10 +118,8 @@ public class EditorController {
         leftAnchorPane.maxWidthProperty().bind(mainSplitPane.widthProperty().multiply(0.5));
         leftAnchorPane.minWidthProperty().bind(mainSplitPane.widthProperty().multiply(0.5));
 
-
-        contextMenuFillColorPicker = new ChoiceBox();
-        contextMenuDrawColorPicker = new ChoiceBox();
-
+        contextMenuFillColorPicker = new ChoiceBox<>();
+        contextMenuDrawColorPicker = new ChoiceBox<>();
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
         ArrayList<String> colors = new ArrayList<>();
@@ -174,7 +161,17 @@ public class EditorController {
         // show shapes at the start(don't have to interact to have them show up)
         tikzTA.textProperty().addListener(this.handleCodeChange);
         translateToTikz();
-        //translateToDraw();
+
+        pane.setOnMouseMoved(event ->
+                lb_coordinates.setText(String.format("x=%.1f, y=%.1f", event.getX(), event.getY())));
+
+        bp_rootPane.setOnKeyPressed(event -> {
+            if (event.isControlDown() && event.getCode() == KeyCode.S) {
+                this.save();
+            } else if (event.isControlDown() && event.getCode() == KeyCode.W) {
+                this.close();
+            }
+        });
     }
 
     @FXML
@@ -233,7 +230,7 @@ public class EditorController {
     /**
      * Notify Shape controller of javafx shape creation
      *
-     * @param addToController
+     * @param addToController the shape that will be added to the model
      * @param shape           JavaFX shape
      */
     public void notifyController(controller.shape.Shape addToController, Shape shape) {
@@ -281,30 +278,12 @@ public class EditorController {
     }
 
     /**
-     * Show alert
-     *
-     * @param title
-     * @param header
-     * @param Content
+     * Save the project
      */
-    public void alert(String title, String header, String Content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(Content);
-        alert.showAndWait();
-    }
-
-    /**
-     * Save project
-     *
-     * @param actionEvent
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public void save(ActionEvent actionEvent) {
+    public void save() {
         try {
             this.projectUcc.save();
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
         } catch (FatalException e) {
             showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
         }
@@ -312,17 +291,11 @@ public class EditorController {
 
     /**
      * Close project and ask if it needs to be saved
-     *
-     * @param actionEvent
-     * @throws IOException
-     * @throws ClassNotFoundException
      */
-    public void close(ActionEvent actionEvent) {
+    public void close() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Close project");
         alert.setHeaderText("Do you want to save your project?");
-
-        UserDTO user = userUcc.getConnectedUser();
 
         ButtonType buttonTypeOne = new ButtonType("Yes");
         ButtonType buttonTypeTwo = new ButtonType("No");
@@ -335,8 +308,7 @@ public class EditorController {
         }
         if (result.get() == buttonTypeCancel) {
             return;
-        }
-        if (result.get() == buttonTypeOne) {
+        } else if (result.get() == buttonTypeOne) {
             try {
                 this.projectUcc.save();
             } catch (FatalException e) {
@@ -355,7 +327,8 @@ public class EditorController {
      */
     private boolean checkIfMoreCoordinateRequired() {
         if (shapeHandler.waitingForMoreCoordinate) {
-            alert("Finish your action", "You need to select a second point", "You need to select a second point to finish the last shape!");
+            Utility.showAlert(Alert.AlertType.INFORMATION, "Finish your action",
+                    "You need to select a second point", "You need to select a second point to finish the last shape!");
             disableButtonOverlay();
             return true;
         }
@@ -369,12 +342,10 @@ public class EditorController {
         tikzTA.setText(canvas.toTikZ());
     }
 
-
     /**
      * Detects and handles changes in the TextArea
      */
     private ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
-
         if (!shapeHandler.drawnFromToolbar) {
             ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
             String[] lines = newValue.split("\\n");
@@ -397,8 +368,6 @@ public class EditorController {
             Pattern p;
             Matcher m;
             for (String filteredLine : al) {
-                p = null;
-                m = null;
                 linesCorrect = false;
                 for (String pattern : patternsArray) {
                     p = Pattern.compile(pattern);
@@ -426,4 +395,13 @@ public class EditorController {
             shapeHandler.drawnFromToolbar = false;
         }
     };
+
+    /**
+     * Required to load view
+     *
+     * @param viewSwitcher the object responsible for the changing the view presented to the user
+     */
+    public void setViewSwitcher(ViewSwitcher viewSwitcher) {
+        this.viewSwitcher = viewSwitcher;
+    }
 }

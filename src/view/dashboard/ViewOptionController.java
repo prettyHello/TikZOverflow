@@ -1,8 +1,6 @@
 package view.dashboard;
 
 import config.ConfigurationSingleton;
-import controller.Canvas.ActiveCanvas;
-import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
@@ -27,17 +25,9 @@ import java.util.Optional;
 
 import static utilities.Utility.showAlert;
 
-//import model.SaveObject;
-
 //TODO CLASS : rename to something actually correct and not meaningless
 
 public class ViewOptionController extends HBox {
-    private String rootFolder = File.separator + "ProjectTikZ" + File.separator;
-
-    private ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
-    private DashboardController dashboard;
-    private ProjectDTO projectDTO;
-    private ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
 
     @FXML
     private Label projectName = null;
@@ -56,8 +46,14 @@ public class ViewOptionController extends HBox {
     @FXML
     private HBox projectRowHbox = null;
 
+    private String rootFolder = File.separator + "ProjectTikZ" + File.separator;
+
+    private ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
+    private DashboardController dashboard;
+    private ProjectDTO projectDTO;
+    private ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
+
     private UserDTO userDTO;
-    private ProjectDTO projectDto;
     private ViewSwitcher viewSwitcher;
 
     public ViewOptionController(DashboardController dashboard, UserDTO userDTO, ProjectDTO projectDto) {
@@ -87,7 +83,7 @@ public class ViewOptionController extends HBox {
             }catch (FatalException e){
                 showAlert(Alert.AlertType.WARNING, "Project exportation", "Unexpected Error", e.getMessage());
             }
-            showAlert(Alert.AlertType.CONFIRMATION,"Success","Success !!!!!","File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz"));
+            showAlert(Alert.AlertType.CONFIRMATION, "Success", "Success !", "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz"));
         });
 
         deleteBtn.setOnAction(event -> {
@@ -109,7 +105,7 @@ public class ViewOptionController extends HBox {
                 this.projectUCC.setActive(dto);
                 viewSwitcher.switchView(ViewName.EDITOR);
             } catch (FatalException e) {
-                showAlert(Alert.AlertType.WARNING, "Project openning", "Unexpected Error", e.getMessage());
+                showAlert(Alert.AlertType.WARNING, "Project opening", "Unexpected Error", e.getMessage());
             }
         });
     }

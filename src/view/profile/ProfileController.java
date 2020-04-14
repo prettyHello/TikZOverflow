@@ -26,46 +26,26 @@ public class ProfileController {
 
     @FXML
     TextField firstnameTF;
-
     @FXML
     TextField lastnameTF;
-
     @FXML
     TextField emailTF;
-
     @FXML
     TextField phoneTF;
-
     @FXML
     PasswordField passwordTF;
-
     @FXML
     PasswordField secondPasswordTF;
-
     @FXML
     BorderPane borderpane;
-
     @FXML
     Button buttonEula;
-
     @FXML
     Button buttonModify;
-
     @FXML
     Button buttonCancel;
 
-    private String firstnameText;
-
-    private String lastnameText;
-
-    private String emailText;
-
-    private String phoneText;
-
-    private String passwordText;
-
     private ViewSwitcher viewSwitcher;
-
     private UserDTO connectedUser;
     private UserFactory userFactory;
     private UserUCC userUcc;
@@ -122,7 +102,7 @@ public class ProfileController {
             String salt;
             String pw_hash;
             if (passwordTF.getText() != null && !passwordTF.getText().trim().isEmpty()) {
-                passwordText = passwordTF.getText();
+                String passwordText = passwordTF.getText();
                 salt = BCrypt.gensalt(12);
                 pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
             } else {
@@ -133,15 +113,15 @@ public class ProfileController {
                 secondPasswordTF.setText("random");
             }
             Utility.checkUserData(firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), emailTF.getText(), passwordTF.getText(), secondPasswordTF.getText(), phoneTF.getText());
-            phoneText = phoneTF.getText();
-            emailText = emailTF.getText();
+            String phoneText = phoneTF.getText();
+            String emailText = emailTF.getText();
 
-            lastnameText = lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            firstnameText = firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            String lastnameText = lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            String firstnameText = firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
 
             UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
             userUcc.updateUserInfo(user);
-            showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information succesfully updated");
+            showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information successfully updated");
         } catch (BizzException e) {
             //Update failed on dao lvl
             System.out.println("Update Failed on business lvl");
@@ -176,7 +156,7 @@ public class ProfileController {
     /**
      * Required to load view.
      *
-     * @param viewSwitcher
+     * @param viewSwitcher the object responsible for the change in views
      */
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;
