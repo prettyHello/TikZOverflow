@@ -11,6 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -374,8 +376,7 @@ public class EditorController {
      * Detects and handles changes in the TextArea
      */
     private ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
-
-        if (!shapeHandler.drawnFromToolbar) {
+        if (!shapeHandler.drawFromGUI) {
             ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
             String[] lines = newValue.split("\\n");
             List<String> al = new ArrayList<>(Arrays.asList(lines));
@@ -412,18 +413,18 @@ public class EditorController {
                 }
             }
             if (linesCorrect) {
+                System.out.println("No incorrect line");
                 canvas.clear();
                 pane.getChildren().clear();
                 for (String line : al) {
                     shapeHandler.sendTikzCode(line);
                 }
-                System.out.println("No incorrect line");
             } else {
                 // TODO: Highlight wrong line
                 System.out.println("Incorrect line: " + incorrectLineNum);
             }
         } else {
-            shapeHandler.drawnFromToolbar = false;
+            shapeHandler.drawFromGUI = false;
         }
     };
 }
