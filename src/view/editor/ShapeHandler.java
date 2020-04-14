@@ -41,7 +41,7 @@ public class ShapeHandler {
     protected double previouslySelectedX, previouslySelectedY; // a line needs 2 points so last choice is saved
     protected double thirdSelectedX, thirdSelectedY; // since a triangle need three points
     protected boolean waitingForMoreCoordinate = false;
-    protected boolean drawnFromToolbar = false;
+    protected boolean drawFromGUI = false;
 
     ContextMenu shapeContextMenu;
     Canvas canvas;
@@ -65,6 +65,7 @@ public class ShapeHandler {
             shape.setFill(Color.valueOf(color.toString()));
             Color fillColor = (Color) shape.getFill();
             canvas.changeShapeFillColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
+            drawFromGUI = true;
         }
         editorController.translateToTikz();
     }
@@ -79,10 +80,14 @@ public class ShapeHandler {
             shape.setStroke(Color.valueOf(color.toString()));
             Color drawColor = (Color) shape.getStroke();
             canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
+            drawFromGUI = true;
         }
         editorController.translateToTikz();
     }
 
+    /**
+     * Handle rightclick set label option
+     */
     public void handleSetLabel() {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
@@ -90,16 +95,42 @@ public class ShapeHandler {
             TextInputDialog dialog = new TextInputDialog();
             dialog.setHeaderText("New shape label: ");
             Optional<String> result = dialog.showAndWait();
-            String label = result.orElse("");
-            canvas.setShapeLabel(shapeId, label);
+            String labelText = result.orElse("");
+            canvas.setShapeLabel(shapeId, labelText);
 
-            if (editorController.selectedShapes.contains(shape)) {
-                editorController.selectedShapes.remove(shape);
-                if (editorController.selectedShapes.isEmpty())
-                    editorController.disableToolbar(false);
-            }
+            controller.shape.Shape controllerShape = canvas.getShapeById(shapeId);
+            Coordinates labelPoint = getCoordintesForLabel(controllerShape);
+            Text label = createLabel(controllerShape, labelPoint.getX(), labelPoint.getY());
+            editorController.pane.getChildren().add(label);
+            drawFromGUI = true;
         }
         editorController.translateToTikz();
+    }
+
+    /**
+     * Return the point where the label is drawn
+     *
+     * @param shape controller shape to which a label is added.
+     * @return the coordinates of the label placement point.
+     */
+    private Coordinates getCoordintesForLabel (controller.shape.Shape shape) {
+        Coordinates point = null;
+
+        switch (shape.getClass().toString()) {
+            case "class controller.shape.Circle":
+                point = ((controller.shape.Circle) shape).getCoordinates();
+                break;
+            case "class controller.shape.Square":
+                point = ((controller.shape.Square) shape).getOriginCoordinates();
+                break;
+            case "class controller.shape.Triangle":
+                point = ((controller.shape.Triangle) shape).getPoints().get(0);
+                break;
+            default:
+                break;
+        }
+
+        return point;
     }
 
 
@@ -194,7 +225,7 @@ public class ShapeHandler {
         } else {
             shape.setFill(Color.valueOf(editorController.fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(editorController.strokeColour.getValue().toString()));
-            drawnFromToolbar = true;
+            drawFromGUI = true;
             editorController.pane.getChildren().add(shape);
             editorController.notifyController(addToController, shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
