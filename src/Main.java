@@ -1,5 +1,6 @@
 import config.ConfigurationSingleton;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -27,6 +28,10 @@ public class Main extends Application {
         viewSwitcher.switchView(ViewName.LOGIN);
 
         primaryStage.setTitle("Groupe9");
+        Image logo_32 = new Image(Main.class.getResourceAsStream("images/logos/logo_32.png"));
+        Image logo_64 = new Image(Main.class.getResourceAsStream("images/logos/logo_64.png"));
+        Image logo_128 = new Image(Main.class.getResourceAsStream("images/logos/logo_128.png"));
+        primaryStage.getIcons().addAll(logo_32, logo_64, logo_128);
         primaryStage.show();
     }
 
