@@ -403,6 +403,7 @@ public class ShapeHandler {
                 if (editorController.selectedShapes.contains(shape)) { //if already selected => unselect
                     shape.setEffect(null);
                     editorController.selectedShapes.remove(shape);
+                    editorController.translateToTikz();
                     if (editorController.selectedShapes.isEmpty())
                         editorController.disableToolbar(false);
                 } else {                                 //if not selected => add to the list
@@ -413,6 +414,7 @@ public class ShapeHandler {
                     );
                     shape.setEffect(borderEffect);
                     editorController.selectedShapes.add(shape);
+                    editorController.translateToTikz();
                 }
             } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                 shape.setOnContextMenuRequested(t -> shapeContextMenu.show(shape, mouseEvent.getScreenX(), mouseEvent.getScreenY()));

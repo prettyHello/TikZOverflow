@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -28,6 +30,8 @@ import java.util.regex.Pattern;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
 import static utilities.Utility.showAlert;
+import model.HighlightTextColor;
+import org.fxmisc.richtext.LineNumberFactory;
 
 /**
  * This class is used to handle drawings and their corresponding tikz translation.
@@ -58,7 +62,7 @@ public class EditorController {
     @FXML
     public Pane pane;
     @FXML
-    private TextArea tikzTA;
+    public HighlightTextColor tikzTA = new HighlightTextColor() ;
     @FXML
     Button square;
     @FXML
@@ -105,6 +109,9 @@ public class EditorController {
 
     @FXML
     public void initialize() {
+        //add a column of numbers in front of each line of the text box
+        tikzTA.setParagraphGraphicFactory(LineNumberFactory.get(tikzTA));
+
         // Get coordinate of click in canvas and draw selected shape
         pane.setOnMouseClicked((MouseEvent event) ->
         {
@@ -341,7 +348,9 @@ public class EditorController {
      * Translate canvas to tikz and fill textarea
      */
     public void translateToTikz() {
-        tikzTA.setText(canvas.toTikZ());
+        tikzTA.replaceText(canvas.toTikZ());
+        tikzTA.clearStyle(0,tikzTA.getText().length());
+        tikzTA.setSelectedShapes(this.selectedShapes).highlightOnSelect();
     }
 
     /**
