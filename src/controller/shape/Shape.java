@@ -23,6 +23,7 @@ public abstract class Shape implements Serializable {
     private Color drawColor = Color.BLACK;
     private String shapeThicknessKey;
     private  double shapeThicknessValue;
+    private String label = "";
     private int id;
 
     /**
@@ -53,11 +54,11 @@ public abstract class Shape implements Serializable {
         this.fill = fill;
 
         if (fill) {
-            Utility.checkObject(fillColor);
+            Utility.checkObjects(fillColor);
             this.fillColor = fillColor;
         }
         if (draw) {
-            Utility.checkObject(drawColor);
+            Utility.checkObjects(drawColor);
             this.drawColor = drawColor;
         }
         setShapeThicknessKey(shapeThicknessKey);
@@ -119,6 +120,14 @@ public abstract class Shape implements Serializable {
         this.drawColor = drawColor;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     public String getShapeThicknessKey() {
         return shapeThicknessKey.toLowerCase().replace("_", " ");
     }
@@ -151,4 +160,15 @@ public abstract class Shape implements Serializable {
         }
         return returnValue;
     }
+
+    public String printLabel() {
+        if (this.label != null && this.label.length() > 0){
+            Coordinates labelOffset = this.calcLabelOffset();
+            return "node[align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.label + "}";
+        }else{
+            return "";
+        }
+    }
+
+    public abstract Coordinates calcLabelOffset();
 }

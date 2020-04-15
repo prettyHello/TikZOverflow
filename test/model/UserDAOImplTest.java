@@ -172,10 +172,7 @@ class UserDAOImplTest {
             userDAO.delete(user);
             userDAO.get(user);
         }, "getUser still return a user after delete was called");
-
-
     }
-
 
     private UserDTO generateBasicUserDTO() {
         UserDTO user = userFactory.createUser();

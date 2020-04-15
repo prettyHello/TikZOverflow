@@ -16,7 +16,7 @@ public interface DAO<T> {
      * @param obj a generic type object defined in children interfaces (a DTO).
      * @return a generic type object (a DTO).
      */
-    T find(T obj);
+    T get(T obj) throws FatalException;
 
     /**
      * Creates an entry in the database.
@@ -30,14 +30,14 @@ public interface DAO<T> {
      *
      * @param obj a generic type object defined in children interfaces (a DTO).
      */
-    void update(T obj);
+    void update(T obj) throws FatalException;
 
     /**
      * Deletes an entry in the database.
      *
      * @param obj a generic type object defined in children interfaces (a DTO).
      */
-    void delete(T obj);
+    void delete(T obj) throws FatalException;
 
-    T get(T obj);
+
 }

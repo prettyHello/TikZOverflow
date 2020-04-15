@@ -1,42 +1,33 @@
 package view.dashboard;
 
 import config.ConfigurationSingleton;
-import controller.Canvas.ActiveCanvas;
-import controller.Canvas.ActiveProject;
-import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
-import controller.UCC.UserUCC;
-import controller.UCC.ViewOptionUCCImpl;
 import controller.factories.ProjectFactory;
-import controller.factories.ProjectFactoryImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import model.*;
-import utilities.Utility;
+import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
+import static utilities.Utility.showAlert;
 
-//TODO refactor to be MVC compliant
+//TODO CLASS : rename to something actually correct and not meaningless
+
 public class ViewOptionController extends HBox {
-
-    private ProjectUCC projectUCC;
-    private UserUCC userUcc;
-    private DashboardController dashboard;
-    private ProjectDTO projectDTO;
-
 
     @FXML
     private Label projectName = null;
@@ -55,87 +46,82 @@ public class ViewOptionController extends HBox {
     @FXML
     private HBox projectRowHbox = null;
 
-    private UserDTO user;
-    private int project_id;
-    private String rootProject = File.separator + "ProjectTikZ" + File.separator;
-    private ViewOptionUCCImpl viewOptionUCC;
+    private String rootFolder = File.separator + "ProjectTikZ" + File.separator;
+
+    private ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
+    private DashboardController dashboard;
+    private ProjectDTO projectDTO;
+    private ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
+
+    private UserDTO userDTO;
     private ViewSwitcher viewSwitcher;
 
-    public ViewOptionController(DashboardController dashboard, UserDTO userDTO, int project_id) {
-        this.projectUCC = ConfigurationSingleton.getProjectUCC();
-        this.userUcc = ConfigurationSingleton.getUserUcc();
-        this.viewOptionUCC = new ViewOptionUCCImpl();
-        this.project_id = project_id;
+    public ViewOptionController(DashboardController dashboard, UserDTO userDTO, ProjectDTO projectDto) {
+        this.projectDTO = projectDto;
         this.dashboard = dashboard;
-        this.user = userDTO;
+        this.userDTO = userDTO;
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("view/dashboard/viewOption.fxml"));
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
         } catch (IOException e) {
-            e.printStackTrace();
+            showAlert(Alert.AlertType.WARNING, "ViewController", "Unexpected Error", e.getMessage());
         }
     }
 
     public void initialize() {
-
         exportBtn.setOnAction(event -> {
-            DALServices dal = new DALServicesImpl();
-            ProjectFactory projectFactory = new ProjectFactoryImpl();
-            ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory);
-            ProjectDTO chooserProject = ((ProjectDAO) new ProjectDAOImpl(new DALServicesImpl(), new ProjectFactoryImpl())).getSelectedProject(user.getUserId(), projectName.getText());
-
             FileChooser fc = new FileChooser();
             fc.setTitle("Save project as...");
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("tar.gz", "*"));
-            fc.setInitialDirectory(new File(System.getProperty("user.home") + rootProject));
-            fc.setInitialFileName(projectName.getText());
-            File exportDirectory = fc.showSaveDialog(null);
-            File dir = new File(chooserProject.getProjectPath());
-            viewOptionUCC.ExportProject(dir, exportDirectory);
+            fc.setInitialDirectory(new File(System.getProperty("user.home") + this.rootFolder));
+            fc.setInitialFileName(this.projectDTO.getProjectName());
+            File selectedFile = fc.showSaveDialog(null);
+            try {
+                this.projectUCC.export(selectedFile,this.projectDTO);
+            }catch (FatalException e){
+                showAlert(Alert.AlertType.WARNING, "Project exportation", "Unexpected Error", e.getMessage());
+            }
+            showAlert(Alert.AlertType.CONFIRMATION, "Success", "Success !", "File exported to : " + selectedFile.getAbsolutePath().concat(".tar.gz"));
         });
 
         deleteBtn.setOnAction(event -> {
-            viewOptionUCC.deleteProject(projectDTO, dashboard);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("confirmation ?");
+            alert.setHeaderText("once deleted, the "+ this.projectDTO.getProjectName()+" project can no longer be restored");
+            alert.setContentText("are you sure you want to delete");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                this.projectUCC.delete(this.projectDTO);
+                this.dashboard.delete(this.projectDTO);
+            }
         });
 
         editBtn.setOnAction(event -> {
-            ProjectDTO project= new ProjectDTO();
-            project.setProjectId(project_id);
-            UserDTO user = userUcc.getConnectedUser();
-            ProjectDTO activeProject = projectUCC.get(project);
-
-            ActiveProject.setActiveProject(activeProject);
-            SaveObject loader = new SaveObject();
-            Canvas loaded = null;
+            ProjectDTO dto = this.projectFactory.createProject();
+            dto.setProjectId(this.projectDTO.getProjectId());
             try {
-                loaded = loader.open(activeProject.getProjectName(), user);
-            } catch (IOException | ClassNotFoundException e) {
-                Utility.showAlert(Alert.AlertType.ERROR, "Fatal error", "Internal error", "Error during loading of the project");
-            }
-            if (loaded != null) {
-                ActiveCanvas.setActiveCanvas(loaded);
+                this.projectUCC.setActive(dto);
                 viewSwitcher.switchView(ViewName.EDITOR);
+            } catch (FatalException e) {
+                showAlert(Alert.AlertType.WARNING, "Project opening", "Unexpected Error", e.getMessage());
             }
         });
     }
 
-    public ViewOptionController setProject(ProjectDTO projectDTO) {
-        projectDTO.setProjectOwnerId(user.getUserId());
+    public void setProject(ProjectDTO projectDTO) {
+        projectDTO.setProjectOwnerId(userDTO.getUserId());
         this.projectDTO = projectDTO;
         this.projectName.setText(projectDTO.getProjectName());
-        return this;
     }
 
-    public ViewOptionController setExportIcon() {
+    public void setExportIcon() {
         this.exportIcon.setImage(new Image("images/exportIcon.png"));
-        return this;
     }
 
-    public ViewOptionController setDeleteIcon() {
+    public void setDeleteIcon() {
         this.deleteIcon.setImage(new Image("images/deleteIcon.png"));
-        return this;
     }
 
     public void setEditIcon() {

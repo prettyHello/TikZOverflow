@@ -102,6 +102,26 @@ public class CanvasImpl implements Canvas {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setShapeLabel(int shapeId, String label) {
+        Shape toChange = null;
+        for (Shape shape : shapes) {
+            if (shape.getId() == shapeId) {
+                toChange = shape;
+                break;
+            }
+        }
+
+        if (toChange == null) {
+            throw new IllegalArgumentException("canvas does not contain a shape with the specified id");
+        }
+
+        toChange.setLabel(label);
+    }
+
+    /**
      * Change the draw color of a shape
      *
      * @param id        id of the shape
@@ -151,9 +171,17 @@ public class CanvasImpl implements Canvas {
     @Override
     public String toTikZ() {
         StringBuilder tikz = new StringBuilder();
+        tikz.append("\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n");
         for (Shape shape : shapes) {
             tikz.append(shape.print()).append("\n");
         }
+        tikz.append("\n\\end{tikzpicture}\n\\end{document}");
         return tikz.toString();
+    }
+
+    @Override
+    public void clear() {
+        this.shapes.clear();
+        this.idCounter = 0;
     }
 }

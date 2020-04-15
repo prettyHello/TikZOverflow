@@ -5,7 +5,7 @@ package config;
  * This class load the configuration "TestBusiness", meant to be used when testing the business
  */
 public class TestBusinessConfigurationSingleton extends AbstractConfigurationSingleton {
-    private static TestBusinessConfigurationSingleton INSTANCE = new TestBusinessConfigurationSingleton("TestBusiness");
+    private static final TestBusinessConfigurationSingleton INSTANCE = new TestBusinessConfigurationSingleton("TestBusiness");
 
     /**
      * Constructeur privé

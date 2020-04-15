@@ -26,7 +26,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     @Override
     public PreparedStatement prepareStatement(String query) throws SQLException {
         this.openConnection();
-        return this.connection.prepareStatement(query);
+        return connection.prepareStatement(query);
     }
 
     /**
@@ -36,7 +36,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     public void startTransaction() throws  FatalException {
         this.openConnection();
         try {
-            this.connection.setAutoCommit(false);
+            connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new FatalException("DalServices error - transaction: \n\t"+e.getMessage());
         }
@@ -48,8 +48,8 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     @Override
     public void commit() throws  FatalException {
         try {
-            this.connection.commit();
-            this.connection.setAutoCommit(true);
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             throw new FatalException("DalServices error - unable to commit: \n\t"+e.getMessage());
         }
@@ -61,10 +61,10 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      */
     @Override
     public void rollback() throws FatalException {
-        if (this.connection != null){
+        if (connection != null){
             try {
-                this.connection.rollback();
-                this.connection.setAutoCommit(true);
+                connection.rollback();
+                connection.setAutoCommit(true);
             } catch (SQLException e) {
                 throw new FatalException("DalServices error - impossible to rollback: \n\t"+e.getMessage());
             }
@@ -76,15 +76,15 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      */
     @Override
     public void createTables(String name) throws IOException, FatalException {
-        this.DBName = name;
-        this.DBPath = "jdbc:sqlite:" + this.DBName + ".db";
+        DBName = name;
+        DBPath = "jdbc:sqlite:" + DBName + ".db";
         String scriptFilePath = "script.sql";
         BufferedReader reader = null;
         Statement statement = null;
         StringBuilder text = new StringBuilder();
         try {
             this.openConnection();
-            statement = this.connection.createStatement();
+            statement = connection.createStatement();
             // initialize file reader
             reader = new BufferedReader(new FileReader(scriptFilePath));
             String line = null;
@@ -111,7 +111,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      */
     @Override
     public void createTables() throws IOException, FatalException {
-        createTables(this.DBName);
+        createTables(DBName);
 
     }
 
@@ -136,11 +136,11 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      * Note that if the file doesn't exist, SQLite will create one
      */
     private void openConnection() throws FatalException {
-        if (this.connection == null) {
+        if (connection == null) {
             try {
-                this.connection = DriverManager.getConnection(this.DBPath);
+                connection = DriverManager.getConnection(DBPath);
             } catch (Exception e) {
-                throw new FatalException("Database ./"+this.DBName + " open connection impossible: \n\t: "+e.getMessage());
+                throw new FatalException("Database ./"+ DBName + " open connection impossible: \n\t: "+e.getMessage());
             }
 
         }
@@ -150,12 +150,12 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      * This private method safely close the connexion with the database
      */
     private void closeConnection() throws FatalException {
-        if (this.connection != null) {
+        if (connection != null) {
             try {
-                this.connection.close();
-                this.connection = null;
+                connection.close();
+                connection = null;
             } catch (Exception e) {
-                throw new FatalException("Database ./"+this.DBName + " close connection impossible: \n\t: "+e.getMessage());
+                throw new FatalException("Database ./"+ DBName + " close connection impossible: \n\t: "+e.getMessage());
             }
         }
     }

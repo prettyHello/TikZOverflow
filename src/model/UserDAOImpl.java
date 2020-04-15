@@ -13,14 +13,14 @@ import java.sql.SQLException;
  * {@inheritDoc}
  */
 public class UserDAOImpl implements UserDAO {
-    private DALBackEndServices dal;
-    private UserFactory userFactory;
-
 
     private static final String SQL_INSERT_USER = "INSERT INTO users(first_name, last_name, email, phone, password, salt, register_date ) VALUES (?, ?, ?, ?, ?, ?,?)";
     private static final String SQL_LOGIN_USER = "SELECT * FROM users WHERE email=?";
     private static final String SQL_UPDATE_USER = "UPDATE users SET first_name=?, last_name=?, email=?, phone=?, password=?, salt=?  WHERE email=?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE email=?";
+
+    private final DALBackEndServices dal;
+    private final UserFactory userFactory;
 
     public UserDAOImpl(DALServices dalServices, UserFactory userFactory) {
         this.dal = (DALBackEndServices) dalServices;
@@ -39,7 +39,7 @@ public class UserDAOImpl implements UserDAO {
             pr = dal.prepareStatement(SQL_LOGIN_USER);
             pr.setString(1, usrAuth.getEmail());
             rs = pr.executeQuery();
-            usr = (UserDTO) this.userFactory.createUser();
+            usr = this.userFactory.createUser();
             if (rs.next()) {
                 usr.setEmail(rs.getString("email"));
                 usr.setFirstName(rs.getString("first_name"));
@@ -64,37 +64,36 @@ public class UserDAOImpl implements UserDAO {
      * {@inheritDoc}
      */
     @Override
-    public UserDTO find(UserDTO obj) {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void create(UserDTO userDTO) throws FatalException {
         PreparedStatement ps = null;
         try {
             ps = dal.prepareStatement(SQL_INSERT_USER);
-            ps.setString(1, userDTO.getFirstName());
-            ps.setString(2, userDTO.getLastName());
-            ps.setString(3, userDTO.getEmail());
-            ps.setString(4, userDTO.getPhone());
-            ps.setString(5, userDTO.getPassword());
-            ps.setString(6, userDTO.getSalt());
-            ps.setString(7, userDTO.getRegisterDate());
+            fullyFillPreparedStatement(ps, userDTO);
             ps.executeUpdate();
-
         } catch (SQLException exc) {
-            exc.printStackTrace();
-            switch (exc.getErrorCode()) {
-                case 19:
-                    throw new FatalException("Email address or telephone number already in use.");
-                default:
-                    throw new FatalException("An error occurred in create of UserDAO");
+            if (exc.getErrorCode() == 19) {
+                throw new FatalException("Email address or telephone number already in use.");
             }
+            throw new FatalException("An error occurred in create of UserDAO");
 
         }
+    }
+
+    /**
+     * Extracted method that fills a prepared statement with all the content of a UserDTO object
+     *
+     * @param ps      the SQL prepared statement that will need all the information of the DTO
+     * @param userDTO the DTO containing the info of a user
+     * @throws SQLException if an index is invalid for the statement
+     */
+    private void fullyFillPreparedStatement(PreparedStatement ps, UserDTO userDTO) throws SQLException {
+        ps.setString(1, userDTO.getFirstName());
+        ps.setString(2, userDTO.getLastName());
+        ps.setString(3, userDTO.getEmail());
+        ps.setString(4, userDTO.getPhone());
+        ps.setString(5, userDTO.getPassword());
+        ps.setString(6, userDTO.getSalt());
+        ps.setString(7, userDTO.getRegisterDate());
     }
 
     /**
@@ -106,13 +105,7 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement ps = null;
         try {
             ps = dal.prepareStatement(SQL_UPDATE_USER);
-            ps.setString(1, userDTO.getFirstName());
-            ps.setString(2, userDTO.getLastName());
-            ps.setString(3, userDTO.getEmail());
-            ps.setString(4, userDTO.getPhone());
-            ps.setString(5, userDTO.getPassword());
-            ps.setString(6, userDTO.getSalt());
-            ps.setString(7, userDTO.getEmail());
+            fullyFillPreparedStatement(ps, userDTO);
             ps.executeUpdate();
         } catch (SQLException exc) {
             exc.printStackTrace();

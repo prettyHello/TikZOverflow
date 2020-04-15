@@ -10,6 +10,8 @@ import utilities.exceptions.FatalException;
 
 import java.io.File;
 
+import static utilities.Utility.checkObjects;
+
 /**
  * {@inheritDoc}
  */
@@ -17,7 +19,7 @@ public class UserUCCImpl implements UserUCC {
 
     private final DALServices dal;
     private final DAO<UserDTO> userDAO;
-    private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator;
+    private final String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator;
 
     public UserUCCImpl(DALServices dalServices, DAO<UserDTO> userDAO) {
         this.dal = dalServices;
@@ -28,7 +30,7 @@ public class UserUCCImpl implements UserUCC {
      * {@inheritDoc}
      */
     public void login(UserDTO user) throws BizzException, FatalException {
-        utilities.Utility.checkObject(user);
+        checkObjects(user);
         User userDb = (User) userDAO.get(user);
         /* The salt is incorporated into the hash (encoded in a base64-style format).
          * That's why the salt shouldn't actually be saved */
@@ -36,6 +38,7 @@ public class UserUCCImpl implements UserUCC {
             throw new BizzException("Wrong Password");
         }
         ConnectedUser.setConnectedUser(userDb);
+        //TODO Move dans utility
         File file = new File(rootProject +"userid_" +userDb.getUserId());
         if (!file.exists()) {
             if (file.mkdir()) {
@@ -51,9 +54,7 @@ public class UserUCCImpl implements UserUCC {
      */
     @Override
     public void updateUserInfo(UserDTO userDTO) throws BizzException, FatalException {
-        //TODO need to check userDTO with utils
-        //good implementation, a little bit empty
-        utilities.Utility.checkObject(userDTO);
+        checkObjects(userDTO);
         try {
             dal.startTransaction();
             //TODO add business constrains here or remove the transaction/rollback/commit
@@ -93,7 +94,7 @@ public class UserUCCImpl implements UserUCC {
      */
     @Override
     public UserDTO getUserInfo(UserDTO user) throws BizzException, FatalException {
-        utilities.Utility.checkObject(user);
+        checkObjects(user);
         return userDAO.get(user);
     }
 
@@ -102,7 +103,7 @@ public class UserUCCImpl implements UserUCC {
      */
     @Override
     public void register(UserDTO userDTO) throws FatalException {
-        utilities.Utility.checkObject(userDTO);
+        checkObjects(userDTO);
         try {
             dal.startTransaction();
             //TODO add business constrains here or remove the transaction/rollback/commit

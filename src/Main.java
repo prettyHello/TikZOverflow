@@ -1,5 +1,6 @@
 import config.ConfigurationSingleton;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import view.ViewName;
 import view.ViewSwitcher;
@@ -18,22 +19,26 @@ public class Main extends Application {
     /**
      * The start methods tells which javaFX should be shown first (the login page)
      * and setup the minimum size as well as the title of the window.
-     * @param primaryStage
+     *
+     * @param primaryStage the main stage of the application
      */
     @Override
     public void start(Stage primaryStage) {
         ViewSwitcher viewSwitcher = new ViewSwitcher(primaryStage);
         viewSwitcher.switchView(ViewName.LOGIN);
 
-        primaryStage.setMinHeight(500.0);
-        primaryStage.setMinWidth(500.0);
         primaryStage.setTitle("Groupe9");
+        Image logo_32 = new Image(Main.class.getResourceAsStream("images/logos/logo_32.png"));
+        Image logo_64 = new Image(Main.class.getResourceAsStream("images/logos/logo_64.png"));
+        Image logo_128 = new Image(Main.class.getResourceAsStream("images/logos/logo_128.png"));
+        primaryStage.getIcons().addAll(logo_32, logo_64, logo_128);
         primaryStage.show();
     }
 
     /**
      * The main function is the first function called
-     * @param args
+     *
+     * @param args the command line arguments passed to the application
      */
     public static void main(String[] args) {
 
@@ -49,6 +54,4 @@ public class Main extends Application {
 
         launch(args);
     }
-
 }
-

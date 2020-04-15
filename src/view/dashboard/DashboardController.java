@@ -6,59 +6,41 @@ import controller.DTO.UserDTO;
 import controller.UCC.ProjectUCC;
 import controller.UCC.UserUCC;
 import controller.factories.ProjectFactory;
-import controller.factories.UserFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import model.DALServices;
-import model.ProjectDAO;
-import model.ProjectDAOImpl;
 import utilities.Utility;
 import utilities.exceptions.BizzException;
+import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
+
+import static utilities.Utility.showAlert;
 
 /**
  * This class handles the main screen of the program and allows the user to manage through their projects.
  */
 public class DashboardController {
+    final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
+    final ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
+    final ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
 
-    UserFactory userFactory;
-    DALServices dal; //TODO remove once the code was refactored and dal is not used in view anymore
-    UserUCC userUcc;
-    ProjectUCC projectUCC ;
-    ProjectFactory projectFactory;
-
-    DashboardController dbc = this;
+    final DashboardController dbc = this;
     private boolean useAskedName;
-
-    private String popupMessage = "Please enter the name of your Project";
-    private String rootProject = File.separator + "ProjectTikZ" + File.separator;
-    private String ContentTextImport = "impossible to import, this project already exists in: ";
 
     private ViewSwitcher viewSwitcher;
 
     @FXML
     private MenuItem userSetting;
-
     @FXML
     private ListView<ProjectDTO> projectList;
-
-    @FXML
-    private HBox editView;
-
     @FXML
     private ListView<String> optionList;
 
@@ -68,68 +50,16 @@ public class DashboardController {
 
     private UserDTO user;
 
-    public DashboardController() {;
-        projectList = new ListView<>();
-        //load the configuration
-        this.dal = ConfigurationSingleton.getDalServices(); //TODO remove once the code was refactored and dal is not used in view anymore
-        this.userFactory = ConfigurationSingleton.getUserFactory();
-        this.userUcc = ConfigurationSingleton.getUserUcc();
-        this.projectUCC = ConfigurationSingleton.getProjectUCC();
-        this.projectFactory = ConfigurationSingleton.getProjectFactory();
+    public DashboardController() {
     }
-
-    /**
-     * Switch to the user's profile view.
-     */
-    public void handleProfileButton() {
-        viewSwitcher.switchView(ViewName.PROFILE);
-    }
-
-    /**
-     * Required to load view.
-     *
-     * @param viewSwitcher
-     */
-    public void setViewSwitcher(ViewSwitcher viewSwitcher) {
-        this.viewSwitcher = viewSwitcher;
-    }
-
-    /**
-     * Set the projects of the current user.
-     *
-     * @param user
-     */
-    public void setUserProjectView(UserDTO user) {
-        ProjectDAO projectDAO = new ProjectDAOImpl(dal, projectFactory); //TODO remove once error below is fixed
-
-        this.user = user;
-        userSetting.setText(user.getFirstName());
-        ArrayList<ProjectDTO> listOfProject = projectDAO.getProjects(user.getUserId()); //TODO this should be in a real controller, can't call model from view
-        projectObsList = FXCollections.observableArrayList(listOfProject);
-        projectList.setItems(projectObsList);
-    }
-
-    /**
-     * Disconnect current user from the program and go back to login screen.
-     */
-    public void handleDisconnectButton() {
-        viewSwitcher.switchView(ViewName.LOGIN);
-        userUcc.deleteConnectedUser();
-    }
-
 
     public void initialize() {
-
-        UserDTO user = userUcc.getConnectedUser();
-
+        UserDTO userDto = userUcc.getConnectedUser();
         itemList = FXCollections.observableArrayList();
         itemList.add("Your projects");
         itemList.add("Shared with you");
         optionList.setItems(itemList);
-
-        userSetting.setText(user.getFirstName());
-        rootProject = File.separator + "ProjectTikZ" + File.separator +"userid_"+ user.getUserId() + File.separator;
-
+        userSetting.setText(userDto.getFirstName());
 
         projectList.setCellFactory(cell -> new ListCell<ProjectDTO>() {
             @Override
@@ -138,7 +68,7 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    ViewOptionController viewOptionController = new ViewOptionController(dbc, user, item.getProjectId());
+                    ViewOptionController viewOptionController = new ViewOptionController(dbc, userDto, item);
                     viewOptionController.setProject(item);
                     viewOptionController.setExportIcon();
                     viewOptionController.setEditIcon();
@@ -151,76 +81,76 @@ public class DashboardController {
     }
 
     /**
+     * Switch to the user's profile view.
+     */
+    public void handleProfileButton() {
+        this.viewSwitcher.switchView(ViewName.PROFILE);
+    }
+
+    /**
+     * Required to load view.
+     *
+     * @param viewSwitcher the object responsible for the changing of view in the application
+     */
+    public void setViewSwitcher(ViewSwitcher viewSwitcher) {
+        this.viewSwitcher = viewSwitcher;
+    }
+
+    /**
+     * Set the projects of the current user.
+     *
+     * @param userDto contains the data about the user
+     */
+    public void setUserProjectView(UserDTO userDto) {
+        this.user = userDto;
+        userSetting.setText(user.getFirstName());
+        ArrayList<ProjectDTO> listOfProject = this.projectUCC.getOwnedProjects(userDto);
+        projectObsList = FXCollections.observableArrayList(listOfProject);
+        projectList.setItems(projectObsList);
+    }
+
+    /**
+     * Disconnect current user from the program and go back to login screen.
+     */
+    public void handleDisconnectButton() {
+        viewSwitcher.switchView(ViewName.LOGIN);
+        userUcc.deleteConnectedUser();
+    }
+
+    /**
      * Decompress a choose file to user home, display it on the dashboard and save it into the database
      * Untar a choose file to user home, show to the dashboard and save into the database
-     *
-     * @throws BizzException
      */
     @FXML
-    public void ImportProject() throws BizzException {
+    public void ImportProject() {
         FileChooser fc = new FileChooser();
+        ProjectDTO projectDTO = null;
         File selectedFile = fc.showOpenDialog(null);
-
-        if (selectedFile != null) {
-            String extension = selectedFile.getName().substring(selectedFile.getName().length() - 7, selectedFile.getName().length());
-
-            if (extension.equals(".tar.gz")) {
-                String projectName = askProjectName();
-
-                if (projectName != null) {
-                    Path folderDestination = Paths.get(System.getProperty("user.home") + rootProject);
-
-                    if (!Files.exists(folderDestination.resolve(projectName))) {
-                        try {
-                            Files.createDirectories(folderDestination);
-                            Files.createDirectories(folderDestination.resolve("tmp"));
-
-
-                            String Dst = Utility.unTarFile(selectedFile, folderDestination.resolve("tmp"));
-
-                            Files.createDirectories(folderDestination) ;
-                            Files.createDirectories(folderDestination.resolve(projectName)) ;
-
-
-                            Utility.copy(folderDestination.resolve("tmp"+ File.separator+ Dst).toFile(), folderDestination.resolve(projectName).toFile() );
-
-
-                            projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+Dst), new File(folderDestination.toString() + File.separator + File.separator+projectName));
-
-                            projectUCC.renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+Dst+".bin"), new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+projectName+".bin"));
-
-
-                            ProjectDTO newProjectImport = projectUCC.getProjectDTO(projectName, folderDestination, user.getUserId());
-                            projectObsList.add(newProjectImport);
-
-                            Path delFile =   Paths.get(folderDestination.resolve("tmp"+File.separator).toString()) ;
-
-                            System.out.println(delFile);
-
-                            Utility.deleteFile(delFile.toFile());
-                            this.projectUCC.createFromImport(newProjectImport);
-                            setUserProjectView(this.user);
-                        } catch (IOException e) {
-                            throw new BizzException("Could not locate files to import");
-                        }
-                    } else {
-                        new Alert(Alert.AlertType.ERROR, ContentTextImport + folderDestination).showAndWait();
-                        throw new BizzException("Existing Project");
-                    }
-                }
-            } else {
-                new Alert(Alert.AlertType.WARNING, "please select a file with a \".tar.gz\" extension ").showAndWait();
-            }
+        String projectName = askProjectName();
+        if (selectedFile == null)
+            return;
+        if (projectName == null)
+            return;
+        try {
+            projectDTO = this.projectFactory.createProject(projectName);
+            projectDTO = this.projectUCC.load(selectedFile, projectDTO);
+        } catch (BizzException e) {
+            showAlert(Alert.AlertType.WARNING, "Load", "Business Error", e.getMessage());
+        } catch (FatalException e) {
+            showAlert(Alert.AlertType.WARNING, "Load", "Unexpected Error", e.getMessage());
         }
+        this.projectObsList.add(projectDTO);
+        setUserProjectView(this.user);
     }
 
     /**
      * Delete an existing project.
      *
-     * @param data
+     * @param dto contains the information about the project
      */
-    public void delete(ProjectDTO data) {
-        projectObsList.remove(data);
+    public void delete(ProjectDTO dto) {
+        projectObsList.remove(dto);
+        setUserProjectView(this.user);
     }
 
     /**
@@ -230,26 +160,18 @@ public class DashboardController {
     public void newProject() {
         this.useAskedName = false;
         String projectName = askProjectName();
-        if (!this.useAskedName) {
+        if (projectName == null) {// askProjectName return null if user cancelled the action
             return;
         }
-
-        if (projectName != null && projectName.matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
-            try {
-                ProjectDTO newProject = new ProjectDTO();
-                newProject.setProjectName(projectName);
-                newProject.setCreateDate(Utility.getTimeStamp());
-
-                projectUCC.createNewProject(projectName);
-                toEditorView();
-            } catch (BizzException e) {
-                Utility.showAlert(Alert.AlertType.WARNING, "Creation impossible", "Duplicate project name", "A project with ths name already exists. Please specify another one");
-            } catch (IOException e) {
-                //TODO I/O exception
-                e.printStackTrace();
-            }
-        } else {
-            new Alert(Alert.AlertType.ERROR, ContentTextImport).showAndWait();
+        try {
+            ProjectDTO projectDto = this.projectFactory.createProject();
+            projectDto.setProjectName(projectName);
+            projectUCC.create(projectDto);
+            this.viewSwitcher.switchView(ViewName.EDITOR);
+        } catch (BizzException e) {
+            showAlert(Alert.AlertType.WARNING, "newProject", "Business Error", e.getMessage());
+        } catch (FatalException e) {
+            showAlert(Alert.AlertType.WARNING, "newProject", "Unexpected Error", e.getMessage());
         }
     }
 
@@ -264,8 +186,8 @@ public class DashboardController {
 
         final Button confirm = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         confirm.addEventFilter(ActionEvent.ACTION, event -> this.useAskedName = true);
-
         dialog.setTitle("Project name");
+        String popupMessage = "Please enter the name of your Project";
         dialog.setHeaderText(popupMessage);
         dialog.setContentText("Name :");
         projectName = dialog.showAndWait();
@@ -274,17 +196,9 @@ public class DashboardController {
             return projectName.get();
         } else {
             if (this.useAskedName) {
-                new Alert(Alert.AlertType.ERROR, "Please enter a valid name").showAndWait();
+                showAlert(Alert.AlertType.WARNING, "newProject", "Please enter a valid name", "Please enter a valid name");
             }
         }
-
         return null;
-    }
-
-    /**
-     * Change actual view to project editor view.
-     */
-    private void toEditorView() {
-        viewSwitcher.switchView(ViewName.EDITOR);
     }
 }

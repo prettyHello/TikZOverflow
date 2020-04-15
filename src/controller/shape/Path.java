@@ -14,7 +14,7 @@ import java.util.Iterator;
  * eg : \draw [<->]
  * for now, we only support one type of arrow.
  */
- class Path extends Shape {
+ public class Path extends Shape {
     private ArrayList<Coordinates> pathPoints = null;
     private boolean arrowStart = false;
     private boolean arrowEnd = false;
@@ -45,7 +45,7 @@ import java.util.Iterator;
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
         pathPoints.add(origin);
         pathPoints.add(end);
-        Utility.checkObject(pathPoints);
+        Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
 
     }
@@ -62,8 +62,26 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
         super(true, false, drawColor, Color.WHITE, shapeThickness, id);
-        System.out.println("Inside Constructor : "+shapeThickness);
-        Utility.checkObject(pathPoints);
+        Utility.checkObjects(pathPoints);
+        this.pathPoints = pathPoints;
+    }
+
+    /**
+     * Personalised path with multiple points, with arrows and specified color.
+     *
+     * @param origin
+     * @param end
+     * @param arrowStart
+     * @param arrowEnd
+     * @param drawColor
+     * @throws FatalException
+     */
+    public Path(Coordinates origin, Coordinates end, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
+        super(true, false, drawColor, Color.WHITE, id);
+        ArrayList<Coordinates> pathPoints = new ArrayList<>();
+        pathPoints.add(origin);
+        pathPoints.add(end);
+        Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
@@ -74,27 +92,28 @@ import java.util.Iterator;
     /**
      * TODO, not in usage right now, status: it's complicated
      * @return The Tikz code for these coordinates, intended to use in other print function of shapes, like rectangle.
-     * /!\ Print always add an exta " " empty character at the end, no need to add one if concatenating multiple Print result.
+     * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
-        String returnValue = "\\draw ["+super.getDrawColor().value+ ", "+ super.getShapeThicknessKey() +"] ";
+        StringBuilder returnValue = new StringBuilder("\\draw ["+super.getDrawColor().value+ ", "+ super.getShapeThicknessKey() +"] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
-        returnValue += iterator.next().print();
+        returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {
-            returnValue += "-- ";
-            returnValue += iterator.next().print();
+            returnValue.append("-- ");
+            returnValue.append(iterator.next().print());
         }
-        returnValue += ";";
-        return returnValue;
+        returnValue.append(super.printLabel());
+        returnValue.append(";");
+        return returnValue.toString();
     }
 
     public void addCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObject(coordinates);
+        Utility.checkObjects(coordinates);
         this.pathPoints.add(coordinates);
     }
 
     public void rmCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObject(coordinates);
+        Utility.checkObjects(coordinates);
         this.pathPoints.remove(coordinates);
         //Todo check if it works like that, 50% it won't, let's pray.
     }
@@ -113,5 +132,17 @@ import java.util.Iterator;
 
     public void setArrowEnd(boolean arrowEnd) {
         this.arrowEnd = arrowEnd;
+    }
+
+    /**
+     * @return origin and end of Path.
+     */
+    public ArrayList<Coordinates> getPathPoints() {
+        return this.pathPoints;
+    }
+
+    @Override
+    public Coordinates calcLabelOffset() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
