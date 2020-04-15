@@ -15,8 +15,6 @@ import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 
-import java.util.function.UnaryOperator;
-
 import static utilities.Utility.showAlert;
 
 /**
@@ -48,8 +46,8 @@ public class RegistrationController {
     CheckBox checkboxEula;
 
     private ViewSwitcher viewSwitcher;
-    private UserFactory userFactory;
-    private UserUCC userUcc;
+    private final UserFactory userFactory;
+    private final UserUCC userUcc;
 
     public RegistrationController() {
         this.userFactory = ConfigurationSingleton.getUserFactory();
@@ -139,16 +137,7 @@ public class RegistrationController {
      * Filter for the phone number field to only allow integers.
      */
     public void allowIntegersOnly() {
-        UnaryOperator<TextFormatter.Change> filter = change -> {
-            String text = change.getText();
-
-            if (text.matches("[0-9]*")) {
-                return change;
-            }
-
-            return null;
-        };
-        TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+        TextFormatter<String> textFormatter = new TextFormatter<>(Utility.textFormatterUnary());
         phoneTF.setTextFormatter(textFormatter);
     }
 

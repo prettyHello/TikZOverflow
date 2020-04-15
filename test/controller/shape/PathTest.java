@@ -10,7 +10,7 @@ class PathTest {
 
     @Test
     void printSimplePathArrayOfPoints() {
-        ArrayList<Coordinates> coordinates = new ArrayList<Coordinates>();
+        ArrayList<Coordinates> coordinates = new ArrayList<>();
         coordinates.add(new Coordinates(0,0));
         coordinates.add(new Coordinates(2,2));
         coordinates.add(new Coordinates(0,4));
@@ -20,7 +20,7 @@ class PathTest {
 
     @Test
     void printComplexPath2Points() {
-        ArrayList<Coordinates> coordinates = new ArrayList<Coordinates>();
+        ArrayList<Coordinates> coordinates = new ArrayList<>();
         coordinates.add(new Coordinates(0,0));
         coordinates.add(new Coordinates(2,2));
         Path path = new Path(new Coordinates(0,0),new Coordinates(2,2),1,false, false);
@@ -29,7 +29,7 @@ class PathTest {
 
     @Test
     void printComplexPathArrayOfPoints() {
-        ArrayList<Coordinates> coordinates = new ArrayList<Coordinates>();
+        ArrayList<Coordinates> coordinates = new ArrayList<>();
         coordinates.add(new Coordinates(0,0));
         coordinates.add(new Coordinates(2,2));
         coordinates.add(new Coordinates(0,4));

@@ -15,8 +15,6 @@ import utilities.exceptions.FatalException;
 import view.ViewName;
 import view.ViewSwitcher;
 
-import java.util.function.UnaryOperator;
-
 import static utilities.Utility.showAlert;
 
 /**
@@ -46,12 +44,11 @@ public class ProfileController {
     Button buttonCancel;
 
     private ViewSwitcher viewSwitcher;
-    private UserDTO connectedUser;
-    private UserFactory userFactory;
-    private UserUCC userUcc;
+    private final UserDTO connectedUser;
+    private final UserFactory userFactory;
+    private final UserUCC userUcc;
 
     public ProfileController() {
-        //TODO We need a way to know wich user we are talking about
         this.userFactory = ConfigurationSingleton.getUserFactory();
         this.userUcc = ConfigurationSingleton.getUserUcc();
         this.connectedUser = userUcc.getConnectedUser();
@@ -140,16 +137,7 @@ public class ProfileController {
      * Filter for the phone number field to only allow integers.
      */
     public void allowIntegersOnly() {
-        UnaryOperator<TextFormatter.Change> filter = change -> {
-            String text = change.getText();
-
-            if (text.matches("[0-9]*")) {
-                return change;
-            }
-
-            return null;
-        };
-        TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+        TextFormatter<String> textFormatter = new TextFormatter<>(Utility.textFormatterUnary());
         phoneTF.setTextFormatter(textFormatter);
     }
 

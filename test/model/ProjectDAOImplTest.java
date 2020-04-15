@@ -192,10 +192,10 @@ class ProjectDAOImplTest {
         assertNotNull(c, "The canvas return for an existing .bin is empty");
     }
 
-    @Test
     /**
      * This test ensure that if the file .bin was never saved or was deleted, the method create a new canvas
      */
+    @Test
     void workingLoadUnsavedProject(){
         ProjectDTO projectDTO = generateBasicProjectDTO();
         projectDAO.create(projectDTO);

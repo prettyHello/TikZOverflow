@@ -48,12 +48,13 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
 
     /**
      * Load a project previously exported in a tar.gz
+     *
      * @param selectedArchive The archive to import
-     * @param projectDTO DTO with the name of the new project once imported
-     * @param userDTO Active user
+     * @param projectDTO      DTO with the name of the new project once imported
+     * @param userDTO         Active user
      * @return the projectDTO of the newly loaded project
      * @throws FatalException in case of I/O Exception or if a project of that name already exists
-     * @throws BizzException in case of invalid or emppty tar.gz
+     * @throws BizzException  in case of invalid or empty tar.gz
      */
     ProjectDTO load(File selectedArchive, ProjectDTO projectDTO, UserDTO userDTO) throws FatalException, BizzException;
 }

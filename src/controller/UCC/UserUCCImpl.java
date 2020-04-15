@@ -19,7 +19,7 @@ public class UserUCCImpl implements UserUCC {
 
     private final DALServices dal;
     private final DAO<UserDTO> userDAO;
-    private String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator;
+    private final String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator;
 
     public UserUCCImpl(DALServices dalServices, DAO<UserDTO> userDAO) {
         this.dal = dalServices;

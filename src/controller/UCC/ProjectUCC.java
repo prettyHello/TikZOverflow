@@ -1,6 +1,5 @@
 package controller.UCC;
 
-import controller.Canvas.Canvas;
 import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
 import utilities.exceptions.BizzException;

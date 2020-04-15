@@ -37,7 +37,8 @@ public class Main extends Application {
 
     /**
      * The main function is the first function called
-     * @param args the command line argments passed to the application
+     *
+     * @param args the command line arguments passed to the application
      */
     public static void main(String[] args) {
 
@@ -53,6 +54,4 @@ public class Main extends Application {
 
         launch(args);
     }
-
 }
-

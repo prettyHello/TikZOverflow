@@ -15,12 +15,11 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * This class is meant to be used by:
- *      - the tests, in order to instanciate the configuration and Mocks only once
- *      - the Main class in order to build the application only once
- *      - The getters are used by every class to access the implementation hiding behind the interface
+ * - the tests, in order to instantiate the configuration and Mocks only once
+ * - the Main class in order to build the application only once
+ * - The getters are used by every class to access the implementation hiding behind the interface
  * This is done through a pattern singleton
  */
-
 public abstract class AbstractConfigurationSingleton {
     private static String conf_name;
     private static Configuration configuration;
@@ -28,9 +27,9 @@ public abstract class AbstractConfigurationSingleton {
     private static UserFactory userFactory;
     private static DAO<UserDTO> userDAO;
     private static UserUCC userUcc;
-    private  static ProjectFactory projectFactory;
+    private static ProjectFactory projectFactory;
     private static ProjectUCC projectUCC;
-    private  static  ProjectDAO projectDAO;
+    private static ProjectDAO projectDAO;
 
     public static String getConf_name() {
         return conf_name;
@@ -56,15 +55,21 @@ public abstract class AbstractConfigurationSingleton {
         return userUcc;
     }
 
-    public static ProjectFactory getProjectFactory() { return projectFactory; }
+    public static ProjectFactory getProjectFactory() {
+        return projectFactory;
+    }
 
-    public static ProjectUCC getProjectUCC() { return projectUCC; }
+    public static ProjectUCC getProjectUCC() {
+        return projectUCC;
+    }
 
-    public static ProjectDAO getProjectDAO() { return projectDAO; }
-
+    public static ProjectDAO getProjectDAO() {
+        return projectDAO;
+    }
 
     /**
      * Load the specified configuration, used in testing
+     *
      * @param conf_name
      */
     protected void loadConfiguration(String conf_name) {
@@ -77,9 +82,10 @@ public abstract class AbstractConfigurationSingleton {
      * Load the configuration specified in the Main's arguments
      * This is launch at the beginning of the application, in the Main
      * This method is called before JavaFX is launched, thus the error handling can only be a print stack trace
+     *
      * @param args
      */
-    protected void loadConfiguration(String[] args){
+    protected void loadConfiguration(String[] args) {
         try {
             configuration = (Configuration) Class.forName("config.Configuration").getDeclaredConstructor().newInstance();
             configuration.initProperties(args);
@@ -97,6 +103,4 @@ public abstract class AbstractConfigurationSingleton {
             System.exit(1);
         }
     }
-
-
 }

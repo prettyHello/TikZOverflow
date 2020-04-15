@@ -44,7 +44,7 @@ public class Rectangle extends Shape {
 
     /**
      * @return The line of Tikz code representing this object.
-     * /!\ Print always add an exta " " empty character at the end, no need to add one if concatenating multiple Print result.
+     * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
         String returnValue = super.print();

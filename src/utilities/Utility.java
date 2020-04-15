@@ -2,6 +2,7 @@ package utilities;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextFormatter;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -16,6 +17,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -26,12 +28,9 @@ import java.util.zip.GZIPOutputStream;
 //TODO DIVIDE ENTRE VIEWUTILITY ET CONTROLLERUTILITY
 public class Utility {
 
-    public static String ALLOWED_CHARACTERS_PATTERN = "^[_,A-Z|a-z|0-9]+";
-
+    public static final String ALLOWED_CHARACTERS_PATTERN = "^[_,A-Z|a-z|0-9]+";
     public static final String UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
-
     public static final String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
-
     //TODO Change capital letters
     public static final String EMAIL_PATTERN = "(?:[a-zA-Z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 
@@ -39,7 +38,6 @@ public class Utility {
     }
 
     /**
-     *
      * @return the timeStamp
      */
     public static String getTimeStamp() {
@@ -108,12 +106,12 @@ public class Utility {
     /**
      * Check if a String is empty.
      *
-     * @param chaine  String to check.
+     * @param str     String to check.
      * @param varName Name of the variable, to be used in case a BizzException is thrown.
      * @throws BizzException In case the String is empty.
      */
-    public static void checkString(String chaine, String varName) throws BizzException {
-        if (chaine == null || chaine.equals("")) {
+    public static void checkString(String str, String varName) throws BizzException {
+        if (str == null || str.equals("")) {
             throw new BizzException(varName + " is empty");
         }
     }
@@ -124,7 +122,7 @@ public class Utility {
      * @param tarFile  path to source file ".tar.gz"
      * @param destFile destination directory of decompressed file
      */
-    public static String unTarFile(File tarFile, Path destFile) throws FatalException{
+    public static String unTarFile(File tarFile, Path destFile) throws FatalException {
         TarArchiveInputStream tis;
         try {
             FileOutputStream fos;
@@ -162,10 +160,11 @@ public class Utility {
 
     /**
      * Copy a folder and it's content recursively
-     * @param dirSrc The folder to copy
+     *
+     * @param dirSrc  The folder to copy
      * @param dirDest It's new location
      */
-    private static void copyDirectory(File dirSrc, File dirDest){
+    private static void copyDirectory(File dirSrc, File dirDest) {
         if (!dirDest.exists()) {
             dirDest.mkdir();
         }
@@ -179,11 +178,12 @@ public class Utility {
 
     /**
      * Copy a simple file
-     * @param dirSrc The file to copy
+     *
+     * @param dirSrc  The file to copy
      * @param dirDest The new location
      * @throws FatalException if file was deleted or if I/O Exception
      */
-    private static void copyFile(File dirSrc, File dirDest) throws FatalException{
+    private static void copyFile(File dirSrc, File dirDest) throws FatalException {
         try {
             InputStream in = new FileInputStream(dirSrc);
             OutputStream out = new FileOutputStream(dirDest);
@@ -194,9 +194,9 @@ public class Utility {
             }
             in.close();
             out.close();
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             throw new FatalException("Couldn't copy file");
-        }catch(IOException e){
+        } catch (IOException e) {
             throw new FatalException("IOException in copyFile");
         }
     }
@@ -204,18 +204,18 @@ public class Utility {
     /**
      * Copy a folder with all it's files recursively
      * Can copy simple file as well
-     * @param dirSrc The file or folder to copy
+     *
+     * @param dirSrc  The file or folder to copy
      * @param dirDest The location in which to copy said file/folder
      * @throws FatalException if file was deleted or if I/O Exception
      */
     public static void copy(File dirSrc, File dirDest) throws FatalException {
         if (dirSrc.isDirectory()) {
-            copyDirectory(dirSrc,dirDest);
+            copyDirectory(dirSrc, dirDest);
         } else {
-            copyFile(dirSrc,dirDest);
+            copyFile(dirSrc, dirDest);
         }
     }
-
 
     /**
      * Check the data the users enter while registering of modifying theirs information.
@@ -301,12 +301,30 @@ public class Utility {
     }
 
     /**
+     * Used to format textFields in the view
+     *
+     * @return a unary operator that applies a transformation to text
+     */
+    public static UnaryOperator<TextFormatter.Change> textFormatterUnary() {
+        return change -> {
+            String text = change.getText();
+
+            if (text.matches("[0-9]*")) {
+                return change;
+            }
+
+            return null;
+        };
+    }
+
+    /**
      * Delete the give file/directory
+     *
      * @param dir
      * @throws FatalException File permission problem
-     * @throws BizzException No file or directory not empty
+     * @throws BizzException  No file or directory not empty
      */
-    public static void deleteFile(File dir) throws FatalException ,BizzException{
+    public static void deleteFile(File dir) throws FatalException, BizzException {
         if (dir.isDirectory()) {
             File[] listFiles = dir.listFiles();
             if (listFiles != null) {
@@ -330,15 +348,16 @@ public class Utility {
 
     /**
      * Try to Delete the give file/directory, and do nothing if it doesnt exist
+     *
      * @param dir
      * @throws FatalException File permission problem
-     * @throws BizzException No file or directory not empty
+     * @throws BizzException  No file or directory not empty
      */
-    public static void deleteFileSilent(File dir){
-        try{
+    public static void deleteFileSilent(File dir) {
+        try {
             deleteFile(dir);
-        }catch (BizzException e){
-            //delete file only launch a BizzException if the file doesn't exist
+        } catch (BizzException e) {
+            // delete file only launch a BizzException if the file doesn't exist
         }
     }
 
@@ -347,9 +366,9 @@ public class Utility {
      *
      * @param folderProject      path to the folder we need to compress
      * @param fileTarDestination path to destination of the compressed file
+     * @return
      * @throws IOException
      * @throws BizzException
-     * @return
      */
     public static void createTarGz(String folderProject, String fileTarDestination) throws FatalException {
         TarArchiveOutputStream archiveTarGz = null;
@@ -360,8 +379,7 @@ public class Utility {
             archiveTarGz = new TarArchiveOutputStream(outputGZip);
             addFileToArchiveTarGz(folderProject, "", archiveTarGz);
             archiveTarGz.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new FatalException("Impossible to export the project");
         }
     }
@@ -373,7 +391,7 @@ public class Utility {
      * @param parent        parent folder of the file to be added
      * @param archiveTarGz  destination of the file
      */
-    private static void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz)throws FatalException{
+    private static void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) throws FatalException {
         File file = new File(folderProject);
         String entryName = parent + file.getName();
         try {

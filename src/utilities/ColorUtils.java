@@ -11,12 +11,10 @@ import java.util.ArrayList;
 //TODO remove this class during the next refactor
 public class ColorUtils {
 
-    static ArrayList<ColorUtils.ColorName> colorList = new ArrayList<ColorUtils.ColorName>();
+    static final ArrayList<ColorUtils.ColorName> colorList = new ArrayList<>();
 
-    /**
-     * Initialize the color list that we have.
-     */
-    static  {
+    // Initialize the color list that we have.
+    static {
         colorList.add(new ColorUtils.ColorName(controller.shape.Color.RED, 0xFF, 0x00, 0x00));
         colorList.add(new ColorUtils.ColorName(controller.shape.Color.GREEN, 0x00, 0x80, 0x00));
         colorList.add(new ColorUtils.ColorName(controller.shape.Color.BLUE, 0x00, 0x00, 0xFF));
@@ -41,10 +39,10 @@ public class ColorUtils {
     /**
      * Get the closest color name from our list
      *
-     * @param red
-     * @param green
-     * @param blue
-     * @return
+     * @param red   red component
+     * @param green green component
+     * @param blue  blue component
+     * @return the closest color
      */
     public static controller.shape.Color getColorNameFromRgb(double red, double green, double blue) {
         int r = (int) Math.floor(red * 255 + 0.5d);
@@ -78,13 +76,11 @@ public class ColorUtils {
     }
 
     public int colorToHex(Color c) {
-        return Integer.decode("0x"
-                + Integer.toHexString(c.getRGB()).substring(2));
+        return Integer.decode("0x" + Integer.toHexString(c.getRGB()).substring(2));
     }
 
     public controller.shape.Color getColorNameFromColor(Color color) {
-        return getColorNameFromRgb(color.getRed(), color.getGreen(),
-                color.getBlue());
+        return getColorNameFromRgb(color.getRed(), color.getGreen(), color.getBlue());
     }
 
     /**
@@ -94,7 +90,7 @@ public class ColorUtils {
      */
     public static class ColorName {
         public int r, g, b;
-        public controller.shape.Color name;
+        public final controller.shape.Color name;
 
         public ColorName(controller.shape.Color name, int r, int g, int b) {
             this.r = r;
@@ -104,8 +100,7 @@ public class ColorUtils {
         }
 
         public int computeMSE(double pixR, double pixG, double pixB) {
-            return (int) (((pixR - r) * (pixR - r) + (pixG - g) * (pixG - g) + (pixB - b)
-                    * (pixB - b)) / 3);
+            return (int) (((pixR - r) * (pixR - r) + (pixG - g) * (pixG - g) + (pixB - b) * (pixB - b)) / 3);
         }
 
         public int getR() {
@@ -125,4 +120,3 @@ public class ColorUtils {
         }
     }
 }
-

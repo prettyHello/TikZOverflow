@@ -23,9 +23,9 @@ import static utilities.Utility.checkString;
  * {@inheritDoc}
  */
 public class ProjectUCCImpl implements ProjectUCC {
-    private String rootFolder = File.separator + "ProjectTikZ" + File.separator;
+    private final String rootFolder = File.separator + "ProjectTikZ" + File.separator;
 
-    private UserUCC userUcc = ConfigurationSingleton.getUserUcc();
+    private final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
     private final DALServices dal;
     private final ProjectDAO projectDAO;
 
