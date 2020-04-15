@@ -46,10 +46,10 @@ public class HighlightTextColor  extends CodeArea{
      * @return
      */
     private String[] getWordList(String wordListOption) {
-        String[] keyWord = {"filldraw","draw","path","node","begin","tikzstyle","fill","end"}; // Words use by tikz and that will be highlight.
-        String[] keyCharacter = {"\\", ",", "[", "]", "(", ")"} ;
+        String[] keyWord = {"filldraw","draw","path","node","tikzstyle","fill","documentclass","usepackage","begin","end"}; // Words use by tikz and that will be highlight.
+        String[] keyCharacter = {"\\", ",",";", "[", "]", "(", ")", "{", "}", "$","#","%","*"} ;
         String[] shapes = {"circle", "rectangle", "cycle", "->"} ;
-        String[] digit = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"} ;
+        String[] digit = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."} ;
         String[] wordList=null;
 
         switch (wordListOption) {
