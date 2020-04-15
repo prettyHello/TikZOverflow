@@ -1,8 +1,7 @@
-package model;
+package view.editor;
 import controller.Canvas.ActiveCanvas;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.CodeArea;
 import java.util.ArrayList;

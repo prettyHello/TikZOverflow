@@ -8,10 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -30,7 +27,7 @@ import java.util.regex.Pattern;
 
 import static utilities.ColorUtils.getColorNameFromRgb;
 import static utilities.Utility.showAlert;
-import model.HighlightTextColor;
+
 import org.fxmisc.richtext.LineNumberFactory;
 
 /**
