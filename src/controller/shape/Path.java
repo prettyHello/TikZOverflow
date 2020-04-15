@@ -14,7 +14,7 @@ import java.util.Iterator;
  * eg : \draw [<->]
  * for now, we only support one type of arrow.
  */
- class Path extends Shape {
+ public class Path extends Shape {
     private ArrayList<Coordinates> pathPoints = null;
     private boolean arrowStart = false;
     private boolean arrowEnd = false;
@@ -27,7 +27,7 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, int id) throws FatalException {
         super(true, false, id);
-        Utility.checkObject(pathPoints);
+        Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
@@ -38,14 +38,14 @@ import java.util.Iterator;
      * @param id
      * @throws FatalException
      */
-    public Path(Coordinates origin, Coordinates end, int id,boolean arrowStart,boolean arrowEnd) throws FatalException {
+    public Path(Coordinates origin, Coordinates end, int id, boolean arrowStart, boolean arrowEnd) throws FatalException {
         super(true, false, id);
         this.arrowStart = arrowStart;
         this.arrowEnd = arrowEnd;
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
         pathPoints.add(origin);
         pathPoints.add(end);
-        Utility.checkObject(pathPoints);
+        Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
 
     }
@@ -62,7 +62,26 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
         super(true, false, drawColor, Color.WHITE, id);
-        Utility.checkObject(pathPoints);
+        Utility.checkObjects(pathPoints);
+        this.pathPoints = pathPoints;
+    }
+
+    /**
+     * Personalised path with multiple points, with arrows and specified color.
+     *
+     * @param origin
+     * @param end
+     * @param arrowStart
+     * @param arrowEnd
+     * @param drawColor
+     * @throws FatalException
+     */
+    public Path(Coordinates origin, Coordinates end, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
+        super(true, false, drawColor, Color.WHITE, id);
+        ArrayList<Coordinates> pathPoints = new ArrayList<>();
+        pathPoints.add(origin);
+        pathPoints.add(end);
+        Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
@@ -83,17 +102,18 @@ import java.util.Iterator;
             returnValue += "-- ";
             returnValue += iterator.next().print();
         }
+        returnValue += super.printLabel();
         returnValue += ";";
         return returnValue;
     }
 
     public void addCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObject(coordinates);
+        Utility.checkObjects(coordinates);
         this.pathPoints.add(coordinates);
     }
 
     public void rmCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObject(coordinates);
+        Utility.checkObjects(coordinates);
         this.pathPoints.remove(coordinates);
         //Todo check if it works like that, 50% it won't, let's pray.
     }
@@ -112,5 +132,17 @@ import java.util.Iterator;
 
     public void setArrowEnd(boolean arrowEnd) {
         this.arrowEnd = arrowEnd;
+    }
+
+    /**
+     * @return origin and end of Path.
+     */
+    public ArrayList<Coordinates> getPathPoints() {
+        return this.pathPoints;
+    }
+
+    @Override
+    public Coordinates calcLabelOffset() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

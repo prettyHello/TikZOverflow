@@ -10,6 +10,10 @@ public class Arrow extends Path {
         super(origin, end, id, false, true);
     }
 
+    public Arrow(Coordinates origin, Coordinates end, Color drawColor, int id) throws FatalException {
+        super(origin, end,false,true, drawColor, id);
+    }
+
     public String print() {
         StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().value + ",->] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();

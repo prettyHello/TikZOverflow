@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import utilities.Utility;
 import utilities.exceptions.BizzException;
 import utilities.exceptions.FatalException;
@@ -24,33 +24,29 @@ import static utilities.Utility.showAlert;
  * This class handles the process of login of a user.
  */
 public class LoginController {
-    UserFactory userFactory = ConfigurationSingleton.getUserFactory();
-    UserUCC userUcc = ConfigurationSingleton.getUserUcc();
 
     @FXML
     public TextField usernameTF;
-
     @FXML
     public PasswordField passwordTF;
-
     @FXML
     public Button buttonLogin;
-
     @FXML
     public Button buttonCreateAccount;
-
     @FXML
-    public AnchorPane anchorPane;
+    public BorderPane bp_rootPane;
+
+    UserFactory userFactory = ConfigurationSingleton.getUserFactory();
+    UserUCC userUcc = ConfigurationSingleton.getUserUcc();
 
     private ViewSwitcher viewSwitcher;
 
     public LoginController() {
-        ConfigurationSingleton.getInstance();
     }
 
     @FXML
     public void initialize() {
-        anchorPane.setOnKeyPressed(event -> {
+        bp_rootPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 handleLoginButton();
             }
@@ -89,7 +85,7 @@ public class LoginController {
     /**
      * Switch to registration view when the create account button is pressed.
      *
-     * @param event
+     * @param event the event fired by the user
      */
     @FXML
     public void handleCreateAccountButton(ActionEvent event) {
@@ -99,7 +95,7 @@ public class LoginController {
     /**
      * Required to load view.
      *
-     * @param viewSwitcher
+     * @param viewSwitcher the event fired by the user
      */
     public void setViewSwitcher(ViewSwitcher viewSwitcher) {
         this.viewSwitcher = viewSwitcher;

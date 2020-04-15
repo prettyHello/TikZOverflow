@@ -34,7 +34,7 @@ public class Circle extends Shape {
      */
     public Circle(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates coordinates, float radius, int id) throws FatalException, BizzException {
         super(draw, fill, drawColor, fillColor, id);
-        Utility.checkObject(coordinates);
+        Utility.checkObjects(coordinates);
         if (radius <= 0) {
             throw new BizzException("Radius is negative or null");
         }
@@ -48,7 +48,9 @@ public class Circle extends Shape {
      */
     public String print() {
         String returnValue = super.print();
-        returnValue += this.coordinates.print() + "circle [radius=" + this.radius + "];";
+        returnValue += this.coordinates.print() + "circle [radius=" + this.radius + "] ";
+        returnValue += super.printLabel();
+        returnValue += ";";
         return returnValue;
     }
 
@@ -57,7 +59,7 @@ public class Circle extends Shape {
     }
 
     public void setCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObject(coordinates);
+        Utility.checkObjects(coordinates);
         this.coordinates = coordinates;
     }
 
@@ -70,5 +72,10 @@ public class Circle extends Shape {
             throw new BizzException("Radius is negative or null");
         }
         this.radius = radius;
+    }
+
+    @Override
+    public Coordinates calcLabelOffset() {
+        return new Coordinates(0, 0);
     }
 }
