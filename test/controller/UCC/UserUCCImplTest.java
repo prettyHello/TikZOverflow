@@ -3,10 +3,9 @@ package controller.UCC;
 import config.TestBusinessConfigurationSingleton;
 import controller.DTO.UserDTO;
 import controller.factories.UserFactory;
-import utilities.exceptions.FatalException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
+import utilities.exceptions.FatalException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

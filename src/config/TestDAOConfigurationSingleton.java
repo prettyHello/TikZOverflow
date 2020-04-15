@@ -5,7 +5,7 @@ package config;
  * This class load the configuration "TestDAO", meant to be used when unit testing the model
  */
 public class TestDAOConfigurationSingleton extends AbstractConfigurationSingleton {
-    private static TestDAOConfigurationSingleton INSTANCE = new TestDAOConfigurationSingleton("TestDAO");
+    private static final TestDAOConfigurationSingleton INSTANCE = new TestDAOConfigurationSingleton("TestDAO");
 
     /**
      * Private constructor

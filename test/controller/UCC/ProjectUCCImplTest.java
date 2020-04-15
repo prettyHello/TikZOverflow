@@ -6,14 +6,12 @@ import controller.DTO.ProjectDTO;
 import controller.DTO.UserDTO;
 import controller.factories.ProjectFactory;
 import controller.factories.UserFactory;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import utilities.exceptions.FatalException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //TODO fix later
 
@@ -62,7 +60,7 @@ class ProjectUCCImplTest {
         ProjectDTO projectDTO = this.projectFactory.createProject();
         projectDTO.setProjectName("testProject");
         ProjectDTO result = projectUcc.load(null,null);
-        assertTrue(result.getProjectId() == projectDTO.getProjectId());
+        assertEquals(result.getProjectId(), projectDTO.getProjectId());
     }
 
     @Test

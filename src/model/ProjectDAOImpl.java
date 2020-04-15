@@ -28,7 +28,7 @@ import static utilities.Utility.*;
  * {@inheritDoc}
  */
 public class ProjectDAOImpl implements ProjectDAO {
-    private String rootFolder = File.separator + "ProjectTikZ" + File.separator;
+    private final String rootFolder = File.separator + "ProjectTikZ" + File.separator;
 
     private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";

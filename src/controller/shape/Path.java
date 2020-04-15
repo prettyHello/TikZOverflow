@@ -92,19 +92,19 @@ import java.util.Iterator;
     /**
      * TODO, not in usage right now, status: it's complicated
      * @return The Tikz code for these coordinates, intended to use in other print function of shapes, like rectangle.
-     * /!\ Print always add an exta " " empty character at the end, no need to add one if concatenating multiple Print result.
+     * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
-        String returnValue = "\\draw ["+super.getDrawColor().value+"] ";
+        StringBuilder returnValue = new StringBuilder("\\draw[" + super.getDrawColor().value + "] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
-        returnValue += iterator.next().print();
+        returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {
-            returnValue += "-- ";
-            returnValue += iterator.next().print();
+            returnValue.append("-- ");
+            returnValue.append(iterator.next().print());
         }
-        returnValue += super.printLabel();
-        returnValue += ";";
-        return returnValue;
+        returnValue.append(super.printLabel());
+        returnValue.append(";");
+        return returnValue.toString();
     }
 
     public void addCoordinates(Coordinates coordinates) throws FatalException {

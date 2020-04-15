@@ -9,13 +9,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+import org.fxmisc.richtext.LineNumberFactory;
 import utilities.Utility;
 import utilities.exceptions.FatalException;
 import view.ViewName;
@@ -28,16 +28,11 @@ import java.util.regex.Pattern;
 import static utilities.ColorUtils.getColorNameFromRgb;
 import static utilities.Utility.showAlert;
 
-import org.fxmisc.richtext.LineNumberFactory;
-
 /**
  * This class is used to handle drawings and their corresponding tikz translation.
  */
 public class EditorController {
 
-    /**
-     * TODO We need to divide teh fxml so that we have separate controller for this one and the other view
-     */
     protected static final String SQUARE = "SQUARE";
     protected static final String TRIANGLE = "TRIANGLE";
     protected static final String TRIANGLE_POINT2 = "TRIANGLE2";
@@ -49,17 +44,15 @@ public class EditorController {
     protected static final String ARROW_POINT2 = "ARROW_POINT2";
 
     private ViewSwitcher viewSwitcher;
-
     private ShapeHandler shapeHandler;
-
-    private ProjectUCC projectUcc = ConfigurationSingleton.getProjectUCC();
+    private final ProjectUCC projectUcc = ConfigurationSingleton.getProjectUCC();
 
     @FXML
     Pane toolbar;
     @FXML
     public Pane pane;
     @FXML
-    public HighlightTextColor tikzTA = new HighlightTextColor() ;
+    public HighlightTextColor tikzTA = new HighlightTextColor();
     @FXML
     Button square;
     @FXML
@@ -85,7 +78,7 @@ public class EditorController {
     @FXML
     BorderPane bp_rootPane;
 
-    public ArrayList<Shape> selectedShapes = new ArrayList<>();
+    public final ArrayList<Shape> selectedShapes = new ArrayList<>();
     protected String shapeToDraw = "";
     protected Canvas canvas;
     private String colorsPattern = "";
@@ -93,6 +86,8 @@ public class EditorController {
     private ChoiceBox<controller.shape.Color> contextMenuFillColorPicker;
     private ChoiceBox<controller.shape.Color> contextMenuDrawColorPicker;
 
+    protected String intNumber;
+    protected String floatNumber;
     protected String coordinatePattern;
     protected String squarePattern;
     protected String circlePattern;
@@ -139,12 +134,14 @@ public class EditorController {
 
         // Initialize TikZ regex patterns
         this.colorsPattern = String.join("|", colors);
-        this.coordinatePattern = "\\((\\d+\\.\\d+),(\\d+\\.\\d+)\\)";
-        this.labelPattern = "(node\\[align=center, right=([-+]?[0-9]\\d*.\\d+)cm, above=([-+]?[0-9]\\d*.\\d+)cm\\] \\{([\\w ]+)\\})";
-        this.squarePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
-        this.circlePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(\\+?[1-9][0-9]*.\\d+)\\]" + labelPattern + "?";
-        this.trianglePattern = "\\\\filldraw\\[fill=(" + colorsPattern + "), draw=(" + colorsPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
-        this.pathPattern = "\\\\draw \\[(" + colorsPattern + ")(,->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
+        this.intNumber = "[+-]?\\d+";
+        this.floatNumber = "[+-]?\\d+\\.\\d+";
+        this.coordinatePattern = "\\((" + intNumber + "|" + floatNumber + "),[ ]*(" + intNumber + "|" + floatNumber + ")\\)";
+        this.labelPattern = "(node\\[align=center,[ ]*right=(" + intNumber + "|" + floatNumber + ")cm,[ ]*above=(" + intNumber + "|" + floatNumber + ")cm\\] \\{([\\w ]+)\\})";
+        this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + ")[ ]*\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
+        this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + ")[ ]*\\] " + coordinatePattern + " (\\w+) \\[radius=(\\+?[1-9][0-9]*.\\d+)\\]" + labelPattern + "?";
+        this.trianglePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + ")[ ]*\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
+        this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
 
         // Set start value dropdown to black
         fillColour.setValue(controller.shape.Color.BLACK);
@@ -346,14 +343,15 @@ public class EditorController {
      */
     public void translateToTikz() {
         tikzTA.replaceText(canvas.toTikZ());
-        tikzTA.clearStyle(0,tikzTA.getText().length());
-        tikzTA.setSelectedShapes(this.selectedShapes).highlightOnSelect();
+        tikzTA.clearStyle(0, tikzTA.getText().length());
+        tikzTA.setSelectedShapes(this.selectedShapes);
+        tikzTA.highlightOnSelect();
     }
 
     /**
      * Detects and handles changes in the TextArea
      */
-    private ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
+    private final ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
         if (!shapeHandler.drawFromGUI) {
             ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
             String[] lines = newValue.split("\\n");

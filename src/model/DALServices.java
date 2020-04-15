@@ -33,7 +33,7 @@ public interface DALServices {
 
     /**
      * This method delete the database
-     * Usefull for tests
+     * Useful for tests
      **/
     void deleteDB(String name) throws FatalException;
 }

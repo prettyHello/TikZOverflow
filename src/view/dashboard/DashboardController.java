@@ -28,14 +28,12 @@ import static utilities.Utility.showAlert;
  * This class handles the main screen of the program and allows the user to manage through their projects.
  */
 public class DashboardController {
-    UserUCC userUcc = ConfigurationSingleton.getUserUcc();
-    ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
-    ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
+    final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
+    final ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
+    final ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
 
-    DashboardController dbc = this;
+    final DashboardController dbc = this;
     private boolean useAskedName;
-
-    private String popupMessage = "Please enter the name of your Project";
 
     private ViewSwitcher viewSwitcher;
 
@@ -189,6 +187,7 @@ public class DashboardController {
         final Button confirm = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
         confirm.addEventFilter(ActionEvent.ACTION, event -> this.useAskedName = true);
         dialog.setTitle("Project name");
+        String popupMessage = "Please enter the name of your Project";
         dialog.setHeaderText(popupMessage);
         dialog.setContentText("Name :");
         projectName = dialog.showAndWait();

@@ -43,9 +43,9 @@ public class ShapeHandler {
     protected boolean waitingForMoreCoordinate = false;
     protected boolean drawFromGUI = false;
 
-    ContextMenu shapeContextMenu;
-    Canvas canvas;
-    EditorController editorController;
+    final ContextMenu shapeContextMenu;
+    final Canvas canvas;
+    final EditorController editorController;
 
     public ShapeHandler(ContextMenu shapeContextMenu, Canvas canvas, EditorController editorController) {
         this.shapeContextMenu = shapeContextMenu;
@@ -71,7 +71,7 @@ public class ShapeHandler {
     }
 
     /**
-     * Rightclick dropdown menu, change StokeColor
+     * Right-click dropdown menu, change StokeColor
      */
     public void setDrawColor(Color color) {
         //TODO use canvas.updateShape to update the shape.
@@ -86,7 +86,7 @@ public class ShapeHandler {
     }
 
     /**
-     * Handle rightclick set label option
+     * Handle right-click set label option
      */
     public void handleSetLabel() {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
@@ -99,7 +99,7 @@ public class ShapeHandler {
             canvas.setShapeLabel(shapeId, labelText);
 
             controller.shape.Shape controllerShape = canvas.getShapeById(shapeId);
-            Coordinates labelPoint = getCoordintesForLabel(controllerShape);
+            Coordinates labelPoint = getCoordinatesForLabel(controllerShape);
             Text label = createLabel(controllerShape, labelPoint.getX(), labelPoint.getY());
             editorController.pane.getChildren().add(label);
             drawFromGUI = true;
@@ -113,7 +113,7 @@ public class ShapeHandler {
      * @param shape controller shape to which a label is added.
      * @return the coordinates of the label placement point.
      */
-    private Coordinates getCoordintesForLabel (controller.shape.Shape shape) {
+    private Coordinates getCoordinatesForLabel(controller.shape.Shape shape) {
         Coordinates point = null;
 
         switch (shape.getClass().toString()) {
@@ -135,7 +135,7 @@ public class ShapeHandler {
 
 
     /**
-     * Rightclick dropdown menu, delete shape
+     * Right-click dropdown menu, delete shape
      */
     public void rightClickDeleteShape() {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
@@ -376,7 +376,7 @@ public class ShapeHandler {
             double dx = (previouslySelectedX - selectedX) * factor;
             double dy = (previouslySelectedY - selectedY) * factor;
 
-            // part ortogonal to main line
+            // part orthogonal to main line
             double ox = (previouslySelectedX - selectedX) * factorO;
             double oy = (previouslySelectedY - selectedY) * factorO;
 

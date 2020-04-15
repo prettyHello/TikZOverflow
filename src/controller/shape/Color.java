@@ -34,7 +34,7 @@ public enum Color {
         this.value = value;
     }
 
-    private static final Map<String, Color> lookup = new HashMap<String, Color>();
+    private static final Map<String, Color> lookup = new HashMap<>();
 
     static {
         for (Color c : Color.values()) {

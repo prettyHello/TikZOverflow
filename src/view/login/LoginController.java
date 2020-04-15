@@ -36,8 +36,8 @@ public class LoginController {
     @FXML
     public BorderPane bp_rootPane;
 
-    UserFactory userFactory = ConfigurationSingleton.getUserFactory();
-    UserUCC userUcc = ConfigurationSingleton.getUserUcc();
+    final UserFactory userFactory = ConfigurationSingleton.getUserFactory();
+    final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
 
     private ViewSwitcher viewSwitcher;
 
