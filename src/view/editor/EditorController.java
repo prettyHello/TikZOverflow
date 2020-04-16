@@ -375,7 +375,7 @@ public class EditorController {
      * Detects and handles changes in the TextArea
      */
     private final ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
-        if (!shapeHandler.drawFromGUI) {
+        if (!shapeHandler.actionFromGUI) {
             ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
             String[] lines = newValue.split("\\n");
             List<String> al = new ArrayList<>(Arrays.asList(lines));
@@ -421,7 +421,7 @@ public class EditorController {
                 System.out.println("Incorrect line: " + incorrectLineNum);
             }
         } else {
-            shapeHandler.drawFromGUI = false;
+            shapeHandler.actionFromGUI = false;
         }
     };
 

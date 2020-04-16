@@ -43,6 +43,7 @@ public class ShapeHandler {
     protected double thirdSelectedX, thirdSelectedY; // since a triangle need three points
     protected boolean waitingForMoreCoordinate = false;
     protected boolean drawFromGUI = false;
+    protected boolean actionFromGUI = false;
 
     final ContextMenu shapeContextMenu;
     final Canvas canvas;
@@ -67,6 +68,7 @@ public class ShapeHandler {
             Color fillColor = (Color) shape.getFill();
             canvas.changeShapeFillColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
             drawFromGUI = true;
+            actionFromGUI = true;
         }
         editorController.translateToTikz();
     }
@@ -82,6 +84,7 @@ public class ShapeHandler {
             Color drawColor = (Color) shape.getStroke();
             canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
             drawFromGUI = true;
+            actionFromGUI = true;
         }
         editorController.translateToTikz();
     }
@@ -117,6 +120,7 @@ public class ShapeHandler {
             Text label = createLabel(controllerShape, labelPoint.getX(), labelPoint.getY());
             editorController.pane.getChildren().add(label);
             drawFromGUI = true;
+            actionFromGUI = true;
         }
         editorController.translateToTikz();
     }
@@ -161,6 +165,7 @@ public class ShapeHandler {
                 if (editorController.selectedShapes.isEmpty())
                     editorController.disableToolbar(false);
             }
+            actionFromGUI = true;
         }
         editorController.translateToTikz();
     }
@@ -241,6 +246,7 @@ public class ShapeHandler {
             shape.setStroke(Color.valueOf(editorController.strokeColour.getValue().toString()));
             shape.setStrokeWidth(Thickness.valueOf(editorController.shapeThickness.getValue().toString()).thicknessValue());
             drawFromGUI = true;
+            actionFromGUI = true;
             editorController.pane.getChildren().add(shape);
             editorController.notifyController(addToController, shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
