@@ -18,7 +18,7 @@ public class Triangle extends Shape {
      */
     public Triangle(Coordinates originPoint,String shapeThickness, int id) {
         super(true, false, shapeThickness, id);
-        Utility.checkObject(originPoint);
+        Utility.checkObjects(originPoint);
         this.originPoint = originPoint;
         this.secondPoint = new Coordinates(originPoint.getX() + 1, originPoint.getY());
         this.thirdPoint = new Coordinates(originPoint.getX(), originPoint.getY() + 1);
@@ -32,8 +32,8 @@ public class Triangle extends Shape {
      * @param pt3 the third point of the triangle
      * @param id  the id of the shape
      */
-    public Triangle(Coordinates pt1, Coordinates pt2, Coordinates pt3, int id) {
-        super(true, false, id);
+    public Triangle(Coordinates pt1, Coordinates pt2, Coordinates pt3, String shapeThickness, int id) {
+        super(true, false, shapeThickness, id);
         Utility.checkObjects(pt1, pt2, pt3);
         this.originPoint = pt1;
         this.secondPoint = pt2;

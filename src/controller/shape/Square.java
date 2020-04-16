@@ -41,8 +41,8 @@ public class Square extends Rectangle{
      * @param fillColor        Color to fill the shape with, color list in Color enum.
      * @param drawColor        Outer line color, color list in Color enum.
      */
-    public Square (boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
-        super(draw, fill, drawColor, fillColor, originCoordinates, endCoordinates, id);
+    public Square (boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor,  shapeThickness, originCoordinates, endCoordinates, id);
         Utility.checkObjects(originCoordinates, endCoordinates);
         this.size = endCoordinates.getX() - originCoordinates.getX();
     }

@@ -3,6 +3,7 @@ package view.editor;
 import controller.Canvas.Canvas;
 import controller.shape.Coordinates;
 import controller.shape.Square;
+import controller.shape.Thickness;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextInputDialog;
@@ -80,6 +81,19 @@ public class ShapeHandler {
             shape.setStroke(Color.valueOf(color.toString()));
             Color drawColor = (Color) shape.getStroke();
             canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
+            drawFromGUI = true;
+        }
+        editorController.translateToTikz();
+    }
+
+    /**
+     * Rightclick dropdown menu, change shape thickness
+     */
+    public void updateShapeThickness(Double thicknessValue, String thicknessKey){
+        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
+            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
+            shape.setStrokeWidth(thicknessValue);
+            canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(thicknessKey);
             drawFromGUI = true;
         }
         editorController.translateToTikz();
@@ -175,7 +189,7 @@ public class ShapeHandler {
                 Coordinates pt1 = new Coordinates(thirdSelectedX, thirdSelectedY);
                 Coordinates pt2 = new Coordinates(previouslySelectedX, previouslySelectedY);
                 Coordinates pt3 = new Coordinates(selectedX, selectedY);
-                addToController = new controller.shape.Triangle(pt1, pt2, pt3, canvas.getIdForNewShape());
+                addToController = new controller.shape.Triangle(pt1, pt2, pt3, editorController.shapeThickness.getValue().toString(),canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
@@ -185,7 +199,7 @@ public class ShapeHandler {
                 circle.setCenterX(selectedX);
                 circle.setCenterY(selectedY);
                 circle.setRadius(radius);
-                addToController = new controller.shape.Circle(new Coordinates(selectedX, selectedY), radius, canvas.getIdForNewShape());
+                addToController = new controller.shape.Circle(new Coordinates(selectedX, selectedY), radius, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = circle;
                 break;
             case ARROW:
@@ -195,7 +209,7 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case ARROW_POINT2:
-                addToController = new controller.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                addToController = new controller.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = constructArrow();
                 waitingForMoreCoordinate = false;
                 break;
@@ -206,7 +220,7 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case LINE_POINT2:
-                addToController = new controller.shape.Line(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), canvas.getIdForNewShape());
+                addToController = new controller.shape.Line(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
                 shape.setStroke(Color.valueOf(editorController.fillColour.getValue().toString()));
                 waitingForMoreCoordinate = false;
@@ -214,7 +228,7 @@ public class ShapeHandler {
             case SQUARE:
                 int size = 75;
                 shape = new Rectangle(selectedX, selectedY, 75, 75);
-                addToController = new Square(new Coordinates(selectedX, selectedY), size, canvas.getIdForNewShape());
+                addToController = new Square(new Coordinates(selectedX, selectedY), size, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 break;
         }
         if (waitingForMoreCoordinate) {
@@ -225,6 +239,7 @@ public class ShapeHandler {
         } else {
             shape.setFill(Color.valueOf(editorController.fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(editorController.strokeColour.getValue().toString()));
+            shape.setStrokeWidth(Thickness.valueOf(editorController.shapeThickness.getValue().toString()).thicknessValue());
             drawFromGUI = true;
             editorController.pane.getChildren().add(shape);
             editorController.notifyController(addToController, shape);
@@ -408,7 +423,7 @@ public class ShapeHandler {
                         editorController.disableToolbar(false);
                 } else {                                 //if not selected => add to the list
                     editorController.disableToolbar(true);
-                    shape.setStrokeWidth(2);
+                    shape.setStrokeWidth(canvas.getShapeById(Integer.parseInt(shape.getId())).getShapeThicknessValue());
                     DropShadow borderEffect = new DropShadow(
                             BlurType.THREE_PASS_BOX, Color.GREEN, 2, 1, 0, 0
                     );
@@ -465,7 +480,7 @@ public class ShapeHandler {
                     Coordinates origin = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
                     Coordinates end = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
 
-                    shapeToDraw = new Square(true, true, drawColor, fillColor, origin, end, canvas.getIdForNewShape());
+                    shapeToDraw = new Square(true, true, drawColor, fillColor, origin, end, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                     break;
                 }
                 case CIRCLE: {
@@ -479,7 +494,7 @@ public class ShapeHandler {
                         throw new Error("handle this");
                     }
 
-                    shapeToDraw = new controller.shape.Circle(true, true, drawColor, fillColor, center, radius, canvas.getIdForNewShape());
+                    shapeToDraw = new controller.shape.Circle(true, true, drawColor, fillColor, editorController.shapeThickness.getValue().toString(), center, radius, canvas.getIdForNewShape());
                     break;
                 }
                 case TRIANGLE: {
@@ -487,7 +502,7 @@ public class ShapeHandler {
                     Coordinates p2 = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
                     Coordinates p3 = new Coordinates(Double.parseDouble(m.group(7)), Double.parseDouble(m.group(8)));
 
-                    shapeToDraw = new controller.shape.Triangle(true, true, drawColor, fillColor, p1, p2, p3, canvas.getIdForNewShape());
+                    shapeToDraw = new controller.shape.Triangle(true, true, drawColor, fillColor, editorController.shapeThickness.getValue().toString(), p1, p2, p3, canvas.getIdForNewShape());
                     break;
                 }
                 case "PATH": {
@@ -495,9 +510,9 @@ public class ShapeHandler {
                     Coordinates end = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
 
                     if (m.group(2) == null) {
-                        shapeToDraw = new controller.shape.Line(begin, end, drawColor, canvas.getIdForNewShape());
+                        shapeToDraw = new controller.shape.Line(begin, end, drawColor, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                     } else {
-                        shapeToDraw = new controller.shape.Arrow(begin, end, drawColor, canvas.getIdForNewShape());
+                        shapeToDraw = new controller.shape.Arrow(begin, end, drawColor, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                     }
                     break;
                 }

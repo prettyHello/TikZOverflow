@@ -88,7 +88,7 @@ public class EditorController {
     private ContextMenu shapeContextMenu;
     private ChoiceBox<controller.shape.Color> contextMenuFillColorPicker;
     private ChoiceBox<controller.shape.Color> contextMenuDrawColorPicker;
-    private ChoiceBox contextMenuChangeThickness;
+    private ChoiceBox<controller.shape.Thickness> contextMenuChangeThickness;
 
     protected String intNumber;
     protected String floatNumber;
@@ -125,7 +125,7 @@ public class EditorController {
 
         contextMenuFillColorPicker = new ChoiceBox<>();
         contextMenuDrawColorPicker = new ChoiceBox<>();
-        contextMenuChangeThickness = new ChoiceBox();
+        contextMenuChangeThickness = new ChoiceBox<>();
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
         ArrayList<String> colors = new ArrayList<>();
@@ -170,10 +170,10 @@ public class EditorController {
         drawColorMenu.setOnAction(t -> shapeHandler.setDrawColor(Color.valueOf(contextMenuDrawColorPicker.getValue().toString())));
         MenuItem setLabel = new MenuItem("Set label");
         setLabel.setOnAction(t -> shapeHandler.handleSetLabel());
-        MenuItem shapeThicknessMenu = new MenuItem("Shape thickness", contextMenuChangeThickness);
-        shapeThicknessMenu.setOnAction(t-> updateShapeThickness());
-        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu, setLabel);
+        MenuItem shapeThicknessMenu = new MenuItem("Change thickness", contextMenuChangeThickness);
+        shapeThicknessMenu.setOnAction(t-> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString()).thicknessValue(), contextMenuChangeThickness.getValue().toString()));
 
+        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu, setLabel);
         shapeHandler = new ShapeHandler(shapeContextMenu, canvas, this);
 
         // show shapes at the start(don't have to interact to have them show up)
@@ -192,17 +192,7 @@ public class EditorController {
         });
     }
 
-    /**
-     * Rightclick dropdown menu, change shape thickness
-     */
-    private void updateShapeThickness(){
-        if (shapeContextMenu.getOwnerNode() instanceof Shape) {
-            Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            shape.setStrokeWidth(Thickness.valueOf(contextMenuChangeThickness.getValue().toString()).thicknessValue());
-            canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(contextMenuChangeThickness.getValue().toString());
-        }
-        translateToTikz();
-    }
+
 
     @FXML
     void drawLine() {
@@ -256,6 +246,8 @@ public class EditorController {
         }
         translateToTikz();
     }
+
+
 
     /**
      * Notify Shape controller of javafx shape creation

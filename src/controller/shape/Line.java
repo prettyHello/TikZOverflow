@@ -8,7 +8,7 @@ public class Line extends Path {
         super(origin, end, shapeThickness, id,false,false);
     }
 
-    public Line(Coordinates origin, Coordinates end, Color drawColor, int id) throws FatalException {
-        super(origin, end,false,false, drawColor, id);
+    public Line(Coordinates origin, Coordinates end, Color drawColor, String shapeThickness, int id) throws FatalException {
+        super(origin, end,false,false, drawColor, shapeThickness, id);
     }
 }

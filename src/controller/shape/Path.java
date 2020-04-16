@@ -27,7 +27,7 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, String shapeThickness, int id) throws FatalException {
         super(true, false, shapeThickness, id);
-        Utility.checkObject(pathPoints);
+        Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
@@ -76,8 +76,8 @@ import java.util.Iterator;
      * @param drawColor
      * @throws FatalException
      */
-    public Path(Coordinates origin, Coordinates end, boolean arrowStart, boolean arrowEnd, Color drawColor, int id) throws FatalException {
-        super(true, false, drawColor, Color.WHITE, id);
+    public Path(Coordinates origin, Coordinates end, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
+        super(true, false, drawColor, Color.WHITE, shapeThickness, id);
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
         pathPoints.add(origin);
         pathPoints.add(end);

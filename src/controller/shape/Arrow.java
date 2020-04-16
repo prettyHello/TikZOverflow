@@ -10,8 +10,8 @@ public class Arrow extends Path {
         super(origin, end, shapeThickness, id, false, true);
     }
 
-    public Arrow(Coordinates origin, Coordinates end, Color drawColor, int id) throws FatalException {
-        super(origin, end,false,true, drawColor, id);
+    public Arrow(Coordinates origin, Coordinates end, Color drawColor, String shapeThickness, int id) throws FatalException {
+        super(origin, end,false,true, drawColor, shapeThickness, id);
     }
 
     public String print() {
