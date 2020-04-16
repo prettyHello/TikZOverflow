@@ -242,7 +242,6 @@ public class ShapeHandler {
             shape.setFill(Color.valueOf(editorController.fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(editorController.strokeColour.getValue().toString()));
             shape.setStrokeWidth(Thickness.valueOf(editorController.shapeThickness.getValue().toString()).thicknessValue());
-//            drawFromGUI = true;
             actionFromGUI = true;
             editorController.pane.getChildren().add(shape);
             editorController.notifyController(addToController, shape);
