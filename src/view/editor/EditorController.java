@@ -98,6 +98,7 @@ public class EditorController {
     protected String trianglePattern;
     protected String pathPattern;
     protected String labelPattern;
+    protected String thicknessPattern;
 
     public EditorController() {
         this.canvas = ActiveCanvas.getActiveCanvas();
@@ -138,21 +139,24 @@ public class EditorController {
         }
 
         //Fill the thickness ChoiceBox on contextMenu
+        ArrayList<String> thicknessKeys = new ArrayList<>();
         for (controller.shape.Thickness thickness : controller.shape.Thickness.values()) {
             shapeThickness.getItems().add(thickness);
             contextMenuChangeThickness.getItems().add(thickness);
+            thicknessKeys.add(thickness.toString().toLowerCase().replace('_', ' '));
         }
 
         // Initialize TikZ regex patterns
         this.colorsPattern = String.join("|", colors);
+        this.thicknessPattern = String.join("|", thicknessKeys);
         this.intNumber = "[+-]?\\d+";
         this.floatNumber = "[+-]?\\d+\\.\\d+";
         this.coordinatePattern = "\\((" + intNumber + "|" + floatNumber + "),[ ]*(" + intNumber + "|" + floatNumber + ")\\)";
         this.labelPattern = "(node\\[align=center,[ ]*right=(" + intNumber + "|" + floatNumber + ")cm,[ ]*above=(" + intNumber + "|" + floatNumber + ")cm\\] \\{([\\w ]+)\\})";
-        this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + ")[ ]*\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
-        this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + ")[ ]*\\] " + coordinatePattern + " (\\w+) \\[radius=(\\+?[1-9][0-9]*.\\d+)\\]" + labelPattern + "?";
-        this.trianglePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + ")[ ]*\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
-        this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*\\] " + coordinatePattern + " -- " + coordinatePattern;
+        this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
+        this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " (\\w+) \\[radius=(\\+?[1-9][0-9]*.\\d+)\\]" + labelPattern + "?";
+        this.trianglePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
+        this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*[ ]*,[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " -- " + coordinatePattern;
 
         // Set start value dropdown to black
         fillColour.setValue(controller.shape.Color.BLACK);

@@ -314,6 +314,7 @@ public class ShapeHandler {
             shapeDrawing.setId(Integer.toString(shape.getId()));
             shapeDrawing.setFill(Color.valueOf(shape.getFillColor().toString()));
             shapeDrawing.setStroke(Color.valueOf(shape.getDrawColor().toString()));
+            shapeDrawing.setStrokeWidth(shape.getShapeThicknessValue());
             editorController.pane.getChildren().add(shapeDrawing);
             if (label != null) {
                 editorController.pane.getChildren().add(label);
@@ -466,53 +467,55 @@ public class ShapeHandler {
 
         if (shapeType != null) {
             controller.shape.Color fillColor = null, drawColor = null;
+            String thickness = null;
             if (shapeType.equals(SQUARE) || shapeType.equals(CIRCLE) || shapeType.equals(TRIANGLE)) {
                 fillColor = controller.shape.Color.get(m.group(1));
                 drawColor = controller.shape.Color.get(m.group(2));
             } else if (shapeType.equals("PATH")) {
                 drawColor = controller.shape.Color.get(m.group(1));
             }
+            thickness = m.group(3).toUpperCase().replace(' ', '_');
 
             // Process new shape
             controller.shape.Shape shapeToDraw = null;
             switch (shapeType) {
                 case SQUARE: {
-                    Coordinates origin = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
-                    Coordinates end = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
+                    Coordinates origin = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
+                    Coordinates end = new Coordinates(Double.parseDouble(m.group(7)), Double.parseDouble(m.group(8)));
 
-                    shapeToDraw = new Square(true, true, drawColor, fillColor, origin, end, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                    shapeToDraw = new Square(true, true, drawColor, fillColor, origin, end, thickness, canvas.getIdForNewShape());
                     break;
                 }
                 case CIRCLE: {
-                    Coordinates center = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
+                    Coordinates center = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
 
                     float radius;
                     try {
-                        radius = Float.parseFloat(m.group(6));
+                        radius = Float.parseFloat(m.group(7));
                     } catch (NumberFormatException e) {
                         //todo handle
                         throw new Error("handle this");
                     }
 
-                    shapeToDraw = new controller.shape.Circle(true, true, drawColor, fillColor, editorController.shapeThickness.getValue().toString(), center, radius, canvas.getIdForNewShape());
+                    shapeToDraw = new controller.shape.Circle(true, true, drawColor, fillColor, thickness, center, radius, canvas.getIdForNewShape());
                     break;
                 }
                 case TRIANGLE: {
-                    Coordinates p1 = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
-                    Coordinates p2 = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
-                    Coordinates p3 = new Coordinates(Double.parseDouble(m.group(7)), Double.parseDouble(m.group(8)));
+                    Coordinates p1 = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
+                    Coordinates p2 = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
+                    Coordinates p3 = new Coordinates(Double.parseDouble(m.group(8)), Double.parseDouble(m.group(9)));
 
-                    shapeToDraw = new controller.shape.Triangle(true, true, drawColor, fillColor, editorController.shapeThickness.getValue().toString(), p1, p2, p3, canvas.getIdForNewShape());
+                    shapeToDraw = new controller.shape.Triangle(true, true, drawColor, fillColor, thickness, p1, p2, p3, canvas.getIdForNewShape());
                     break;
                 }
                 case "PATH": {
-                    Coordinates begin = new Coordinates(Double.parseDouble(m.group(3)), Double.parseDouble(m.group(4)));
-                    Coordinates end = new Coordinates(Double.parseDouble(m.group(5)), Double.parseDouble(m.group(6)));
+                    Coordinates begin = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
+                    Coordinates end = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
 
                     if (m.group(2) == null) {
-                        shapeToDraw = new controller.shape.Line(begin, end, drawColor, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                        shapeToDraw = new controller.shape.Line(begin, end, drawColor, thickness, canvas.getIdForNewShape());
                     } else {
-                        shapeToDraw = new controller.shape.Arrow(begin, end, drawColor, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                        shapeToDraw = new controller.shape.Arrow(begin, end, drawColor, thickness, canvas.getIdForNewShape());
                     }
                     break;
                 }
@@ -520,7 +523,7 @@ public class ShapeHandler {
                     throw new UnsupportedOperationException("Unknown shape");
             }
 
-            Node node = getNodeInfo(line);
+           Node node = getNodeInfo(line);
             if (node != null) {
                 shapeToDraw.setLabel(node.label);
             }
