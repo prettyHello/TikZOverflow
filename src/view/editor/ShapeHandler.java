@@ -95,7 +95,6 @@ public class ShapeHandler {
             shape.setStrokeWidth(thicknessValue);
             canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(thicknessKey);
             actionFromGUI = true;
-
         }
         editorController.translateToTikz();
     }
@@ -147,7 +146,6 @@ public class ShapeHandler {
 
         return point;
     }
-
 
     /**
      * Right-click dropdown menu, delete shape

@@ -197,7 +197,6 @@ public class EditorController {
     }
 
 
-
     @FXML
     void drawLine() {
         if (!checkIfMoreCoordinateRequired()) {
@@ -250,8 +249,6 @@ public class EditorController {
         }
         translateToTikz();
     }
-
-
 
     /**
      * Notify Shape controller of javafx shape creation
