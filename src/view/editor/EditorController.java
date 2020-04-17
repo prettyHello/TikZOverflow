@@ -3,17 +3,17 @@ package view.editor;
 import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.Canvas;
-import controller.shape.Thickness;
 import controller.UCC.ProjectUCC;
+import controller.shape.Thickness;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -71,11 +71,11 @@ public class EditorController {
     @FXML
     ChoiceBox<controller.shape.Color> strokeColour;
     @FXML
-    ChoiceBox shapeThickness;
+    ChoiceBox<controller.shape.Thickness> shapeThickness;
     @FXML
     SplitPane mainSplitPane;
     @FXML
-    AnchorPane leftAnchorPane;
+    StackPane leftStackPane;
     @FXML
     Label lb_coordinates;
     @FXML
@@ -119,11 +119,7 @@ public class EditorController {
                 shapeHandler.handleDrawCall();
             }
         });
-
-        // to make the split pane non resizeable
-        leftAnchorPane.maxWidthProperty().bind(mainSplitPane.widthProperty().multiply(0.5));
-        leftAnchorPane.minWidthProperty().bind(mainSplitPane.widthProperty().multiply(0.5));
-
+        
         contextMenuFillColorPicker = new ChoiceBox<>();
         contextMenuDrawColorPicker = new ChoiceBox<>();
         contextMenuChangeThickness = new ChoiceBox<>();
