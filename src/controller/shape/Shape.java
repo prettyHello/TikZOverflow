@@ -142,7 +142,6 @@ public abstract class Shape implements Serializable {
         return shapeThicknessValue;
     }
 
-
     public String print() {
         String returnValue = "";
         if (this.fill && this.draw) {

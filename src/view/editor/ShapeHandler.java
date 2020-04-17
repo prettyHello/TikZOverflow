@@ -89,11 +89,11 @@ public class ShapeHandler {
     /**
      * Rightclick dropdown menu, change shape thickness
      */
-    public void updateShapeThickness(Double thicknessValue, String thicknessKey){
+    public void updateShapeThickness(Thickness thickness){
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            shape.setStrokeWidth(thicknessValue);
-            canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(thicknessKey);
+            shape.setStrokeWidth(thickness.thicknessValue());
+            canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(thickness.name());
             actionFromGUI = true;
         }
         editorController.translateToTikz();

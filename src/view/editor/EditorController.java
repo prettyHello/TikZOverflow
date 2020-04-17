@@ -175,7 +175,7 @@ public class EditorController {
         MenuItem setLabel = new MenuItem("Set label");
         setLabel.setOnAction(t -> shapeHandler.handleSetLabel());
         MenuItem shapeThicknessMenu = new MenuItem("Change thickness", contextMenuChangeThickness);
-        shapeThicknessMenu.setOnAction(t-> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString()).thicknessValue(), contextMenuChangeThickness.getValue().toString()));
+        shapeThicknessMenu.setOnAction(t-> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
 
         shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu, setLabel);
         shapeHandler = new ShapeHandler(shapeContextMenu, canvas, this);
