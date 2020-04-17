@@ -318,11 +318,11 @@ public class ShapeHandler {
             shapeDrawing.setStroke(Color.valueOf(shape.getDrawColor().toString()));
             shapeDrawing.setStrokeWidth(shape.getShapeThicknessValue());
             editorController.pane.getChildren().add(shapeDrawing);
+            shapeDrawing.toFront();
+            shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
             if (label != null) {
                 editorController.pane.getChildren().add(label);
             }
-
-            shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
         }
     }
 

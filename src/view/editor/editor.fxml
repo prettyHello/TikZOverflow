@@ -159,9 +159,10 @@
                                     </children>
                                 </AnchorPane>
                                 <Separator/>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="320.0" prefWidth="300.0">
+                                <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                            minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
                                     <children>
-                                        <Pane fx:id="pane" prefHeight="320.0" prefWidth="400.0"
+                                        <Pane fx:id="pane" prefHeight="500.0" prefWidth="400.0"
                                               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                                               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <rotationAxis>
