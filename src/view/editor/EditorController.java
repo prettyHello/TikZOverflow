@@ -3,17 +3,17 @@ package view.editor;
 import config.ConfigurationSingleton;
 import controller.Canvas.ActiveCanvas;
 import controller.Canvas.Canvas;
-import controller.shape.Thickness;
 import controller.UCC.ProjectUCC;
+import controller.shape.Thickness;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -71,11 +71,11 @@ public class EditorController {
     @FXML
     ChoiceBox<controller.shape.Color> strokeColour;
     @FXML
-    ChoiceBox shapeThickness;
+    ChoiceBox<controller.shape.Thickness> shapeThickness;
     @FXML
     SplitPane mainSplitPane;
     @FXML
-    AnchorPane leftAnchorPane;
+    StackPane leftStackPane;
     @FXML
     Label lb_coordinates;
     @FXML
@@ -120,10 +120,6 @@ public class EditorController {
             }
         });
 
-        // to make the split pane non resizeable
-        leftAnchorPane.maxWidthProperty().bind(mainSplitPane.widthProperty().multiply(0.5));
-        leftAnchorPane.minWidthProperty().bind(mainSplitPane.widthProperty().multiply(0.5));
-
         contextMenuFillColorPicker = new ChoiceBox<>();
         contextMenuDrawColorPicker = new ChoiceBox<>();
         contextMenuChangeThickness = new ChoiceBox<>();
@@ -153,9 +149,9 @@ public class EditorController {
         this.floatNumber = "[+-]?\\d+\\.\\d+";
         this.coordinatePattern = "\\((" + intNumber + "|" + floatNumber + "),[ ]*(" + intNumber + "|" + floatNumber + ")\\)";
         this.labelPattern = "(node\\[align=center,[ ]*right=(" + intNumber + "|" + floatNumber + ")cm,[ ]*above=(" + intNumber + "|" + floatNumber + ")cm\\] \\{([\\w ]+)\\})";
-        this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
-        this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " (\\w+) \\[radius=(\\+?[1-9][0-9]*.\\d+)\\]" + labelPattern + "?";
-        this.trianglePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
+        this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
+        this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(" + intNumber + "|" + floatNumber + ")\\]" + labelPattern + "?";
+        this.trianglePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
         this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*[ ]*,[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " -- " + coordinatePattern;
 
         // Set start value dropdown to black
@@ -185,7 +181,7 @@ public class EditorController {
         translateToTikz();
 
         pane.setOnMouseMoved(event ->
-                lb_coordinates.setText(String.format("x=%.1f, y=%.1f", event.getX(), event.getY())));
+                lb_coordinates.setText(String.format("x=%d, y=%d", (int) event.getX(), (int) event.getY())));
 
         bp_rootPane.setOnKeyPressed(event -> {
             if (event.isControlDown() && event.getCode() == KeyCode.S) {

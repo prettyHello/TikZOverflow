@@ -28,16 +28,6 @@ import static utilities.ColorUtils.getColorNameFromRgb;
 
 public class ShapeHandler {
 
-    protected static final String SQUARE = "SQUARE";
-    protected static final String TRIANGLE = "TRIANGLE";
-    protected static final String TRIANGLE_POINT2 = "TRIANGLE2";
-    protected static final String TRIANGLE_POINT3 = "TRIANGLE3";
-    protected static final String CIRCLE = "CIRCLE";
-    protected static final String LINE = "LINE";
-    protected static final String LINE_POINT2 = "LINE_POINT2";
-    protected static final String ARROW = "ARROW";
-    protected static final String ARROW_POINT2 = "ARROW_POINT2";
-
     protected double selectedX, selectedY;
     protected double previouslySelectedX, previouslySelectedY; // a line needs 2 points so last choice is saved
     protected double thirdSelectedX, thirdSelectedY; // since a triangle need three points
@@ -173,19 +163,19 @@ public class ShapeHandler {
         controller.shape.Shape addToController = null;
 
         switch (editorController.shapeToDraw) {
-            case TRIANGLE:
+            case EditorController.TRIANGLE:
                 thirdSelectedX = selectedX;
                 thirdSelectedY = selectedY;
-                editorController.shapeToDraw = TRIANGLE_POINT2;
+                editorController.shapeToDraw = EditorController.TRIANGLE_POINT2;
                 waitingForMoreCoordinate = true;
                 break;
-            case TRIANGLE_POINT2:
+            case EditorController.TRIANGLE_POINT2:
                 previouslySelectedX = selectedX;
                 previouslySelectedY = selectedY;
-                editorController.shapeToDraw = TRIANGLE_POINT3;
+                editorController.shapeToDraw = EditorController.TRIANGLE_POINT3;
                 waitingForMoreCoordinate = true;
                 break;
-            case TRIANGLE_POINT3:
+            case EditorController.TRIANGLE_POINT3:
                 Coordinates pt1 = new Coordinates(thirdSelectedX, thirdSelectedY);
                 Coordinates pt2 = new Coordinates(previouslySelectedX, previouslySelectedY);
                 Coordinates pt3 = new Coordinates(selectedX, selectedY);
@@ -193,7 +183,7 @@ public class ShapeHandler {
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
-            case CIRCLE:
+            case EditorController.CIRCLE:
                 float radius = 50.0f;
                 Circle circle = new Circle();
                 circle.setCenterX(selectedX);
@@ -202,30 +192,30 @@ public class ShapeHandler {
                 addToController = new controller.shape.Circle(new Coordinates(selectedX, selectedY), radius, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = circle;
                 break;
-            case ARROW:
+            case EditorController.ARROW:
                 previouslySelectedX = selectedX;
                 previouslySelectedY = selectedY;
-                editorController.shapeToDraw = ARROW_POINT2;
+                editorController.shapeToDraw = EditorController.ARROW_POINT2;
                 waitingForMoreCoordinate = true;
                 break;
-            case ARROW_POINT2:
+            case EditorController.ARROW_POINT2:
                 addToController = new controller.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = constructArrow();
                 waitingForMoreCoordinate = false;
                 break;
-            case LINE:
+            case EditorController.LINE:
                 previouslySelectedX = selectedX;
                 previouslySelectedY = selectedY;
-                editorController.shapeToDraw = LINE_POINT2;
+                editorController.shapeToDraw = EditorController.LINE_POINT2;
                 waitingForMoreCoordinate = true;
                 break;
-            case LINE_POINT2:
+            case EditorController.LINE_POINT2:
                 addToController = new controller.shape.Line(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
                 shape.setStroke(Color.valueOf(editorController.fillColour.getValue().toString()));
                 waitingForMoreCoordinate = false;
                 break;
-            case SQUARE:
+            case EditorController.SQUARE:
                 int size = 75;
                 shape = new Rectangle(selectedX, selectedY, 75, 75);
                 addToController = new Square(new Coordinates(selectedX, selectedY), size, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
@@ -316,11 +306,11 @@ public class ShapeHandler {
             shapeDrawing.setStroke(Color.valueOf(shape.getDrawColor().toString()));
             shapeDrawing.setStrokeWidth(shape.getShapeThicknessValue());
             editorController.pane.getChildren().add(shapeDrawing);
+            shapeDrawing.toFront();
+            shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
             if (label != null) {
                 editorController.pane.getChildren().add(label);
             }
-
-            shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
         }
     }
 
@@ -446,9 +436,9 @@ public class ShapeHandler {
     protected void sendTikzCode(String line) {
 
         ArrayList<Pair<String, String>> patternsArray = new ArrayList<>(Arrays.asList(
-                new Pair<>(editorController.squarePattern, SQUARE),
-                new Pair<>(editorController.circlePattern, CIRCLE),
-                new Pair<>(editorController.trianglePattern, TRIANGLE),
+                new Pair<>(editorController.squarePattern, EditorController.SQUARE),
+                new Pair<>(editorController.circlePattern, EditorController.CIRCLE),
+                new Pair<>(editorController.trianglePattern, EditorController.TRIANGLE),
                 new Pair<>(editorController.pathPattern, "PATH")
         ));
 
@@ -468,7 +458,7 @@ public class ShapeHandler {
         if (shapeType != null) {
             controller.shape.Color fillColor = null, drawColor = null;
             String thickness = null;
-            if (shapeType.equals(SQUARE) || shapeType.equals(CIRCLE) || shapeType.equals(TRIANGLE)) {
+            if (shapeType.equals(EditorController.SQUARE) || shapeType.equals(EditorController.CIRCLE) || shapeType.equals(EditorController.TRIANGLE)) {
                 fillColor = controller.shape.Color.get(m.group(1));
                 drawColor = controller.shape.Color.get(m.group(2));
             } else if (shapeType.equals("PATH")) {
@@ -479,14 +469,14 @@ public class ShapeHandler {
             // Process new shape
             controller.shape.Shape shapeToDraw = null;
             switch (shapeType) {
-                case SQUARE: {
+                case EditorController.SQUARE: {
                     Coordinates origin = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
                     Coordinates end = new Coordinates(Double.parseDouble(m.group(7)), Double.parseDouble(m.group(8)));
 
                     shapeToDraw = new Square(true, true, drawColor, fillColor, origin, end, thickness, canvas.getIdForNewShape());
                     break;
                 }
-                case CIRCLE: {
+                case EditorController.CIRCLE: {
                     Coordinates center = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
 
                     float radius;
@@ -500,7 +490,7 @@ public class ShapeHandler {
                     shapeToDraw = new controller.shape.Circle(true, true, drawColor, fillColor, thickness, center, radius, canvas.getIdForNewShape());
                     break;
                 }
-                case TRIANGLE: {
+                case EditorController.TRIANGLE: {
                     Coordinates p1 = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
                     Coordinates p2 = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
                     Coordinates p3 = new Coordinates(Double.parseDouble(m.group(8)), Double.parseDouble(m.group(9)));
