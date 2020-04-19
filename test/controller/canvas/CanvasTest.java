@@ -18,7 +18,7 @@ public class CanvasTest {
     void setUp() {
         canvas = new CanvasImpl(500, 500);
         id = canvas.getIdForNewShape();
-        shape = new Rectangle(new Coordinates(0, 0), new Coordinates(50, 50),"thin", id);
+        shape = new Rectangle(new Coordinates(0, 0), new Coordinates(50, 50),Thickness.THIN.toString(), id);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class CanvasTest {
     @Test
     void updateShape_sameType() {
         canvas.addShape(shape);
-        Shape newShape = new Rectangle(new Coordinates(0, 0), new Coordinates(0, 0),"thin", id);
+        Shape newShape = new Rectangle(new Coordinates(0, 0), new Coordinates(0, 0),Thickness.VERY_THIN.toString(), id);
         canvas.updateShape(newShape);
         assertEquals(canvas.getShapeById(id), shape);
         assertEquals(newShape, shape);
@@ -65,7 +65,7 @@ public class CanvasTest {
     @Test
     void updateShape_differentType() {
         canvas.addShape(shape);
-        Shape newShape = new Circle(new Coordinates(0, 0), 50,"thin", id);
+        Shape newShape = new Circle(new Coordinates(0, 0), 50,Thickness.SEMI_THICK.toString(), id);
         assertEquals(shape, canvas.getShapeById(id));
         assertEquals(newShape, canvas.getShapeById(id));
     }
@@ -94,8 +94,8 @@ public class CanvasTest {
 
     @Test
     void getIdForNewShape_uniquenessGuaranteed() {
-        canvas.addShape(new Square(new Coordinates(0, 0), new Coordinates(0, 0), "thin", canvas.getIdForNewShape()));
-        canvas.addShape(new Square(new Coordinates(0, 0), new Coordinates(0, 0), "thin", canvas.getIdForNewShape()));
+        canvas.addShape(new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.SEMI_THICK.toString(), canvas.getIdForNewShape()));
+        canvas.addShape(new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.ULTRA_THICK.toString(), canvas.getIdForNewShape()));
     }
 
     @Test
@@ -119,15 +119,15 @@ public class CanvasTest {
 
     @Test
     void toTikz() {
-        Shape toAdd = new Square(new Coordinates(0, 0), new Coordinates(0, 0), "thin",canvas.getIdForNewShape());
+        Shape toAdd = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.ULTRA_THIN.toString(),canvas.getIdForNewShape());
         canvas.addShape(toAdd);
         assertEquals(canvas.toTikZ(), toAdd.print() + "\n");
     }
 
     @Test
     void toTikz_multipleShapes() {
-        Shape toAdd1 = new Square(new Coordinates(0, 0), new Coordinates(0, 0), "thin",canvas.getIdForNewShape());
-        Shape toAdd2 = new Circle(new Coordinates(0, 0), 50, "thin",canvas.getIdForNewShape());
+        Shape toAdd1 = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.VERY_THICK.toString(),canvas.getIdForNewShape());
+        Shape toAdd2 = new Circle(new Coordinates(0, 0), 50, Thickness.VERY_THICK.toString(),canvas.getIdForNewShape());
         canvas.addShape(toAdd1);
         canvas.addShape(toAdd2);
         String control = toAdd1.print() + "\n" + toAdd2.print() + "\n";
