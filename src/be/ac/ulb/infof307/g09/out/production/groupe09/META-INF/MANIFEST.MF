@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+be.ac.ulb.infof307.g09.Main-Class: be.ac.ulb.infof307.g09.Main
+
