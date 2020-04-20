@@ -244,7 +244,7 @@ public class ShapeHandler {
      *
      * @param shape
      */
-    public void handleDraw(be.ac.ulb.infof307.g09.controller.shape.Shape shape) {
+    public Shape handleDraw(be.ac.ulb.infof307.g09.controller.shape.Shape shape) {
         Shape shapeDrawing = null;
         Text label = null;
 
@@ -312,6 +312,8 @@ public class ShapeHandler {
                 editorController.pane.getChildren().add(label);
             }
         }
+
+        return shapeDrawing;
     }
 
     /**
@@ -396,6 +398,21 @@ public class ShapeHandler {
     }
 
     /**
+     * Add highlight effect on a shape
+     *
+     * @param shape to which add the effect.
+     * @return the shape with the highlight effect added.
+     */
+    protected Shape highlightShape(Shape shape) {
+        DropShadow borderEffect = new DropShadow(
+                BlurType.THREE_PASS_BOX, Color.GREEN, 2, 1, 0, 0
+        );
+        shape.setEffect(borderEffect);
+
+        return shape;
+    }
+
+    /**
      * Listener left-click select or unselect
      * Listener right-click dropdown delete + change color
      *
@@ -433,8 +450,8 @@ public class ShapeHandler {
      *
      * @param line the line of Tikz code
      */
-    protected void sendTikzCode(String line) {
-
+    protected Shape sendTikzCode(String line) {
+        Shape shape = null;
         ArrayList<Pair<String, String>> patternsArray = new ArrayList<>(Arrays.asList(
                 new Pair<>(editorController.squarePattern, EditorController.SQUARE),
                 new Pair<>(editorController.circlePattern, EditorController.CIRCLE),
@@ -518,9 +535,10 @@ public class ShapeHandler {
                 shapeToDraw.setLabel(node.label);
             }
 
-            handleDraw(shapeToDraw);
+            shape = handleDraw(shapeToDraw);
             canvas.addShape(shapeToDraw);
         }
+        return shape;
     }
 
     /**

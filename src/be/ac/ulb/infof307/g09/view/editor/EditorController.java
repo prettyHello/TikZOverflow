@@ -9,6 +9,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -99,6 +101,8 @@ public class EditorController {
     protected String pathPattern;
     protected String labelPattern;
     protected String thicknessPattern;
+    private String oldCode;
+    private boolean writableOldCode = true;
 
     public EditorController() {
         this.canvas = ActiveCanvas.getActiveCanvas();
@@ -370,8 +374,7 @@ public class EditorController {
     private final ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
         if (!shapeHandler.actionFromGUI) {
             ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
-            String[] lines = newValue.split("\\n");
-            List<String> al = new ArrayList<>(Arrays.asList(lines));
+            List<String> newLines = new ArrayList<>(Arrays.asList(newValue.split("\\n")));
 
             // Only handle Tikz shape declarations not general headers/footers
             List<String> blackList = new ArrayList<>(Arrays.asList(
@@ -383,13 +386,13 @@ public class EditorController {
                     "\\end{tikzpicture}",
                     "\\end{document}",
                     ""));
-            al.removeIf(blackList::contains);
+            newLines.removeIf(blackList::contains);
 
             boolean linesCorrect = true;
             int incorrectLineNum = -1;
             Pattern p;
             Matcher m;
-            for (String filteredLine : al) {
+            for (String filteredLine : newLines) {
                 linesCorrect = false;
                 for (String pattern : patternsArray) {
                     p = Pattern.compile(pattern);
@@ -398,24 +401,93 @@ public class EditorController {
                         linesCorrect = true;
                 }
                 if (!linesCorrect) {
-                    incorrectLineNum = al.indexOf(filteredLine);
+                    incorrectLineNum = newLines.indexOf(filteredLine);
                     break;
                 }
             }
             if (linesCorrect) {
                 System.out.println("No incorrect line");
-                canvas.clear();
-                pane.getChildren().clear();
-                for (String line : al) {
-                    shapeHandler.sendTikzCode(line);
+
+                ArrayList<Integer> selectedShapesIds = new ArrayList<>();
+                if (!selectedShapes.isEmpty()) {
+                    if (oldCode == null)
+                        oldCode = oldValue;
+
+                    List<String> oldLines = new ArrayList<>(Arrays.asList(oldCode.split("\\n")));
+                    oldLines.removeIf(blackList::contains);
+                    // Save the IDs of the shapes selected
+                    for (Shape selectedShape : selectedShapes)
+                        selectedShapesIds.add(Integer.parseInt(selectedShape.getId()));
+
+                    Collections.sort(selectedShapesIds);
+
+                    if (newLines.size() < oldLines.size()) {
+                        // X lines have been removed. selectedShapesIds at some point is X ahead
+                        int nLinesChanged = oldLines.size() - newLines.size();
+
+                        // Find first line that changed
+                        int i;
+                        for (i = 0; i < newLines.size(); i++)
+                            if (!oldLines.get(i).equals(newLines.get(i)))
+                                break;
+                        i += 1;
+
+                        // If the shape selected was removed, remove it from selectedShapes.
+                        for (int j = 0; j < nLinesChanged; j++)
+                            if (selectedShapesIds.contains(i + j))
+                                selectedShapesIds.remove(Integer.valueOf(i + j));
+                        // Update the IDs of the selected shapes;
+                        for (int j = 0; j < selectedShapesIds.size(); j++)
+                            if (selectedShapesIds.get(j) > i)
+                                selectedShapesIds.set(j, selectedShapesIds.get(j) - nLinesChanged);
+
+                    }
+                    else if (newLines.size() > oldLines.size()) {
+                        // X lines have been added. selectedShapesIds at some point is X behind
+                        int nLinesChanged = newLines.size() - oldLines.size();
+                        // Find first line that changed
+                        int i;
+                        for (i = 0; i < oldLines.size(); i++)
+                            if (!newLines.get(i).equals(oldLines.get(i)))
+                                break;
+                        i += 1;
+
+                        // Update the IDs of the selected shapes;
+                        for (int j = 0; j < selectedShapesIds.size(); j++)
+                            if (selectedShapesIds.get(j) >= i)
+                                selectedShapesIds.set(j, selectedShapesIds.get(j) + nLinesChanged);
+                    }
                 }
+
+                canvas.clear();
+                selectedShapes.clear();
+                pane.getChildren().clear();
+                Shape shapeDrawn;
+                for (String line : newLines) {
+                    shapeDrawn = shapeHandler.sendTikzCode(line);
+                    if (selectedShapesIds.contains(Integer.parseInt(shapeDrawn.getId()))) {
+                       shapeDrawn = shapeHandler.highlightShape(shapeDrawn);
+                       selectedShapes.add(shapeDrawn);
+                   }
+                }
+
+                if (selectedShapes.isEmpty())
+                    disableToolbar(false);
+
+                writableOldCode = true;
             } else {
                 // TODO: Highlight wrong line
-                System.out.println("Incorrect line: " + incorrectLineNum);
+                System.out.println("Incorrect shape ID: " + incorrectLineNum + 1);
+                if (!selectedShapes.isEmpty() && writableOldCode) {
+                    this.oldCode = oldValue;
+                    writableOldCode = false;
+                }
             }
         } else {
             shapeHandler.actionFromGUI = false;
         }
+
+        tikzTA.highlightOnSelect();
     };
 
     /**
