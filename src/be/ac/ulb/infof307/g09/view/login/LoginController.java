@@ -34,7 +34,7 @@ public class LoginController {
     @FXML
     public Button buttonCreateAccount;
     @FXML
-    public BorderPane bp_rootPane;
+    public BorderPane bpRootPane;
 
     final UserFactory userFactory = ConfigurationSingleton.getUserFactory();
     final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
@@ -46,7 +46,7 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        bp_rootPane.setOnKeyPressed(event -> {
+        bpRootPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 handleLoginButton();
             }

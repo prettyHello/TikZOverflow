@@ -21,7 +21,7 @@ import java.lang.reflect.InvocationTargetException;
  * This is done through a pattern singleton
  */
 public abstract class AbstractConfigurationSingleton {
-    private static String conf_name;
+    private static String confName;
     private static Configuration configuration;
     private static DALServices dalServices;
     private static UserFactory userFactory;
@@ -31,8 +31,8 @@ public abstract class AbstractConfigurationSingleton {
     private static ProjectUCC projectUCC;
     private static ProjectDAO projectDAO;
 
-    public static String getConf_name() {
-        return conf_name;
+    public static String getConfName() {
+        return confName;
     }
 
     public static Configuration getConfiguration() {
@@ -73,8 +73,8 @@ public abstract class AbstractConfigurationSingleton {
      * @param conf_name
      */
     protected void loadConfiguration(String conf_name) {
-        AbstractConfigurationSingleton.conf_name = conf_name;
-        String[] args = {AbstractConfigurationSingleton.conf_name};
+        AbstractConfigurationSingleton.confName = conf_name;
+        String[] args = {AbstractConfigurationSingleton.confName};
         loadConfiguration(args);
     }
 

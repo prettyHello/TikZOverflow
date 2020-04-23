@@ -13,8 +13,8 @@ import java.sql.*;
  */
 public class DALServicesImpl implements DALServices, DALBackEndServices {
     private static Connection connection;
-    private static String DBName = "database";
-    private static String DBPath;
+    private static String databaseName = "database";
+    private static String databasePath;
 
     public DALServicesImpl() {
 
@@ -76,8 +76,8 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      */
     @Override
     public void createTables(String name) throws IOException, FatalException {
-        DBName = name;
-        DBPath = "jdbc:sqlite:" + DBName + ".db";
+        databaseName = name;
+        databasePath = "jdbc:sqlite:" + databaseName + ".db";
         String scriptFilePath = "script.sql";
         BufferedReader reader = null;
         Statement statement = null;
@@ -111,7 +111,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      */
     @Override
     public void createTables() throws IOException, FatalException {
-        createTables(DBName);
+        createTables(databaseName);
 
     }
 
@@ -138,9 +138,9 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     private void openConnection() throws FatalException {
         if (connection == null) {
             try {
-                connection = DriverManager.getConnection(DBPath);
+                connection = DriverManager.getConnection(databasePath);
             } catch (Exception e) {
-                throw new FatalException("Database ./"+ DBName + " open connection impossible: \n\t: "+e.getMessage());
+                throw new FatalException("Database ./"+ databaseName + " open connection impossible: \n\t: "+e.getMessage());
             }
 
         }
@@ -155,7 +155,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
                 connection.close();
                 connection = null;
             } catch (Exception e) {
-                throw new FatalException("Database ./"+ DBName + " close connection impossible: \n\t: "+e.getMessage());
+                throw new FatalException("Database ./"+ databaseName + " close connection impossible: \n\t: "+e.getMessage());
             }
         }
     }

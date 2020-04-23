@@ -24,8 +24,8 @@ public class ProjectImpl implements ProjectDTO {
         this.projectName = projectName;
     }
 
-    public ProjectImpl(int project_id, int projectOwnerId, String projectName, String projectPath, String createDate, String modificationDate) {
-        this.projectId = project_id;
+    public ProjectImpl(int projectId, int projectOwnerId, String projectName, String projectPath, String createDate, String modificationDate) {
+        this.projectId = projectId;
         this.projectOwnerId = projectOwnerId;
         this.projectName = projectName;
         this.projectPath = projectPath;

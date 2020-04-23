@@ -1,14 +1,14 @@
 package be.ac.ulb.infof307.g09.controller;
 
 public class UserImpl implements User {
-    private int user_id;
-    private String first_name;
-    private String last_name;
+    private int userId;
+    private String firstName;
+    private String lastName;
     private String email;
     private String phone;
     private String password;
     private String salt;
-    private String register_date;
+    private String registerDate;
     private boolean isAuthorized; //this is not in the db
 
     public UserImpl() {
@@ -21,20 +21,20 @@ public class UserImpl implements User {
     }
 
     //Full constructor
-    public UserImpl(int user_id, String first_name, String last_name, String email, String phone, String password, String salt, String register_date) {
+    public UserImpl(int userId, String firstName, String lastName, String email, String phone, String password, String salt, String registerDate) {
         this(email, password);
-        this.user_id = user_id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phone = phone;
         this.salt = salt;
-        this.register_date = register_date;
+        this.registerDate = registerDate;
     }
 
 
     //---------------- getters and setters ---------------//
     public String getLastName() {
-        return last_name;
+        return lastName;
     }
 
     public String getEmail() {
@@ -54,23 +54,23 @@ public class UserImpl implements User {
     }
 
     public String getRegisterDate() {
-        return register_date;
+        return registerDate;
     }
 
     public int getUserId() {
-        return user_id;
+        return userId;
     }
 
-    public void setUserId(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public void setFirstName(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setLastName(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setEmail(String email) {
@@ -89,12 +89,12 @@ public class UserImpl implements User {
         this.salt = salt;
     }
 
-    public void setRegisterDate(String register_date) {
-        this.register_date = register_date;
+    public void setRegisterDate(String registerDate) {
+        this.registerDate = registerDate;
     }
 
     public String getFirstName() {
-        return first_name;
+        return firstName;
     }
 
     public boolean isAuthorized() {

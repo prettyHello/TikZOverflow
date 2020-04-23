@@ -17,7 +17,7 @@ public class UserFactoryImpl implements UserFactory {
         return new UserImpl(login, password);
     }
 
-    public UserDTO createUser(int user_id, String first_name, String last_name, String email, String phone, String password, String salt, String register_date) {
-        return new UserImpl(user_id, first_name, last_name, email, phone, password, salt, register_date);
+    public UserDTO createUser(int userId, String firstName, String lastName, String email, String phone, String password, String salt, String registerDate) {
+        return new UserImpl(userId, firstName, lastName, email, phone, password, salt, registerDate);
     }
 }

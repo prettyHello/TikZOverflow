@@ -20,11 +20,11 @@ public interface UserDTO {
 
     int getUserId();
 
-    void setUserId(int user_id);
+    void setUserId(int userId);
 
-    void setFirstName(String first_name);
+    void setFirstName(String firstName);
 
-    void setLastName(String last_name);
+    void setLastName(String lastName);
 
     void setEmail(String email);
 
@@ -34,7 +34,7 @@ public interface UserDTO {
 
     void setSalt(String salt);
 
-    void setRegisterDate(String register_date);
+    void setRegisterDate(String registerDate);
 
     void setAuthorized(boolean authorized);
 

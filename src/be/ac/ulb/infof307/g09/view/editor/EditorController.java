@@ -9,8 +9,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -79,9 +77,9 @@ public class EditorController {
     @FXML
     StackPane leftStackPane;
     @FXML
-    Label lb_coordinates;
+    Label lbCoordinates;
     @FXML
-    BorderPane bp_rootPane;
+    BorderPane bpRootpane;
 
     public final ArrayList<Shape> selectedShapes = new ArrayList<>();
     protected String shapeToDraw = "";
@@ -185,9 +183,9 @@ public class EditorController {
         translateToTikz();
 
         pane.setOnMouseMoved(event ->
-                lb_coordinates.setText(String.format("x=%d, y=%d", (int) event.getX(), (int) event.getY())));
+                lbCoordinates.setText(String.format("x=%d, y=%d", (int) event.getX(), (int) event.getY())));
 
-        bp_rootPane.setOnKeyPressed(event -> {
+        bpRootpane.setOnKeyPressed(event -> {
             if (event.isControlDown() && event.getCode() == KeyCode.S) {
                 this.save();
             } else if (event.isControlDown() && event.getCode() == KeyCode.W) {

@@ -10,5 +10,5 @@ public interface UserFactory {
 
     UserDTO createUser(String login, String password);
 
-    UserDTO createUser(int user_id, String first_name, String last_name, String email, String phone, String password, String salt, String register_date);
+    UserDTO createUser(int userId, String firstName, String lastName, String email, String phone, String password, String salt, String registerDate);
 }

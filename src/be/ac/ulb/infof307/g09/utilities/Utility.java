@@ -122,7 +122,7 @@ public class Utility {
      * @param tarFile  path to source file ".tar.gz"
      * @param destFile destination directory of decompressed file
      */
-    public static String unTarFile(File tarFile, Path destFile) throws FatalException {
+    public static String untarfile(File tarFile, Path destFile) throws FatalException {
         TarArchiveInputStream tis;
         try {
             FileOutputStream fos;

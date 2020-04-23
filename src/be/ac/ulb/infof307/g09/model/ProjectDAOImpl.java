@@ -240,7 +240,7 @@ public class ProjectDAOImpl implements ProjectDAO {
                 Files.createDirectories(folderDestination); //create user dir if doesn't exists
                 Files.createDirectories(folderDestination.resolve("tmp")); //create a temp dir
                 Files.createDirectories(folderDestination.resolve(projectName)) ; //create a dir with real project name
-                String destination = Utility.unTarFile(selectedArchive, folderDestination.resolve("tmp")); //untar the archive in tmp
+                String destination = Utility.untarfile(selectedArchive, folderDestination.resolve("tmp")); //untar the archive in tmp
                 Utility.copy(folderDestination.resolve("tmp"+ File.separator+ destination).toFile(), folderDestination.resolve(projectName).toFile() );
                 renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+destination), new File(folderDestination.toString() + File.separator + File.separator+projectName));
                 renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+destination+".bin"), new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+projectName+".bin"));
