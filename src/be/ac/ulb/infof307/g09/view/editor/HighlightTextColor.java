@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g09.view.editor;
 
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.CodeArea;
@@ -160,6 +161,13 @@ public class HighlightTextColor extends CodeArea {
                 }
             }
         });
+    }
+
+    public void highLightWrongLine(String line) {
+        List<Integer> positions = findWordUpgrade(this.getText(), line); // Get the line position in the canvas of the selected shape.
+        for (Integer position : positions) {
+            setStyleClass(position, position + line.length(), "wrong-line"); // Highlight the position of the shape.
+        }
     }
 
 }
