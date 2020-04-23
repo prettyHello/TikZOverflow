@@ -141,11 +141,13 @@ public class HighlightTextColor extends CodeArea {
                     key.getCode().isNavigationKey() ||
                     key.getCode().isWhitespaceKey() ||
                     key.getCode() == KeyCode.BACK_SPACE) {
+
                 setStyleClass(0, getText().length(), "resetColor");
                 colorWord("keyWord", "keyWord");
                 colorWord("keyCharacter", "keyCharacter");
                 colorWord("shapes", "shapes");
                 colorWord("digit", "digit");
+                highlightOnSelect();
             }
 
             //allows to add a line number
