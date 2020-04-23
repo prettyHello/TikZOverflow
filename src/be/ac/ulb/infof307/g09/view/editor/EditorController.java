@@ -404,8 +404,6 @@ public class EditorController {
                 }
             }
             if (linesCorrect) {
-                System.out.println("No incorrect line");
-
                 ArrayList<Integer> selectedShapesIds = new ArrayList<>();
                 if (!selectedShapes.isEmpty()) {
                     if (oldCode == null)
