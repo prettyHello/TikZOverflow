@@ -16,7 +16,6 @@ public class ProjectImpl implements ProjectDTO {
     private String createDate;
     private String modificationDate;
 
-
     public ProjectImpl() {
     }
 

@@ -90,7 +90,6 @@ import java.util.Iterator;
     }
 
     /**
-     * TODO, not in usage right now, status: it's complicated
      * @return The Tikz code for these coordinates, intended to use in other print function of shapes, like rectangle.
      * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
@@ -115,7 +114,6 @@ import java.util.Iterator;
     public void rmCoordinates(Coordinates coordinates) throws FatalException {
         Utility.checkObjects(coordinates);
         this.pathPoints.remove(coordinates);
-        //Todo check if it works like that, 50% it won't, let's pray.
     }
 
     public boolean isArrowStart() {

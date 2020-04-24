@@ -13,8 +13,6 @@ import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-//TODO fix later
-
 class ProjectUCCImplTest {
 
     ProjectFactory projectFactory;
@@ -78,5 +76,4 @@ class ProjectUCCImplTest {
             projectUcc.setActive(null);
         }, "check that the ucc don't catch the fatalException coming from the Dao");
     }
-
 }

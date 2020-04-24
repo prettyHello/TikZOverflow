@@ -38,13 +38,22 @@ public class UserUCCImpl implements UserUCC {
             throw new BizzException("Wrong Password");
         }
         ConnectedUser.setConnectedUser(userDb);
-        //TODO Move dans utility
-        File file = new File(rootProject +"userid_" +userDb.getUserId());
+        createUserFolder(String.valueOf(userDb.getUserId()));
+    }
+
+    /**
+     * Creates the folder that will contain the projects of a user
+     *
+     * @param userId the id of the user the projects will belong to
+     */
+    private void createUserFolder(String userId) throws FatalException {
+        File file = new File(rootProject + "userid_" + userId);
         if (!file.exists()) {
             if (file.mkdir()) {
                 System.out.println("Directory is created!");
             } else {
                 System.out.println("Failed to create directory!");
+                throw new FatalException("Unable to create user folder");
             }
         }
     }
@@ -55,14 +64,7 @@ public class UserUCCImpl implements UserUCC {
     @Override
     public void updateUserInfo(UserDTO userDTO) throws BizzException, FatalException {
         checkObjects(userDTO);
-        try {
-            dal.startTransaction();
-            //TODO add business constrains here or remove the transaction/rollback/commit
-            userDAO.update(userDTO);
-            dal.commit();
-        } finally {
-            dal.rollback();
-        }
+        userDAO.update(userDTO);
     }
 
     /**
@@ -104,13 +106,6 @@ public class UserUCCImpl implements UserUCC {
     @Override
     public void register(UserDTO userDTO) throws FatalException {
         checkObjects(userDTO);
-        try {
-            dal.startTransaction();
-            //TODO add business constrains here or remove the transaction/rollback/commit
-            userDAO.create(userDTO);
-            dal.commit();
-        } finally {
-            dal.rollback();
-        }
+        userDAO.create(userDTO);
     }
 }
