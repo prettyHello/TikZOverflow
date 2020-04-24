@@ -13,6 +13,7 @@ import be.ac.ulb.infof307.g09.utilities.Utility;
 import be.ac.ulb.infof307.g09.utilities.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
 
+import javax.rmi.CORBA.Util;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -76,6 +77,8 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public ProjectDTO load(File selectedFile, ProjectDTO projectDTO) throws FatalException {
+        Utility.checkObjects(projectDTO);
+        Utility.checkObjects(selectedFile);
         projectDTO.setCreateDate(Utility.getTimeStamp());
         projectDTO.setModificationDate(Utility.getTimeStamp());
         projectDTO.setProjectOwnerId(this.userUcc.getConnectedUser().getUserId());

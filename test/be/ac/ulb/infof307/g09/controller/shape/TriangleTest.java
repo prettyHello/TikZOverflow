@@ -7,13 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TriangleTest {
 
     @Test
-    void printSimpleTriangle() {
+    void print_SimpleTriangle() {
         Triangle triangle = new Triangle(new Coordinates(0,0),"SEMI_THICK",1);
         assertEquals("\\draw[draw=black, semi thick] (0.0,0.0) -- (1.0,0.0) -- (0.0,1.0) -- cycle;",triangle.print());
     }
 
     @Test
-    void printComplexComplex() {
+    void print_ComplexComplex() {
         Triangle triangle = new Triangle(true,true,Color.BLUE,Color.RED,"VERY_THIN", new Coordinates(0,0),new Coordinates(2,0),new Coordinates(0,3), 1);
         assertEquals("\\filldraw[fill=red, draw=blue, very thin] (0.0,0.0) -- (2.0,0.0) -- (0.0,3.0) -- cycle;",triangle.print());
     }

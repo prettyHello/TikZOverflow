@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PathTest {
 
     @Test
-    void printSimplePathArrayOfPoints() {
+    void print_SimplePathArrayOfPoints() {
         ArrayList<Coordinates> coordinates = new ArrayList<>();
         coordinates.add(new Coordinates(0,0));
         coordinates.add(new Coordinates(2,2));
@@ -19,7 +19,7 @@ class PathTest {
     }
 
     @Test
-    void printComplexPath2Points() {
+    void print_ComplexPath2Points() {
         ArrayList<Coordinates> coordinates = new ArrayList<>();
         coordinates.add(new Coordinates(0,0));
         coordinates.add(new Coordinates(2,2));
@@ -28,7 +28,7 @@ class PathTest {
     }
 
     @Test
-    void printComplexPathArrayOfPoints() {
+    void print_ComplexPathArrayOfPoints() {
         ArrayList<Coordinates> coordinates = new ArrayList<>();
         coordinates.add(new Coordinates(0,0));
         coordinates.add(new Coordinates(2,2));

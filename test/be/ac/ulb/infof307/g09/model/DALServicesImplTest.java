@@ -19,25 +19,13 @@ class DALServicesImplTest {
     }
 
     @Test
-    void deleteInexistantDB(){
+    void deleteDB_wrongParameter(){
         assertThrows(FatalException.class, () -> {
             dal.deleteDB("noDB");
         });
     }
 
-    @Test
-    void rollBackNothing(){
-        assertThrows(FatalException.class, () -> {
-            dal.startTransaction();
-            dal.rollback();
-        });
-    }
 
-    @Test
-    void startTransactionWithoutDB(){
-        assertThrows(FatalException.class, () -> {
-            dal.startTransaction();
-        });
-    }
+
 
 }

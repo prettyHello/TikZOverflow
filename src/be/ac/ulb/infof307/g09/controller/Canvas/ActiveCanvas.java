@@ -1,5 +1,7 @@
 package be.ac.ulb.infof307.g09.controller.Canvas;
 
+import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+
 /**
  * Singleton for the canvas that is currently being worked on
  */
@@ -9,7 +11,7 @@ public class ActiveCanvas {
 
     public static Canvas getActiveCanvas() {
         if (INSTANCE == null) {
-            throw new IllegalStateException("Currently no active canvas set");
+            throw new FatalException("Currently no active canvas set");
         }
         return INSTANCE;
     }

@@ -53,7 +53,7 @@ class UserUCCImplTest {
     }
 
     @Test
-    void setConnectedUser(){
+    void setConnectedUser_expectedBehaviour(){
         ConnectedUser.deleteConnectedUser();
         UserDTO user = userFactory.createUser();
         userUcc.setConnectedUser(user);
@@ -61,14 +61,14 @@ class UserUCCImplTest {
     }
 
     @Test
-    void getConnectedUser(){
+    void getConnectedUser_expectedBehaviour(){
         UserDTO user = userFactory.createUser();
         userUcc.setConnectedUser(user);
         assertEquals(user, userUcc.getConnectedUser());
     }
 
     @Test
-    void deleteConnectedUser(){
+    void deleteConnectedUser_expectedBehaviour(){
         ConnectedUser.deleteConnectedUser();
         assertNull(userUcc.getConnectedUser());
     }

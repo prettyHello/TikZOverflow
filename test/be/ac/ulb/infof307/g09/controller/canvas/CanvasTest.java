@@ -71,7 +71,7 @@ public class CanvasTest {
     }
 
     @Test
-    void changeShapeDrawColor() {
+    void changeShapeDrawColor_expectedBehaviour() {
         shape.setDrawColor(Color.BLUE);
         canvas.addShape(shape);
         canvas.changeShapeDrawColor(id, Color.BLACK);
@@ -79,7 +79,7 @@ public class CanvasTest {
     }
 
     @Test
-    void changeShapeFillColor() {
+    void changeShapeFillColor_expectedBehaviour() {
         shape.setFillColor(Color.RED);
         canvas.addShape(shape);
         canvas.getShapeById(id);
@@ -118,7 +118,7 @@ public class CanvasTest {
     }
 
     @Test
-    void toTikz() {
+    void toTikz_expectedBehaviour() {
         Shape toAdd = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.ULTRA_THIN.toString(),canvas.getIdForNewShape());
         canvas.addShape(toAdd);
         assertEquals(canvas.toTikZ(), toAdd.print() + "\n");
@@ -135,7 +135,7 @@ public class CanvasTest {
     }
 
     @Test
-    void clear() {
+    void clear_expectedBehaviour() {
         canvas.clear();
         assertTrue(canvas.getShapes().isEmpty());
         assertEquals(canvas.getIdForNewShape(), 1);
