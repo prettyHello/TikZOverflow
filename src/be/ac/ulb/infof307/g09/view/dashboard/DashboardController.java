@@ -68,7 +68,7 @@ public class DashboardController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    ViewOptionController viewOptionController = new ViewOptionController(dbc, userDto, item);
+                    ProjectItemView viewOptionController = new ProjectItemView(dbc, userDto, item);
                     viewOptionController.setProject(item);
                     viewOptionController.setExportIcon();
                     viewOptionController.setEditIcon();

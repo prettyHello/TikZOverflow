@@ -461,7 +461,7 @@ public class EditorController {
                 pane.getChildren().clear();
                 Shape shapeDrawn;
                 for (String line : newLines) {
-                    shapeDrawn = shapeHandler.sendTikzCode(line);
+                    shapeDrawn = shapeHandler.sendTikZCode(line);
                     if (selectedShapesIds.contains(Integer.parseInt(shapeDrawn.getId()))) {
                        shapeDrawn = shapeHandler.highlightShape(shapeDrawn);
                        selectedShapes.add(shapeDrawn);

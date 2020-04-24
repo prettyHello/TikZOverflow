@@ -202,7 +202,7 @@ class ProjectDAOImplTest {
     }
 
     private Canvas generateDummyCanvas(){
-        return new CanvasImpl(1,1);
+        return new CanvasImpl();
     }
 
     private ProjectDTO generateBasicProjectDTO(){

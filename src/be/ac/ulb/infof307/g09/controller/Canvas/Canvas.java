@@ -10,16 +10,6 @@ import java.util.List;
 public interface Canvas extends Serializable {
 
     /**
-     * Getter for the width of the canvas
-     */
-    int getWidth();
-
-    /**
-     * Getter for the height of the canvas
-     */
-    int getHeight();
-
-    /**
      * Getter for the shapes on the canvas
      *
      * @return the list of shapes on the canvas

@@ -79,7 +79,7 @@ public class ShapeHandler {
     /**
      * Rightclick dropdown menu, change shape thickness
      */
-    public void updateShapeThickness(Thickness thickness){
+    public void updateShapeThickness(Thickness thickness) {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             shape.setStrokeWidth(thickness.thicknessValue());
@@ -179,7 +179,7 @@ public class ShapeHandler {
                 Coordinates pt1 = new Coordinates(thirdSelectedX, thirdSelectedY);
                 Coordinates pt2 = new Coordinates(previouslySelectedX, previouslySelectedY);
                 Coordinates pt3 = new Coordinates(selectedX, selectedY);
-                addToController = new be.ac.ulb.infof307.g09.controller.shape.Triangle(pt1, pt2, pt3, editorController.shapeThickness.getValue().toString(),canvas.getIdForNewShape());
+                addToController = new be.ac.ulb.infof307.g09.controller.shape.Triangle(pt1, pt2, pt3, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
@@ -450,7 +450,7 @@ public class ShapeHandler {
      *
      * @param line the line of Tikz code
      */
-    protected Shape sendTikzCode(String line) {
+    protected Shape sendTikZCode(String line) {
         Shape shape = null;
         ArrayList<Pair<String, String>> patternsArray = new ArrayList<>(Arrays.asList(
                 new Pair<>(editorController.squarePattern, EditorController.SQUARE),
@@ -495,15 +495,7 @@ public class ShapeHandler {
                 }
                 case EditorController.CIRCLE: {
                     Coordinates center = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
-
-                    float radius;
-                    try {
-                        radius = Float.parseFloat(m.group(7));
-                    } catch (NumberFormatException e) {
-                        //todo handle
-                        throw new Error("handle this");
-                    }
-
+                    float radius = Float.parseFloat(m.group(7));
                     shapeToDraw = new be.ac.ulb.infof307.g09.controller.shape.Circle(true, true, drawColor, fillColor, thickness, center, radius, canvas.getIdForNewShape());
                     break;
                 }
@@ -530,7 +522,7 @@ public class ShapeHandler {
                     throw new UnsupportedOperationException("Unknown shape");
             }
 
-           Node node = getNodeInfo(line);
+            Node node = getNodeInfo(line);
             if (node != null) {
                 shapeToDraw.setLabel(node.label);
             }
@@ -542,10 +534,10 @@ public class ShapeHandler {
     }
 
     /**
-     * If the given line corresponds to a valid Tikz instruction and contains a node definition at the end it will
+     * If the given line corresponds to a valid TikZ instruction and contains a node definition at the end it will
      * return its information, otherwise return null
      *
-     * @param line the Tikz code line
+     * @param line the TikZ code line
      * @return a Node instance that contains the offsets and the text of the label node
      */
     private Node getNodeInfo(String line) {
@@ -554,14 +546,10 @@ public class ShapeHandler {
 
         Node node = null;
         if (m.find()) {
-            try {
-                double rightOffset = Double.parseDouble(m.group(2));
-                double aboveOffset = Double.parseDouble(m.group(3));
-                String label = m.group(4);
-                node = new Node(rightOffset, aboveOffset, label);
-            } catch (NumberFormatException e) {
-                //TODO do stuff
-            }
+            double rightOffset = Double.parseDouble(m.group(2));
+            double aboveOffset = Double.parseDouble(m.group(3));
+            String label = m.group(4);
+            node = new Node(rightOffset, aboveOffset, label);
         }
 
         return node;

@@ -25,9 +25,7 @@ import java.util.Optional;
 
 import static be.ac.ulb.infof307.g09.utilities.Utility.showAlert;
 
-//TODO CLASS : rename to something actually correct and not meaningless
-
-public class ViewOptionController extends HBox {
+public class ProjectItemView extends HBox {
 
     @FXML
     private Label projectName = null;
@@ -56,7 +54,7 @@ public class ViewOptionController extends HBox {
     private UserDTO userDTO;
     private ViewSwitcher viewSwitcher;
 
-    public ViewOptionController(DashboardController dashboard, UserDTO userDTO, ProjectDTO projectDto) {
+    public ProjectItemView(DashboardController dashboard, UserDTO userDTO, ProjectDTO projectDto) {
         this.projectDTO = projectDto;
         this.dashboard = dashboard;
         this.userDTO = userDTO;

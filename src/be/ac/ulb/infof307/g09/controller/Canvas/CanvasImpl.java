@@ -10,28 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasImpl implements Canvas {
-    final int width;
-    final int height;
     final List<Shape> shapes;
     private int idCounter = 0;
 
     /**
      * package visibility constructor. Should use the singleton to get an instance of this class.
      */
-    public CanvasImpl(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public CanvasImpl() {
         shapes = new ArrayList<>();
-    }
-
-    @Override
-    public int getWidth() {
-        return this.width;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.height;
     }
 
     /**

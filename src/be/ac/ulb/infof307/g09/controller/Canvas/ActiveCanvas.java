@@ -21,7 +21,7 @@ public class ActiveCanvas {
     }
 
     public static void setNewCanvas(int width, int height) {
-        INSTANCE = new CanvasImpl(width, height);
+        INSTANCE = new CanvasImpl();
     }
 
     public static void deleteActiveCanvas() {

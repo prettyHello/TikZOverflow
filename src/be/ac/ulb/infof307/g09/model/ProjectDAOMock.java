@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import static java.util.Objects.isNull;
 import static be.ac.ulb.infof307.g09.utilities.Utility.checkObjects;
 
-//TODO CHANGE APRES LE REFACTOR
-
 /**
  * Implementation used for the tests of the controllers
  * Using a mock allow to test the controllers independently from the be.ac.ulb.infof307.g09.model implementation

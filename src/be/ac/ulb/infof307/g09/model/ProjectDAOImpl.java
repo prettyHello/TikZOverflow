@@ -212,7 +212,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             //There is no canvas in this project, this can happen in two case:
             // 1) the user might have quit without ever saving <= which used to create a bug
             // 2) he deleted the file manually
-            return new CanvasImpl(-1, -1); //TODO I copied the -1,-1, but why is it done this way?
+            return new CanvasImpl();
         } catch (IOException e) {
             throw new FatalException("Error while opening the project " + e.getMessage());
         } catch (ClassNotFoundException e) {

@@ -16,7 +16,7 @@ public class CanvasTest {
 
     @BeforeEach
     void setUp() {
-        canvas = new CanvasImpl(500, 500);
+        canvas = new CanvasImpl();
         id = canvas.getIdForNewShape();
         shape = new Rectangle(new Coordinates(0, 0), new Coordinates(50, 50),Thickness.THIN.toString(), id);
     }
