@@ -1,9 +1,8 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
 /**
- * All different shape thickness in Tikz.
+ * All different shape thickness in TikZ.
  */
-//TODO right value
 public enum Thickness {
     ULTRA_THIN(0.1),
     VERY_THIN(0.2),
