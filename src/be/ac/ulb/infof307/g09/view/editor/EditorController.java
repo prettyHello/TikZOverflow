@@ -473,6 +473,7 @@ public class EditorController {
                     disableToolbar(false);
 
                 writableOldCode = true;
+                this.oldCode = null;
             } else {
                 // TODO: Highlight wrong line
                 System.out.println("Incorrect shape ID: " + incorrectLineNum + 1);
