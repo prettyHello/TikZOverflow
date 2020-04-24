@@ -9,15 +9,15 @@ import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.model.DALServices;
 import be.ac.ulb.infof307.g09.model.DAO;
 import be.ac.ulb.infof307.g09.model.ProjectDAO;
-import be.ac.ulb.infof307.g09.utilities.Utility;
-import be.ac.ulb.infof307.g09.utilities.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import static be.ac.ulb.infof307.g09.utilities.Utility.checkObjects;
-import static be.ac.ulb.infof307.g09.utilities.Utility.checkString;
+import static be.ac.ulb.infof307.g09.controller.Utility.checkObjects;
+import static be.ac.ulb.infof307.g09.controller.Utility.checkString;
 
 /**
  * {@inheritDoc}

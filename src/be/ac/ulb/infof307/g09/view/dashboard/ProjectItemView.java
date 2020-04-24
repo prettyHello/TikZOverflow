@@ -15,7 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import static be.ac.ulb.infof307.g09.utilities.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
 
 public class ProjectItemView extends HBox {
 

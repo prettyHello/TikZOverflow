@@ -1,14 +1,13 @@
-package be.ac.ulb.infof307.g09.utilities;
+package be.ac.ulb.infof307.g09.view;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * This class is to be removed during the next refactor
+ * This class allow to transform a rgb value into a tikz supported color
  * Java Code to get a color name from rgb/hex value/awt color
- * This is basically a slightly modified copy paste of stack overflow https://stackoverflow.com/questions/4126029/convert-rgb-values-to-color-name
+ * This code was heavily inspired by the following solution: stack overflow https://stackoverflow.com/questions/4126029/convert-rgb-values-to-color-name
  */
-//TODO remove this class during the next refactor
 public class ColorUtils {
 
     static final ArrayList<ColorUtils.ColorName> colorList = new ArrayList<>();
@@ -37,7 +36,7 @@ public class ColorUtils {
     }
 
     /**
-     * Get the closest color name from our list
+     * Get the closest color name from our list of tikz color
      *
      * @param red   red component
      * @param green green component
@@ -62,29 +61,12 @@ public class ColorUtils {
         return closestMatch.getName();
     }
 
-    /**
-     * Convert hexColor to rgb, then call getColorNameFromRgb(r, g, b)
-     *
-     * @param hexColor
-     * @return
-     */
-    public be.ac.ulb.infof307.g09.controller.shape.Color getColorNameFromHex(int hexColor) {
-        int r = (hexColor & 0xFF0000) >> 16;
-        int g = (hexColor & 0xFF00) >> 8;
-        int b = (hexColor & 0xFF);
-        return getColorNameFromRgb(r, g, b);
-    }
-
-    public int colorToHex(Color c) {
-        return Integer.decode("0x" + Integer.toHexString(c.getRGB()).substring(2));
-    }
-
     public be.ac.ulb.infof307.g09.controller.shape.Color getColorNameFromColor(Color color) {
         return getColorNameFromRgb(color.getRed(), color.getGreen(), color.getBlue());
     }
 
     /**
-     * SubClass of ColorUtils. In order to lookup color name
+     * This is a subClass of ColorUtils. It is used to store the different color properties in a list.
      *
      * @author Xiaoxiao Li
      */

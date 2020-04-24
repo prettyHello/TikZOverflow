@@ -4,6 +4,7 @@ import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
 import be.ac.ulb.infof307.g09.controller.shape.Square;
 import be.ac.ulb.infof307.g09.controller.shape.Thickness;
+import be.ac.ulb.infof307.g09.view.Utility;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextInputDialog;
@@ -16,7 +17,6 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Pair;
-import be.ac.ulb.infof307.g09.utilities.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static be.ac.ulb.infof307.g09.utilities.ColorUtils.getColorNameFromRgb;
+import static be.ac.ulb.infof307.g09.view.ColorUtils.getColorNameFromRgb;
 
 public class ShapeHandler {
 
@@ -49,32 +49,53 @@ public class ShapeHandler {
      *
      * @param color the color to set
      */
-    public void setFillColor(Color color) {
+    public void changeColorRightClick(Color color) {
         //TODO use canvas.updateShape to update the shape.
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            shape.setFill(Color.valueOf(color.toString()));
-            Color fillColor = (Color) shape.getFill();
-            canvas.changeShapeFillColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
-            actionFromGUI = true;
+            setFillColor(color,shape);
         }
+    }
+
+    /**
+     * Change the shape color and update the view
+     * @param color the new color
+     * @param shape the shape to update
+     */
+    public void setFillColor(Color color, Shape shape){
+        shape.setFill(Color.valueOf(color.toString()));
+        Color fillColor = (Color) shape.getFill();
+        canvas.changeShapeFillColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
+        actionFromGUI = true;
         editorController.translateToTikz();
     }
 
     /**
      * Right-click dropdown menu, change StokeColor
      */
-    public void setDrawColor(Color color) {
+    public void changeStrokeColorRightClick(Color color) {
         //TODO use canvas.updateShape to update the shape.
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            shape.setStroke(Color.valueOf(color.toString()));
-            Color drawColor = (Color) shape.getStroke();
-            canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
-            actionFromGUI = true;
+            setStrokeColor(color,shape);
         }
+
+    }
+
+    /**
+     * Change the shape stroke color and update the view
+     * @param color the new color
+     * @param shape the shape to update
+     */
+    public void setStrokeColor(Color color, Shape shape) {
+        shape.setStroke(Color.valueOf(color.toString()));
+        Color drawColor = (Color) shape.getStroke();
+        canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
+        actionFromGUI = true;
         editorController.translateToTikz();
     }
+
+
 
     /**
      * Rightclick dropdown menu, change shape thickness
@@ -82,10 +103,20 @@ public class ShapeHandler {
     public void updateShapeThickness(Thickness thickness) {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            shape.setStrokeWidth(thickness.thicknessValue());
-            canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(thickness.name());
-            actionFromGUI = true;
+            setShapeThickness(thickness, shape);
         }
+
+    }
+
+    /**
+     * Change the shape stroke thickness and update the view
+     * @param thickness
+     * @param shape
+     */
+    public void setShapeThickness(Thickness thickness, Shape shape) {
+        shape.setStrokeWidth(thickness.thicknessValue());
+        canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(thickness.name());
+        actionFromGUI = true;
         editorController.translateToTikz();
     }
 

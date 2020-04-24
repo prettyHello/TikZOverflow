@@ -6,13 +6,13 @@ import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import static java.util.Objects.isNull;
-import static be.ac.ulb.infof307.g09.utilities.Utility.checkObjects;
+import static be.ac.ulb.infof307.g09.controller.Utility.checkObjects;
 
 /**
  * Implementation used for the tests of the controllers

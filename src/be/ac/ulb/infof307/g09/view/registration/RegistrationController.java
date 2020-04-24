@@ -9,13 +9,13 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import be.ac.ulb.infof307.g09.utilities.Utility;
-import be.ac.ulb.infof307.g09.utilities.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
-import static be.ac.ulb.infof307.g09.utilities.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
 
 /**
  * This class handles the process of register a new user.
@@ -89,7 +89,7 @@ public class RegistrationController {
      * Show EULA when requested.
      */
     public void handleReadEulaButton() {
-        Utility.showEula();
+        be.ac.ulb.infof307.g09.view.Utility.showEula();
     }
 
     /**
@@ -104,7 +104,7 @@ public class RegistrationController {
      */
     public void handleRegisterButton() {
         try {
-            Utility.checkUserData(this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, ""), this.emailTF.getText(), this.passwordTF.getText(), this.secondPasswordTF.getText(), this.phoneTF.getText());
+            be.ac.ulb.infof307.g09.view.Utility.checkUserData(this.firstnameTF.getText().replaceAll(be.ac.ulb.infof307.g09.view.Utility.WHITE_SPACES_PATTERN, ""), this.lastnameTF.getText().replaceAll(be.ac.ulb.infof307.g09.view.Utility.WHITE_SPACES_PATTERN, ""), this.emailTF.getText(), this.passwordTF.getText(), this.secondPasswordTF.getText(), this.phoneTF.getText());
             if (!checkboxEula.isSelected()) {
                 throw new IllegalStateException("EULA not accepted");
             }
@@ -112,8 +112,8 @@ public class RegistrationController {
             String phoneText = this.phoneTF.getText();
             String emailText = this.emailTF.getText();
             String passwordText = this.passwordTF.getText();
-            String lastnameText = this.lastnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
-            String firstnameText = this.firstnameTF.getText().replaceAll(Utility.WHITE_SPACES_PATTERN, "");
+            String lastnameText = this.lastnameTF.getText().replaceAll(be.ac.ulb.infof307.g09.view.Utility.WHITE_SPACES_PATTERN, "");
+            String firstnameText = this.firstnameTF.getText().replaceAll(be.ac.ulb.infof307.g09.view.Utility.WHITE_SPACES_PATTERN, "");
             String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
             UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
             userUcc.register(user);
@@ -137,7 +137,7 @@ public class RegistrationController {
      * Filter for the phone number field to only allow integers.
      */
     public void allowIntegersOnly() {
-        TextFormatter<String> textFormatter = new TextFormatter<>(Utility.textFormatterUnary());
+        TextFormatter<String> textFormatter = new TextFormatter<>(be.ac.ulb.infof307.g09.view.Utility.textFormatterUnary());
         phoneTF.setTextFormatter(textFormatter);
     }
 

@@ -8,9 +8,9 @@ import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.ProjectImpl;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
-import be.ac.ulb.infof307.g09.utilities.Utility;
-import be.ac.ulb.infof307.g09.utilities.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -21,7 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static be.ac.ulb.infof307.g09.utilities.Utility.*;
+import static be.ac.ulb.infof307.g09.controller.Utility.*;
 
 
 /**
@@ -104,9 +104,9 @@ public class ProjectDAOImpl implements ProjectDAO {
             throw new FatalException("Error the project does not exist on the path: " +dir);
         }
         try{
-            createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz"));
+            be.ac.ulb.infof307.g09.model.Utility.createTarGz(dir.toString(), selectedFile.getAbsolutePath().concat(".tar.gz"));
         }catch (FatalException e){
-            deleteFile(new File(selectedFile.getAbsolutePath().concat(".tar.gz") ) );
+            be.ac.ulb.infof307.g09.model.Utility.deleteFile(new File(selectedFile.getAbsolutePath().concat(".tar.gz") ) );
             throw e;
         }
     }
@@ -150,7 +150,7 @@ public class ProjectDAOImpl implements ProjectDAO {
         } catch (SQLException e) {
             throw new FatalException("Failed to Delete the project '" + dto.getProjectName() + "' in Database");
         }
-        deleteFileSilent(new File(dto.getProjectPath()));
+        be.ac.ulb.infof307.g09.model.Utility.deleteFileSilent(new File(dto.getProjectPath()));
     }
 
 
@@ -241,19 +241,19 @@ public class ProjectDAOImpl implements ProjectDAO {
                 Files.createDirectories(folderDestination); //create user dir if doesn't exists
                 Files.createDirectories(folderDestination.resolve("tmp")); //create a temp dir
                 Files.createDirectories(folderDestination.resolve(projectName)) ; //create a dir with real project name
-                String destination = Utility.untarfile(selectedArchive, folderDestination.resolve("tmp")); //untar the archive in tmp
-                Utility.copy(folderDestination.resolve("tmp"+ File.separator+ destination).toFile(), folderDestination.resolve(projectName).toFile() );
+                String destination = be.ac.ulb.infof307.g09.model.Utility.untarfile(selectedArchive, folderDestination.resolve("tmp")); //untar the archive in tmp
+                be.ac.ulb.infof307.g09.model.Utility.copy(folderDestination.resolve("tmp"+ File.separator+ destination).toFile(), folderDestination.resolve(projectName).toFile() );
                 renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+destination), new File(folderDestination.toString() + File.separator + File.separator+projectName));
                 renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+destination+".bin"), new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+projectName+".bin"));
                 Path delFile = Paths.get(folderDestination.resolve("tmp"+File.separator).toString()) ;
-                Utility.deleteFile(delFile.toFile());
+                be.ac.ulb.infof307.g09.model.Utility.deleteFile(delFile.toFile());
                 projectDTO.setProjectPath(folderDestination.toString()+ File.separator +projectName);
                 this.create(projectDTO);
             } catch (IOException e) {
                 throw new FatalException("IO exception : Can't find the file to import");
             } catch (FatalException fatale){
-                Utility.deleteFileSilent(new File(folderDestination.resolve("tmp").toString()));
-                Utility.deleteFileSilent(new File(folderDestination.resolve(projectName).toString()));
+                be.ac.ulb.infof307.g09.model.Utility.deleteFileSilent(new File(folderDestination.resolve("tmp").toString()));
+                be.ac.ulb.infof307.g09.model.Utility.deleteFileSilent(new File(folderDestination.resolve(projectName).toString()));
                 throw new BizzException("Please select a .tar.gz file not empty");
             }
         } else {

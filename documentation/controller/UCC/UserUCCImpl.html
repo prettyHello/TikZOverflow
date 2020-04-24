@@ -234,8 +234,8 @@ implements <a href="../../be.ac.ulb.infof307.g09.controller/UCC/UserUCC.html" ti
 <li class="blockList">
 <h4>login</h4>
 <pre>public&nbsp;void&nbsp;login(<a href="../../be.ac.ulb.infof307.g09.controller/DTO/UserDTO.html" title="interface in be.ac.ulb.infof307.g09.controller.DTO">UserDTO</a>&nbsp;user)
-           throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a>,
-                  <a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">FatalException</a></pre>
+           throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a>,
+                  <a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.exceptions">FatalException</a></pre>
 <div class="block">Used to log a user in to the application</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -243,8 +243,8 @@ implements <a href="../../be.ac.ulb.infof307.g09.controller/UCC/UserUCC.html" ti
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>user</code> - the user to login with username and password</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a></code> - if the password is wrong</dd>
-<dd><code><a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">FatalException</a></code> - if interaction with the database failed</dd>
+<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a></code> - if the password is wrong</dd>
+<dd><code><a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.exceptions">FatalException</a></code> - if interaction with the database failed</dd>
 </dl>
 </li>
 </ul>
@@ -255,8 +255,8 @@ implements <a href="../../be.ac.ulb.infof307.g09.controller/UCC/UserUCC.html" ti
 <li class="blockList">
 <h4>updateUserInfo</h4>
 <pre>public&nbsp;void&nbsp;updateUserInfo(<a href="../../be.ac.ulb.infof307.g09.controller/DTO/UserDTO.html" title="interface in be.ac.ulb.infof307.g09.controller.DTO">UserDTO</a>&nbsp;userDTO)
-                    throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a>,
-                           <a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">FatalException</a></pre>
+                    throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a>,
+                           <a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.exceptions">FatalException</a></pre>
 <div class="block">Used to update the saved data of a user</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -264,8 +264,8 @@ implements <a href="../../be.ac.ulb.infof307.g09.controller/UCC/UserUCC.html" ti
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>userDTO</code> - the new info of the user</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a></code></dd>
-<dd><code><a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">FatalException</a></code> - if interaction with the database failed</dd>
+<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a></code></dd>
+<dd><code><a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.exceptions">FatalException</a></code> - if interaction with the database failed</dd>
 </dl>
 </li>
 </ul>
@@ -315,8 +315,8 @@ implements <a href="../../be.ac.ulb.infof307.g09.controller/UCC/UserUCC.html" ti
 <li class="blockList">
 <h4>getUserInfo</h4>
 <pre>public&nbsp;<a href="../../be.ac.ulb.infof307.g09.controller/DTO/UserDTO.html" title="interface in be.ac.ulb.infof307.g09.controller.DTO">UserDTO</a>&nbsp;getUserInfo(<a href="../../be.ac.ulb.infof307.g09.controller/DTO/UserDTO.html" title="interface in be.ac.ulb.infof307.g09.controller.DTO">UserDTO</a>&nbsp;user)
-                    throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a>,
-                           <a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">FatalException</a></pre>
+                    throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a>,
+                           <a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.exceptions">FatalException</a></pre>
 <div class="block">Returns the full information DTO for a specified user</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -326,8 +326,8 @@ implements <a href="../../be.ac.ulb.infof307.g09.controller/UCC/UserUCC.html" ti
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the full DTO</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a></code> - if the user doesn't exist</dd>
-<dd><code><a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">FatalException</a></code> - if interaction with the database failed</dd>
+<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a></code> - if the user doesn't exist</dd>
+<dd><code><a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.exceptions">FatalException</a></code> - if interaction with the database failed</dd>
 </dl>
 </li>
 </ul>
@@ -338,7 +338,7 @@ implements <a href="../../be.ac.ulb.infof307.g09.controller/UCC/UserUCC.html" ti
 <li class="blockList">
 <h4>register</h4>
 <pre>public&nbsp;void&nbsp;register(<a href="../../be.ac.ulb.infof307.g09.controller/DTO/UserDTO.html" title="interface in be.ac.ulb.infof307.g09.controller.DTO">UserDTO</a>&nbsp;userDTO)
-              throws <a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">FatalException</a></pre>
+              throws <a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.exceptions">FatalException</a></pre>
 <div class="block">Used to register a new user to the application</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -346,7 +346,7 @@ implements <a href="../../be.ac.ulb.infof307.g09.controller/UCC/UserUCC.html" ti
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>userDTO</code> - the user to register</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">FatalException</a></code> - if interaction with the database failed</dd>
+<dd><code><a href="../../utilities/exceptions/FatalException.html" title="class in be.ac.ulb.infof307.g09.exceptions">FatalException</a></code> - if interaction with the database failed</dd>
 </dl>
 </li>
 </ul>

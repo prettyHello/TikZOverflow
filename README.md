@@ -28,7 +28,7 @@ This java program has been tested and worked on with the SDK versions 8,11 and 1
 	<li>In Modules-> groupe09-> select the "sources" tab and mark the folder "src" as Sources.</li>
 	<li>In Modules-> groupe09-> select the "tests" tab and mark the folder "test" as Test.</li>
 	<li>In Project-> project set JDK (choose the jdk of your choice)</li>
-	<li>In Project-> fill the field "project compiler output" with the path to the folder where you want the output to be generated. We recommand creating a folder name "be.ac.ulb.infof307.g09.out" in the root folder for that </li>
+	<li>In Project-> fill the field "project compiler output" with the path to the folder where you want the output to be generated. We recommand creating a folder name "out" in the root folder for that </li>
 	<li>In Libraries -> press "+" -> then add the folder "src/lib" as a java library. Once done it is necessary to click on "change version" and to confirm in order to load most libraries.</li>
 	<li>In Libraries -> press "+" -> in lib, select "sqlite-jdbc-3.30.1.jar" and add it as java.</li>
 	<li>In Libraries -> press "+" -> in lib, select "spring-secuity-crypto/5.2.1.RELEASE/spring-security-crypto-5.2.1.RELEASE.jar" and add it as java.</li>
@@ -36,7 +36,7 @@ This java program has been tested and worked on with the SDK versions 8,11 and 1
 </ul>
 
 <p>
-2) On the menu above, click on "Add Configuration" -> "+" -> "Application". On the form, fill the field "be.ac.ulb.infof307.g09.Main class" with the path to the main file from /src (i.e. the value is "be.ac.ulb.infof307.g09.Main"). 
+2) On the menu above, click on "Add Configuration" -> "+" -> "Application". On the form, fill the field "Main class" with the path to the main file from /src (i.e. the value is "Main"). 
 </p>
 
 <p>
@@ -70,7 +70,7 @@ The javaFX SDK can be downloaded from here https://gluonhq.com/products/javafx/,
 All the unit test are in the test folder, the mock are with the code.
 </p>
 <p>
-The mock are initialized through the configurations classes in the be.ac.ulb.infof307.g09.utilities package.
+The mock are initialized through the configurations classes in the utilities package.
 </p>
 
 # Misc

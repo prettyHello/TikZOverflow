@@ -2,13 +2,11 @@ package be.ac.ulb.infof307.g09.controller.UCC;
 
 import be.ac.ulb.infof307.g09.config.TestBusinessConfigurationSingleton;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
-import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
-import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

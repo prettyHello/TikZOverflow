@@ -141,7 +141,7 @@ In both cases, the system must be able to produce the TikZ code with the placeme
 **Original instructions:**
 
 - The system offers a preview functionality in which it is possible to generate a pdf/image file of the diagram.
-To do this, the system performs a LATEX compilation of the TkiZ code described in the diagram and generates the corresponding image/pdf file. The user can immediately be.ac.ulb.infof307.g09.view the result.
+To do this, the system performs a LATEX compilation of the TkiZ code described in the diagram and generates the corresponding image/pdf file. The user can immediately view the result.
  
 **Tasks:** 
 

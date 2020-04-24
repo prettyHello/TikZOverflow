@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g09.utilities.exceptions;
+package be.ac.ulb.infof307.g09.exceptions;
 
 /**
  * RuntimeException used in case of a business error.

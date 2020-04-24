@@ -230,14 +230,14 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>createNewProject</h4>
 <pre>void&nbsp;createNewProject(java.lang.String&nbsp;projectName)
-               throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a>,
+               throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a>,
                       java.io.IOException</pre>
 <div class="block">Creates a new project on disk and stores its path in the database</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>projectName</code> - the name of the project</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a></code> - if the project already exists</dd>
+<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a></code> - if the project already exists</dd>
 <dd><code>java.io.IOException</code> - if IO operations fail</dd>
 </dl>
 </li>
@@ -249,14 +249,14 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <h4>createFromImport</h4>
 <pre>void&nbsp;createFromImport(<a href="../../be.ac.ulb.infof307.g09.controller/DTO/ProjectDTO.html" title="class in be.ac.ulb.infof307.g09.controller.DTO">ProjectDTO</a>&nbsp;projectDTO)
-               throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a>,
+               throws <a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a>,
                       java.io.IOException</pre>
 <div class="block">Creates a new project on disk and stores its path in the database from a specified import</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>projectDTO</code> - the path to the archive to import</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.utilities.exceptions">BizzException</a></code> - if the project in the archive has a problem or if a similar project already exists</dd>
+<dd><code><a href="../../utilities/exceptions/BizzException.html" title="class in be.ac.ulb.infof307.g09.exceptions">BizzException</a></code> - if the project in the archive has a problem or if a similar project already exists</dd>
 <dd><code>java.io.IOException</code> - if an error occurred during finding/opening the archive</dd>
 </dl>
 </li>

@@ -7,7 +7,6 @@ import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.shape.Thickness;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -17,8 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.LineNumberFactory;
-import be.ac.ulb.infof307.g09.utilities.Utility;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
@@ -26,8 +24,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static be.ac.ulb.infof307.g09.utilities.ColorUtils.getColorNameFromRgb;
-import static be.ac.ulb.infof307.g09.utilities.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.ColorUtils.getColorNameFromRgb;
+import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
 
 /**
  * This class is used to handle drawings and their corresponding tikz translation.
@@ -167,13 +165,29 @@ public class EditorController {
         MenuItem delete = new MenuItem("Delete");
         delete.setOnAction(t -> shapeHandler.rightClickDeleteShape());
         MenuItem fillColorMenu = new MenuItem("Fill color", contextMenuFillColorPicker);
-        fillColorMenu.setOnAction(t -> shapeHandler.setFillColor(Color.valueOf(contextMenuFillColorPicker.getValue().toString())));
+        fillColorMenu.setOnAction(t -> shapeHandler.changeColorRightClick(Color.valueOf(contextMenuFillColorPicker.getValue().toString())));
         MenuItem drawColorMenu = new MenuItem("Stroke color", contextMenuDrawColorPicker);
-        drawColorMenu.setOnAction(t -> shapeHandler.setDrawColor(Color.valueOf(contextMenuDrawColorPicker.getValue().toString())));
+        drawColorMenu.setOnAction(t -> shapeHandler.changeStrokeColorRightClick(Color.valueOf(contextMenuDrawColorPicker.getValue().toString())));
         MenuItem setLabel = new MenuItem("Set label");
         setLabel.setOnAction(t -> shapeHandler.handleSetLabel());
         MenuItem shapeThicknessMenu = new MenuItem("Change thickness", contextMenuChangeThickness);
         shapeThicknessMenu.setOnAction(t-> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
+
+        fillColour.setOnAction(t-> {
+            if(!selectedShapes.isEmpty()){
+                selectedShapes.forEach(shape -> shapeHandler.setFillColor(Color.valueOf(fillColour.getValue().toString()),shape));
+            }
+        });
+        strokeColour.setOnAction(t-> {
+            if(!selectedShapes.isEmpty()){
+                selectedShapes.forEach(shape -> shapeHandler.setStrokeColor(Color.valueOf(strokeColour.getValue().toString()),shape));
+            }
+        });
+        shapeThickness.setOnAction(t-> {
+            if(!selectedShapes.isEmpty()){
+                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(Thickness.valueOf(shapeThickness.getValue().toString()),shape));
+            }
+        });
 
         shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu, setLabel);
         shapeHandler = new ShapeHandler(shapeContextMenu, canvas, this);
@@ -249,9 +263,9 @@ public class EditorController {
     }
 
     /**
-     * Notify Shape be.ac.ulb.infof307.g09.controller of javafx shape creation
+     * Notify Shape controller of javafx shape creation
      *
-     * @param addToController the shape that will be added to the be.ac.ulb.infof307.g09.model
+     * @param addToController the shape that will be added to the model
      * @param shape           JavaFX shape
      */
     public void notifyController(be.ac.ulb.infof307.g09.controller.shape.Shape addToController, Shape shape) {
@@ -270,20 +284,20 @@ public class EditorController {
         } else {
             addToController.setFill(false);
         }
-        canvas.addShape(addToController); //warn the be.ac.ulb.infof307.g09.model
+        canvas.addShape(addToController); //warn the model
         translateToTikz();
     }
 
     /**
-     * Disables all the buttons except delete button when shape is selected
-     * Gets all children in case new buttons are added
-     *
+     * Disables all the buttons except delete and edits buttons when shape is selected
      * @param isDisabled disables the buttons when true
      */
     public void disableToolbar(boolean isDisabled) {
-        for (Node node : toolbar.getChildren()) {
-            node.setDisable(isDisabled);
-        }
+        circle.setDisable(isDisabled);
+        square.setDisable(isDisabled);
+        triangle.setDisable(isDisabled);
+        line.setDisable(isDisabled);
+        arrow.setDisable(isDisabled);
         delete.setDisable(false);
     }
 
@@ -304,7 +318,7 @@ public class EditorController {
     public void save() {
         try {
             this.projectUcc.save();
-            Utility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
+            be.ac.ulb.infof307.g09.view.Utility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
         } catch (FatalException e) {
             showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
         }
@@ -348,7 +362,7 @@ public class EditorController {
      */
     private boolean checkIfMoreCoordinateRequired() {
         if (shapeHandler.waitingForMoreCoordinate) {
-            Utility.showAlert(Alert.AlertType.INFORMATION, "Finish your action",
+            be.ac.ulb.infof307.g09.view.Utility.showAlert(Alert.AlertType.INFORMATION, "Finish your action",
                     "You need to select a second point", "You need to select a second point to finish the last shape!");
             disableButtonOverlay();
             return true;
@@ -491,7 +505,7 @@ public class EditorController {
     };
 
     /**
-     * Required to load be.ac.ulb.infof307.g09.view
+     * Required to load view
      *
      * @param viewSwitcher the object responsible for the changing the be.ac.ulb.infof307.g09.view presented to the user
      */

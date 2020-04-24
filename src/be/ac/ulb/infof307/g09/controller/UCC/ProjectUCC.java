@@ -2,8 +2,8 @@ package be.ac.ulb.infof307.g09.controller.UCC;
 
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
-import be.ac.ulb.infof307.g09.utilities.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.File;
 import java.util.ArrayList;

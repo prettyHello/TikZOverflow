@@ -5,7 +5,7 @@ import be.ac.ulb.infof307.g09.controller.Canvas.CanvasImpl;
 import be.ac.ulb.infof307.g09.controller.shape.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import static org.junit.jupiter.api.Assertions.*;
 

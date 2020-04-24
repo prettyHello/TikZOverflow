@@ -10,9 +10,8 @@ import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import be.ac.ulb.infof307.g09.utilities.Utility;
-import be.ac.ulb.infof307.g09.utilities.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,7 +50,7 @@ class ProjectDAOImplTest {
     @AfterEach
     void tearDown() {
         dalServices.deleteDB("dao_test");
-        Utility.deleteFileSilent(new File(rootFolder)); // zip folder
+        be.ac.ulb.infof307.g09.model.Utility.deleteFileSilent(new File(rootFolder)); // zip folder
     }
 
 

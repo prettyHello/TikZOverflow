@@ -2,7 +2,7 @@ package be.ac.ulb.infof307.g09.controller.Canvas;
 
 import be.ac.ulb.infof307.g09.controller.shape.Color;
 import be.ac.ulb.infof307.g09.controller.shape.Shape;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.Serializable;
 import java.util.List;

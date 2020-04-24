@@ -6,15 +6,15 @@ import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
+import be.ac.ulb.infof307.g09.view.Utility;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-import be.ac.ulb.infof307.g09.utilities.Utility;
-import be.ac.ulb.infof307.g09.utilities.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static be.ac.ulb.infof307.g09.utilities.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
 
 /**
  * This class handles the main screen of the program and allows the user to manage through their projects.

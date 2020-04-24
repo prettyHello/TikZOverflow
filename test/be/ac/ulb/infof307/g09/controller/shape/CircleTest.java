@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
 import org.junit.jupiter.api.Test;
-import be.ac.ulb.infof307.g09.utilities.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

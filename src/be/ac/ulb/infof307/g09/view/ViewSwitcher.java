@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import be.ac.ulb.infof307.g09.utilities.Utility;
 import be.ac.ulb.infof307.g09.view.dashboard.DashboardController;
 import be.ac.ulb.infof307.g09.view.editor.EditorController;
 import be.ac.ulb.infof307.g09.view.login.LoginController;

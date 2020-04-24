@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.model;
 
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 /**
  * This interface exposes the basic CRUD operations performed on the database that are shared by all

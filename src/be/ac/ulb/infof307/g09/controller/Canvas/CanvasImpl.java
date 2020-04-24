@@ -4,7 +4,7 @@ import be.ac.ulb.infof307.g09.controller.shape.Color;
 import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
 import be.ac.ulb.infof307.g09.controller.shape.Shape;
 import be.ac.ulb.infof307.g09.controller.shape.Square;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.ArrayList;
 import java.util.List;

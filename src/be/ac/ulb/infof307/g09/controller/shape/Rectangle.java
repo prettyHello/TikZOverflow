@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.utilities.Utility;
-import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 /**
  * eg : \draw (0,0) rectangle (1,1);
