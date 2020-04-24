@@ -387,7 +387,7 @@ public class EditorController {
             newLines.removeIf(blackList::contains);
 
             boolean linesCorrect = true;
-            int incorrectLineNum = -1;
+            String incorrectLine = null;
             Pattern p;
             Matcher m;
             for (String filteredLine : newLines) {
@@ -399,13 +399,12 @@ public class EditorController {
                         linesCorrect = true;
                 }
                 if (!linesCorrect) {
-                    incorrectLineNum = newLines.indexOf(filteredLine);
+                    incorrectLine = filteredLine;
                     break;
                 }
             }
             if (linesCorrect) {
-                System.out.println("No incorrect line");
-
+                tikzTA.setWrongLine(null);
                 ArrayList<Integer> selectedShapesIds = new ArrayList<>();
                 if (!selectedShapes.isEmpty()) {
                     if (oldCode == null)
@@ -472,20 +471,23 @@ public class EditorController {
                 if (selectedShapes.isEmpty())
                     disableToolbar(false);
 
+                this.oldCode = null;
                 writableOldCode = true;
             } else {
-                // TODO: Highlight wrong line
-                System.out.println("Incorrect shape ID: " + incorrectLineNum + 1);
-                if (!selectedShapes.isEmpty() && writableOldCode) {
+                tikzTA.setWrongLine(incorrectLine);
+                if (writableOldCode) {
                     this.oldCode = oldValue;
                     writableOldCode = false;
                 }
             }
+
+            if (!selectedShapes.isEmpty()) {
+                tikzTA.setSelectedShapes(this.selectedShapes);
+            }
+
         } else {
             shapeHandler.actionFromGUI = false;
         }
-
-        tikzTA.highlightOnSelect();
     };
 
     /**

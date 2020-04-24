@@ -2,6 +2,7 @@ package be.ac.ulb.infof307.g09.view.editor;
 
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.CodeArea;
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 public class HighlightTextColor extends CodeArea {
 
     private ArrayList<Shape> selectedShapes = new ArrayList<>();
+    private String wrongLine = null;
 
     public HighlightTextColor() {
         super();
@@ -23,6 +25,12 @@ public class HighlightTextColor extends CodeArea {
     public void setSelectedShapes(ArrayList<Shape> selectedShapes) {
         this.selectedShapes = selectedShapes;
     }
+
+    /**
+     * Set the value of the line that it's wrong formatted.
+     * @param line the value of the line that is wrong.
+     */
+    public void setWrongLine(String line) { this.wrongLine = line; }
 
     /**
      * color an identical word by its position, in a text field
@@ -148,6 +156,8 @@ public class HighlightTextColor extends CodeArea {
                 colorWord("shapes", "shapes");
                 colorWord("digit", "digit");
                 highlightOnSelect();
+                if (this.wrongLine != null)
+                    highLightWrongLine();
             }
 
             //allows to add a line number
@@ -160,6 +170,13 @@ public class HighlightTextColor extends CodeArea {
                 }
             }
         });
+    }
+
+    public void highLightWrongLine() {
+        List<Integer> positions = findWordUpgrade(this.getText(), this.wrongLine); // Get the line position in the canvas of the selected shape.
+        for (Integer position : positions) {
+            setStyleClass(position, position + this.wrongLine.length(), "wrong-line"); // Highlight the position of the shape.
+        }
     }
 
 }
