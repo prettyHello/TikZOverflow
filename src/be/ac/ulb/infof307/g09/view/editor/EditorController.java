@@ -404,6 +404,7 @@ public class EditorController {
                 }
             }
             if (linesCorrect) {
+                tikzTA.setWrongLine(null);
                 ArrayList<Integer> selectedShapesIds = new ArrayList<>();
                 if (!selectedShapes.isEmpty()) {
                     if (oldCode == null)
@@ -472,18 +473,16 @@ public class EditorController {
 
                 this.oldCode = null;
                 writableOldCode = true;
-                this.oldCode = null;
             } else {
+                tikzTA.setWrongLine(incorrectLine);
                 if (writableOldCode) {
                     this.oldCode = oldValue;
                     writableOldCode = false;
                 }
-                tikzTA.highLightWrongLine(incorrectLine);
             }
 
             if (!selectedShapes.isEmpty()) {
                 tikzTA.setSelectedShapes(this.selectedShapes);
-                tikzTA.highlightOnSelect();
             }
 
         } else {
