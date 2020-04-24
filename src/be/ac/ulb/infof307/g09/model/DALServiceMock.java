@@ -4,6 +4,11 @@ import be.ac.ulb.infof307.g09.utilities.exceptions.FatalException;
 
 import java.io.IOException;
 
+/**
+ * The DALServiceMock is used to hide the database transaction during test.
+ * Since all the methods return void, they are all empty, the point being to test the model (dao) without the need worry about eventual
+ * throws the real dalservice could launch.
+ */
 public class DALServiceMock  implements DALServices {
 
     public DALServiceMock(){
