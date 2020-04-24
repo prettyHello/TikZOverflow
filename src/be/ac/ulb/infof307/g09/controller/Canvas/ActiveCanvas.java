@@ -20,7 +20,7 @@ public class ActiveCanvas {
         INSTANCE = canvas;
     }
 
-    public static void setNewCanvas(int width, int height) {
+    public static void setNewCanvas() {
         INSTANCE = new CanvasImpl();
     }
 

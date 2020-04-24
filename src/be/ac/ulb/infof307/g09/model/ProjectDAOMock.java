@@ -94,7 +94,7 @@ public class ProjectDAOMock implements ProjectDAO {
         checkObjects(dto.getModificationDate());
         dto.setProjectId(projectIdCounter++);
         this.projectList.add(dto);
-        ActiveCanvas.setNewCanvas(-1, -1);
+        ActiveCanvas.setNewCanvas();
         this.activeCanvas = ActiveCanvas.getActiveCanvas();
         ActiveProject.setActiveProject(dto);
         this.projectDTO = ActiveProject.getActiveProject();

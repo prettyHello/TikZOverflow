@@ -156,7 +156,7 @@ class ProjectDAOImplTest {
     @Test
     void import_emptyArchive(){
         UserDTO userDTO = generateBasicUserDTO();
-        userDTO.setUserId(666666); //TODO move the rootFolderInPorjectDAOImpl vers la conf (in case we have more user than taht)
+        userDTO.setUserId(Integer.MAX_VALUE);
         userDAO.create(userDTO);
         ProjectDTO projectDTO = projectFactory.createProject();
         projectDTO.setProjectName("test");
@@ -170,7 +170,7 @@ class ProjectDAOImplTest {
     @Test
     void import_expectedBehaviour(){
         UserDTO userDTO = generateBasicUserDTO();
-        userDTO.setUserId(666666); //TODO move the rootFolderInPorjectDAOImpl vers la conf
+        userDTO.setUserId(Integer.MAX_VALUE);
         userDAO.create(userDTO);
         ProjectDTO projectDTO = generateBasicProjectDTO();
         projectDTO.setProjectName("test");

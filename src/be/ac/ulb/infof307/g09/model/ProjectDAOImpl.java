@@ -62,8 +62,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             pr.executeUpdate();
             Files.createDirectories(Paths.get(dto.getProjectPath()));
             ActiveProject.setActiveProject(dto);
-            //TODO, Why ?
-            ActiveCanvas.setNewCanvas(-1, -1);
+            ActiveCanvas.setNewCanvas();
         } catch (SQLException e) {
             throw new FatalException("Project already exists");
         } catch (IOException e){
@@ -160,7 +159,7 @@ public class ProjectDAOImpl implements ProjectDAO {
      */
     @Override
     public void update(ProjectDTO obj) {
-        //TODO
+        throw new UnsupportedOperationException("Not implemented yet"); // can't update a project yet
     }
 
     /**
