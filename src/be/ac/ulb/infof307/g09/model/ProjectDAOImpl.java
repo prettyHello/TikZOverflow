@@ -185,6 +185,8 @@ public class ProjectDAOImpl implements ProjectDAO {
      */
     @Override
     public void save(Canvas canvas, ProjectDTO dto) throws FatalException {
+        Utility.checkObjects(canvas);
+        Utility.checkObjects(dto);
         try{
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
             objectOutputStream.writeObject(canvas);

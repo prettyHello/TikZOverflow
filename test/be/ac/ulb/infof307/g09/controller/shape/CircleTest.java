@@ -9,26 +9,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CircleTest {
 
     @Test
-    void printSimpleCircle() {
+    void print_simpleCircle() {
         Circle circle = new Circle(new Coordinates(1,2),3,Thickness.ULTRA_THIN.toString(),1);
-        assertEquals("\\draw[draw=black, ultra thin] (1.0,2.0) circle [radius=3.0];",circle.print());
+        assertEquals("\\draw[draw=black, ultra thin] (1.0,2.0) circle [radius=3.0] ;",circle.print());
     }
 
     @Test
-    void printComplexCircle() {
+    void print_complexCircle() {
         Circle circle = new Circle(true,true,Color.BLUE,Color.RED, Thickness.VERY_THICK.toString(), new Coordinates(1,2),3,1);
-        assertEquals("\\filldraw[fill=red, draw=blue, very thick] (1.0,2.0) circle [radius=3.0];",circle.print());
+        assertEquals("\\filldraw[fill=red, draw=blue, very thick] (1.0,2.0) circle [radius=3.0] ;",circle.print());
     }
 
     @Test
-    void constructorNegativeRadius() {
+    void constructor_NegativeRadius() {
         assertThrows(BizzException.class, () -> {
             new Circle(new Coordinates(1,1),-1,"THIN",1);
         }, "Error if a negative radius is passed");
     }
 
     @Test
-    void constructorZeroRadius() {
+    void constructor_ZeroRadius() {
         assertThrows(BizzException.class, () -> {
             new Circle(new Coordinates(1,1),0,"THIN",1);
         }, "Error if a zero value radius is passed");

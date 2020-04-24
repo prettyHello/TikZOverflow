@@ -56,7 +56,7 @@ class ProjectDAOImplTest {
 
 
     @Test
-    void testBasicInsertion(){
+    void create_expectedBehaviour(){
         ProjectDTO dto = generateBasicProjectDTO();
         projectDAO.create(dto);
         ProjectDTO result = projectDAO.get(dto);
@@ -72,7 +72,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void testInsertionSameName() {
+    void create_nameUniqueness() {
         ProjectDTO dto = generateBasicProjectDTO();
         ProjectDTO dto2 = generateBasicProjectDTO2();
         dto2.setProjectName(dto.getProjectName());
@@ -86,7 +86,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void testInsertionSamePath() {
+    void create_pathUniqueness() {
         ProjectDTO dto = generateBasicProjectDTO();
         ProjectDTO dto2 = generateBasicProjectDTO2();
         dto2.setProjectPath(dto.getProjectPath());
@@ -97,7 +97,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void testBasicDelete() {
+    void delete_expectedBehaviour() {
         ProjectDTO dto = generateBasicProjectDTO();
         projectDAO.create( dto);
         projectDAO.delete(dto);
@@ -110,9 +110,8 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void saveNonexistingProject(){
+    void save_nonExistingProject(){
         ProjectDTO projectDTO = generateBasicProjectDTO();
-        UserDTO userDTO = generateBasicUserDTO();
         Canvas c = generateDummyCanvas();
         assertThrows(FatalException.class, () -> {
             projectDAO.save(c, projectDTO);
@@ -120,18 +119,17 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void saveExistingProject(){
+    void save_existingProject(){
         ProjectDTO projectDTO = generateBasicProjectDTO();
-        UserDTO userDTO = generateBasicUserDTO();
         Canvas c = generateDummyCanvas();
         projectDAO.create(projectDTO);
         projectDAO.save(c, projectDTO);
         Path destination = Paths.get(projectDTO.getProjectPath()+ File.separator + projectDTO.getProjectName() + ".bin");
-        assertTrue(Files.exists(destination), "project folder wasn't deleted after delete was called");
+        assertTrue(Files.exists(destination), "project folder wasn't created after save was called");
     }
 
     @Test
-    void exportExistingProject(){
+    void export_expectedBehaviour(){
         String exportPath = rootFolder+"export";
         File fileToBeCreated = new File(exportPath);
         ProjectDTO projectDTO = generateBasicProjectDTO();
@@ -143,7 +141,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void exportNonExistingProject(){
+    void export_nonExistingProject(){
         String exportPath = rootFolder+"export";
         File fileToBeCreated = new File(exportPath);
         ProjectDTO projectDTO = generateBasicProjectDTO();
@@ -156,7 +154,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void importEmptyArchive(){
+    void import_emptyArchive(){
         UserDTO userDTO = generateBasicUserDTO();
         userDTO.setUserId(666666); //TODO move the rootFolderInPorjectDAOImpl vers la conf (in case we have more user than taht)
         userDAO.create(userDTO);
@@ -170,7 +168,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void workingImport(){
+    void import_expectedBehaviour(){
         UserDTO userDTO = generateBasicUserDTO();
         userDTO.setUserId(666666); //TODO move the rootFolderInPorjectDAOImpl vers la conf
         userDAO.create(userDTO);
@@ -186,7 +184,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void workingLoadSavedProject(){
+    void loadSavedCanvas_expectedBehaviour(){
         ProjectDTO projectDTO = generateFilledProject(generateBasicProjectDTO());
         Canvas c = this.projectDAO.loadSavedCanvas(projectDTO);
         assertNotNull(c, "The canvas return for an existing .bin is empty");
@@ -196,18 +194,18 @@ class ProjectDAOImplTest {
      * This test ensure that if the file .bin was never saved or was deleted, the method create a new canvas
      */
     @Test
-    void workingLoadUnsavedProject(){
+    void loadSavedCanvas_createNewCanvas(){
         ProjectDTO projectDTO = generateBasicProjectDTO();
         projectDAO.create(projectDTO);
         Canvas c = this.projectDAO.loadSavedCanvas(projectDTO);
         assertNotNull(c, "if the .bin was deleted or not saved, the method is supposed to create a new Canvas");
     }
 
-    Canvas generateDummyCanvas(){
+    private Canvas generateDummyCanvas(){
         return new CanvasImpl(1,1);
     }
 
-    ProjectDTO generateBasicProjectDTO(){
+    private ProjectDTO generateBasicProjectDTO(){
         ProjectDTO dto = projectFactory.createProject();
         dto.setProjectId(1);
         dto.setCreateDate("date");
@@ -218,7 +216,7 @@ class ProjectDAOImplTest {
         return dto;
     }
 
-    ProjectDTO generateBasicProjectDTO2(){
+    private ProjectDTO generateBasicProjectDTO2(){
         ProjectDTO dto = projectFactory.createProject();
         dto.setProjectId(2);
         dto.setCreateDate("date2");
@@ -245,7 +243,7 @@ class ProjectDAOImplTest {
      * create a empty tar.gz
      * @return the path of the tar.gz
      */
-    String generateExportedEmptyPorject(ProjectDTO projectDTO){
+    private String generateExportedEmptyPorject(ProjectDTO projectDTO){
         String exportPath = rootFolder+"export";
         File fileToBeCreated = new File(exportPath);
         projectDAO.create(projectDTO);
@@ -257,7 +255,7 @@ class ProjectDAOImplTest {
      * create a tar.gz with a canvas saved inside (.bin)
      * @return the path of the tar.gz
      */
-    String generateExportedFilledProject(ProjectDTO projectDTO){
+    private String generateExportedFilledProject(ProjectDTO projectDTO){
         String exportPath = rootFolder+"export";
         File fileToBeCreated = new File(exportPath);
         Canvas c = generateDummyCanvas();
@@ -267,7 +265,7 @@ class ProjectDAOImplTest {
         return exportPath+".tar.gz";
     }
 
-    ProjectDTO generateFilledProject(ProjectDTO projectDTO){
+    private ProjectDTO generateFilledProject(ProjectDTO projectDTO){
         Canvas c = generateDummyCanvas();
         projectDAO.create(projectDTO);
         projectDAO.save(c, projectDTO);

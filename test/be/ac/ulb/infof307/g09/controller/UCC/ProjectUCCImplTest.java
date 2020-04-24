@@ -32,46 +32,35 @@ class ProjectUCCImplTest {
     }
 
     @Test
-    void createFatal(){
+    void create_nullArg(){
         assertThrows(FatalException.class, () -> {
             projectUcc.create(null);
         }, "check that the ucc don't catch the fatalException coming from the Dao");
     }
 
     @Test
-    void exportFatal(){
+    void export_nullArg(){
         assertThrows(FatalException.class, () -> {
             projectUcc.export(null,null);
         }, "check that the ucc don't catch the fatalException coming from the Dao");
     }
 
     @Test
-    void loadFatal(){
+    void load_nullArg(){
         assertThrows(FatalException.class, () -> {
             projectUcc.load(null,null);
         }, "check that the ucc don't catch the fatalException coming from the Dao");
     }
 
     @Test
-    void loadConnectedUser(){
-        ConnectedUser.deleteConnectedUser();
-        UserDTO userDto = this.userFactory.createUser(10,"test", "test","e@mail.ulb","0472345261","blablabla","blablabla","blablabla");
-        ConnectedUser.setConnectedUser(userDto);
-        ProjectDTO projectDTO = this.projectFactory.createProject();
-        projectDTO.setProjectName("testProject");
-        ProjectDTO result = projectUcc.load(null,null);
-        assertEquals(result.getProjectId(), projectDTO.getProjectId());
-    }
-
-    @Test
-    void deleteFatal(){
+    void delete_nullArg(){
         assertThrows(FatalException.class, () -> {
             projectUcc.delete(null);
         }, "check that the ucc don't catch the fatalException coming from the Dao");
     }
 
     @Test
-    void saveFatal(){
+    void save_nullArg(){
         assertThrows(FatalException.class, () -> {
             ActiveProject.setActiveProject(null);
             projectUcc.save();
@@ -84,55 +73,10 @@ class ProjectUCCImplTest {
     }
 
     @Test
-    void setActiveFatal(){
+    void setActive_nullArg(){
         assertThrows(FatalException.class, () -> {
             projectUcc.setActive(null);
         }, "check that the ucc don't catch the fatalException coming from the Dao");
     }
 
-    @Test
-    void getOwnedProjectsFatal(){
-        assertThrows(FatalException.class, () -> {
-            projectUcc.create(null);
-        }, "check that the ucc don't catch the fatalException coming from the Dao");
-    }
-
-    @Test
-    void getBackListOfProject(){
-        assertThrows(FatalException.class, () -> {
-            projectUcc.create(null);
-        }, "check that the ucc don't catch the fatalException coming from the Dao");
-    }
-
-    /*
-    @Test
-    void setActiveFatal(){
-
-    }
-
-    @Test
-    void setActiveFatal(){
-
-    }
-
-    @Test
-    void setActiveFatal(){
-
-    }
-
-    @Test
-    void setActiveFatal(){
-
-    }
-
-    @Test
-    void setActiveFatal(){
-
-    }
-
-    @Test
-    void setActiveFatal(){
-
-    }
-    */
 }

@@ -56,7 +56,7 @@ public class Triangle extends Shape {
 
     public String print() {
         String returnValue = super.print();
-        returnValue += this.originPoint.print() + "-- " + this.secondPoint.print() + "-- " + this.thirdPoint.print() + "-- cycle ";
+        returnValue += this.originPoint.print() + "-- " + this.secondPoint.print() + "-- " + this.thirdPoint.print() + "-- cycle";
         returnValue += super.printLabel();
         returnValue += ";";
         return returnValue;

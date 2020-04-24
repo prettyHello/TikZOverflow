@@ -42,12 +42,10 @@ class UserDAOImplTest {
     }
 
     @Test
-    void testBasicInsert() {
-        // Test1: simple, working insert
+    void create_expectedBehaviour() {
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
         UserDTO result = userDAO.get(user);
-
         assertEquals(user.getFirstName(), result.getFirstName(), "First name does not match");
         assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
         assertEquals(user.getPassword(), user.getPassword(), "Password does not match");
@@ -58,7 +56,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void testEmailUnicity() {
+    void create_emailUniqueness() {
         UserDTO user = generateBasicUserDTO();
         UserDTO user2 = generateBasicUser2DTO();
         userDAO.create(user);
@@ -69,7 +67,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void testSaltUnicity() {
+    void create_saltUniqueness() {
         UserDTO user = generateBasicUserDTO();
         UserDTO user2 = generateBasicUser2DTO();
         userDAO.create(user);
@@ -81,7 +79,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void testPhoneNumberUnicity() {
+    void create_phoneUniqueness() {
         UserDTO user = generateBasicUserDTO();
         UserDTO user2 = generateBasicUser2DTO();
         userDAO.create(user);
@@ -94,8 +92,7 @@ class UserDAOImplTest {
 
 
     @Test
-    void getExistingUser() {
-        // Test 1 User exist
+    void get_expectedBehaviour() {
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
         UserDTO result = userDAO.get(user);
@@ -109,7 +106,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void getNoneExistingUser() {
+    void get_noUser() {
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
         assertThrows(BizzException.class, () -> {
@@ -119,11 +116,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void find() {
-    }
-
-    @Test
-    void updateToExistsingPhoneNumber() {
+    void update_phoneUniqueness() {
         //  error same phone number
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
@@ -137,7 +130,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void updateWithexistingMail() {
+    void update_mailUniqueness() {
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
         UserDTO user2 = generateBasicUser2DTO();
@@ -151,7 +144,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void updateWithExistingSalt() {
+    void update_saltUniqueness() {
         // error same salt
         UserDTO user = generateBasicUserDTO();
         userDAO.create(user);
@@ -164,7 +157,7 @@ class UserDAOImplTest {
     }
 
     @Test
-    void deleteExistingUser() {
+    void delete_expectedBehaviour() {
         // test 1: create then delete then see if still exists
         UserDTO user = generateBasicUserDTO();
         assertThrows(BizzException.class, () -> {
