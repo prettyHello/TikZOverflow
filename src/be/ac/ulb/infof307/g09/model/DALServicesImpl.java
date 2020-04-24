@@ -33,12 +33,12 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      * {@inheritDoc}
      */
     @Override
-    public void startTransaction() throws  FatalException {
+    public void startTransaction() throws FatalException {
         this.openConnection();
         try {
             connection.setAutoCommit(false);
         } catch (SQLException e) {
-            throw new FatalException("DalServices error - transaction: \n\t"+e.getMessage());
+            throw new FatalException("DalServices error - transaction: \n\t" + e.getMessage());
         }
     }
 
@@ -46,12 +46,12 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      * {@inheritDoc}
      */
     @Override
-    public void commit() throws  FatalException {
+    public void commit() throws FatalException {
         try {
             connection.commit();
             connection.setAutoCommit(true);
         } catch (SQLException e) {
-            throw new FatalException("DalServices error - unable to commit: \n\t"+e.getMessage());
+            throw new FatalException("DalServices error - unable to commit: \n\t" + e.getMessage());
         }
         this.closeConnection();
     }
@@ -61,12 +61,12 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
      */
     @Override
     public void rollback() throws FatalException {
-        if (connection != null){
+        if (connection != null) {
             try {
                 connection.rollback();
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
-                throw new FatalException("DalServices error - impossible to rollback: \n\t"+e.getMessage());
+                throw new FatalException("DalServices error - impossible to rollback: \n\t" + e.getMessage());
             }
         }
     }
@@ -96,7 +96,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
             }
             statement.executeUpdate(text.toString());
         } catch (Exception e) {
-            throw new FatalException("Database creation impossible: \n\t"+e.getMessage());
+            throw new FatalException("Database creation impossible: \n\t" + e.getMessage());
         } finally {
             // close file reader
             if (reader != null) {
@@ -123,11 +123,11 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
         this.closeConnection();
         try {
             File f = new File("./" + name + ".db");
-            if (!f.exists() || !f.delete()) {
-                throw new FatalException("Database ./"+name + " deletion impossible: \n\t");
+            if (f.exists() && !f.delete()) {
+                throw new FatalException("Database ./" + name + " deletion impossible: \n\t");
             }
         } catch (Exception e) {
-            throw new FatalException("Database ./"+name + " deletion impossible: \n\t: "+e.getMessage());
+            throw new FatalException("Database ./" + name + " deletion impossible: \n\t: " + e.getMessage());
         }
     }
 
@@ -140,7 +140,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
             try {
                 connection = DriverManager.getConnection(databasePath);
             } catch (Exception e) {
-                throw new FatalException("Database ./"+ databaseName + " open connection impossible: \n\t: "+e.getMessage());
+                throw new FatalException("Database ./" + databaseName + " open connection impossible: \n\t: " + e.getMessage());
             }
 
         }
@@ -155,7 +155,7 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
                 connection.close();
                 connection = null;
             } catch (Exception e) {
-                throw new FatalException("Database ./"+ databaseName + " close connection impossible: \n\t: "+e.getMessage());
+                throw new FatalException("Database ./" + databaseName + " close connection impossible: \n\t: " + e.getMessage());
             }
         }
     }

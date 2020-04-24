@@ -68,7 +68,13 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement ps = null;
         try {
             ps = dal.prepareStatement(SQL_INSERT_USER);
-            fullyFillPreparedStatement(ps, userDTO);
+            ps.setString(1, userDTO.getFirstName());
+            ps.setString(2, userDTO.getLastName());
+            ps.setString(3, userDTO.getEmail());
+            ps.setString(4, userDTO.getPhone());
+            ps.setString(5, userDTO.getPassword());
+            ps.setString(6, userDTO.getSalt());
+            ps.setString(7, userDTO.getRegisterDate());
             ps.executeUpdate();
         } catch (SQLException exc) {
             if (exc.getErrorCode() == 19) {
@@ -105,10 +111,17 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement ps = null;
         try {
             ps = dal.prepareStatement(SQL_UPDATE_USER);
-            fullyFillPreparedStatement(ps, userDTO);
+            ps.setString(1, userDTO.getFirstName());
+            ps.setString(2, userDTO.getLastName());
+            ps.setString(3, userDTO.getEmail());
+            ps.setString(4, userDTO.getPhone());
+            ps.setString(5, userDTO.getPassword());
+            ps.setString(6, userDTO.getSalt());
+            ps.setString(7, userDTO.getEmail());
             ps.executeUpdate();
+            System.out.println(ps);
         } catch (SQLException exc) {
-            exc.printStackTrace();
+            //exc.printStackTrace();
             throw new FatalException("An error occurred in updateUser");
         }
     }

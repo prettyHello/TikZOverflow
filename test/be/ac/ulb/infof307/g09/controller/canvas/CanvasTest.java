@@ -114,14 +114,18 @@ public class CanvasTest {
 
     @Test
     void toTikz_empty() {
-        assertEquals(canvas.toTikZ(), "");
+        assertEquals(canvas.toTikZ(), "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n\n\\end{tikzpicture}\n\\end{document}");
     }
 
     @Test
     void toTikz_expectedBehaviour() {
         Shape toAdd = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.ULTRA_THIN.toString(),canvas.getIdForNewShape());
         canvas.addShape(toAdd);
-        assertEquals(canvas.toTikZ(), toAdd.print() + "\n");
+
+        String control = "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n";
+        control += toAdd.print() + "\n";
+        control += "\n\\end{tikzpicture}\n\\end{document}";
+        assertEquals(canvas.toTikZ(), control);
     }
 
     @Test
@@ -130,7 +134,12 @@ public class CanvasTest {
         Shape toAdd2 = new Circle(new Coordinates(0, 0), 50, Thickness.VERY_THICK.toString(),canvas.getIdForNewShape());
         canvas.addShape(toAdd1);
         canvas.addShape(toAdd2);
-        String control = toAdd1.print() + "\n" + toAdd2.print() + "\n";
+
+        String control = "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n";
+        control += toAdd1.print() + "\n";
+        control += toAdd2.print() + "\n";
+        control += "\n\\end{tikzpicture}\n\\end{document}";
+
         assertEquals(control, canvas.toTikZ());
     }
 

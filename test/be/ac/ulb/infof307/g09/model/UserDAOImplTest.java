@@ -29,6 +29,7 @@ class UserDAOImplTest {
         this.dalServices = TestDAOConfigurationSingleton.getDalServices();
         this.userFactory = TestDAOConfigurationSingleton.getUserFactory();
         this.userDAO = TestDAOConfigurationSingleton.getUserDAO();
+        dalServices.deleteDB("dao_test");
         try {
             dalServices.createTables("dao_test");
         } catch (IOException e) {
@@ -87,7 +88,6 @@ class UserDAOImplTest {
             user2.setPhone("123");
             userDAO.create(user2);
         });
-
     }
 
 
@@ -125,8 +125,8 @@ class UserDAOImplTest {
         assertThrows(FatalException.class, () -> {
             user.setPhone("049");
             userDAO.update(user);
+            System.out.println("eee");
         }, "update phone number to an existing one doesn't raise an exception");
-
     }
 
     @Test

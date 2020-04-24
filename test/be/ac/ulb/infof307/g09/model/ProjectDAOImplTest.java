@@ -51,7 +51,7 @@ class ProjectDAOImplTest {
     @AfterEach
     void tearDown() {
         dalServices.deleteDB("dao_test");
-        Utility.deleteFileSilent(new File(rootFolder));
+        Utility.deleteFileSilent(new File(rootFolder)); // zip folder
     }
 
 
