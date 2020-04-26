@@ -64,11 +64,6 @@ class ProjectUCCImplTest {
     }
 
     @Test
-    void createProjectAndGetCanvas(){
-        //todo
-    }
-
-    @Test
     void setActive_nullArg(){
         assertThrows(FatalException.class, () -> {
             projectUcc.setActive(null);
