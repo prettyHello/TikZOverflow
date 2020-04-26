@@ -1,6 +1,8 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-public class Label {
+import java.io.Serializable;
+
+public class Label implements Serializable {
     private String id;
     private final String idPrefix = "labelOfShape";
     private String title;

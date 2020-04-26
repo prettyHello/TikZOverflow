@@ -200,7 +200,7 @@ public class ShapeHandler {
                 if (editorController.selectedShapes.isEmpty())
                     editorController.disableToolbar(false);
             }
-            actionFromGUI = true;
+            actionFromGUI = false;
         }
         editorController.translateToTikz();
     }
@@ -379,6 +379,8 @@ public class ShapeHandler {
         //TODO vérifier utilité de cette condition
         if (shape.getLabel() != null) {
             label = new Text(shape.getLabel().getTitle());
+            label.setDisable(true);
+            label.setStyle("-fx-font-weight: bold");
             label.setId(shape.getLabel().getId());
             label.setFill(Color.valueOf(shape.getLabel().getColor().toString()));
             final Coordinates offset = shape.calcLabelOffset();

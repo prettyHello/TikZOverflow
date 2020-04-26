@@ -26,6 +26,13 @@ public abstract class Shape implements Serializable {
     private  double shapeThicknessValue;
     //private String label = "";
     private int id;
+    //TEST
+    private Label labelObject = null;
+
+
+
+    //ENDTEST
+
 
     /**
      * @param draw Is the shape have a outer line, can be combined with fill.
@@ -120,20 +127,13 @@ public abstract class Shape implements Serializable {
     public void setDrawColor(Color drawColor) {
         this.drawColor = drawColor;
     }
-
-    //TEST
-    private Label labelObject;
-
-    public Label getLabel() {
-
-        return labelObject;
-    }
+    public Label getLabel() { return labelObject; }
 
     public void setLabel(Label label) {
         this.labelObject = label;
     }
 
-    //ENDTEST
+
 
     public String getShapeThicknessKey() {
         return shapeThicknessKey.toLowerCase().replace("_", " ");
