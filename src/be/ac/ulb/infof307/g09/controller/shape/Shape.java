@@ -21,9 +21,10 @@ public abstract class Shape implements Serializable {
     private boolean fill = false;
     private Color fillColor = Color.BLACK;
     private Color drawColor = Color.BLACK;
+
     private String shapeThicknessKey;
     private  double shapeThicknessValue;
-    private String label = "";
+    //private String label = "";
     private int id;
 
     /**
@@ -120,13 +121,19 @@ public abstract class Shape implements Serializable {
         this.drawColor = drawColor;
     }
 
-    public String getLabel() {
-        return label;
+    //TEST
+    private Label labelObject;
+
+    public Label getLabel() {
+
+        return labelObject;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setLabel(Label label) {
+        this.labelObject = label;
     }
+
+    //ENDTEST
 
     public String getShapeThicknessKey() {
         return shapeThicknessKey.toLowerCase().replace("_", " ");
@@ -161,9 +168,9 @@ public abstract class Shape implements Serializable {
     }
 
     public String printLabel() {
-        if (this.label != null && this.label.length() > 0){
+        if (this.labelObject != null && this.labelObject.getTitle().length() > 0){
             Coordinates labelOffset = this.calcLabelOffset();
-            return "node[align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.label + "}";
+            return "node[fill=" + this.labelObject.getColor().value +", align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.labelObject.getTitle() + "}";
         }else{
             return "";
         }

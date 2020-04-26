@@ -87,6 +87,9 @@ public class EditorController {
     private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuFillColorPicker;
     private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuDrawColorPicker;
     private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Thickness> contextMenuChangeThickness;
+    //TEST
+    private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuLabelColorPicker;
+    //ENDTEST
 
     protected String intNumber;
     protected String floatNumber;
@@ -123,6 +126,9 @@ public class EditorController {
         contextMenuFillColorPicker = new ChoiceBox<>();
         contextMenuDrawColorPicker = new ChoiceBox<>();
         contextMenuChangeThickness = new ChoiceBox<>();
+        //TEST
+        contextMenuLabelColorPicker = new ChoiceBox<>();
+        //ENDTEST
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
         ArrayList<String> colors = new ArrayList<>();
@@ -131,6 +137,9 @@ public class EditorController {
             strokeColour.getItems().add(colour);
             contextMenuFillColorPicker.getItems().add(colour);
             contextMenuDrawColorPicker.getItems().add(colour);
+            //TEST
+            contextMenuLabelColorPicker.getItems().add(colour);
+            //ENDTEST
             colors.add(colour.getValue());
         }
 
@@ -160,7 +169,11 @@ public class EditorController {
         shapeThickness.setValue(Thickness.THIN);
         contextMenuFillColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
         contextMenuDrawColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
+        //TEST
+        contextMenuLabelColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
+        //ENDTEST
         contextMenuChangeThickness.setValue(Thickness.THIN);
+
 
         MenuItem delete = new MenuItem("Delete");
         delete.setOnAction(t -> shapeHandler.rightClickDeleteShape());
@@ -168,8 +181,8 @@ public class EditorController {
         fillColorMenu.setOnAction(t -> shapeHandler.changeColorRightClick(Color.valueOf(contextMenuFillColorPicker.getValue().toString())));
         MenuItem drawColorMenu = new MenuItem("Stroke color", contextMenuDrawColorPicker);
         drawColorMenu.setOnAction(t -> shapeHandler.changeStrokeColorRightClick(Color.valueOf(contextMenuDrawColorPicker.getValue().toString())));
-        MenuItem setLabel = new MenuItem("Set label");
-        setLabel.setOnAction(t -> shapeHandler.handleSetLabel());
+        MenuItem setLabel = new MenuItem("Set label", contextMenuLabelColorPicker);
+        setLabel.setOnAction(t -> shapeHandler.handleSetLabel(Color.valueOf(contextMenuLabelColorPicker.getValue().toString())));
         MenuItem shapeThicknessMenu = new MenuItem("Change thickness", contextMenuChangeThickness);
         shapeThicknessMenu.setOnAction(t-> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
 

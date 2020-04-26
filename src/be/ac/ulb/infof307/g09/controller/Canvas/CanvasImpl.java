@@ -1,13 +1,12 @@
 package be.ac.ulb.infof307.g09.controller.Canvas;
 
-import be.ac.ulb.infof307.g09.controller.shape.Color;
-import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
-import be.ac.ulb.infof307.g09.controller.shape.Shape;
-import be.ac.ulb.infof307.g09.controller.shape.Square;
+import be.ac.ulb.infof307.g09.controller.shape.*;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static be.ac.ulb.infof307.g09.view.ColorUtils.getColorNameFromRgb;
 
 public class CanvasImpl implements Canvas {
     final List<Shape> shapes;
@@ -91,7 +90,7 @@ public class CanvasImpl implements Canvas {
      * {@inheritDoc}
      */
     @Override
-    public void setShapeLabel(int shapeId, String label) {
+    public void setShapeLabel(int shapeId, String label, Coordinates labelCoords, Color labelColor) {
         Shape toChange = null;
         for (Shape shape : shapes) {
             if (shape.getId() == shapeId) {
@@ -104,8 +103,11 @@ public class CanvasImpl implements Canvas {
             throw new IllegalArgumentException("canvas does not contain a shape with the specified id");
         }
 
-        toChange.setLabel(label);
+        Label shapeLabel = new Label(shapeId,label, new Coordinates(labelCoords.getX(),labelCoords.getY()),labelColor);
+        toChange.setLabel(shapeLabel);
+
     }
+
 
     /**
      * Change the draw color of a shape
