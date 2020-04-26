@@ -220,7 +220,6 @@ public class ProjectDAOImpl implements ProjectDAO {
         return canvas;
     }
 
-    //TODO remove
     private void renameFolderProject(File projectName, File NewProjectName) {
         projectName.renameTo(NewProjectName);
     }

@@ -8,11 +8,9 @@ import java.time.LocalDateTime;
 
 public class UserDAOMock implements UserDAO {
 
-    //private final DALBackEndServices dal;
     private final UserFactory userFactory;
 
     public UserDAOMock(DALServices dalServices, UserFactory userFactory) {
-        //this.dal = (DALBackEndServices) dalServices;
         this.userFactory = userFactory;
     }
 

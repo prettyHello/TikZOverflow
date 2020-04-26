@@ -1,6 +1,6 @@
 # Model package :
 
-Here you will find packages for everything concerning the be.ac.ulb.infof307.g09.model part of the application.
+Here you will find packages for everything concerning the model part of the application.
 
 ## Classes :
 ### DalBackEndServices :

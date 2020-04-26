@@ -2,7 +2,7 @@ package be.ac.ulb.infof307.g09.config;
 
 /**
  * This class in meant to be used anywhere else than the tests
- * this pseudo-singleton will be instantiate only once by the be.ac.ulb.infof307.g09.Main application
+ * this pseudo-singleton will be instantiate only once by the Main application
  */
 public class ConfigurationSingleton extends AbstractConfigurationSingleton {
     private static ConfigurationSingleton INSTANCE;

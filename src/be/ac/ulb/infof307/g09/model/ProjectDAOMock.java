@@ -16,7 +16,7 @@ import static be.ac.ulb.infof307.g09.controller.Utility.checkObjects;
 
 /**
  * Implementation used for the tests of the controllers
- * Using a mock allow to test the controllers independently from the be.ac.ulb.infof307.g09.model implementation
+ * Using a mock allow to test the controllers independently from the model implementation
  */
 public class ProjectDAOMock implements ProjectDAO {
 

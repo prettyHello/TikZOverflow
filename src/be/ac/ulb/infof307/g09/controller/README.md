@@ -1,6 +1,6 @@
 # Controller package :
 
-Here you will find the packages for everything concerning the be.ac.ulb.infof307.g09.controller part of the application.
+Here you will find the packages for everything concerning the controller part of the application.
 
 ## Packages :
 
@@ -11,7 +11,7 @@ The UCC or "Use Case Controllers" are the controllers. There is one accessible m
 </p>
 
 <p>
-The DTO (Data Transfer Objects)  are used to communicate between the controllers and the be.ac.ulb.infof307.g09.view/be.ac.ulb.infof307.g09.model. 
+The DTO (Data Transfer Objects)  are used to communicate between the controllers and the view/model. 
 DTO are simple class made only of getters and setters. Using DTO avoid the usage of too many parameters in method call, thus making refactoring easier.  
 </p>
 
@@ -24,5 +24,5 @@ Canvas: is the link between the shapes on screen and the Tikz editor
 </p>
 
 <p>
-Shape: is the java be.ac.ulb.infof307.g09.model for the code Tikz
+Shape: is the java model for the code Tikz
 </p>
