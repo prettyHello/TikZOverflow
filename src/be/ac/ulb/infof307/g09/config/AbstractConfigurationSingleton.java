@@ -88,7 +88,7 @@ public abstract class AbstractConfigurationSingleton {
      */
     protected void loadConfiguration(String[] args) {
         try {
-            configuration = (Configuration) Class.forName("config.Configuration").getDeclaredConstructor().newInstance();
+            configuration = (Configuration) Class.forName("be.ac.ulb.infof307.g09.config.Configuration").getDeclaredConstructor().newInstance();
             configuration.initProperties(args);
 
             dalServices = (DALServices) configuration.getClassFor("DALServices").getDeclaredConstructor().newInstance();
