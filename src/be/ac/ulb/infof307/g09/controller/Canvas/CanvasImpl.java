@@ -6,8 +6,6 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static be.ac.ulb.infof307.g09.view.ColorUtils.getColorNameFromRgb;
-
 public class CanvasImpl implements Canvas {
     final List<Shape> shapes;
     private int idCounter = 0;
@@ -90,7 +88,7 @@ public class CanvasImpl implements Canvas {
      * {@inheritDoc}
      */
     @Override
-    public void setShapeLabel(int shapeId, String label, Coordinates labelCoords, Color labelColor) {
+    public void setShapeLabel(int shapeId, String label, Color labelColor) {
         Shape toChange = null;
         for (Shape shape : shapes) {
             if (shape.getId() == shapeId) {
@@ -103,11 +101,10 @@ public class CanvasImpl implements Canvas {
             throw new IllegalArgumentException("canvas does not contain a shape with the specified id");
         }
 
-        Label shapeLabel = new Label(shapeId,label, new Coordinates(labelCoords.getX(),labelCoords.getY()),labelColor);
+        Label shapeLabel = new Label(label, labelColor);
         toChange.setLabel(shapeLabel);
 
     }
-
 
     /**
      * Change the draw color of a shape

@@ -6,7 +6,6 @@ import be.ac.ulb.infof307.g09.controller.shape.Label;
 import be.ac.ulb.infof307.g09.controller.shape.Square;
 import be.ac.ulb.infof307.g09.controller.shape.Thickness;
 import be.ac.ulb.infof307.g09.view.Utility;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextInputDialog;
@@ -97,8 +96,6 @@ public class ShapeHandler {
         editorController.translateToTikz();
     }
 
-
-
     /**
      * Rightclick dropdown menu, change shape thickness
      */
@@ -107,7 +104,6 @@ public class ShapeHandler {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             setShapeThickness(thickness, shape);
         }
-
     }
 
     /**
@@ -134,57 +130,16 @@ public class ShapeHandler {
             Optional<String> result = dialog.showAndWait();
             String labelText = result.orElse("");
 
-            be.ac.ulb.infof307.g09.controller.shape.Shape controllerShape = canvas.getShapeById(shapeId);
-            Coordinates labelPoint = getCoordinatesForLabel(controllerShape);
-
-            //TEST
-            if(controllerShape.getLabel() != null){
-                deleteLabel(controllerShape.getLabel().getId());
+            be.ac.ulb.infof307.g09.controller.shape.Shape modelShape = canvas.getShapeById(shapeId);
+            if (modelShape instanceof be.ac.ulb.infof307.g09.controller.shape.Path){
+                return;
             }
-            canvas.setShapeLabel(shapeId, labelText, labelPoint, getColorNameFromRgb(labelColor.getRed(), labelColor.getGreen(), labelColor.getBlue()));
 
 
-            Text label = createLabel(controllerShape, labelPoint.getX(), labelPoint.getY());
-
-            //ENDTEST
-            editorController.pane.getChildren().add(label);
-
-            actionFromGUI = true;
+            canvas.setShapeLabel(shapeId, labelText, getColorNameFromRgb(labelColor.getRed(), labelColor.getGreen(), labelColor.getBlue()));
+            actionFromGUI = false;
         }
         editorController.translateToTikz();
-    }
-
-    //TEST
-    private void deleteLabel(String labelId){
-        Text label = (Text) editorController.pane.lookup("#"+labelId);
-        editorController.pane.getChildren().remove(label);
-    }
-    //ENDTEST
-
-    /**
-     * Return the point where the label is drawn
-     *
-     * @param shape be.ac.ulb.infof307.g09.controller shape to which a label is added.
-     * @return the coordinates of the label placement point.
-     */
-    private Coordinates getCoordinatesForLabel(be.ac.ulb.infof307.g09.controller.shape.Shape shape) {
-        Coordinates point = null;
-
-        switch (shape.getClass().toString()) {
-            case "class be.ac.ulb.infof307.g09.controller.shape.Circle":
-                point = ((be.ac.ulb.infof307.g09.controller.shape.Circle) shape).getCoordinates();
-                break;
-            case "class be.ac.ulb.infof307.g09.controller.shape.Square":
-                point = ((be.ac.ulb.infof307.g09.controller.shape.Square) shape).getOriginCoordinates();
-                break;
-            case "class be.ac.ulb.infof307.g09.controller.shape.Triangle":
-                point = ((be.ac.ulb.infof307.g09.controller.shape.Triangle) shape).getPoints().get(0);
-                break;
-            default:
-                break;
-        }
-
-        return point;
     }
 
     /**
@@ -378,19 +333,14 @@ public class ShapeHandler {
         Text label = null;
         //TODO vérifier utilité de cette condition
         if (shape.getLabel() != null) {
-            label = new Text(shape.getLabel().getTitle());
+            label = new Text(shape.getLabel().getValue());
             label.setDisable(true);
             label.setStyle("-fx-font-weight: bold");
-            label.setId(shape.getLabel().getId());
             label.setFill(Color.valueOf(shape.getLabel().getColor().toString()));
             final Coordinates offset = shape.calcLabelOffset();
             label.setX(shapeX + offset.getX());
             label.setY(shapeY + offset.getY());
             label.setTextAlignment(TextAlignment.CENTER);
-            label.setOnMouseClicked(event -> {
-            });
-            label.addEventHandler(MouseEvent.ANY, event -> {
-            });
         }
         return label;
     }
@@ -579,8 +529,7 @@ public class ShapeHandler {
 
             Node node = getNodeInfo(line);
             if (node != null) {
-
-                shapeToDraw.setLabel(new Label(shapeToDraw.getId(),node.label, new Coordinates(node.rightOffset, node.aboveOffset),node.color));
+                shapeToDraw.setLabel(new Label(node.label, node.color));
             }
 
             shape = handleDraw(shapeToDraw);

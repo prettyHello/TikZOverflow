@@ -2,40 +2,32 @@ package be.ac.ulb.infof307.g09.controller.shape;
 
 import java.io.Serializable;
 
+/**
+ * Represents the label that can be added to shapes
+ */
 public class Label implements Serializable {
-    private String id;
-    private final String idPrefix = "labelOfShape";
-    private String title;
-    private Coordinates coords;
-    private Color color = Color.BLACK;
 
-    public Label(int id, String title, Coordinates coords, Color color) {
-        this.id = this.idPrefix + id;
-        this.title = title;
-        this.coords = coords;
+    /**
+     * The text of the label
+     */
+    private String value;
+
+    /**
+     * The color of the label
+     */
+    private Color color;
+
+    public Label(String value, Color color) {
+        this.value = value;
         this.color = color;
     }
 
-    public String getId() { return id;}
-
-    public void setId(String id) {
-        this.id = id;
+    public String getValue() {
+        return value;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Coordinates getCoords() {
-        return coords;
-    }
-
-    public void setCoords(Coordinates coords) {
-        this.coords = coords;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public Color getColor() {

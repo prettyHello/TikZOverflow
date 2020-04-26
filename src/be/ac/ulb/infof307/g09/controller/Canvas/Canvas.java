@@ -1,7 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.Canvas;
 
 import be.ac.ulb.infof307.g09.controller.shape.Color;
-import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
 import be.ac.ulb.infof307.g09.controller.shape.Shape;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
@@ -61,9 +60,7 @@ public interface Canvas extends Serializable {
      * @param shapeId the id of the shape
      * @param label the label to set
      */
-    //TEST
-    void setShapeLabel(int shapeId, String label, Coordinates labelCoords, Color labelColor);
-    //ENDTEST
+    void setShapeLabel(int shapeId, String label, Color labelColor);
 
     /**
      * Get the id for the next shape

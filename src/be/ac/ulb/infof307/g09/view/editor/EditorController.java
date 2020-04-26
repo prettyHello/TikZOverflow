@@ -5,6 +5,9 @@ import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.shape.Thickness;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.view.ViewName;
+import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,9 +19,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.LineNumberFactory;
-import be.ac.ulb.infof307.g09.exceptions.FatalException;
-import be.ac.ulb.infof307.g09.view.ViewName;
-import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -87,9 +87,7 @@ public class EditorController {
     private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuFillColorPicker;
     private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuDrawColorPicker;
     private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Thickness> contextMenuChangeThickness;
-    //TEST
     private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuLabelColorPicker;
-    //ENDTEST
 
     protected String intNumber;
     protected String floatNumber;
@@ -126,9 +124,7 @@ public class EditorController {
         contextMenuFillColorPicker = new ChoiceBox<>();
         contextMenuDrawColorPicker = new ChoiceBox<>();
         contextMenuChangeThickness = new ChoiceBox<>();
-        //TEST
         contextMenuLabelColorPicker = new ChoiceBox<>();
-        //ENDTEST
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
         ArrayList<String> colors = new ArrayList<>();
@@ -137,9 +133,7 @@ public class EditorController {
             strokeColour.getItems().add(colour);
             contextMenuFillColorPicker.getItems().add(colour);
             contextMenuDrawColorPicker.getItems().add(colour);
-            //TEST
             contextMenuLabelColorPicker.getItems().add(colour);
-            //ENDTEST
             colors.add(colour.getValue());
         }
 
@@ -169,9 +163,7 @@ public class EditorController {
         shapeThickness.setValue(Thickness.THIN);
         contextMenuFillColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
         contextMenuDrawColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
-        //TEST
         contextMenuLabelColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
-        //ENDTEST
         contextMenuChangeThickness.setValue(Thickness.THIN);
 
 
@@ -431,7 +423,6 @@ public class EditorController {
                 }
             }
             if (linesCorrect) {
-                System.out.println("HEY PABLITO");
                 tikzTA.setWrongLine(null);
                 ArrayList<Integer> selectedShapesIds = new ArrayList<>();
                 if (!selectedShapes.isEmpty()) {
@@ -502,7 +493,6 @@ public class EditorController {
                 this.oldCode = null;
                 writableOldCode = true;
             } else {
-                System.out.println("PLATO O PLOMO");
                 tikzTA.setWrongLine(incorrectLine);
                 if (writableOldCode) {
                     this.oldCode = oldValue;

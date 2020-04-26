@@ -21,18 +21,10 @@ public abstract class Shape implements Serializable {
     private boolean fill = false;
     private Color fillColor = Color.BLACK;
     private Color drawColor = Color.BLACK;
-
     private String shapeThicknessKey;
     private  double shapeThicknessValue;
-    //private String label = "";
     private int id;
-    //TEST
-    private Label labelObject = null;
-
-
-
-    //ENDTEST
-
+    private Label label = null;
 
     /**
      * @param draw Is the shape have a outer line, can be combined with fill.
@@ -127,10 +119,10 @@ public abstract class Shape implements Serializable {
     public void setDrawColor(Color drawColor) {
         this.drawColor = drawColor;
     }
-    public Label getLabel() { return labelObject; }
+    public Label getLabel() { return label; }
 
     public void setLabel(Label label) {
-        this.labelObject = label;
+        this.label = label;
     }
 
 
@@ -168,9 +160,9 @@ public abstract class Shape implements Serializable {
     }
 
     public String printLabel() {
-        if (this.labelObject != null && this.labelObject.getTitle().length() > 0){
+        if (this.label != null && this.label.getValue().length() > 0){
             Coordinates labelOffset = this.calcLabelOffset();
-            return "node[fill=" + this.labelObject.getColor().value +", align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.labelObject.getTitle() + "}";
+            return "node[fill=" + this.label.getColor().value +", align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.label.getValue() + "}";
         }else{
             return "";
         }
