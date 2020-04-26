@@ -79,7 +79,6 @@ public class ShapeHandler {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             setStrokeColor(color,shape);
         }
-
     }
 
     /**
@@ -105,7 +104,6 @@ public class ShapeHandler {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             setShapeThickness(thickness, shape);
         }
-
     }
 
     /**
@@ -132,40 +130,9 @@ public class ShapeHandler {
             Optional<String> result = dialog.showAndWait();
             String labelText = result.orElse("");
             canvas.setShapeLabel(shapeId, labelText);
-
-            be.ac.ulb.infof307.g09.controller.shape.Shape controllerShape = canvas.getShapeById(shapeId);
-            Coordinates labelPoint = getCoordinatesForLabel(controllerShape);
-            Text label = createLabel(controllerShape, labelPoint.getX(), labelPoint.getY());
-            editorController.pane.getChildren().add(label);
-            actionFromGUI = true;
+            actionFromGUI = false;
         }
         editorController.translateToTikz();
-    }
-
-    /**
-     * Return the point where the label is drawn
-     *
-     * @param shape be.ac.ulb.infof307.g09.controller shape to which a label is added.
-     * @return the coordinates of the label placement point.
-     */
-    private Coordinates getCoordinatesForLabel(be.ac.ulb.infof307.g09.controller.shape.Shape shape) {
-        Coordinates point = null;
-
-        switch (shape.getClass().toString()) {
-            case "class be.ac.ulb.infof307.g09.controller.shape.Circle":
-                point = ((be.ac.ulb.infof307.g09.controller.shape.Circle) shape).getCoordinates();
-                break;
-            case "class be.ac.ulb.infof307.g09.controller.shape.Square":
-                point = ((be.ac.ulb.infof307.g09.controller.shape.Square) shape).getOriginCoordinates();
-                break;
-            case "class be.ac.ulb.infof307.g09.controller.shape.Triangle":
-                point = ((be.ac.ulb.infof307.g09.controller.shape.Triangle) shape).getPoints().get(0);
-                break;
-            default:
-                break;
-        }
-
-        return point;
     }
 
     /**
@@ -181,7 +148,7 @@ public class ShapeHandler {
                 if (editorController.selectedShapes.isEmpty())
                     editorController.disableToolbar(false);
             }
-            actionFromGUI = true;
+            actionFromGUI = false;
         }
         editorController.translateToTikz();
     }
@@ -363,10 +330,6 @@ public class ShapeHandler {
             label.setX(shapeX + offset.getX());
             label.setY(shapeY + offset.getY());
             label.setTextAlignment(TextAlignment.CENTER);
-            label.setOnMouseClicked(event -> {
-            });
-            label.addEventHandler(MouseEvent.ANY, event -> {
-            });
         }
         return label;
     }
