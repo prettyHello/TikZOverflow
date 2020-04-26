@@ -157,7 +157,7 @@ public class EditorController {
         this.intNumber = "[+-]?\\d+";
         this.floatNumber = "[+-]?\\d+\\.\\d+";
         this.coordinatePattern = "\\((" + intNumber + "|" + floatNumber + "),[ ]*(" + intNumber + "|" + floatNumber + ")\\)";
-        this.labelPattern = "(node\\[align=center,[ ]*right=(" + intNumber + "|" + floatNumber + ")cm,[ ]*above=(" + intNumber + "|" + floatNumber + ")cm\\] \\{([\\w ]+)\\})";
+        this.labelPattern = "(node\\[fill=(" + colorsPattern + "),[ ]*align=center,[ ]*right=(" + intNumber + "|" + floatNumber + ")cm,[ ]*above=(" + intNumber + "|" + floatNumber + ")cm\\] \\{([\\w ]+)\\})";
         this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
         this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(" + intNumber + "|" + floatNumber + ")\\]" + labelPattern + "?";
         this.trianglePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
@@ -431,6 +431,7 @@ public class EditorController {
                 }
             }
             if (linesCorrect) {
+                System.out.println("HEY PABLITO");
                 tikzTA.setWrongLine(null);
                 ArrayList<Integer> selectedShapesIds = new ArrayList<>();
                 if (!selectedShapes.isEmpty()) {
@@ -501,6 +502,7 @@ public class EditorController {
                 this.oldCode = null;
                 writableOldCode = true;
             } else {
+                System.out.println("PLATO O PLOMO");
                 tikzTA.setWrongLine(incorrectLine);
                 if (writableOldCode) {
                     this.oldCode = oldValue;

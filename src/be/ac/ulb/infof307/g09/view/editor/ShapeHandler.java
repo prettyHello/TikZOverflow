@@ -138,11 +138,13 @@ public class ShapeHandler {
             Coordinates labelPoint = getCoordinatesForLabel(controllerShape);
 
             //TEST
+            if(controllerShape.getLabel() != null){
+                deleteLabel(controllerShape.getLabel().getId());
+            }
             canvas.setShapeLabel(shapeId, labelText, labelPoint, getColorNameFromRgb(labelColor.getRed(), labelColor.getGreen(), labelColor.getBlue()));
 
+
             Text label = createLabel(controllerShape, labelPoint.getX(), labelPoint.getY());
-            label.setId(controllerShape.getLabel().getId());
-            label.setFill(Color.valueOf(labelColor.toString()));
 
             //ENDTEST
             editorController.pane.getChildren().add(label);
@@ -376,12 +378,9 @@ public class ShapeHandler {
         Text label = null;
         //TODO vérifier utilité de cette condition
         if (shape.getLabel() != null) {
-            //TEST
-
-            deleteLabel(shape.getLabel().getId());
-
-            //ENDTEST
             label = new Text(shape.getLabel().getTitle());
+            label.setId(shape.getLabel().getId());
+            label.setFill(Color.valueOf(shape.getLabel().getColor().toString()));
             final Coordinates offset = shape.calcLabelOffset();
             label.setX(shapeX + offset.getX());
             label.setY(shapeY + offset.getY());
@@ -578,7 +577,8 @@ public class ShapeHandler {
 
             Node node = getNodeInfo(line);
             if (node != null) {
-                shapeToDraw.getLabel().setTitle(node.label);
+
+                shapeToDraw.setLabel(new Label(shapeToDraw.getId(),node.label, new Coordinates(node.rightOffset, node.aboveOffset),node.color));
             }
 
             shape = handleDraw(shapeToDraw);
@@ -600,21 +600,26 @@ public class ShapeHandler {
 
         Node node = null;
         if (m.find()) {
-            double rightOffset = Double.parseDouble(m.group(2));
-            double aboveOffset = Double.parseDouble(m.group(3));
-            String label = m.group(4);
-            node = new Node(rightOffset, aboveOffset, label);
+            //TODO change m.group
+            be.ac.ulb.infof307.g09.controller.shape.Color drawColor = be.ac.ulb.infof307.g09.controller.shape.Color.get(m.group(2));
+
+            double rightOffset = Double.parseDouble(m.group(3));
+            double aboveOffset = Double.parseDouble(m.group(4));
+            String label = m.group(5);
+            node = new Node(drawColor,rightOffset, aboveOffset, label);
         }
 
         return node;
     }
 
     static class Node {
+        be.ac.ulb.infof307.g09.controller.shape.Color color;
         double rightOffset;
         double aboveOffset;
         String label;
 
-        public Node(double rightOffset, double aboveOffset, String label) {
+        public Node(be.ac.ulb.infof307.g09.controller.shape.Color color, double rightOffset, double aboveOffset, String label) {
+            this.color = color;
             this.rightOffset = rightOffset;
             this.aboveOffset = aboveOffset;
             this.label = label;
