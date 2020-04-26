@@ -24,7 +24,6 @@ public abstract class Shape implements Serializable {
     private String shapeThicknessKey;
     private  double shapeThicknessValue;
     private int id;
-    private Label label = null;
 
     /**
      * @param draw Is the shape have a outer line, can be combined with fill.
@@ -39,8 +38,6 @@ public abstract class Shape implements Serializable {
         setShapeThicknessKey(shapeThicknessKey);
         this.id = id;
     }
-
-
 
     /**
      * @param draw      Is the shape have a outer line, can be combined with fill.
@@ -119,13 +116,6 @@ public abstract class Shape implements Serializable {
     public void setDrawColor(Color drawColor) {
         this.drawColor = drawColor;
     }
-    public Label getLabel() { return label; }
-
-    public void setLabel(Label label) {
-        this.label = label;
-    }
-
-
 
     public String getShapeThicknessKey() {
         return shapeThicknessKey.toLowerCase().replace("_", " ");
@@ -140,7 +130,7 @@ public abstract class Shape implements Serializable {
     public double getShapeThicknessValue() {
         return shapeThicknessValue;
     }
-
+    
     public String print() {
         String returnValue = "";
         if (this.fill && this.draw) {
@@ -158,15 +148,4 @@ public abstract class Shape implements Serializable {
         }
         return returnValue;
     }
-
-    public String printLabel() {
-        if (this.label != null && this.label.getValue().length() > 0){
-            Coordinates labelOffset = this.calcLabelOffset();
-            return "node[fill=" + this.label.getColor().value +", align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.label.getValue() + "}";
-        }else{
-            return "";
-        }
-    }
-
-    public abstract Coordinates calcLabelOffset();
 }

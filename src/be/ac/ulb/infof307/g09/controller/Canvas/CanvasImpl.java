@@ -99,11 +99,13 @@ public class CanvasImpl implements Canvas {
 
         if (toChange == null) {
             throw new IllegalArgumentException("canvas does not contain a shape with the specified id");
+        } else if (!(toChange instanceof LabelizableShape)){
+            return;
         }
 
+        LabelizableShape toChangeLabelizable = (LabelizableShape) toChange;
         Label shapeLabel = new Label(label, labelColor);
-        toChange.setLabel(shapeLabel);
-
+        toChangeLabelizable.setLabel(shapeLabel);
     }
 
     /**

@@ -5,7 +5,7 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.ArrayList;
 
-public class Triangle extends Shape {
+public class Triangle extends LabelizableShape{
     private Coordinates originPoint;
     private Coordinates secondPoint;
     private Coordinates thirdPoint;
