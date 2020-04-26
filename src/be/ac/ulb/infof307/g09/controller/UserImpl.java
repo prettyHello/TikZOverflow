@@ -9,7 +9,7 @@ public class UserImpl implements User {
     private String password;
     private String salt;
     private String registerDate;
-    private boolean isAuthorized; //this is not in the db
+    private boolean isAuthorized;
 
     public UserImpl() {
     }
@@ -20,7 +20,6 @@ public class UserImpl implements User {
         this.password = password;
     }
 
-    //Full constructor
     public UserImpl(int userId, String firstName, String lastName, String email, String phone, String password, String salt, String registerDate) {
         this(email, password);
         this.userId = userId;

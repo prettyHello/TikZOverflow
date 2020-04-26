@@ -8,7 +8,6 @@ import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
 import be.ac.ulb.infof307.g09.model.DALServices;
 import be.ac.ulb.infof307.g09.model.DAO;
 import be.ac.ulb.infof307.g09.model.ProjectDAO;
-import javafx.application.Platform;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
 /**
  * This class is meant to be used by:
  * - the tests, in order to instantiate the configuration and Mocks only once
- * - the be.ac.ulb.infof307.g09.Main class in order to build the application only once
+ * - the Main class in order to build the application only once
  * - The getters are used by every class to access the implementation hiding behind the interface
  * This is done through a singleton pattern
  */
@@ -81,15 +80,15 @@ public abstract class AbstractConfigurationSingleton {
     }
 
     /**
-     * Load the configuration specified in the be.ac.ulb.infof307.g09.Main's arguments
-     * This is launch at the beginning of the application, in the be.ac.ulb.infof307.g09.Main
+     * Load the configuration specified in the Main's arguments
+     * This is launch at the beginning of the application, in the Main
      * This method is called before JavaFX is launched, thus the error handling can only be a print stack trace
      *
      * @param args the command line arguments passed
      */
     protected void loadConfiguration(String[] args) {
         try {
-            configuration = (Configuration) Class.forName("be.ac.ulb.infof307.g09.config.Configuration").getDeclaredConstructor().newInstance();
+            configuration = (Configuration) Class.forName("config.Configuration").getDeclaredConstructor().newInstance();
             configuration.initProperties(args);
 
             dalServices = (DALServices) configuration.getClassFor("DALServices").getDeclaredConstructor().newInstance();

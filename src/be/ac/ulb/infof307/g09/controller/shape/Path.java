@@ -32,7 +32,7 @@ import java.util.Iterator;
     }
 
     /**
-     * Personalised path with only 2 points, with arrows and specified color.  et shapethickness a probablement ajouter si ca marche
+     * Personalised path with only 2 points, with arrows and specified color.
      * @param origin
      * @param end
      * @param id

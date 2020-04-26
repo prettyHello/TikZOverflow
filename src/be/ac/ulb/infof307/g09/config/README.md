@@ -17,9 +17,9 @@ Here you will find the files for everything concerning the configuration part of
 <u>ConfigurationSingleton</u>: extend AbstractConfigurationSingleton and open a configuration depending on the given args (dev.properties is used by default)
 </p>
 <p>
-<u>TestBusinessConfigurationSingleton</u>: extend AbstractConfigurationSingleton and open  the configuration used when testing  the be.ac.ulb.infof307.g09.controller (previously called business)
+<u>TestBusinessConfigurationSingleton</u>: extend AbstractConfigurationSingleton and open  the configuration used when testing  the controller (previously called business)
 </p>
 <p>
-<u>TestDAOConfigurationSingleton</u>: extend AbstractConfigurationSingleton and open the configuration used when testing the be.ac.ulb.infof307.g09.model
+<u>TestDAOConfigurationSingleton</u>: extend AbstractConfigurationSingleton and open the configuration used when testing the model
 </p>
 

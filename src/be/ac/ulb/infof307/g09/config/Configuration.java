@@ -26,7 +26,7 @@ public class Configuration {
     public static void loadProperties(String path) {
         Properties prop = new Properties();
         FileInputStream stream;
-        LOG.info("Loading be.ac.ulb.infof307.g09.config from " + path);
+        LOG.info("Loading config from " + path);
         try {
             stream = new FileInputStream(path);
 
@@ -50,7 +50,7 @@ public class Configuration {
     }
 
     /**
-     * Loads the be.ac.ulb.infof307.g09.config file for either dev or prod environment.
+     * Loads the config file for either dev or prod environment.
      *
      * @param args the arguments passed to the main.
      */

@@ -25,7 +25,7 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
 
     /**
      * compress and export a selected project
-     * @param dto use the id in dto to get the values through the be.ac.ulb.infof307.g09.model
+     * @param dto use the id in dto to get the values through the model
      */
     void export(File selectedFile, ProjectDTO dto) throws FatalException;
 
