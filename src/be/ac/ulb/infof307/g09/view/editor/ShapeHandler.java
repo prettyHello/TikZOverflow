@@ -1,9 +1,7 @@
 package be.ac.ulb.infof307.g09.view.editor;
 
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
-import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
-import be.ac.ulb.infof307.g09.controller.shape.Square;
-import be.ac.ulb.infof307.g09.controller.shape.Thickness;
+import be.ac.ulb.infof307.g09.controller.shape.*;
 import be.ac.ulb.infof307.g09.view.Utility;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
@@ -13,6 +11,10 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -94,8 +96,6 @@ public class ShapeHandler {
         editorController.translateToTikz();
     }
 
-
-
     /**
      * Rightclick dropdown menu, change shape thickness
      */
@@ -121,15 +121,22 @@ public class ShapeHandler {
     /**
      * Handle right-click set label option
      */
-    public void handleSetLabel() {
+    public void handleSetLabel(Color labelColor) {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             int shapeId = Integer.parseInt(shape.getId());
+
+            be.ac.ulb.infof307.g09.controller.shape.Shape modelShape = canvas.getShapeById(shapeId);
+            if (!(modelShape instanceof LabelizableShape)){
+                return;
+            }
+
             TextInputDialog dialog = new TextInputDialog();
             dialog.setHeaderText("New shape label: ");
             Optional<String> result = dialog.showAndWait();
             String labelText = result.orElse("");
-            canvas.setShapeLabel(shapeId, labelText);
+
+            canvas.setShapeLabel(shapeId, labelText, getColorNameFromRgb(labelColor.getRed(), labelColor.getGreen(), labelColor.getBlue()));
             actionFromGUI = false;
         }
         editorController.translateToTikz();
@@ -251,7 +258,7 @@ public class ShapeHandler {
                 Coordinates circleCenter = ((be.ac.ulb.infof307.g09.controller.shape.Circle) shape).getCoordinates();
                 double circleRadius = ((be.ac.ulb.infof307.g09.controller.shape.Circle) shape).getRadius();
                 shapeDrawing = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
-                label = createLabel(shape, circleCenter.getX(), circleCenter.getY());
+                label = createLabel((LabelizableShape) shape, circleCenter.getX(), circleCenter.getY());
                 break;
             }
             case "class be.ac.ulb.infof307.g09.controller.shape.Square": {
@@ -260,7 +267,7 @@ public class ShapeHandler {
                 double squareSize = ((be.ac.ulb.infof307.g09.controller.shape.Square) shape).getSize();
                 shapeDrawing = new Rectangle(squareX, squareY, squareSize, squareSize);
 
-                label = createLabel(shape, squareX, squareY);
+                label = createLabel((LabelizableShape) shape, squareX, squareY);
                 break;
             }
             case "class be.ac.ulb.infof307.g09.controller.shape.Triangle": {
@@ -272,7 +279,7 @@ public class ShapeHandler {
                 Polygon polygon = new Polygon();
                 polygon.getPoints().addAll(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY());
                 shapeDrawing = polygon;
-                label = createLabel(shape, point1.getX(), point1.getY());
+                label = createLabel((LabelizableShape) shape, point1.getX(), point1.getY());
                 break;
             }
             case "class be.ac.ulb.infof307.g09.controller.shape.Line": {
@@ -322,10 +329,13 @@ public class ShapeHandler {
      * @param shapeY the y-coordinate of the shape
      * @return the constructed label
      */
-    private Text createLabel(be.ac.ulb.infof307.g09.controller.shape.Shape shape, double shapeX, double shapeY) {
+    private Text createLabel(be.ac.ulb.infof307.g09.controller.shape.LabelizableShape shape, double shapeX, double shapeY) {
         Text label = null;
         if (shape.getLabel() != null) {
-            label = new Text(shape.getLabel());
+            label = new Text(shape.getLabel().getValue());
+            label.setDisable(true);
+            label.setStyle("-fx-font-weight: bold");
+            label.setFill(Color.valueOf(shape.getLabel().getColor().toString()));
             final Coordinates offset = shape.calcLabelOffset();
             label.setX(shapeX + offset.getX());
             label.setY(shapeY + offset.getY());
@@ -518,7 +528,7 @@ public class ShapeHandler {
 
             Node node = getNodeInfo(line);
             if (node != null) {
-                shapeToDraw.setLabel(node.label);
+                ((LabelizableShape) shapeToDraw).setLabel(new Label(node.label, node.color));
             }
 
             shape = handleDraw(shapeToDraw);
@@ -540,21 +550,25 @@ public class ShapeHandler {
 
         Node node = null;
         if (m.find()) {
-            double rightOffset = Double.parseDouble(m.group(2));
-            double aboveOffset = Double.parseDouble(m.group(3));
-            String label = m.group(4);
-            node = new Node(rightOffset, aboveOffset, label);
+            be.ac.ulb.infof307.g09.controller.shape.Color drawColor = be.ac.ulb.infof307.g09.controller.shape.Color.get(m.group(2));
+
+            double rightOffset = Double.parseDouble(m.group(3));
+            double aboveOffset = Double.parseDouble(m.group(4));
+            String label = m.group(5);
+            node = new Node(drawColor,rightOffset, aboveOffset, label);
         }
 
         return node;
     }
 
     static class Node {
+        be.ac.ulb.infof307.g09.controller.shape.Color color;
         double rightOffset;
         double aboveOffset;
         String label;
 
-        public Node(double rightOffset, double aboveOffset, String label) {
+        public Node(be.ac.ulb.infof307.g09.controller.shape.Color color, double rightOffset, double aboveOffset, String label) {
+            this.color = color;
             this.rightOffset = rightOffset;
             this.aboveOffset = aboveOffset;
             this.label = label;

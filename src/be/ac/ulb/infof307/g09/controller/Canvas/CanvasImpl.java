@@ -1,9 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.Canvas;
 
-import be.ac.ulb.infof307.g09.controller.shape.Color;
-import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
-import be.ac.ulb.infof307.g09.controller.shape.Shape;
-import be.ac.ulb.infof307.g09.controller.shape.Square;
+import be.ac.ulb.infof307.g09.controller.shape.*;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.ArrayList;
@@ -91,7 +88,7 @@ public class CanvasImpl implements Canvas {
      * {@inheritDoc}
      */
     @Override
-    public void setShapeLabel(int shapeId, String label) {
+    public void setShapeLabel(int shapeId, String label, Color labelColor) {
         Shape toChange = null;
         for (Shape shape : shapes) {
             if (shape.getId() == shapeId) {
@@ -102,9 +99,13 @@ public class CanvasImpl implements Canvas {
 
         if (toChange == null) {
             throw new IllegalArgumentException("canvas does not contain a shape with the specified id");
+        } else if (!(toChange instanceof LabelizableShape)){
+            return;
         }
 
-        toChange.setLabel(label);
+        LabelizableShape toChangeLabelizable = (LabelizableShape) toChange;
+        Label shapeLabel = new Label(label, labelColor);
+        toChangeLabelizable.setLabel(shapeLabel);
     }
 
     /**

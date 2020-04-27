@@ -7,7 +7,7 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
  * eg : \draw (0,0) rectangle (1,1);
  * 0,0 is the origin coordinate, 1,1 is the end coordinate.
  */
-public class Rectangle extends Shape {
+public class Rectangle extends LabelizableShape {
     private Coordinates originCoordinates = null;
     private Coordinates endCoordinates = null;
 

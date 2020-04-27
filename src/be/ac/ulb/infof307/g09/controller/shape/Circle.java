@@ -7,7 +7,7 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 /**
  * eg : \draw (0,0) circle [radius=1.5];
  */
-public class Circle extends Shape {
+public class Circle extends LabelizableShape {
     private Coordinates coordinates;
     private float radius = 1;
 

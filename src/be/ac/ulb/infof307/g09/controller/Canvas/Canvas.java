@@ -60,7 +60,7 @@ public interface Canvas extends Serializable {
      * @param shapeId the id of the shape
      * @param label the label to set
      */
-    void setShapeLabel(int shapeId, String label);
+    void setShapeLabel(int shapeId, String label, Color labelColor);
 
     /**
      * Get the id for the next shape

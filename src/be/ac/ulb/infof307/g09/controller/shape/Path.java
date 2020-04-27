@@ -101,7 +101,6 @@ import java.util.Iterator;
             returnValue.append("-- ");
             returnValue.append(iterator.next().print());
         }
-        returnValue.append(super.printLabel());
         returnValue.append(";");
         return returnValue.toString();
     }
@@ -137,10 +136,5 @@ import java.util.Iterator;
      */
     public ArrayList<Coordinates> getPathPoints() {
         return this.pathPoints;
-    }
-
-    @Override
-    public Coordinates calcLabelOffset() {
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
