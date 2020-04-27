@@ -151,7 +151,7 @@ public class EditorController {
         this.intNumber = "[+-]?\\d+";
         this.floatNumber = "[+-]?\\d+\\.\\d+";
         this.coordinatePattern = "\\((" + intNumber + "|" + floatNumber + "),[ ]*(" + intNumber + "|" + floatNumber + ")\\)";
-        this.labelPattern = "(node\\[fill=(" + colorsPattern + "),[ ]*align=center,[ ]*right=(" + intNumber + "|" + floatNumber + ")cm,[ ]*above=(" + intNumber + "|" + floatNumber + ")cm\\] \\{([\\w ]+)\\})";
+        this.labelPattern = "(node\\[text=(" + colorsPattern + "),[ ]*align=center,[ ]*right=(" + intNumber + "|" + floatNumber + ")cm,[ ]*above=(" + intNumber + "|" + floatNumber + ")cm\\] \\{([\\w ]+)\\})";
         this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
         this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(" + intNumber + "|" + floatNumber + ")\\]" + labelPattern + "?";
         this.trianglePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
