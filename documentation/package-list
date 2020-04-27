@@ -1,4 +1,4 @@
-
+be.ac.ulb.infof307.g09
 be.ac.ulb.infof307.g09.config
 be.ac.ulb.infof307.g09.controller
 be.ac.ulb.infof307.g09.controller.Canvas
@@ -7,9 +7,8 @@ be.ac.ulb.infof307.g09.controller.UCC
 be.ac.ulb.infof307.g09.controller.canvas
 be.ac.ulb.infof307.g09.controller.factories
 be.ac.ulb.infof307.g09.controller.shape
-be.ac.ulb.infof307.g09.model
-be.ac.ulb.infof307.g09.utilities
 be.ac.ulb.infof307.g09.exceptions
+be.ac.ulb.infof307.g09.model
 be.ac.ulb.infof307.g09.view
 be.ac.ulb.infof307.g09.view.dashboard
 be.ac.ulb.infof307.g09.view.editor
