@@ -52,7 +52,6 @@ public class ShapeHandler {
      * @param color the color to set
      */
     public void changeColorRightClick(Color color) {
-        //TODO use canvas.updateShape to update the shape.
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             setFillColor(color,shape);
@@ -76,7 +75,6 @@ public class ShapeHandler {
      * Right-click dropdown menu, change StokeColor
      */
     public void changeStrokeColorRightClick(Color color) {
-        //TODO use canvas.updateShape to update the shape.
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             setStrokeColor(color,shape);
