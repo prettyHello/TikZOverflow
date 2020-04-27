@@ -3,6 +3,9 @@ package be.ac.ulb.infof307.g09.config;
 /**
  * This class in meant to be used anywhere else than the tests
  * this pseudo-singleton will be instantiate only once by the Main application
+ *
+ * It uses the configuration given in args to the main, then uses the AbstractConfigurationSingleton methods
+ *  to instanciate with introspection them and to make them avaible to the rest of the application.
  */
 public class ConfigurationSingleton extends AbstractConfigurationSingleton {
     private static ConfigurationSingleton INSTANCE;

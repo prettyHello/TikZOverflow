@@ -5,7 +5,11 @@ import java.io.FileNotFoundException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-
+/**
+ * This class will read the properties files which are on the format (interface-implementation)
+ * It is used by AbstractConfigurationSingleton to instanciate the implementations by introspection and make them avaible
+ * everywhere in the app.
+ */
 public class Configuration {
     public static Properties properties;
     public static final String DEV = "dev";

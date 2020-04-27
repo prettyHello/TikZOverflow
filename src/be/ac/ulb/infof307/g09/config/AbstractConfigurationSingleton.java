@@ -18,6 +18,15 @@ import java.util.logging.Logger;
  * - the Main class in order to build the application only once
  * - The getters are used by every class to access the implementation hiding behind the interface
  * This is done through a singleton pattern
+ *
+ * The properties files (key - values) are read by Configuration and stored inside it
+ * AbstractConfigurationSingleton will use this configuration file to instanciate through introspection
+ *  the  implementations of each interface and link them all (in loadConfiguration).
+ *  Those implementations will be availble through getter and setters.
+ * Everything is static since each instances must be unique for the entire application.
+ *
+ * This class is abstract so that we can have classes that use the args given in arguments to the main, or load specific configuration,
+ *  just based on the name of the class. For easier use.
  */
 public abstract class AbstractConfigurationSingleton {
     private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
