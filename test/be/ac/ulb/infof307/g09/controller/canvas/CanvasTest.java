@@ -143,6 +143,23 @@ public class CanvasTest {
         assertEquals(control, canvas.toTikZ());
     }
 
+/*    @Test
+    void toTikz_shapeWithLabel() {
+        int shapeId = canvas.getIdForNewShape();
+        Shape toAdd1 = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.VERY_THICK.toString(),shapeId);
+
+        canvas.addShape(toAdd1);
+        canvas.setShapeLabel(shapeId,);
+
+
+        String control = "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n";
+        control += toAdd1.print() + "\n";
+
+        control += "\n\\end{tikzpicture}\n\\end{document}";
+
+        assertEquals(control, canvas.toTikZ());
+    }*/
+
     @Test
     void clear_expectedBehaviour() {
         canvas.clear();
