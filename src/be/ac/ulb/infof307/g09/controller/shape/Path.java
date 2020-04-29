@@ -5,6 +5,7 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * /!\ Only used in the package, use Arrow or line for the displaying a path. (subject to change later)
@@ -14,8 +15,8 @@ import java.util.Iterator;
  * eg : \draw [<->]
  * for now, we only support one type of arrow.
  */
- public class Path extends Shape {
-    private ArrayList<Coordinates> pathPoints = null;
+public class Path extends Shape {
+    private List<Coordinates> pathPoints = null;
     private boolean arrowStart = false;
     private boolean arrowEnd = false;
 
@@ -33,23 +34,22 @@ import java.util.Iterator;
 
     /**
      * Personalised path with only 2 points, with arrows and specified color.
+     *
      * @param origin
      * @param end
      * @param id
      * @throws FatalException
      */
-    public Path(Coordinates origin, Coordinates end, String shapeThickness,int id,boolean arrowStart,boolean arrowEnd) throws FatalException {
+    public Path(Coordinates origin, Coordinates end, String shapeThickness, int id, boolean arrowStart, boolean arrowEnd) throws FatalException {
         super(true, false, shapeThickness, id);
         this.arrowStart = arrowStart;
         this.arrowEnd = arrowEnd;
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
-        pathPoints.add(origin);
-        pathPoints.add(end);
+        pathPoints.add(new Coordinates(origin));
+        pathPoints.add(new Coordinates(end));
         Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
-
     }
-
 
     /**
      * Personalised path with multiple points, with arrows and specified color.
@@ -79,8 +79,8 @@ import java.util.Iterator;
     public Path(Coordinates origin, Coordinates end, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
         super(true, false, drawColor, Color.WHITE, shapeThickness, id);
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
-        pathPoints.add(origin);
-        pathPoints.add(end);
+        pathPoints.add(new Coordinates(origin));
+        pathPoints.add(new Coordinates(end));
         Utility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -94,7 +94,7 @@ import java.util.Iterator;
      * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
-        StringBuilder returnValue = new StringBuilder("\\draw ["+super.getDrawColor().value+ ", "+ super.getShapeThicknessKey() +"] ");
+        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().value + ", " + super.getShapeThicknessKeyFormatted() + "] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
         returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {
@@ -134,7 +134,30 @@ import java.util.Iterator;
     /**
      * @return origin and end of Path.
      */
-    public ArrayList<Coordinates> getPathPoints() {
+    public List<Coordinates> getPathPoints() {
         return this.pathPoints;
+    }
+
+    public Coordinates getStartCoordinates() {
+        return this.getPathPoints().get(0);
+    }
+
+    public Coordinates getEndCoordinates() {
+        List<Coordinates> points = getPathPoints();
+        return points.get(points.size() - 1);
+    }
+
+    public void setStartCoordinates(Coordinates val) {
+        this.getPathPoints().set(0, val);
+    }
+
+    public void setEndCoordinates(Coordinates val) {
+        List<Coordinates> points = this.getPathPoints();
+        points.set(points.size() - 1, val);
+    }
+
+    @Override
+    public Coordinates getCoordinates() {
+        return this.getStartCoordinates();
     }
 }

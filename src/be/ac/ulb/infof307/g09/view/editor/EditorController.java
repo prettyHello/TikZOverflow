@@ -4,12 +4,13 @@ import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
-import be.ac.ulb.infof307.g09.controller.shape.Thickness;
+import be.ac.ulb.infof307.g09.controller.shape.*;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -79,7 +80,9 @@ public class EditorController {
     @FXML
     BorderPane bpRootpane;
 
-    public final ArrayList<Shape> selectedShapes = new ArrayList<>();
+    protected final List<Shape> selectedShapes = new ArrayList<>();
+    private final List<Shape> clipboard = new ArrayList<>();
+    private Coordinates lastMousePos = new Coordinates(0, 0);
     protected String shapeToDraw = "";
     protected Canvas canvas;
     private String colorsPattern = "";
@@ -155,7 +158,7 @@ public class EditorController {
         this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
         this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(" + intNumber + "|" + floatNumber + ")\\]" + labelPattern + "?";
         this.trianglePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
-        this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*[ ]*,[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " -- " + coordinatePattern;
+        this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*[ ]*,[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern;
 
         // Set start value dropdown to black
         fillColour.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
@@ -176,21 +179,21 @@ public class EditorController {
         MenuItem setLabel = new MenuItem("Set label", contextMenuLabelColorPicker);
         setLabel.setOnAction(t -> shapeHandler.handleSetLabel(Color.valueOf(contextMenuLabelColorPicker.getValue().toString())));
         MenuItem shapeThicknessMenu = new MenuItem("Change thickness", contextMenuChangeThickness);
-        shapeThicknessMenu.setOnAction(t-> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
+        shapeThicknessMenu.setOnAction(t -> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
 
-        fillColour.setOnAction(t-> {
-            if(!selectedShapes.isEmpty()){
-                selectedShapes.forEach(shape -> shapeHandler.setFillColor(Color.valueOf(fillColour.getValue().toString()),shape));
+        fillColour.setOnAction(t -> {
+            if (!selectedShapes.isEmpty()) {
+                selectedShapes.forEach(shape -> shapeHandler.setFillColor(Color.valueOf(fillColour.getValue().toString()), shape));
             }
         });
-        strokeColour.setOnAction(t-> {
-            if(!selectedShapes.isEmpty()){
-                selectedShapes.forEach(shape -> shapeHandler.setStrokeColor(Color.valueOf(strokeColour.getValue().toString()),shape));
+        strokeColour.setOnAction(t -> {
+            if (!selectedShapes.isEmpty()) {
+                selectedShapes.forEach(shape -> shapeHandler.setStrokeColor(Color.valueOf(strokeColour.getValue().toString()), shape));
             }
         });
-        shapeThickness.setOnAction(t-> {
-            if(!selectedShapes.isEmpty()){
-                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(Thickness.valueOf(shapeThickness.getValue().toString()),shape));
+        shapeThickness.setOnAction(t -> {
+            if (!selectedShapes.isEmpty()) {
+                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(Thickness.valueOf(shapeThickness.getValue().toString()), shape));
             }
         });
 
@@ -202,13 +205,20 @@ public class EditorController {
         translateToTikz();
 
         pane.setOnMouseMoved(event ->
-                lbCoordinates.setText(String.format("x=%d, y=%d", (int) event.getX(), (int) event.getY())));
+        {
+            lbCoordinates.setText(String.format("x=%d, y=%d", (int) event.getX(), (int) event.getY()));
+            this.lastMousePos = new Coordinates(event.getX(), event.getY());
+        });
 
         bpRootpane.setOnKeyPressed(event -> {
             if (event.isControlDown() && event.getCode() == KeyCode.S) {
                 this.save();
             } else if (event.isControlDown() && event.getCode() == KeyCode.W) {
                 this.close();
+            } else if (event.isControlDown() && event.getCode() == KeyCode.C) {
+                this.handleCopy();
+            } else if (event.isControlDown() && event.getCode() == KeyCode.V) {
+                this.handlePaste();
             }
         });
     }
@@ -295,6 +305,7 @@ public class EditorController {
 
     /**
      * Disables all the buttons except delete and edits buttons when shape is selected
+     *
      * @param isDisabled disables the buttons when true
      */
     public void disableToolbar(boolean isDisabled) {
@@ -315,6 +326,64 @@ public class EditorController {
         line.setStyle("-fx-focus-color: transparent;");
         arrow.setStyle("-fx-focus-color: transparent;");
         triangle.setStyle("-fx-focus-color: transparent;");
+    }
+
+    /**
+     * Copies the content of the shape selection into the 'clipboard' after clearing it
+     */
+    private void handleCopy() {
+        this.clipboard.clear();
+        this.clipboard.addAll(this.selectedShapes);
+    }
+
+    /**
+     * Pastes the content of the clipboard at the mouse position. Relative positioning between shapes will remain the
+     * same and the mouse position will be the mean position of the pasted selection
+     */
+    private void handlePaste() {
+        if (!this.clipboard.isEmpty()) {
+            // calc mean pos
+            Coordinates meanPos = new Coordinates(0, 0);
+            for (Shape s : this.clipboard) {
+                be.ac.ulb.infof307.g09.controller.shape.Shape modelShape = canvas.getShapeById(Integer.parseInt(s.getId()));
+                meanPos = meanPos.add(modelShape.getCoordinates());
+            }
+            meanPos = new Coordinates(meanPos.getX() / clipboard.size(), meanPos.getY() / clipboard.size());
+
+            // new shape relative to mean pos
+            for (Shape s : this.clipboard) {
+                be.ac.ulb.infof307.g09.controller.shape.Shape modelShape = canvas.getShapeById(Integer.parseInt(s.getId()));
+                be.ac.ulb.infof307.g09.controller.shape.Shape toAdd = null;
+                if (modelShape instanceof Circle) {
+                    Circle c = new Circle((Circle) modelShape, canvas.getIdForNewShape());
+                    Coordinates offsetToMean = new Coordinates(meanPos.sub(c.getCoordinates()));
+                    c.setCoordinates(lastMousePos.sub(offsetToMean));
+                    toAdd = c;
+                } else if (modelShape instanceof Triangle) {
+                    Triangle t = new Triangle((Triangle) modelShape, canvas.getIdForNewShape());
+                    Coordinates offsetToMean = new Coordinates(meanPos.sub(t.getCoordinates()));
+                    t.setOriginPoint(lastMousePos.sub(offsetToMean));
+                    Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(t.getSecondPoint()));
+                    t.setSecondPoint(lastMousePos.sub(offsetMeanToSec));
+                    Coordinates offsetMeanToThi = new Coordinates(meanPos.sub(t.getThirdPoint()));
+                    t.setThirdPoint(lastMousePos.sub(offsetMeanToThi));
+                    toAdd = t;
+                } else if (modelShape instanceof Square) {
+
+                } else if (modelShape instanceof Line) {
+                    Line l = new Line((Line) modelShape, canvas.getIdForNewShape());
+                    Coordinates offsetToMean = new Coordinates(meanPos.sub(l.getCoordinates()));
+                    l.setStartCoordinates(lastMousePos.sub(offsetToMean));
+                    Coordinates offsetMeanToSec = new Coordinates(l.getStartCoordinates().sub(l.getEndCoordinates()));
+                    l.setEndCoordinates(lastMousePos.sub(offsetMeanToSec));
+                    toAdd = l;
+                } else if (modelShape instanceof Arrow) {
+                }
+                canvas.addShape(toAdd);
+            }
+            shapeHandler.actionFromGUI = false;
+            this.translateToTikz();
+        }
     }
 
     /**
@@ -424,7 +493,7 @@ public class EditorController {
             }
             if (linesCorrect) {
                 tikzTA.setWrongLine(null);
-                ArrayList<Integer> selectedShapesIds = new ArrayList<>();
+                List<Integer> selectedShapesIds = new ArrayList<>();
                 if (!selectedShapes.isEmpty()) {
                     if (oldCode == null)
                         oldCode = oldValue;
@@ -457,8 +526,7 @@ public class EditorController {
                             if (selectedShapesIds.get(j) > i)
                                 selectedShapesIds.set(j, selectedShapesIds.get(j) - nLinesChanged);
 
-                    }
-                    else if (newLines.size() > oldLines.size()) {
+                    } else if (newLines.size() > oldLines.size()) {
                         // X lines have been added. selectedShapesIds at some point is X behind
                         int nLinesChanged = newLines.size() - oldLines.size();
                         // Find first line that changed
@@ -482,9 +550,9 @@ public class EditorController {
                 for (String line : newLines) {
                     shapeDrawn = shapeHandler.sendTikZCode(line);
                     if (selectedShapesIds.contains(Integer.parseInt(shapeDrawn.getId()))) {
-                       shapeDrawn = shapeHandler.highlightShape(shapeDrawn);
-                       selectedShapes.add(shapeDrawn);
-                   }
+                        shapeDrawn = shapeHandler.highlightShape(shapeDrawn);
+                        selectedShapes.add(shapeDrawn);
+                    }
                 }
 
                 if (selectedShapes.isEmpty())
