@@ -374,7 +374,7 @@ public class EditorController {
                     Line l = new Line((Line) modelShape, canvas.getIdForNewShape());
                     Coordinates offsetToMean = new Coordinates(meanPos.sub(l.getCoordinates()));
                     l.setStartCoordinates(lastMousePos.sub(offsetToMean));
-                    Coordinates offsetMeanToSec = new Coordinates(l.getStartCoordinates().sub(l.getEndCoordinates()));
+                    Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(l.getEndCoordinates()));
                     l.setEndCoordinates(lastMousePos.sub(offsetMeanToSec));
                     toAdd = l;
                 } else if (modelShape instanceof Arrow) {
@@ -412,7 +412,7 @@ public class EditorController {
         alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (!result.isPresent()) {
+        if (result.isEmpty()) {
             return;
         }
         if (result.get() == buttonTypeCancel) {
