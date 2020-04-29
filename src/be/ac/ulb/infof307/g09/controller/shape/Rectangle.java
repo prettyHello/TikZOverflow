@@ -75,4 +75,9 @@ public class Rectangle extends LabelizableShape {
         double yDiff = endCoordinates.getY() - originCoordinates.getY();
         return new Coordinates(xDiff / 2, yDiff / 2);
     }
+
+    @Override
+    public Coordinates getCoordinates() {
+        return this.getOriginCoordinates();
+    }
 }

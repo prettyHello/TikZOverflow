@@ -2,7 +2,6 @@ package be.ac.ulb.infof307.g09.view.editor;
 
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.CodeArea;
@@ -14,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class HighlightTextColor extends CodeArea {
 
-    private ArrayList<Shape> selectedShapes = new ArrayList<>();
+    private List<Shape> selectedShapes = new ArrayList<>();
     private String wrongLine = null;
 
     public HighlightTextColor() {
@@ -22,7 +21,7 @@ public class HighlightTextColor extends CodeArea {
         keyValidation();
     }
 
-    public void setSelectedShapes(ArrayList<Shape> selectedShapes) {
+    public void setSelectedShapes(List<Shape> selectedShapes) {
         this.selectedShapes = selectedShapes;
     }
 
