@@ -113,9 +113,13 @@ public class EditorController {
         //add a column of numbers in front of each line of the text box
         tikzTA.setParagraphGraphicFactory(LineNumberFactory.get(tikzTA));
 
+        // 'canvas' can be focused to specify actions should happen on it
+        pane.setFocusTraversable(true);
+
         // Get coordinate of click in canvas and draw selected shape
         pane.setOnMouseClicked((MouseEvent event) ->
         {
+            pane.requestFocus();
             // No shapes must be selected and a drawing shape has to be selected
             if (selectedShapes.isEmpty() && !shapeToDraw.equals("")) {
                 shapeHandler.selectedX = event.getX();
@@ -412,7 +416,7 @@ public class EditorController {
         alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.isEmpty()) {
+        if (!result.isPresent()) {
             return;
         }
         if (result.get() == buttonTypeCancel) {
