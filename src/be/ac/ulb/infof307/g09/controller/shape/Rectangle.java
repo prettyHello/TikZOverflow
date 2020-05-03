@@ -15,11 +15,10 @@ public class Rectangle extends LabelizableShape {
     /**
      * Default rectangle, drawn with a black line.
      *
-     * @param originCoordinates
-     * @param endCoordinates
-     * @throws FatalException
+     * @param originCoordinates the first defining corner of the rectangle
+     * @param endCoordinates    the second defining corner of the rectangle
      */
-    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) throws FatalException {
+    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) {
         super(true, false, shapeThickness, id);
         Utility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
@@ -29,8 +28,8 @@ public class Rectangle extends LabelizableShape {
     /**
      * Personalised rectangle.
      *
-     * @param originCoordinates
-     * @param endCoordinates
+     * @param originCoordinates the first defining corner of the rectangle
+     * @param endCoordinates    the second defining corner of the rectangle
      * @param draw              Is the shape have a outer line, can be combined with fill.
      * @param fill              Is the shape filled with a color, can be combined with draw.
      * @param fillColor         Color to fill the shape with, color list in Color enum.
@@ -67,6 +66,14 @@ public class Rectangle extends LabelizableShape {
      */
     public Coordinates getEndCoordinates() {
         return this.endCoordinates;
+    }
+
+    public void setOriginCoordinates(Coordinates originCoordinates) {
+        this.originCoordinates = originCoordinates;
+    }
+
+    public void setEndCoordinates(Coordinates endCoordinates) {
+        this.endCoordinates = endCoordinates;
     }
 
     @Override

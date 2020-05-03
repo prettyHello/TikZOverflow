@@ -231,7 +231,12 @@ public class CanvasImpl implements Canvas {
                 t.setThirdPoint(destinationPos.sub(offsetMeanToThi));
                 toAdd = t;
             }else if (shape instanceof Square){
-
+                Square s = new Square((Square) shape, getIdForNewShape());
+                Coordinates offsetToMean = new Coordinates(meanPos.sub(s.getCoordinates()));
+                s.setOriginCoordinates(destinationPos.sub(offsetToMean));
+                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(s.getEndCoordinates()));
+                s.setEndCoordinates(destinationPos.sub(offsetMeanToSec));
+                toAdd = s;
             }else if (shape instanceof Line){
                 Line l = new Line((Line) shape, getIdForNewShape());
                 Coordinates offsetToMean = new Coordinates(meanPos.sub(l.getCoordinates()));
