@@ -81,7 +81,6 @@ public class EditorController {
     BorderPane bpRootpane;
 
     protected final List<Shape> selectedShapes = new ArrayList<>();
-    private final List<Shape> clipboard = new ArrayList<>();
     private Coordinates lastMousePos = new Coordinates(0, 0);
     protected String shapeToDraw = "";
     protected Canvas canvas;
@@ -336,8 +335,11 @@ public class EditorController {
      * Copies the content of the shape selection into the 'clipboard' after clearing it
      */
     private void handleCopy() {
-        this.clipboard.clear();
-        this.clipboard.addAll(this.selectedShapes);
+        List<Integer> selectionIds = new ArrayList<>();
+        for (Shape s : selectedShapes){
+            selectionIds.add(Integer.parseInt(s.getId()));
+        }
+        canvas.copyToClipboard(selectionIds);
     }
 
     /**
@@ -345,49 +347,9 @@ public class EditorController {
      * same and the mouse position will be the mean position of the pasted selection
      */
     private void handlePaste() {
-        if (!this.clipboard.isEmpty()) {
-            // calc mean pos
-            Coordinates meanPos = new Coordinates(0, 0);
-            for (Shape s : this.clipboard) {
-                be.ac.ulb.infof307.g09.controller.shape.Shape modelShape = canvas.getShapeById(Integer.parseInt(s.getId()));
-                meanPos = meanPos.add(modelShape.getCoordinates());
-            }
-            meanPos = new Coordinates(meanPos.getX() / clipboard.size(), meanPos.getY() / clipboard.size());
-
-            // new shape relative to mean pos
-            for (Shape s : this.clipboard) {
-                be.ac.ulb.infof307.g09.controller.shape.Shape modelShape = canvas.getShapeById(Integer.parseInt(s.getId()));
-                be.ac.ulb.infof307.g09.controller.shape.Shape toAdd = null;
-                if (modelShape instanceof Circle) {
-                    Circle c = new Circle((Circle) modelShape, canvas.getIdForNewShape());
-                    Coordinates offsetToMean = new Coordinates(meanPos.sub(c.getCoordinates()));
-                    c.setCoordinates(lastMousePos.sub(offsetToMean));
-                    toAdd = c;
-                } else if (modelShape instanceof Triangle) {
-                    Triangle t = new Triangle((Triangle) modelShape, canvas.getIdForNewShape());
-                    Coordinates offsetToMean = new Coordinates(meanPos.sub(t.getCoordinates()));
-                    t.setOriginPoint(lastMousePos.sub(offsetToMean));
-                    Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(t.getSecondPoint()));
-                    t.setSecondPoint(lastMousePos.sub(offsetMeanToSec));
-                    Coordinates offsetMeanToThi = new Coordinates(meanPos.sub(t.getThirdPoint()));
-                    t.setThirdPoint(lastMousePos.sub(offsetMeanToThi));
-                    toAdd = t;
-                } else if (modelShape instanceof Square) {
-
-                } else if (modelShape instanceof Line) {
-                    Line l = new Line((Line) modelShape, canvas.getIdForNewShape());
-                    Coordinates offsetToMean = new Coordinates(meanPos.sub(l.getCoordinates()));
-                    l.setStartCoordinates(lastMousePos.sub(offsetToMean));
-                    Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(l.getEndCoordinates()));
-                    l.setEndCoordinates(lastMousePos.sub(offsetMeanToSec));
-                    toAdd = l;
-                } else if (modelShape instanceof Arrow) {
-                }
-                canvas.addShape(toAdd);
-            }
-            shapeHandler.actionFromGUI = false;
-            this.translateToTikz();
-        }
+        canvas.pasteClipBoard(lastMousePos);
+        shapeHandler.actionFromGUI = false;
+        translateToTikz();
     }
 
     /**
