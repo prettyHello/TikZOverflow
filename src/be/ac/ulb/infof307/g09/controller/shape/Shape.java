@@ -19,8 +19,8 @@ public abstract class Shape implements Serializable {
 
     private boolean draw;
     private boolean fill;
-    private Color fillColor;
-    private Color drawColor;
+    private Color fillColor = Color.BLACK;
+    private Color drawColor = Color.BLACK;
     private String shapeThicknessKey;
     private double shapeThicknessValue;
     private int id;
@@ -33,8 +33,6 @@ public abstract class Shape implements Serializable {
     public Shape(boolean draw, boolean fill, String shapeThicknessKey, int id) {
         this.draw = draw;
         this.fill = fill;
-        this.fillColor = Color.BLACK;
-        this.drawColor = Color.BLACK;
         this.shapeThicknessKey = shapeThicknessKey;
         this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
         this.id = id;

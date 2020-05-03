@@ -240,7 +240,12 @@ public class CanvasImpl implements Canvas {
                 l.setEndCoordinates(destinationPos.sub(offsetMeanToSec));
                 toAdd = l;
             }else if (shape instanceof Arrow){
-
+                Arrow a = new Arrow((Arrow) shape, getIdForNewShape());
+                Coordinates offsetToMean = new Coordinates(meanPos.sub(a.getCoordinates()));
+                a.setStartCoordinates(destinationPos.sub(offsetToMean));
+                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(a.getEndCoordinates()));
+                a.setEndCoordinates(destinationPos.sub(offsetMeanToSec));
+                toAdd = a;
             }
             this.shapes.add(toAdd);
         }
