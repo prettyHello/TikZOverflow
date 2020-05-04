@@ -58,7 +58,7 @@ public class ProjectDAOMock implements ProjectDAO {
     }
 
     @Override
-    public Canvas loadSavedCanvas(ProjectDTO dto) throws FatalException {
+    public Canvas loadSavedCanvas(ProjectDTO dto, String password) throws FatalException {
         checkObjects(dto);
         if(isNull(ActiveProject.getActiveProject())){
             throw new FatalException("test no active project");

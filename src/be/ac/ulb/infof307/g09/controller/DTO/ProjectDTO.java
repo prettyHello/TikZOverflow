@@ -29,6 +29,11 @@ public interface ProjectDTO {
 
     void setModificationDate(String modificationDate);
 
+    //TODO
+    void setProjectPassword(String password);
+
+    String getProjectPassword();
+
     int hashCode();
 
     boolean equals(Object obj);

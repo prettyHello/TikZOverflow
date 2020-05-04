@@ -54,7 +54,7 @@ public interface ProjectUCC {
      * @param dto project to be marked as active
      * @throws FatalException Transmit the eventual FatalException sent by the Model to the view
      */
-    void setActive(ProjectDTO dto) throws FatalException;
+    void setActive(ProjectDTO dto, String password) throws FatalException;
 
     /**
      * Return the list of projects owned by a user

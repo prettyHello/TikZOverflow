@@ -2,10 +2,14 @@ package be.ac.ulb.infof307.g09.view.editor;
 
 import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
+import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
+import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
+import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
 import be.ac.ulb.infof307.g09.controller.shape.Thickness;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.view.Utility;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import javafx.beans.value.ChangeListener;
@@ -100,6 +104,10 @@ public class EditorController {
     protected String thicknessPattern;
     private String oldCode;
     private boolean writableOldCode = true;
+
+    //TODO
+    private ProjectDTO projectDTO;
+
 
     public EditorController() {
         this.canvas = ActiveCanvas.getActiveCanvas();
@@ -322,11 +330,37 @@ public class EditorController {
      */
     public void save() {
         try {
+            //TODO
+            String password = askProjectPassword();
+            if(password != null){
+
+                this.projectDTO = ActiveProject.getActiveProject();
+                this.projectDTO.setProjectPassword(password);
+            }
+
             this.projectUcc.save();
             be.ac.ulb.infof307.g09.view.Utility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
         } catch (FatalException e) {
             showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
         }
+    }
+
+    //TODO
+    private String askProjectPassword() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Project password");
+        dialog.setHeaderText("Please enter password to unlock your project");
+        dialog.setContentText("Password:");
+
+        Optional<String> password = dialog.showAndWait();
+        if (password.isPresent() && password.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)){
+            System.out.println("Your password: " + password.get());
+            return password.get();
+        }
+        else{
+            showAlert(Alert.AlertType.WARNING, "newProject", "Please enter a valid name", "Please enter a valid name");
+        }
+        return null;
     }
 
     /**
@@ -349,11 +383,7 @@ public class EditorController {
         if (result.get() == buttonTypeCancel) {
             return;
         } else if (result.get() == buttonTypeOne) {
-            try {
-                this.projectUcc.save();
-            } catch (FatalException e) {
-                showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
-            }
+            save();
         }
 
         ActiveCanvas.deleteActiveCanvas();

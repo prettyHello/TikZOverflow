@@ -44,7 +44,7 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
      * @return the Canvas
      * @throws FatalException in case of I/O exception
      */
-    Canvas loadSavedCanvas(ProjectDTO dto) throws FatalException;
+    Canvas loadSavedCanvas(ProjectDTO dto, String password) throws FatalException;
 
     /**
      * Load a project previously exported in a tar.gz

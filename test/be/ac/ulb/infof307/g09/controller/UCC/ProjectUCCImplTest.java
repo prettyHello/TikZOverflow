@@ -66,7 +66,7 @@ class ProjectUCCImplTest {
     @Test
     void setActive_nullArg(){
         assertThrows(FatalException.class, () -> {
-            projectUcc.setActive(null);
+            projectUcc.setActive(null,null);
         }, "check that the ucc don't catch the fatalException coming from the Dao");
     }
 }

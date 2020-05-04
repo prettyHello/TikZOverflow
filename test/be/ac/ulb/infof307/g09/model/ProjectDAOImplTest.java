@@ -185,7 +185,7 @@ class ProjectDAOImplTest {
     @Test
     void loadSavedCanvas_expectedBehaviour(){
         ProjectDTO projectDTO = generateFilledProject(generateBasicProjectDTO());
-        Canvas c = this.projectDAO.loadSavedCanvas(projectDTO);
+        Canvas c = this.projectDAO.loadSavedCanvas(projectDTO,"");
         assertNotNull(c, "The canvas return for an existing .bin is empty");
     }
 
@@ -196,7 +196,7 @@ class ProjectDAOImplTest {
     void loadSavedCanvas_createNewCanvas(){
         ProjectDTO projectDTO = generateBasicProjectDTO();
         projectDAO.create(projectDTO);
-        Canvas c = this.projectDAO.loadSavedCanvas(projectDTO);
+        Canvas c = this.projectDAO.loadSavedCanvas(projectDTO,"");
         assertNotNull(c, "if the .bin was deleted or not saved, the method is supposed to create a new Canvas");
     }
 

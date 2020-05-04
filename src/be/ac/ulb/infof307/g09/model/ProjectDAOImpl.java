@@ -4,6 +4,7 @@ import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.CanvasImpl;
+import be.ac.ulb.infof307.g09.controller.Crypto;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.ProjectImpl;
@@ -190,6 +191,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
             objectOutputStream.writeObject(canvas);
             objectOutputStream.close();
+            //TODO
+            Crypto.encryptDirectory(dto.getProjectPassword(), dto.getProjectPath());
         }catch (IOException e){
             throw new FatalException("Error while saving the project " + e.getMessage());
         }
@@ -199,10 +202,12 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public Canvas loadSavedCanvas(ProjectDTO dto) throws FatalException {
+    public Canvas loadSavedCanvas(ProjectDTO dto, String password) throws FatalException {
         FileInputStream fileInputStream = null;
         Canvas canvas = null;
         try {
+            //TODO
+            Crypto.decryptDirectory(password, dto.getProjectPath());
             fileInputStream = new FileInputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin");
             ObjectInputStream in = new ObjectInputStream(fileInputStream);
             canvas = (Canvas) in.readObject();

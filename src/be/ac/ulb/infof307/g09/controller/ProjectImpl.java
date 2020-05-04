@@ -15,6 +15,8 @@ public class ProjectImpl implements ProjectDTO {
     private String projectPath;
     private String createDate;
     private String modificationDate;
+    //TODO
+    private String projectPassword = "";
 
     public ProjectImpl() {
     }
@@ -90,6 +92,17 @@ public class ProjectImpl implements ProjectDTO {
     @Override
     public void setModificationDate(String modificationDate) {
         this.modificationDate = modificationDate;
+    }
+
+    //TODO
+    @Override
+    public void setProjectPassword(String password) {
+        this.projectPassword = password;
+    }
+
+    @Override
+    public String getProjectPassword() {
+        return projectPassword;
     }
 
     @Override

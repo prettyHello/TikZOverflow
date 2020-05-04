@@ -5,12 +5,11 @@ import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.view.Utility;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -99,13 +98,38 @@ public class ProjectItemView extends HBox {
         editBtn.setOnAction(event -> {
             ProjectDTO dto = this.projectFactory.createProject();
             dto.setProjectId(this.projectDTO.getProjectId());
+            String password = askProjectPassword();
             try {
-                this.projectUCC.setActive(dto);
-                viewSwitcher.switchView(ViewName.EDITOR);
-            } catch (FatalException e) {
+                if(password != null){
+                    this.projectUCC.setActive(dto, password);
+                    viewSwitcher.switchView(ViewName.EDITOR);
+                }
+
+            } catch (BizzException e){
+                showAlert(Alert.AlertType.WARNING, "Project opening", "Business Error", e.getMessage());
+            }
+            catch (FatalException e) {
                 showAlert(Alert.AlertType.WARNING, "Project opening", "Unexpected Error", e.getMessage());
             }
         });
+    }
+
+    //TODO
+    private String askProjectPassword() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Project password");
+        dialog.setHeaderText("Please enter password to unlock your project");
+        dialog.setContentText("Password:");
+
+        Optional<String> password = dialog.showAndWait();
+        if (password.isPresent() && password.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)){
+            System.out.println("Your password: " + password.get());
+            return password.get();
+        }
+        else{
+            showAlert(Alert.AlertType.WARNING, "newProject", "Please enter a valid name", "Please enter a valid name");
+        }
+        return null;
     }
 
     public void setProject(ProjectDTO projectDTO) {

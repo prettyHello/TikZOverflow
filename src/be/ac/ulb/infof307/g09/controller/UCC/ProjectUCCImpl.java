@@ -38,10 +38,10 @@ public class ProjectUCCImpl implements ProjectUCC {
      * {@inheritDoc}
      */
     @Override
-    public void setActive(ProjectDTO dto) throws FatalException {
+    public void setActive(ProjectDTO dto, String password) throws FatalException {
         checkObjects(dto);
         ActiveProject.setActiveProject(this.projectDAO.get(dto));
-        Canvas canvas =  this.projectDAO.loadSavedCanvas(ActiveProject.getActiveProject());
+        Canvas canvas =  this.projectDAO.loadSavedCanvas(ActiveProject.getActiveProject(),password);
         ActiveCanvas.setActiveCanvas(canvas);
     }
 
