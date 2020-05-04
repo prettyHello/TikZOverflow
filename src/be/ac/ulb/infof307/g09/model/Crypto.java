@@ -1,14 +1,11 @@
-package be.ac.ulb.infof307.g09.controller;
+package be.ac.ulb.infof307.g09.model;
 
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.*;
 import java.security.*;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.spec.KeySpec;
 import javax.crypto.spec.PBEKeySpec;
@@ -30,7 +27,7 @@ public final class Crypto {
 
     }
 
-    public static void decryptDirectory(String password, String path) {
+    public static void decryptDirectory(String password, String path) throws BizzException, FatalException {
         File directory = new File(path);
         File[] filesOfDirectory = directory.listFiles();
 
@@ -38,16 +35,7 @@ public final class Crypto {
             if (file.isFile()) {
                 System.out.println(file.getName().substring(file.getName().lastIndexOf(".")));
                 if (file.getName().substring(file.getName().lastIndexOf(".")).equals(".enc")) {
-                    try {
                         decrypt(password, file);
-                    } catch (BizzException e) {
-                        throw new BizzException(e.getMessage());
-                    } catch (FatalException e) {
-                        throw new FatalException(e.getMessage());
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-
                 }
             }
         }
@@ -144,13 +132,23 @@ public final class Crypto {
             int indexlastDot = fileToDecrypt.getName().lastIndexOf(".");
             String newFilename = fileToDecrypt.getName().substring(0, indexlastDot);
             String path = fileToDecrypt.getParent();
-            try (FileOutputStream out = new FileOutputStream(path + File.separator + newFilename)) {
-                processFile(ci, in, out);
-            }
+            FileOutputStream out = new FileOutputStream(path + File.separator + newFilename);
+            processFile(ci, in, out);
+
         } catch (BadPaddingException e) {
             throw new BizzException("Invalid password!");
-        } catch (Exception e) {
-            throw new FatalException("Error on processing file!");
+        } catch (IOException e) {
+            throw new FatalException("Unexpected error : " + e.getMessage());
+        } catch (IllegalBlockSizeException e) {
+            throw new FatalException("Unexpected error : " + e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new FatalException("Unexpected error : " + e.getMessage());
+        } catch (InvalidKeyException e) {
+            throw new FatalException("Unexpected error : " + e.getMessage());
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new FatalException("Unexpected error : " + e.getMessage());
+        } catch (NoSuchPaddingException e) {
+            throw new FatalException("Unexpected error : " + e.getMessage());
         }
 
     }

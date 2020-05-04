@@ -8,6 +8,7 @@ import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
 import be.ac.ulb.infof307.g09.controller.shape.Thickness;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.Utility;
 import be.ac.ulb.infof307.g09.view.ViewName;
@@ -342,6 +343,8 @@ public class EditorController {
             be.ac.ulb.infof307.g09.view.Utility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
         } catch (FatalException e) {
             showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
+        }catch (BizzException e){
+            showAlert(Alert.AlertType.WARNING, "Save", "Business Error", e.getMessage());
         }
     }
 
