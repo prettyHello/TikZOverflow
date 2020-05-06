@@ -35,7 +35,6 @@ public class ShapeHandler {
     protected double previouslySelectedX, previouslySelectedY; // a line needs 2 points so last choice is saved
     protected double thirdSelectedX, thirdSelectedY; // since a triangle need three points
     protected boolean waitingForMoreCoordinate = false;
-    protected boolean actionFromGUI = false;
 
     final ContextMenu shapeContextMenu;
     final Canvas canvas;
@@ -69,7 +68,7 @@ public class ShapeHandler {
         shape.setFill(Color.valueOf(color.toString()));
         Color fillColor = (Color) shape.getFill();
         canvas.changeShapeFillColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
-        actionFromGUI = true;
+        editorController.actionFromGUI = true;
         editorController.translateToTikz();
     }
 
@@ -93,7 +92,7 @@ public class ShapeHandler {
         shape.setStroke(Color.valueOf(color.toString()));
         Color drawColor = (Color) shape.getStroke();
         canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
-        actionFromGUI = true;
+        editorController.actionFromGUI = true;
         editorController.translateToTikz();
     }
 
@@ -116,7 +115,7 @@ public class ShapeHandler {
     public void setShapeThickness(Thickness thickness, Shape shape) {
         shape.setStrokeWidth(thickness.thicknessValue());
         canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(thickness.name());
-        actionFromGUI = true;
+        editorController.actionFromGUI = true;
         editorController.translateToTikz();
     }
 
@@ -139,7 +138,7 @@ public class ShapeHandler {
             String labelText = result.orElse("");
 
             canvas.setShapeLabel(shapeId, labelText, getColorNameFromRgb(labelColor.getRed(), labelColor.getGreen(), labelColor.getBlue()));
-            actionFromGUI = false;
+            editorController.actionFromGUI = false;
         }
         editorController.translateToTikz();
     }
@@ -158,7 +157,7 @@ public class ShapeHandler {
                     editorController.disableToolbar(false);
                 }
             }
-            actionFromGUI = false;
+            editorController.actionFromGUI = false;
         }
         editorController.translateToTikz();
     }
@@ -238,7 +237,7 @@ public class ShapeHandler {
             shape.setFill(Color.valueOf(editorController.fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(editorController.strokeColour.getValue().toString()));
             shape.setStrokeWidth(Thickness.valueOf(editorController.shapeThickness.getValue().toString()).thicknessValue());
-            actionFromGUI = true;
+            editorController.actionFromGUI = true;
             editorController.pane.getChildren().add(shape);
             editorController.notifyController(addToController, shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected

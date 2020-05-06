@@ -102,6 +102,7 @@ public class EditorController {
     protected String thicknessPattern;
     private String oldCode;
     private boolean writableOldCode = true;
+    protected boolean actionFromGUI = false;
 
     public EditorController() {
         this.canvas = ActiveCanvas.getActiveCanvas();
@@ -348,7 +349,7 @@ public class EditorController {
      */
     private void handlePaste() {
         canvas.pasteClipBoard(lastMousePos);
-        shapeHandler.actionFromGUI = false;
+        this.actionFromGUI = false;
         translateToTikz();
     }
 
@@ -424,102 +425,28 @@ public class EditorController {
      * Detects and handles changes in the TextArea
      */
     private final ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
-        if (!shapeHandler.actionFromGUI) {
-            ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
+        if (!this.actionFromGUI) {
             List<String> newLines = new ArrayList<>(Arrays.asList(newValue.split("\\n")));
+            tidyLines(newLines);
 
-            // Only handle Tikz shape declarations not general headers/footers
-            List<String> blackList = new ArrayList<>(Arrays.asList(
-                    "\\documentclass{article}",
-                    "\\usepackage[utf8]{inputenc}",
-                    "\\usepackage{tikz}",
-                    "\\begin{document}",
-                    "\\begin{tikzpicture}",
-                    "\\end{tikzpicture}",
-                    "\\end{document}",
-                    ""));
-            newLines.removeIf(blackList::contains);
+            String incorrectLine = checkIfLinesCorrect(newLines);
 
-            boolean linesCorrect = true;
-            String incorrectLine = null;
-            Pattern p;
-            Matcher m;
-            for (String filteredLine : newLines) {
-                linesCorrect = false;
-                for (String pattern : patternsArray) {
-                    p = Pattern.compile(pattern);
-                    m = p.matcher(filteredLine);
-                    if (m.find())
-                        linesCorrect = true;
-                }
-                if (!linesCorrect) {
-                    incorrectLine = filteredLine;
-                    break;
-                }
-            }
-            if (linesCorrect) {
+            if (incorrectLine == null) {
                 tikzTA.setWrongLine(null);
+
+                if (oldCode == null)
+                    oldCode = oldValue;
+
                 List<Integer> selectedShapesIds = new ArrayList<>();
                 if (!selectedShapes.isEmpty()) {
-                    if (oldCode == null)
-                        oldCode = oldValue;
-
                     List<String> oldLines = new ArrayList<>(Arrays.asList(oldCode.split("\\n")));
-                    oldLines.removeIf(blackList::contains);
-                    // Save the IDs of the shapes selected
-                    for (Shape selectedShape : selectedShapes)
-                        selectedShapesIds.add(Integer.parseInt(selectedShape.getId()));
+                    tidyLines(oldLines);
 
-                    Collections.sort(selectedShapesIds);
-
-                    if (newLines.size() < oldLines.size()) {
-                        // X lines have been removed. selectedShapesIds at some point is X ahead
-                        int nLinesChanged = oldLines.size() - newLines.size();
-
-                        // Find first line that changed
-                        int i;
-                        for (i = 0; i < newLines.size(); i++)
-                            if (!oldLines.get(i).equals(newLines.get(i)))
-                                break;
-                        i += 1;
-
-                        // If the shape selected was removed, remove it from selectedShapes.
-                        for (int j = 0; j < nLinesChanged; j++)
-                            if (selectedShapesIds.contains(i + j))
-                                selectedShapesIds.remove(Integer.valueOf(i + j));
-                        // Update the IDs of the selected shapes;
-                        for (int j = 0; j < selectedShapesIds.size(); j++)
-                            if (selectedShapesIds.get(j) > i)
-                                selectedShapesIds.set(j, selectedShapesIds.get(j) - nLinesChanged);
-
-                    } else if (newLines.size() > oldLines.size()) {
-                        // X lines have been added. selectedShapesIds at some point is X behind
-                        int nLinesChanged = newLines.size() - oldLines.size();
-                        // Find first line that changed
-                        int i;
-                        for (i = 0; i < oldLines.size(); i++)
-                            if (!newLines.get(i).equals(oldLines.get(i)))
-                                break;
-                        i += 1;
-
-                        // Update the IDs of the selected shapes;
-                        for (int j = 0; j < selectedShapesIds.size(); j++)
-                            if (selectedShapesIds.get(j) >= i)
-                                selectedShapesIds.set(j, selectedShapesIds.get(j) + nLinesChanged);
-                    }
+                    selectedShapesIds = this.adjustSelectedIds(newLines, oldLines);
                 }
 
-                canvas.clear();
-                selectedShapes.clear();
-                pane.getChildren().clear();
-                Shape shapeDrawn;
-                for (String line : newLines) {
-                    shapeDrawn = shapeHandler.sendTikZCode(line);
-                    if (selectedShapesIds.contains(Integer.parseInt(shapeDrawn.getId()))) {
-                        shapeDrawn = shapeHandler.highlightShape(shapeDrawn);
-                        selectedShapes.add(shapeDrawn);
-                    }
-                }
+                this.clear();
+                this.translateToDiagram(newLines, selectedShapesIds);
 
                 if (selectedShapes.isEmpty())
                     disableToolbar(false);
@@ -539,9 +466,133 @@ public class EditorController {
             }
 
         } else {
-            shapeHandler.actionFromGUI = false;
+            this.actionFromGUI = false;
         }
     };
+
+    /**
+     * Remove LaTeX and blank lines
+     * @param lines array with the lines of the code
+     */
+    private void tidyLines(List<String> lines) {
+        List<String> blackList = new ArrayList<>(Arrays.asList(
+                "\\documentclass{article}",
+                "\\usepackage[utf8]{inputenc}",
+                "\\usepackage{tikz}",
+                "\\begin{document}",
+                "\\begin{tikzpicture}",
+                "\\end{tikzpicture}",
+                "\\end{document}",
+                ""));
+        lines.removeIf(blackList::contains);
+    }
+
+    /**
+     * Check if all the lines of the code are corrects
+     * @param lines array with the lines of the code once useless lines have been removed
+     * @return the first line which syntax is not correct or null if all lines are correct.
+     */
+    private String checkIfLinesCorrect(List<String> lines) {
+        ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
+        boolean linesCorrect;
+        String incorrectLine = null;
+        Pattern p;
+        Matcher m;
+        for (String line : lines) {
+            linesCorrect = false;
+            for (String pattern : patternsArray) {
+                p = Pattern.compile(pattern);
+                m = p.matcher(line);
+                if (m.find())
+                    linesCorrect = true;
+            }
+            if (!linesCorrect) {
+                incorrectLine = line;
+                break;
+            }
+        }
+
+        return incorrectLine;
+    }
+
+    /**
+     * Adjust the IDs of the shapes that will be selected once the diagram is redrawn
+     * @param newLines array with the current lines of code
+     * @param oldLines array with the lines of code that were present before changes in code happened
+     * @return an array with the IDs that shapes selected will have once the diagram is redrawn
+     */
+    private List<Integer> adjustSelectedIds (List<String> newLines, List<String> oldLines) {
+        List<Integer> selectedShapesIds = new ArrayList<>();
+
+        // Save the IDs of the shapes selected
+        for (Shape selectedShape : selectedShapes)
+            selectedShapesIds.add(Integer.parseInt(selectedShape.getId()));
+
+        Collections.sort(selectedShapesIds);
+
+        if (newLines.size() < oldLines.size()) {
+            // X lines have been removed. selectedShapesIds at some point is X ahead
+            int nLinesChanged = oldLines.size() - newLines.size();
+
+            // Find first line that changed
+            int i;
+            for (i = 0; i < newLines.size(); i++)
+                if (!oldLines.get(i).equals(newLines.get(i)))
+                    break;
+            i += 1;
+
+            // If the shape selected was removed, remove it from selectedShapes.
+            for (int j = 0; j < nLinesChanged; j++)
+                if (selectedShapesIds.contains(i + j))
+                    selectedShapesIds.remove(Integer.valueOf(i + j));
+            // Update the IDs of the selected shapes;
+            for (int j = 0; j < selectedShapesIds.size(); j++)
+                if (selectedShapesIds.get(j) > i)
+                    selectedShapesIds.set(j, selectedShapesIds.get(j) - nLinesChanged);
+
+        } else if (newLines.size() > oldLines.size()) {
+            // X lines have been added. selectedShapesIds at some point is X behind
+            int nLinesChanged = newLines.size() - oldLines.size();
+            // Find first line that changed
+            int i;
+            for (i = 0; i < oldLines.size(); i++)
+                if (!newLines.get(i).equals(oldLines.get(i)))
+                    break;
+            i += 1;
+
+            // Update the IDs of the selected shapes;
+            for (int j = 0; j < selectedShapesIds.size(); j++)
+                if (selectedShapesIds.get(j) >= i)
+                    selectedShapesIds.set(j, selectedShapesIds.get(j) + nLinesChanged);
+        }
+
+        return selectedShapesIds;
+    }
+
+    /**
+     * Clear canvas, selectedShapes and pane content.
+     */
+    private void clear() {
+        canvas.clear();
+        selectedShapes.clear();
+        pane.getChildren().clear();
+    }
+
+    /**
+     * Translate TikZ code to diagram.
+     * @param lines array with the lines of code
+     * @param selectedShapesIds array with the IDs of the shapes that must be selected after redraw the diagram
+     */
+    private void translateToDiagram(List<String> lines, List<Integer> selectedShapesIds) {
+        Shape shapeDrawn;
+        for (String line : lines) {
+            shapeDrawn = shapeHandler.sendTikZCode(line);
+            if (selectedShapesIds.contains(Integer.parseInt(shapeDrawn.getId()))) {
+                shapeDrawn = shapeHandler.highlightShape(shapeDrawn);
+                selectedShapes.add(shapeDrawn);
+            }
+        }
+    }
 
     /**
      * Required to load view
