@@ -64,6 +64,7 @@ public class Triangle extends LabelizableShape{
         this.originPoint = other.getOriginPoint();
         this.secondPoint = other.getSecondPoint();
         this.thirdPoint = other.getThirdPoint();
+        this.setLabel(other.getLabel());
     }
 
     public String print() {

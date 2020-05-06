@@ -18,7 +18,7 @@ public class Line extends Path {
      * @param newId the id to assign to the newly created line
      */
     public Line(Line other, int newId){
-        super(other.getStartCoordinates(), other.getEndCoordinates(), other.getShapeThicknessKey(), newId, other.isArrowStart(), other.isArrowEnd());
+        super(new Coordinates(other.getStartCoordinates()), new Coordinates(other.getEndCoordinates()), other.getShapeThicknessKey(), newId, other.isArrowStart(), other.isArrowEnd());
         this.setDraw(other.isDraw());
         this.setFill(other.isFill());
         this.setFillColor(other.getFillColor());

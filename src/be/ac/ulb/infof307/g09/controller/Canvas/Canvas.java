@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g09.controller.Canvas;
 
 import be.ac.ulb.infof307.g09.controller.shape.Color;
+import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
 import be.ac.ulb.infof307.g09.controller.shape.Shape;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
@@ -95,4 +96,17 @@ public interface Canvas extends Serializable {
      *
      */
     void clear();
+
+    /**
+     * Puts a selection of shapes in the clipboard for later pasting
+     *
+     * @param shapeIds list of the ids of the shapes to copy
+     */
+    void copyToClipboard(List<Integer> shapeIds);
+
+    /**
+     * Paste the content of the clipboard. If the clipboard is empty, nothing is done.
+     * @param destinationPos the position at which to paste the shapes
+     */
+    void pasteClipBoard(Coordinates destinationPos);
 }

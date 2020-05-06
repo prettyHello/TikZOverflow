@@ -14,6 +14,19 @@ public class Arrow extends Path {
         super(origin, end,false,true, drawColor, shapeThickness, id);
     }
 
+    /**
+     * Copy-constructor
+     * @param other the Arrow to copy
+     * @param newId the id to give to the newly created Arraow
+     */
+    public Arrow(Arrow other, int newId){
+        super(new Coordinates(other.getStartCoordinates()), new Coordinates(other.getEndCoordinates()), other.getShapeThicknessKey(), newId, other.isArrowStart(), other.isArrowEnd());
+        this.setDraw(other.isDraw());
+        this.setFill(other.isFill());
+        this.setFillColor(other.getFillColor());
+        this.setDrawColor(other.getDrawColor());
+    }
+
     public String print() {
         StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().value + ",->, "+super.getShapeThicknessKeyFormatted()+"] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
