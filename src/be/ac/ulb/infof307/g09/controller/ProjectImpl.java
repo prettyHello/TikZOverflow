@@ -15,6 +15,7 @@ public class ProjectImpl implements ProjectDTO {
     private String projectPath;
     private String createDate;
     private String modificationDate;
+    private String hash;
     //TODO
     private String projectPassword = "";
 
@@ -25,13 +26,14 @@ public class ProjectImpl implements ProjectDTO {
         this.projectName = projectName;
     }
 
-    public ProjectImpl(int projectId, int projectOwnerId, String projectName, String projectPath, String createDate, String modificationDate) {
+    public ProjectImpl(int projectId, int projectOwnerId, String projectName, String projectPath, String createDate, String modificationDate,String hash) {
         this.projectId = projectId;
         this.projectOwnerId = projectOwnerId;
         this.projectName = projectName;
         this.projectPath = projectPath;
         this.createDate = createDate;
         this.modificationDate = modificationDate;
+        this.hash = hash;
     }
 
     @Override
@@ -118,5 +120,15 @@ public class ProjectImpl implements ProjectDTO {
             retVal = ptr.getId() == this.projectId;
         }
         return retVal;
+    }
+
+    @Override
+    public String getHash() {
+        return this.hash;
+    }
+
+    @Override
+    public void setHash(String hash) {
+        this.hash=hash;
     }
 }

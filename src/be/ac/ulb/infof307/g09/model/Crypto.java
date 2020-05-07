@@ -4,6 +4,7 @@ import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
@@ -24,7 +25,6 @@ public final class Crypto {
                     encrypt(password, file.getPath());
             }
         }
-
     }
 
     public static void decryptDirectory(String password, String path) throws BizzException, FatalException {
@@ -42,6 +42,32 @@ public final class Crypto {
 
     }
 
+    public static String hashingFile(String fileToHash) throws FatalException{
+        try {
+            int i;
+            String byteToHash = "";
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            FileInputStream file = new FileInputStream(fileToHash);
+            while((i = file.read())!=-1){
+                byteToHash += (char)i;
+            }
+            byte[] encodedhash = md.digest(
+                    byteToHash.getBytes(StandardCharsets.UTF_8));
+            System.out.println("Hash dans la fonction hashingFile: " +bytesToHex(encodedhash));
+            return bytesToHex(encodedhash);
+        } catch (NoSuchAlgorithmException | IOException e) {
+            throw new FatalException("Hashing error " + e.getMessage());
+        }
+    }
+    private static String bytesToHex(byte[] hash) {
+        StringBuffer hexString = new StringBuffer();
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
     private static void encrypt(String password, String fileToEncypt) {
 
         try {

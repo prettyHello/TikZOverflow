@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g09.model;
 
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 /**
@@ -16,7 +17,7 @@ public interface DAO<T> {
      * @param obj a generic type object defined in children interfaces (a DTO).
      * @return a generic type object (a DTO).
      */
-    T get(T obj) throws FatalException;
+    T get(T obj) throws FatalException, BizzException;
 
     /**
      * Creates an entry in the database.
