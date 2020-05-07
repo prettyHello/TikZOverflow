@@ -33,7 +33,6 @@ public final class Crypto {
 
         for (File file : filesOfDirectory) {
             if (file.isFile()) {
-                System.out.println(file.getName().substring(file.getName().lastIndexOf(".")));
                 if (file.getName().substring(file.getName().lastIndexOf(".")).equals(".enc")) {
                         decrypt(password, file);
                 }
@@ -53,7 +52,6 @@ public final class Crypto {
             }
             byte[] encodedhash = md.digest(
                     byteToHash.getBytes(StandardCharsets.UTF_8));
-            System.out.println("Hash dans la fonction hashingFile: " +bytesToHex(encodedhash));
             return bytesToHex(encodedhash);
         } catch (NoSuchAlgorithmException | IOException e) {
             throw new FatalException("Hashing error " + e.getMessage());
