@@ -17,8 +17,11 @@ import javax.crypto.spec.IvParameterSpec;
  */
 public final class Crypto {
     private static final SecureRandom srandom = new SecureRandom();
+
     /**
      * This method will encrypt the given .bin file with the given password
+     * @param password
+     * @param path
      */
     public static void encryptDirectory(String password, String path) {
         File directory = new File(path);
@@ -32,8 +35,13 @@ public final class Crypto {
             }
         }
     }
+
     /**
      * This method will decrypt the given .enc file with the given password
+     * @param password
+     * @param path
+     * @throws BizzException
+     * @throws FatalException
      */
     public static void decryptDirectory(String password, String path) throws BizzException, FatalException {
         File directory = new File(path);
@@ -49,8 +57,12 @@ public final class Crypto {
         }
 
     }
+
     /**
      * This method hash the given file with SHA-256
+     * @param fileToHash
+     * @return
+     * @throws FatalException
      */
     public static String hashingFile(String fileToHash) throws FatalException{
         try {
@@ -68,6 +80,12 @@ public final class Crypto {
             throw new FatalException("Hashing error " + e.getMessage());
         }
     }
+
+    /**
+     * This method read bytes and convert them to hexadecimal
+     * @param hash the bytes to convert
+     * @return the hexadecimal in string format
+     */
     private static String bytesToHex(byte[] hash) {
         StringBuffer hexString = new StringBuffer();
         for (int i = 0; i < hash.length; i++) {
@@ -80,6 +98,8 @@ public final class Crypto {
 
     /**
      * This method use AES to encrypt and a salt on the given file.
+     * @param password
+     * @param fileToEncypt
      */
     private static void encrypt(String password, String fileToEncypt) {
 
@@ -97,24 +117,33 @@ public final class Crypto {
         }
 
     }
+
     /**
      * This method generate a salt
+     * @return the generated salt
      */
     static private byte[] genSalt() {
         byte[] salt = new byte[8];
         srandom.nextBytes(salt);
         return salt;
     }
+
     /**
      * This method generate an initialization vector
+     * @return the IV
      */
     static private byte[] genIv() {
         byte[] iv = new byte[128 / 8];
         srandom.nextBytes(iv);
         return iv;
     }
+
     /**
      * This method create the new encrypted file
+     * @param fileName
+     * @param salt
+     * @param iv
+     * @return
      */
     static private FileOutputStream genOutputFile(String fileName, byte[] salt, byte[] iv) {
         try {
@@ -128,8 +157,12 @@ public final class Crypto {
         }
 
     }
+
     /**
      * This method generate secret key in AES
+     * @param salt
+     * @param password
+     * @return
      */
     static private SecretKeySpec genAES(byte[] salt, String password) {
         try {
@@ -146,8 +179,12 @@ public final class Crypto {
 
         }
     }
+
     /**
      * This method encrypt the text with the secret key and the initialization vector
+     * @param skey
+     * @param ivspec
+     * @return
      */
     private static Cipher cipherContent(SecretKeySpec skey, IvParameterSpec ivspec) {
         try {
@@ -159,8 +196,12 @@ public final class Crypto {
             return null;
         }
     }
+
     /**
      * This method transform the input in the output
+     * @param fileName
+     * @param ci
+     * @param out
      */
     private static void writeToOutput(String fileName, Cipher ci, FileOutputStream out) {
         try (FileInputStream in = new FileInputStream(fileName)) {
@@ -172,6 +213,10 @@ public final class Crypto {
 
     /**
      * This method decrypt the given file with the given password using AES
+     * @param password
+     * @param fileToDecrypt
+     * @throws BizzException
+     * @throws FatalException
      */
     private static void decrypt(String password, File fileToDecrypt) throws BizzException, FatalException {
         try {
@@ -209,6 +254,12 @@ public final class Crypto {
 
     /**
      * This method process the given input with the ciphertext
+     * @param ci
+     * @param in
+     * @param out
+     * @throws javax.crypto.IllegalBlockSizeException
+     * @throws javax.crypto.BadPaddingException
+     * @throws java.io.IOException
      */
     static private void processFile(Cipher ci, InputStream in, OutputStream out)
             throws
