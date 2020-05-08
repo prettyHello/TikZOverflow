@@ -50,7 +50,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     /**
      * {@inheritDoc}
      */
-    public void create(ProjectDTO dto) throws FatalException {
+    public ProjectDTO create(ProjectDTO dto) throws FatalException {
         checkObjects(dto);
         PreparedStatement pr;
         ResultSet rs;
@@ -72,10 +72,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             } else {
                 throw new FatalException("Error while inserting the new project: unable to get next id");
             }
-
             Files.createDirectories(Paths.get(result.getProjectPath()));
-            ActiveProject.setActiveProject(result);
-            ActiveCanvas.setNewCanvas();
+            return result;
         } catch (SQLException e) {
             throw new FatalException("Project already exists");
         } catch (IOException e){
@@ -205,7 +203,7 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public void save(Canvas canvas, ProjectDTO dto) throws FatalException {
+    public ProjectDTO save(Canvas canvas, ProjectDTO dto) throws FatalException {
         Utility.checkObjects(canvas);
         Utility.checkObjects(dto);
         try{
@@ -215,7 +213,7 @@ public class ProjectDAOImpl implements ProjectDAO {
             dto.setHash(Crypto.hashingFile(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin"));
             Crypto.encryptDirectory(dto.getProjectPassword(), dto.getProjectPath());
             update(dto);
-            ActiveProject.setActiveProject(dto);
+            return dto;
         }catch (IOException e){
             throw new FatalException("Error while saving the project " + e.getMessage());
         }

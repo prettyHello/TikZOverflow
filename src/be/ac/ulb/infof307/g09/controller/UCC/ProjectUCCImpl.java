@@ -59,7 +59,9 @@ public class ProjectUCCImpl implements ProjectUCC {
         dto.setModificationDate(Utility.getTimeStamp());
         String projectPath = System.getProperty("user.home") + rootFolder +"userid_" +owner.getUserId() + File.separator + projectName;
         dto.setProjectPath(projectPath);
-        this.projectDAO.create(dto);
+        ProjectDTO updatedDTO = this.projectDAO.create(dto);
+        ActiveProject.setActiveProject(updatedDTO);
+        ActiveCanvas.setNewCanvas();
 
     }
 
@@ -98,7 +100,8 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public void save() throws FatalException{
-        this.projectDAO.save(ActiveCanvas.getActiveCanvas(),ActiveProject.getActiveProject());
+        ProjectDTO updatedDTO = this.projectDAO.save(ActiveCanvas.getActiveCanvas(),ActiveProject.getActiveProject());
+        ActiveProject.setActiveProject(updatedDTO);
     }
 
     /**

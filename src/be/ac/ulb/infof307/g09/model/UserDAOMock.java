@@ -15,16 +15,19 @@ public class UserDAOMock implements UserDAO {
     }
 
     @Override
-    public void create(UserDTO obj) {
+    public UserDTO create(UserDTO obj) {
+        obj.setUserId(1);
+        return obj;
     }
 
     @Override
     public void update(UserDTO obj) {
+        //update returns void thus the mock doesn't have anything to mimic
     }
 
     @Override
     public void delete(UserDTO obj) {
-
+        //delete returns void thus the mock doesn't have anything tasks to mimic
     }
 
     @Override

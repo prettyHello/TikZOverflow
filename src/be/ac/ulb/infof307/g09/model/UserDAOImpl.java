@@ -15,6 +15,7 @@ import java.sql.SQLException;
 public class UserDAOImpl implements UserDAO {
 
     private static final String SQL_INSERT_USER = "INSERT INTO users(first_name, last_name, email, phone, password, salt, register_date ) VALUES (?, ?, ?, ?, ?, ?,?)";
+    private static final String SQL_LAST_INSERTED_PROJECTD = "SELECT * FROM users WHERE user_id = last_insert_rowid()";
     private static final String SQL_LOGIN_USER = "SELECT * FROM users WHERE email=?";
     private static final String SQL_UPDATE_USER = "UPDATE users SET first_name=?, last_name=?, email=?, phone=?, password=?, salt=?  WHERE email=?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE email=?";
@@ -39,16 +40,8 @@ public class UserDAOImpl implements UserDAO {
             pr = dal.prepareStatement(SQL_LOGIN_USER);
             pr.setString(1, usrAuth.getEmail());
             rs = pr.executeQuery();
-            usr = this.userFactory.createUser();
             if (rs.next()) {
-                usr.setEmail(rs.getString("email"));
-                usr.setFirstName(rs.getString("first_name"));
-                usr.setLastName(rs.getString("last_name"));
-                usr.setPassword(rs.getString("password"));
-                usr.setPhone(rs.getString("phone"));
-                usr.setSalt(rs.getString("salt"));
-                usr.setRegisterDate(rs.getString("register_date"));
-                usr.setUserId(rs.getInt("user_id"));
+                usr = fillDTO(rs);
             } else {
                 throw new BizzException("User : " + usrAuth.getEmail() + " does not exist");
             }
@@ -60,12 +53,16 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
+
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void create(UserDTO userDTO) throws FatalException {
+    public UserDTO create(UserDTO userDTO) throws FatalException {
         PreparedStatement ps = null;
+        ResultSet rs = null;
+        UserDTO updatedDTO = null;
         try {
             ps = dal.prepareStatement(SQL_INSERT_USER);
             ps.setString(1, userDTO.getFirstName());
@@ -76,13 +73,42 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(6, userDTO.getSalt());
             ps.setString(7, userDTO.getRegisterDate());
             ps.executeUpdate();
+
+            ps = this.dal.prepareStatement(SQL_LAST_INSERTED_PROJECTD);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                updatedDTO = fillDTO(rs);
+            } else {
+                throw new FatalException("Error while inserting the new project: unable to get next id");
+            }
+
         } catch (SQLException exc) {
             if (exc.getErrorCode() == 19) {
                 throw new FatalException("Email address or telephone number already in use.");
             }
-            throw new FatalException("An error occurred in create of UserDAO");
+            throw new FatalException("An error occurred in create of UserDAO " + exc.getMessage());
 
         }
+        return updatedDTO;
+    }
+
+    /**
+     * Fully fill a UserDTO with the informations contained in the database
+     * @param rs the resulset from which to extract data
+     * @return the filled dto
+     * @throws SQLException in case of type missmatch
+     */
+    private UserDTO fillDTO(ResultSet rs) throws SQLException {
+        UserDTO usr = this.userFactory.createUser();
+        usr.setEmail(rs.getString("email"));
+        usr.setFirstName(rs.getString("first_name"));
+        usr.setLastName(rs.getString("last_name"));
+        usr.setPassword(rs.getString("password"));
+        usr.setPhone(rs.getString("phone"));
+        usr.setSalt(rs.getString("salt"));
+        usr.setRegisterDate(rs.getString("register_date"));
+        usr.setUserId(rs.getInt("user_id"));
+        return usr;
     }
 
     /**

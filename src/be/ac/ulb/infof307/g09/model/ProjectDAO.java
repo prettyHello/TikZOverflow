@@ -31,11 +31,14 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
 
     /**
      * Save the canvas into a .bin file
+     * Hash the file and update the database
+     * Encrypt the .bin file if required in which case it deletes the non encrypted file
      * @param canvas the canvas that needs to be saved
      * @param dto the project concerned
      * @throws FatalException in case of I/O exception
+     * @return the updated ProjectDTO
      */
-    void save(Canvas canvas, ProjectDTO dto) throws FatalException;
+    ProjectDTO save(Canvas canvas, ProjectDTO dto) throws FatalException;
 
     /**
      * Load a canvas previously saved into a .bin file

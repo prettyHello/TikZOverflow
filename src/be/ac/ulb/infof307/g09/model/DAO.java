@@ -23,8 +23,9 @@ public interface DAO<T> {
      * Creates an entry in the database.
      *
      * @param obj a generic type object defined in children interfaces (a DTO).
+     * @return the object filled with it's id and other auto generated fields
      */
-    void create(T obj) throws FatalException;
+    T create(T obj) throws FatalException;
 
     /**
      * Updates an entry in the database.
