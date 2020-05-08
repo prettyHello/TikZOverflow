@@ -96,12 +96,10 @@ public class ProjectItemView extends HBox {
         });
 
         editBtn.setOnAction(event -> {
-            ProjectDTO dto = this.projectFactory.createProject();
-            dto.setProjectId(this.projectDTO.getProjectId());
             String password = askProjectPassword();
             try {
                 if(password != null){
-                    this.projectUCC.setActive(dto, password);
+                    this.projectUCC.setActive(this.projectDTO, password);
                     viewSwitcher.switchView(ViewName.EDITOR);
                 }
 

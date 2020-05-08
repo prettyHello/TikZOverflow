@@ -37,4 +37,8 @@ public interface ProjectDTO {
     int hashCode();
 
     boolean equals(Object obj);
+
+    String getHash();
+
+    void setHash(String hash);
 }

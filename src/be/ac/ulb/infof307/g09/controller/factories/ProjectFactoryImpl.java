@@ -17,7 +17,7 @@ public class ProjectFactoryImpl implements ProjectFactory {
     }
 
     @Override
-    public ProjectImpl createProject(int projectId, int projectOwnerId, String projectName, String projectPath, String creationDate, String modificationDate) {
-        return new ProjectImpl(projectId, projectOwnerId, projectName, projectPath, creationDate, modificationDate);
+    public ProjectImpl createProject(int projectId, int projectOwnerId, String projectName, String projectPath, String creationDate, String modificationDate, String hash) {
+        return new ProjectImpl(projectId, projectOwnerId, projectName, projectPath, creationDate, modificationDate,hash);
     }
 }

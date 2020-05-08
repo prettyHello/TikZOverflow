@@ -30,11 +30,12 @@ import static be.ac.ulb.infof307.g09.controller.Utility.*;
 public class ProjectDAOImpl implements ProjectDAO {
     private final String rootFolder = File.separator + "ProjectTikZ" + File.separator;
 
-    private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date ) VALUES (?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT_PROJECT = "INSERT INTO projects(project_owner_id, name, path, creation_date, modification_date, hash ) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_LAST_INSERTED_PROJECTD = "SELECT * FROM projects WHERE project_id = last_insert_rowid()";
     private static final String SQL_SELECT_PROJECT = "SELECT * FROM projects WHERE project_owner_id = ?";
     private static final String SQL_SELECT_BY_PROJECTID = "SELECT * FROM projects WHERE project_id = ?";
     private static final String SQL_DELETE_PROJECT_OF_USER = "DELETE FROM projects WHERE project_id = ?";
-
+    private static final String SQL_UPDATE_HASH = "UPDATE projects SET hash = ? WHERE project_id = ?";
     private final DALBackEndServices dal;
     private final ProjectFactory projectFactory;
 
@@ -52,6 +53,8 @@ public class ProjectDAOImpl implements ProjectDAO {
     public void create(ProjectDTO dto) throws FatalException {
         checkObjects(dto);
         PreparedStatement pr;
+        ResultSet rs;
+        ProjectDTO result;
         try {
             pr = dal.prepareStatement(SQL_INSERT_PROJECT);
             pr.setInt(1, dto.getProjectOwnerId());
@@ -59,9 +62,19 @@ public class ProjectDAOImpl implements ProjectDAO {
             pr.setString(3, dto.getProjectPath());
             pr.setString(4, dto.getCreateDate());
             pr.setString(5, dto.getModificationDate());
+            pr.setString(6, dto.getHash());
             pr.executeUpdate();
-            Files.createDirectories(Paths.get(dto.getProjectPath()));
-            ActiveProject.setActiveProject(dto);
+
+            pr = this.dal.prepareStatement(SQL_LAST_INSERTED_PROJECTD);
+            rs = pr.executeQuery();
+            if(rs.next()){
+                result = fillDTO(rs);
+            } else {
+                throw new FatalException("Error while inserting the new project: unable to get next id");
+            }
+
+            Files.createDirectories(Paths.get(result.getProjectPath()));
+            ActiveProject.setActiveProject(result);
             ActiveCanvas.setNewCanvas();
         } catch (SQLException e) {
             throw new FatalException("Project already exists");
@@ -115,7 +128,7 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public ProjectDTO get(ProjectDTO dto) throws FatalException {
+    public ProjectDTO get(ProjectDTO dto) throws FatalException, BizzException {
         checkObjects(dto);
         PreparedStatement pr;
         ResultSet rs;
@@ -158,8 +171,16 @@ public class ProjectDAOImpl implements ProjectDAO {
      * {@inheritDoc}
      */
     @Override
-    public void update(ProjectDTO obj) {
-        throw new UnsupportedOperationException("Not implemented yet"); // can't update a project yet
+    public void update(ProjectDTO dto) {
+        PreparedStatement pr;
+        try {
+            pr = this.dal.prepareStatement(SQL_UPDATE_HASH);
+            pr.setString(1, dto.getHash());
+            pr.setInt(2, dto.getProjectId());
+            pr.executeUpdate();
+        } catch (SQLException e) {
+            throw new FatalException("SQLException in projectDAOImpl: impossible to update the hash to the database");
+        }
     }
 
     /**
@@ -176,6 +197,7 @@ public class ProjectDAOImpl implements ProjectDAO {
         projectDTO.setProjectPath(rs.getString("path"));
         projectDTO.setCreateDate(rs.getString("creation_date"));
         projectDTO.setModificationDate(rs.getString("modification_date"));
+        projectDTO.setHash(rs.getString("hash"));
         return projectDTO;
     }
 
@@ -190,8 +212,10 @@ public class ProjectDAOImpl implements ProjectDAO {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
             objectOutputStream.writeObject(canvas);
             objectOutputStream.close();
-            //TODO
             Crypto.encryptDirectory(dto.getProjectPassword(), dto.getProjectPath());
+            dto.setHash(Crypto.hashingFile(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin"));
+            update(dto);
+            ActiveProject.setActiveProject(dto);
         }catch (IOException e){
             throw new FatalException("Error while saving the project " + e.getMessage());
         }
@@ -204,9 +228,14 @@ public class ProjectDAOImpl implements ProjectDAO {
     public Canvas loadSavedCanvas(ProjectDTO dto, String password) throws FatalException {
         FileInputStream fileInputStream = null;
         Canvas canvas = null;
+        dto = this.get(dto);
+
         try {
             //TODO
             Crypto.decryptDirectory(password, dto.getProjectPath());
+            if(!dto.getHash().equals(Crypto.hashingFile(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin"))){
+                throw new BizzException("Hashes are different.");
+            }
             fileInputStream = new FileInputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin");
             ObjectInputStream in = new ObjectInputStream(fileInputStream);
             canvas = (Canvas) in.readObject();

@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS  projects (
                                          path TEXT NOT NULL UNIQUE,
                                          creation_date TEXT NOT NULL,
                                          modification_date TEXT NOT NULL,
+                                         hash TEXT,
                                          FOREIGN KEY (project_owner_id)
                                                  REFERENCES users (user_id)
                                                  ON DELETE CASCADE

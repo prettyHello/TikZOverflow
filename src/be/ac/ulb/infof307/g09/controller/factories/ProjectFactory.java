@@ -10,5 +10,5 @@ public interface ProjectFactory {
 
     ProjectImpl createProject(String projectName);
 
-    ProjectImpl createProject(int projectId, int projectOwnerId, String projectName, String projectPath, String creationDate, String modificationDate);
+    ProjectImpl createProject(int projectId, int projectOwnerId, String projectName, String projectPath, String creationDate, String modificationDate, String hash);
 }
