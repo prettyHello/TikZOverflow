@@ -12,6 +12,9 @@ import java.security.spec.KeySpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
+/**
+ * Source: https://www.novixys.com/blog/aes-encryption-decryption-password-java/
+ */
 public final class Crypto {
     private static final SecureRandom srandom = new SecureRandom();
     /**
