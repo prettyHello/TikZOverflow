@@ -212,8 +212,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
             objectOutputStream.writeObject(canvas);
             objectOutputStream.close();
-            Crypto.encryptDirectory(dto.getProjectPassword(), dto.getProjectPath());
             dto.setHash(Crypto.hashingFile(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin"));
+            Crypto.encryptDirectory(dto.getProjectPassword(), dto.getProjectPath());
             update(dto);
             ActiveProject.setActiveProject(dto);
         }catch (IOException e){
@@ -231,10 +231,9 @@ public class ProjectDAOImpl implements ProjectDAO {
         dto = this.get(dto);
 
         try {
-            //TODO
             Crypto.decryptDirectory(password, dto.getProjectPath());
             if(!dto.getHash().equals(Crypto.hashingFile(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin"))){
-                throw new BizzException("Hashes are different.");
+                throw new BizzException("The project was modified by an other program:\n Hashes are different.");
             }
             fileInputStream = new FileInputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin");
             ObjectInputStream in = new ObjectInputStream(fileInputStream);

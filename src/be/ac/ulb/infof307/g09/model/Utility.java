@@ -144,7 +144,7 @@ public class Utility {
             } catch (DirectoryNotEmptyException e) {
                 throw new FatalException("What we thought was a file was a directory"); //should never happen as we check if dir is a directory in the if
             } catch (IOException e) {
-                throw new FatalException(" File permission problems for delete " + dir);
+                throw new FatalException(" File permission problems for delete " + dir + " | "+ e.getMessage());
             }
         }
     }

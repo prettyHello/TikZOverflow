@@ -28,6 +28,7 @@ public final class Crypto {
             if (file.isFile()) {
                 if (file.getName().substring(file.getName().lastIndexOf(".")).equals(".bin"))
                     encrypt(password, file.getPath());
+                    Utility.deleteFileSilent(file);
             }
         }
     }
@@ -42,6 +43,7 @@ public final class Crypto {
             if (file.isFile()) {
                 if (file.getName().substring(file.getName().lastIndexOf(".")).equals(".enc")) {
                         decrypt(password, file);
+                        Utility.deleteFileSilent(file);
                 }
             }
         }
@@ -59,8 +61,8 @@ public final class Crypto {
             while((i = file.read())!=-1){
                 byteToHash += (char)i;
             }
-            byte[] encodedhash = md.digest(
-                    byteToHash.getBytes(StandardCharsets.UTF_8));
+            file.close();
+            byte[] encodedhash = md.digest(byteToHash.getBytes(StandardCharsets.UTF_8));
             return bytesToHex(encodedhash);
         } catch (NoSuchAlgorithmException | IOException e) {
             throw new FatalException("Hashing error " + e.getMessage());
@@ -89,7 +91,7 @@ public final class Crypto {
             FileOutputStream out = genOutputFile(fileToEncypt, salt, iv);
             Cipher ci = cipherContent(skey, ivspec);
             writeToOutput(fileToEncypt, ci, out);
-
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -185,7 +187,8 @@ public final class Crypto {
             String path = fileToDecrypt.getParent();
             FileOutputStream out = new FileOutputStream(path + File.separator + newFilename);
             processFile(ci, in, out);
-
+            in.close();
+            out.close();
         } catch (BadPaddingException e) {
             throw new BizzException("Invalid password!");
         } catch (IOException e) {
