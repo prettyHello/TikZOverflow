@@ -88,7 +88,6 @@ public class ProjectDAOMock implements ProjectDAO {
 
     @Override
     public ProjectDTO create(ProjectDTO dto) throws FatalException {
-        //TODO UPDATE
         checkObjects(dto);
         checkObjects(dto.getProjectOwnerId());
         checkObjects(dto.getProjectName());
@@ -101,7 +100,7 @@ public class ProjectDAOMock implements ProjectDAO {
         this.activeCanvas = ActiveCanvas.getActiveCanvas();
         ActiveProject.setActiveProject(dto);
         this.projectDTO = ActiveProject.getActiveProject();
-        return null;
+        return projectDTO;
     }
 
     @Override
