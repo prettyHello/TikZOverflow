@@ -123,7 +123,7 @@ class ProjectDAOImplTest {
         Canvas c = generateDummyCanvas();
         projectDAO.create(projectDTO);
         projectDAO.save(c, projectDTO);
-        Path destination = Paths.get(projectDTO.getProjectPath()+ File.separator + projectDTO.getProjectName() + ".bin");
+        Path destination = Paths.get(projectDTO.getProjectPath()+ File.separator + projectDTO.getProjectName() + ".bin.enc");
         assertTrue(Files.exists(destination), "project folder wasn't created after save was called");
     }
 
@@ -176,8 +176,8 @@ class ProjectDAOImplTest {
         File archive = new File(generateExportedFilledProject(generateBasicProjectDTO2()));
         projectDAO.load(archive,projectDTO,userDTO);
         Path expectedResult = Paths.get(System.getProperty("user.home") + File.separator + "ProjectTikZ"  + File.separator +"userid_" +userDTO.getUserId() + File.separator
-                + projectDTO.getProjectName() + File.separator + projectDTO.getProjectName()+".bin");
-        assertTrue(Files.exists(expectedResult),"The import doesn't seems to generate the .bin");
+                + projectDTO.getProjectName() + File.separator + projectDTO.getProjectName()+".bin.enc");
+        assertTrue(Files.exists(expectedResult),"The import doesn't seems to generate the .bin.enc");
         assertNotNull(this.projectDAO.get(projectDTO), "The import hasn't created the project in the database");
         cleanImport(userDTO.getUserId());
     }
@@ -195,9 +195,10 @@ class ProjectDAOImplTest {
     @Test
     void loadSavedCanvas_createNewCanvas(){
         ProjectDTO projectDTO = generateBasicProjectDTO();
-        projectDAO.create(projectDTO);
+        ProjectDTO result = projectDAO.create(projectDTO);
         Canvas c = this.projectDAO.loadSavedCanvas(projectDTO,"");
         assertNotNull(c, "if the .bin was deleted or not saved, the method is supposed to create a new Canvas");
+        assertEquals(result.getProjectId(),1, "The projectDTO returned was filled with the new id");
     }
 
     private Canvas generateDummyCanvas(){

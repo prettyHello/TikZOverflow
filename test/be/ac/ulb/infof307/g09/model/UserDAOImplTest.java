@@ -45,8 +45,7 @@ class UserDAOImplTest {
     @Test
     void create_expectedBehaviour() {
         UserDTO user = generateBasicUserDTO();
-        userDAO.create(user);
-        UserDTO result = userDAO.get(user);
+        UserDTO result = userDAO.create(user);
         assertEquals(user.getFirstName(), result.getFirstName(), "First name does not match");
         assertEquals(user.getEmail(), result.getEmail(), "Email does not match");
         assertEquals(user.getPassword(), user.getPassword(), "Password does not match");
@@ -54,6 +53,7 @@ class UserDAOImplTest {
         assertEquals(user.getLastName(), user.getLastName(), "LastName does not match");
         assertEquals(user.getRegisterDate(), user.getRegisterDate(), "Date does not match");
         assertEquals(user.getSalt(), user.getSalt(), "Salt does not match");
+        assertEquals(result.getUserId(), 1, "Returned DTO wasn't filled with the ID");
     }
 
     @Test

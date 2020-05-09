@@ -62,9 +62,10 @@ public final class Crypto {
      * This method hash the given file with SHA-256
      * @param fileToHash
      * @return
-     * @throws FatalException
+     * @throws FatalException in case of issue directly hashed related
+     * @throws IOException we are forced to throw this exception as it is a parent of FileNotFoundException, which we want to handle in a specific way
      */
-    public static String hashingFile(String fileToHash) throws FatalException{
+    public static String hashingFile(File fileToHash) throws FatalException {
         try {
             int i;
             String byteToHash = "";
@@ -100,8 +101,9 @@ public final class Crypto {
      * This method use AES to encrypt and a salt on the given file.
      * @param password
      * @param fileToEncypt
+     * @throws FatalException
      */
-    private static void encrypt(String password, String fileToEncypt) {
+    private static void encrypt(String password, String fileToEncypt) throws  FatalException {
 
         try {
             byte[] salt = genSalt();
@@ -112,8 +114,8 @@ public final class Crypto {
             Cipher ci = cipherContent(skey, ivspec);
             writeToOutput(fileToEncypt, ci, out);
             out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new FatalException("Ressource couldn't be closed " + e.getMessage());
         }
 
     }
@@ -219,36 +221,45 @@ public final class Crypto {
      * @throws FatalException
      */
     private static void decrypt(String password, File fileToDecrypt) throws BizzException, FatalException {
-        try {
-            FileInputStream in = new FileInputStream(fileToDecrypt);
-            byte[] salt = new byte[8], iv = new byte[128 / 8];
-            in.read(salt);
-            in.read(iv);
-            SecretKeySpec skey = genAES(salt, password);
-            Cipher ci = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            ci.init(Cipher.DECRYPT_MODE, skey, new IvParameterSpec(iv));
-            int indexlastDot = fileToDecrypt.getName().lastIndexOf(".");
-            String newFilename = fileToDecrypt.getName().substring(0, indexlastDot);
-            String path = fileToDecrypt.getParent();
-            FileOutputStream out = new FileOutputStream(path + File.separator + newFilename);
-            processFile(ci, in, out);
-            in.close();
-            out.close();
-        } catch (BadPaddingException e) {
-            throw new BizzException("Invalid password!");
-        } catch (IOException e) {
-            throw new FatalException("Unexpected error : " + e.getMessage());
-        } catch (IllegalBlockSizeException e) {
-            throw new FatalException("Unexpected error : " + e.getMessage());
-        } catch (NoSuchAlgorithmException e) {
-            throw new FatalException("Unexpected error : " + e.getMessage());
-        } catch (InvalidKeyException e) {
-            throw new FatalException("Unexpected error : " + e.getMessage());
-        } catch (InvalidAlgorithmParameterException e) {
-            throw new FatalException("Unexpected error : " + e.getMessage());
-        } catch (NoSuchPaddingException e) {
+        FileInputStream in = null;
+        FileOutputStream out = null;
+        String path = null;
+        String newFilename = null;
+        try{
+            try {
+                in = new FileInputStream(fileToDecrypt);
+                byte[] salt = new byte[8], iv = new byte[128 / 8];
+                in.read(salt);
+                in.read(iv);
+                SecretKeySpec skey = genAES(salt, password);
+                Cipher ci = Cipher.getInstance("AES/CBC/PKCS5Padding");
+                ci.init(Cipher.DECRYPT_MODE, skey, new IvParameterSpec(iv));
+                int indexlastDot = fileToDecrypt.getName().lastIndexOf(".");
+                newFilename = fileToDecrypt.getName().substring(0, indexlastDot);
+                path = fileToDecrypt.getParent();
+                out = new FileOutputStream(path + File.separator + newFilename);
+                processFile(ci, in, out);
+            } catch (BadPaddingException e) {
+                //if the password is incorrect we need to remove the output file
+                if(out != null) {
+                    out.close();
+                    Utility.deleteFileSilent(new File(path + File.separator + newFilename));
+                }
+                throw new BizzException("Invalid password!");
+            } catch (IllegalBlockSizeException | NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException e) {
+                throw new FatalException("Unexpected error : " + e.getMessage());
+            }finally {
+                if(in!=null){
+                    in.close();
+                }
+                if(out != null) {
+                    out.close();
+                }
+            }
+        }catch (IOException e){
             throw new FatalException("Unexpected error : " + e.getMessage());
         }
+
 
     }
 

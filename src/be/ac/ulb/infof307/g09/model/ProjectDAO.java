@@ -44,6 +44,7 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
      * Load a canvas previously saved into a .bin file
      * If the .bin file has been deleted or never saved, a new Canvas is created
      * @param dto of project concerned
+     * @param password the password of the file
      * @return the Canvas
      * @throws FatalException in case of I/O exception
      */

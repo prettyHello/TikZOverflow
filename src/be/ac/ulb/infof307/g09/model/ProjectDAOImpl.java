@@ -210,7 +210,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
             objectOutputStream.writeObject(canvas);
             objectOutputStream.close();
-            dto.setHash(Crypto.hashingFile(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin"));
+            File uncryptedFile = new File(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin");
+            dto.setHash(Crypto.hashingFile(uncryptedFile));
             Crypto.encryptDirectory(dto.getProjectPassword(), dto.getProjectPath());
             update(dto);
             return dto;
@@ -230,8 +231,11 @@ public class ProjectDAOImpl implements ProjectDAO {
 
         try {
             Crypto.decryptDirectory(password, dto.getProjectPath());
-            if(!dto.getHash().equals(Crypto.hashingFile(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin"))){
-                throw new BizzException("The project was modified by an other program:\n Hashes are different.");
+            File uncryptedZip = new File(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin");
+            if(uncryptedZip.exists()){ //if the file was manually deleted or not saved (user clicked cancel or close app) he will create a blank canvas so nothing to check
+                if(!dto.getHash().equals(Crypto.hashingFile(uncryptedZip))){
+                    throw new BizzException("The project was modified by an other program:\n Hashes are different.");
+                }
             }
             fileInputStream = new FileInputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin");
             ObjectInputStream in = new ObjectInputStream(fileInputStream);
