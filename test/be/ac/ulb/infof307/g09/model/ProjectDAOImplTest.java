@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -187,6 +186,25 @@ class ProjectDAOImplTest {
         ProjectDTO projectDTO = generateFilledProject(generateBasicProjectDTO());
         Canvas c = this.projectDAO.loadSavedCanvas(projectDTO,"");
         assertNotNull(c, "The canvas return for an existing .bin is empty");
+    }
+
+    @Test
+    void loadSavedCanvas_fileWasTemperedWith(){
+        ProjectDTO projectDTO = generateFilledProject(generateBasicProjectDTO());
+        File f = new File(projectDTO.getProjectPath() + File.separator + projectDTO.getProjectName() + ".bin.enc");
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(f);
+            out.write(123);
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertThrows(BizzException.class, () -> {
+            Canvas c = this.projectDAO.loadSavedCanvas(projectDTO,"");
+        },"The file has been tempered with, thus an exception should be raised");
     }
 
     /**
