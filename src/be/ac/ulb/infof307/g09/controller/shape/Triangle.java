@@ -4,6 +4,7 @@ import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Triangle extends LabelizableShape{
     private Coordinates originPoint;
@@ -75,8 +76,8 @@ public class Triangle extends LabelizableShape{
         return returnValue;
     }
 
-    public ArrayList<Coordinates> getPoints() {
-        ArrayList<Coordinates> points = new ArrayList<>();
+    public List<Coordinates> getPoints() {
+        List<Coordinates> points = new ArrayList<>();
         points.add(this.originPoint);
         points.add(this.secondPoint);
         points.add(this.thirdPoint);

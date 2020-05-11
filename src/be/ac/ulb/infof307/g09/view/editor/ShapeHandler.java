@@ -249,62 +249,51 @@ public class ShapeHandler {
     /**
      * Draw be.ac.ulb.infof307.g09.controller shape in diagram.
      *
-     * @param shape
+     * @param shape the shape to draw
      */
     public Shape handleDraw(be.ac.ulb.infof307.g09.controller.shape.Shape shape) {
         Shape shapeDrawing = null;
         Text label = null;
 
-        switch (shape.getClass().toString()) {
-            case "class be.ac.ulb.infof307.g09.controller.shape.Circle": {
-                Coordinates circleCenter = ((be.ac.ulb.infof307.g09.controller.shape.Circle) shape).getCoordinates();
-                double circleRadius = ((be.ac.ulb.infof307.g09.controller.shape.Circle) shape).getRadius();
-                shapeDrawing = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
-                label = createLabel((LabelizableShape) shape, circleCenter.getX(), circleCenter.getY());
-                break;
-            }
-            case "class be.ac.ulb.infof307.g09.controller.shape.Square": {
-                double squareX = ((be.ac.ulb.infof307.g09.controller.shape.Square) shape).getOriginCoordinates().getX();
-                double squareY = ((be.ac.ulb.infof307.g09.controller.shape.Square) shape).getOriginCoordinates().getY();
-                double squareSize = ((be.ac.ulb.infof307.g09.controller.shape.Square) shape).getSize();
-                shapeDrawing = new Rectangle(squareX, squareY, squareSize, squareSize);
+        if (shape instanceof be.ac.ulb.infof307.g09.controller.shape.Circle) {
+            be.ac.ulb.infof307.g09.controller.shape.Circle circle = (be.ac.ulb.infof307.g09.controller.shape.Circle) shape;
+            Coordinates circleCenter = circle.getCoordinates();
+            double circleRadius = circle.getRadius();
+            shapeDrawing = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
+            label = createLabel((LabelizableShape) shape, circleCenter.getX(), circleCenter.getY());
+        } else if (shape instanceof Square) {
+            Square square = (Square) shape;
+            Coordinates squareCoords = square.getOriginCoordinates();
+            shapeDrawing = new Rectangle(squareCoords.getX(), squareCoords.getY(), square.getSize(), square.getSize());
 
-                label = createLabel((LabelizableShape) shape, squareX, squareY);
-                break;
-            }
-            case "class be.ac.ulb.infof307.g09.controller.shape.Triangle": {
-                ArrayList<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Triangle) shape).getPoints();
-                Coordinates point1 = points.get(0);
-                Coordinates point2 = points.get(1);
-                Coordinates point3 = points.get(2);
+            label = createLabel((LabelizableShape) shape, squareCoords.getX(), squareCoords.getY());
+        } else if (shape instanceof Triangle) {
+            List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Triangle) shape).getPoints();
+            Coordinates point1 = points.get(0);
+            Coordinates point2 = points.get(1);
+            Coordinates point3 = points.get(2);
 
-                Polygon polygon = new Polygon();
-                polygon.getPoints().addAll(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY());
-                shapeDrawing = polygon;
-                label = createLabel((LabelizableShape) shape, point1.getX(), point1.getY());
-                break;
-            }
-            case "class be.ac.ulb.infof307.g09.controller.shape.Line": {
-                List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Line) shape).getPathPoints();
-                Coordinates point1 = points.get(0);
-                Coordinates point2 = points.get(1);
+            Polygon polygon = new Polygon();
+            polygon.getPoints().addAll(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY());
+            shapeDrawing = polygon;
+            label = createLabel((LabelizableShape) shape, point1.getX(), point1.getY());
+        } else if (shape instanceof be.ac.ulb.infof307.g09.controller.shape.Line) {
+            List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Line) shape).getPathPoints();
+            Coordinates point1 = points.get(0);
+            Coordinates point2 = points.get(1);
 
-                shapeDrawing = new Line(point1.getX(), point1.getY(), point2.getX(), point2.getY());
-                break;
-            }
-            case "class be.ac.ulb.infof307.g09.controller.shape.Arrow": {
-                List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Arrow) shape).getPathPoints();
-                Coordinates point1 = points.get(0);
-                Coordinates point2 = points.get(1);
+            shapeDrawing = new Line(point1.getX(), point1.getY(), point2.getX(), point2.getY());
+        } else if (shape instanceof Arrow) {
+            List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Arrow) shape).getPathPoints();
+            Coordinates point1 = points.get(0);
+            Coordinates point2 = points.get(1);
 
-                previouslySelectedX = point1.getX();
-                previouslySelectedY = point1.getY();
-                selectedX = point2.getX();
-                selectedY = point2.getY();
+            previouslySelectedX = point1.getX();
+            previouslySelectedY = point1.getY();
+            selectedX = point2.getX();
+            selectedY = point2.getY();
 
-                shapeDrawing = constructArrow();
-                break;
-            }
+            shapeDrawing = constructArrow();
         }
 
         if (shapeDrawing != null) {
