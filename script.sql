@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS  projects (
                                          project_id INTEGER PRIMARY KEY AUTOINCREMENT,
                                          project_owner_id INTEGER NOT NULL,
-                                         name TEXT NOT NULL UNIQUE,
+                                         name TEXT NOT NULL,
                                          path TEXT NOT NULL UNIQUE,
                                          creation_date TEXT NOT NULL,
                                          modification_date TEXT NOT NULL,
