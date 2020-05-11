@@ -70,20 +70,6 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void create_nameUniqueness() {
-        ProjectDTO dto = generateBasicProjectDTO();
-        ProjectDTO dto2 = generateBasicProjectDTO2();
-        dto2.setProjectName(dto.getProjectName());
-        assertThrows(FatalException.class, () -> {
-            projectDAO.create( dto);
-            projectDAO.create( dto2);
-        }, "two project with same name can be created");
-
-        Path destination = Paths.get(dto2.getProjectPath());
-        assertFalse(Files.exists(destination), "project folder was created despite 2 project with same name");
-    }
-
-    @Test
     void create_pathUniqueness() {
         ProjectDTO dto = generateBasicProjectDTO();
         ProjectDTO dto2 = generateBasicProjectDTO2();
@@ -127,15 +113,37 @@ class ProjectDAOImplTest {
     }
 
     @Test
+    void checkEncryptedFile(){
+        ProjectDTO projectDTO = generateBasicProjectDTO();
+        Canvas c = generateDummyCanvas();
+        projectDAO.create(projectDTO);
+        projectDAO.save(c, projectDTO);
+        Path destination = Paths.get(projectDTO.getProjectPath()+ File.separator + projectDTO.getProjectName() + ".bin.enc");
+        assertTrue(Files.exists(destination), "project file wasn't encrypted");
+    }
+
+    @Test
+    void checkDecryptedFile(){
+        ProjectDTO projectDTO = generateBasicProjectDTO();
+        projectDTO.setProjectPassword("test");
+        Canvas c = generateDummyCanvas();
+        projectDAO.create(projectDTO);
+        projectDAO.save(c, projectDTO);
+        Path destination = Paths.get(projectDTO.getProjectPath());
+        Crypto.decryptDirectory("test", destination.toString());
+        Path destination2 = Paths.get(projectDTO.getProjectPath()+ File.separator + projectDTO.getProjectName() + ".bin");
+        assertTrue(Files.exists(destination2), "project file wasn't decrypted");
+    }
+
+    @Test
     void export_expectedBehaviour(){
-        String exportPath = rootFolder+"export";
+        String exportPath = rootFolder+"encryption";
         File fileToBeCreated = new File(exportPath);
         ProjectDTO projectDTO = generateBasicProjectDTO();
         projectDAO.create(projectDTO);
         projectDAO.export(fileToBeCreated, projectDTO);
         Path destination = Paths.get(exportPath+".tar.gz");
         assertTrue(Files.exists(destination), "archive was not created");
-
     }
 
     @Test
