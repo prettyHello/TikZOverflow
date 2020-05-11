@@ -8,6 +8,12 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 public class ActiveCanvas {
     private static Canvas INSTANCE = null;
 
+    /**
+     * private constructor to prevent instantiation
+     */
+    private ActiveCanvas() {
+    }
+
     public static Canvas getActiveCanvas() {
         if (INSTANCE == null) {
             throw new FatalException("Currently no active canvas set");
