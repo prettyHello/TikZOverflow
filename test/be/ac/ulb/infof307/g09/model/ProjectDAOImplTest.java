@@ -127,15 +127,51 @@ class ProjectDAOImplTest {
     }
 
     @Test
+    void encrypt_nonExistingProject(){
+        assertThrows(FatalException.class, () -> {
+            Crypto.encryptDirectory("test","file.bin");
+        }, "encrypt an innexisting project works");
+    }
+
+    @Test
+    void decrypt_nonExistingProject(){
+        assertThrows(FatalException.class, () -> {
+            Crypto.decryptDirectory("test","file.bin");
+        }, "decrypt an innexisting project works");
+    }
+
+    @Test
+    void checkEncryptedFile(){
+        ProjectDTO projectDTO = generateBasicProjectDTO();
+        Canvas c = generateDummyCanvas();
+        projectDAO.create(projectDTO);
+        projectDAO.save(c, projectDTO);
+        Path destination = Paths.get(projectDTO.getProjectPath()+ File.separator + projectDTO.getProjectName() + ".bin");
+        Crypto.encryptDirectory("test",destination.toString());
+        assertTrue(Files.exists(destination), "project file wasn't encrypted");
+    }
+
+    @Test
+    void checkDecryptedFile(){
+        ProjectDTO projectDTO = generateBasicProjectDTO();
+        Canvas c = generateDummyCanvas();
+        projectDAO.create(projectDTO);
+        projectDAO.save(c, projectDTO);
+        Path destination = Paths.get(projectDTO.getProjectPath()+ File.separator + projectDTO.getProjectName() + ".bin");
+        Crypto.encryptDirectory("test",destination.toString());
+        Crypto.decryptDirectory("test", destination.toString());
+        assertTrue(Files.exists(destination), "project file wasn't decrypted");
+    }
+
+    @Test
     void export_expectedBehaviour(){
-        String exportPath = rootFolder+"export";
+        String exportPath = rootFolder+"encryption";
         File fileToBeCreated = new File(exportPath);
         ProjectDTO projectDTO = generateBasicProjectDTO();
         projectDAO.create(projectDTO);
         projectDAO.export(fileToBeCreated, projectDTO);
         Path destination = Paths.get(exportPath+".tar.gz");
         assertTrue(Files.exists(destination), "archive was not created");
-
     }
 
     @Test
