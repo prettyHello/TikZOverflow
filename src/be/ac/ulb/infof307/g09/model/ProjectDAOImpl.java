@@ -277,7 +277,21 @@ public class ProjectDAOImpl implements ProjectDAO {
                 String destination = be.ac.ulb.infof307.g09.model.Utility.untarfile(selectedArchive, folderDestination.resolve("tmp")); //untar the archive in tmp
                 be.ac.ulb.infof307.g09.model.Utility.copy(folderDestination.resolve("tmp"+ File.separator+ destination).toFile(), folderDestination.resolve(projectName).toFile() );
                 renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+destination), new File(folderDestination.toString() + File.separator + File.separator+projectName));
-                renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+destination+".bin"), new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+projectName+".bin"));
+                renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+destination+".bin.enc"), new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+projectName+".bin.enc"));
+
+                //Create the hash before deleting all the files
+                String a = folderDestination.resolve("tmp"+ File.separator+ destination).toString();
+                try{
+                    Crypto.decryptDirectory(projectDTO.getProjectPassword(),folderDestination.resolve("tmp"+ File.separator+ destination).toString());
+                }catch (BizzException e){
+                    be.ac.ulb.infof307.g09.model.Utility.deleteFileSilent(new File(folderDestination.resolve("tmp").toString()));
+                    be.ac.ulb.infof307.g09.model.Utility.deleteFileSilent(new File(folderDestination.resolve(projectName).toString()));
+                    throw e;
+                }
+
+                File uncryptedFile = new File(folderDestination.resolve("tmp"+ File.separator+ destination+ File.separator+ destination +".bin").toString());
+                projectDTO.setHash(Crypto.hashingFile(uncryptedFile));
+
                 Path delFile = Paths.get(folderDestination.resolve("tmp"+File.separator).toString()) ;
                 be.ac.ulb.infof307.g09.model.Utility.deleteFile(delFile.toFile());
                 projectDTO.setProjectPath(folderDestination.toString()+ File.separator +projectName);

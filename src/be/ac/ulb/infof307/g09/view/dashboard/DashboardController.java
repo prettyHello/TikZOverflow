@@ -126,6 +126,7 @@ public class DashboardController {
         FileChooser fc = new FileChooser();
         ProjectDTO projectDTO = null;
         File selectedFile = fc.showOpenDialog(null);
+        String password = Utility.askProjectPassword();
         String projectName = askProjectName();
         if (selectedFile == null)
             return;
@@ -133,6 +134,7 @@ public class DashboardController {
             return;
         try {
             projectDTO = this.projectFactory.createProject(projectName);
+            projectDTO.setProjectPassword(password);
             projectDTO = this.projectUCC.load(selectedFile, projectDTO);
         } catch (BizzException e) {
             showAlert(Alert.AlertType.WARNING, "Load", "Business Error", e.getMessage());

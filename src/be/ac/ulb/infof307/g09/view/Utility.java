@@ -4,11 +4,13 @@ import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextInputDialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -163,5 +165,26 @@ public class Utility {
 
             return null;
         };
+    }
+
+    /**
+     * Used to ask the user the project password
+     * @return
+     */
+    public static String askProjectPassword() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Project password");
+        dialog.setHeaderText("Please enter password to unlock your project");
+        dialog.setContentText("Password:");
+
+        Optional<String> password = dialog.showAndWait();
+        if (password.isPresent() && password.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)){
+            System.out.println("Your password: " + password.get());
+            return password.get();
+        }
+        else{
+            showAlert(Alert.AlertType.WARNING, "newProject", "Please enter a valid name", "Please enter a valid name");
+        }
+        return null;
     }
 }
