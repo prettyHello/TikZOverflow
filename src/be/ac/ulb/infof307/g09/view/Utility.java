@@ -183,7 +183,7 @@ public class Utility {
             return password.get();
         }
         else{
-            showAlert(Alert.AlertType.WARNING, "newProject", "Please enter a valid name", "Please enter a valid name");
+            showAlert(Alert.AlertType.WARNING, "newProject", "Please enter a valid password", "Please enter a valid password");
         }
         return null;
     }

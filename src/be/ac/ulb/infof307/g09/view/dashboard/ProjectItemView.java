@@ -96,7 +96,7 @@ public class ProjectItemView extends HBox {
         });
 
         editBtn.setOnAction(event -> {
-            String password = askProjectPassword();
+            String password = Utility.askProjectPassword();
             try {
                 if(password != null){
                     this.projectUCC.setActive(this.projectDTO, password);
@@ -110,24 +110,6 @@ public class ProjectItemView extends HBox {
                 showAlert(Alert.AlertType.WARNING, "Project opening", "Unexpected Error", e.getMessage());
             }
         });
-    }
-
-    //TODO
-    private String askProjectPassword() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Project password");
-        dialog.setHeaderText("Please enter password to unlock your project");
-        dialog.setContentText("Password:");
-
-        Optional<String> password = dialog.showAndWait();
-        if (password.isPresent() && password.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)){
-            System.out.println("Your password: " + password.get());
-            return password.get();
-        }
-        else{
-            showAlert(Alert.AlertType.WARNING, "newProject", "Please enter a valid name", "Please enter a valid name");
-        }
-        return null;
     }
 
     public void setProject(ProjectDTO projectDTO) {

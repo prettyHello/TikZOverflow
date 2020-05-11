@@ -126,12 +126,11 @@ public class DashboardController {
         FileChooser fc = new FileChooser();
         ProjectDTO projectDTO = null;
         File selectedFile = fc.showOpenDialog(null);
+        if (selectedFile == null) return;
         String password = Utility.askProjectPassword();
+        if(password==null)return;
         String projectName = askProjectName();
-        if (selectedFile == null)
-            return;
-        if (projectName == null)
-            return;
+        if (projectName == null) return;
         try {
             projectDTO = this.projectFactory.createProject(projectName);
             projectDTO.setProjectPassword(password);
