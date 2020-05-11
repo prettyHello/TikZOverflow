@@ -43,6 +43,18 @@ public class Circle extends LabelizableShape {
     }
 
     /**
+     * Copy constructor
+     * @param other the circle to copy
+     * @param newId the id to give to the newly created circle
+     */
+    public Circle(Circle other, int newId){
+        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getShapeThicknessKey(), newId);
+        this.coordinates = new Coordinates(other.getCoordinates().getX(), other.getCoordinates().getY());
+        this.radius = other.getRadius();
+        this.setLabel(other.getLabel());
+    }
+
+    /**
      * @return The line of Tikz code representing this object.
      * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
@@ -54,6 +66,7 @@ public class Circle extends LabelizableShape {
         return returnValue;
     }
 
+    @Override
     public Coordinates getCoordinates() {
         return coordinates;
     }

@@ -17,33 +17,32 @@ import java.io.Serializable;
  */
 public abstract class Shape implements Serializable {
 
-    private boolean draw = true;
-    private boolean fill = false;
+    private boolean draw;
+    private boolean fill;
     private Color fillColor = Color.BLACK;
     private Color drawColor = Color.BLACK;
     private String shapeThicknessKey;
-    private  double shapeThicknessValue;
+    private double shapeThicknessValue;
     private int id;
 
     /**
-     * @param draw Is the shape have a outer line, can be combined with fill.
-     * @param fill Is the shape filled with a color, can be combined with draw.
+     * @param draw              Is the shape have a outer line, can be combined with fill.
+     * @param fill              Is the shape filled with a color, can be combined with draw.
      * @param shapeThicknessKey Thickness starting value.
      */
     public Shape(boolean draw, boolean fill, String shapeThicknessKey, int id) {
         this.draw = draw;
         this.fill = fill;
-        this.fillColor = Color.BLACK;
-        this.drawColor = Color.BLACK;
-        setShapeThicknessKey(shapeThicknessKey);
+        this.shapeThicknessKey = shapeThicknessKey;
+        this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
         this.id = id;
     }
 
     /**
-     * @param draw      Is the shape have a outer line, can be combined with fill.
-     * @param fill      Is the shape filled with a color, can be combined with draw.
-     * @param fillColor Color to fill the shape with, color list in Color enum.
-     * @param drawColor Outer line color, color list in Color enum.
+     * @param draw              Is the shape have a outer line, can be combined with fill.
+     * @param fill              Is the shape filled with a color, can be combined with draw.
+     * @param fillColor         Color to fill the shape with, color list in Color enum.
+     * @param drawColor         Outer line color, color list in Color enum.
      * @param shapeThicknessKey Thickness starting value.
      */
     public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
@@ -58,7 +57,8 @@ public abstract class Shape implements Serializable {
             ControllerUtility.checkObjects(drawColor);
             this.drawColor = drawColor;
         }
-        setShapeThicknessKey(shapeThicknessKey);
+        this.shapeThicknessKey = shapeThicknessKey;
+        this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
         this.id = id;
     }
 
@@ -70,7 +70,7 @@ public abstract class Shape implements Serializable {
     @Override
     public boolean equals(Object obj) {
         boolean retVal = false;
-        if (obj instanceof Shape){
+        if (obj instanceof Shape) {
             Shape ptr = (Shape) obj;
             retVal = ptr.getId() == this.id;
         }
@@ -118,32 +118,41 @@ public abstract class Shape implements Serializable {
     }
 
     public String getShapeThicknessKey() {
+        return this.shapeThicknessKey;
+    }
+
+    public String getShapeThicknessKeyFormatted() {
         return shapeThicknessKey.toLowerCase().replace("_", " ");
     }
 
     public Shape setShapeThicknessKey(String shapeThicknessKey) {
-        this.shapeThicknessKey = shapeThicknessKey.toLowerCase().replace("_"," ");
+        this.shapeThicknessKey = shapeThicknessKey.toUpperCase();
         this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
-        return  this;
+        return this;
     }
+
+    /**
+     * @return the Coordinates that is considered to be the shape's anchor point
+     */
+    abstract public Coordinates getCoordinates();
 
     public double getShapeThicknessValue() {
         return shapeThicknessValue;
     }
-    
+
     public String print() {
         String returnValue = "";
         if (this.fill && this.draw) {
             returnValue += "\\filldraw";
-            returnValue += "[fill=" + this.fillColor.value + ", draw=" + this.drawColor.value + ", "+ this.shapeThicknessKey + "] " ;
+            returnValue += "[fill=" + this.fillColor.value + ", draw=" + this.drawColor.value + ", " + this.getShapeThicknessKeyFormatted() + "] ";
         } else {
             if (this.fill) {
                 returnValue += "\\fill";
-                returnValue += "[fill=" + this.fillColor.value + ", "+ this.shapeThicknessKey + "] ";
+                returnValue += "[fill=" + this.fillColor.value + ", " + this.getShapeThicknessKeyFormatted() + "] ";
             }
             if (this.draw) {
                 returnValue += "\\draw";
-                returnValue += "[draw=" + this.drawColor.value + ", "+ this.shapeThicknessKey + "] ";
+                returnValue += "[draw=" + this.drawColor.value + ", " + this.getShapeThicknessKeyFormatted() + "] ";
             }
         }
         return returnValue;

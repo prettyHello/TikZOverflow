@@ -8,6 +8,7 @@ import java.util.List;
 
 public class CanvasImpl implements Canvas {
     final List<Shape> shapes;
+    final List<Shape> clipboard;
     private int idCounter = 0;
 
     /**
@@ -15,6 +16,7 @@ public class CanvasImpl implements Canvas {
      */
     public CanvasImpl() {
         shapes = new ArrayList<>();
+        clipboard = new ArrayList<>();
     }
 
     /**
@@ -99,7 +101,7 @@ public class CanvasImpl implements Canvas {
 
         if (toChange == null) {
             throw new IllegalArgumentException("canvas does not contain a shape with the specified id");
-        } else if (!(toChange instanceof LabelizableShape)){
+        } else if (!(toChange instanceof LabelizableShape)) {
             return;
         }
 
@@ -155,6 +157,9 @@ public class CanvasImpl implements Canvas {
         this.shapes.remove(tmpShape);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toTikZ() {
         StringBuilder tikz = new StringBuilder();
@@ -166,9 +171,88 @@ public class CanvasImpl implements Canvas {
         return tikz.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear() {
         this.shapes.clear();
         this.idCounter = 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void copyToClipboard(List<Integer> shapeIds) {
+        this.clipboard.clear();
+        for (Integer id : shapeIds){
+            for (Shape s : this.shapes){
+                if (s.getId() == id){
+                    this.clipboard.add(s);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void pasteClipBoard(Coordinates destinationPos) {
+        if (this.clipboard.isEmpty()) {
+            return;
+        }
+
+        // calc mean position of shapes in clipboard
+        Coordinates meanPos = new Coordinates(0,0);
+        for (Shape s : clipboard){
+            meanPos = meanPos.add(s.getCoordinates());
+        }
+        meanPos = new Coordinates(meanPos.getX() / clipboard.size(), meanPos.getY() / clipboard.size());
+
+        // new shape relative to mean pos
+        for (Shape shape : clipboard){
+            Shape toAdd = null;
+
+            if (shape instanceof Circle){
+                Circle c = new Circle((Circle) shape, getIdForNewShape());
+                Coordinates offsetToMean = new Coordinates(meanPos.sub(c.getCoordinates()));
+                c.setCoordinates(destinationPos.sub(offsetToMean));
+                toAdd = c;
+            }else if (shape instanceof Triangle){
+                Triangle t = new Triangle((Triangle) shape, getIdForNewShape());
+                Coordinates offsetToMean = new Coordinates(meanPos.sub(t.getCoordinates()));
+                t.setOriginPoint(destinationPos.sub(offsetToMean));
+                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(t.getSecondPoint()));
+                t.setSecondPoint(destinationPos.sub(offsetMeanToSec));
+                Coordinates offsetMeanToThi = new Coordinates(meanPos.sub(t.getThirdPoint()));
+                t.setThirdPoint(destinationPos.sub(offsetMeanToThi));
+                toAdd = t;
+            }else if (shape instanceof Square){
+                Square s = new Square((Square) shape, getIdForNewShape());
+                Coordinates offsetToMean = new Coordinates(meanPos.sub(s.getCoordinates()));
+                s.setOriginCoordinates(destinationPos.sub(offsetToMean));
+                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(s.getEndCoordinates()));
+                s.setEndCoordinates(destinationPos.sub(offsetMeanToSec));
+                toAdd = s;
+            }else if (shape instanceof Line){
+                Line l = new Line((Line) shape, getIdForNewShape());
+                Coordinates offsetToMean = new Coordinates(meanPos.sub(l.getCoordinates()));
+                l.setStartCoordinates(destinationPos.sub(offsetToMean));
+                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(l.getEndCoordinates()));
+                l.setEndCoordinates(destinationPos.sub(offsetMeanToSec));
+                toAdd = l;
+            }else if (shape instanceof Arrow){
+                Arrow a = new Arrow((Arrow) shape, getIdForNewShape());
+                Coordinates offsetToMean = new Coordinates(meanPos.sub(a.getCoordinates()));
+                a.setStartCoordinates(destinationPos.sub(offsetToMean));
+                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(a.getEndCoordinates()));
+                a.setEndCoordinates(destinationPos.sub(offsetMeanToSec));
+                toAdd = a;
+            }
+            this.shapes.add(toAdd);
+        }
     }
 }

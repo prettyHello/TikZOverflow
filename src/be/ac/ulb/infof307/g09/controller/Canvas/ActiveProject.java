@@ -3,7 +3,7 @@ package be.ac.ulb.infof307.g09.controller.Canvas;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 
 /**
- * Singleton that contains the only active project.
+ * Class that contains the only active project.
  */
 public class ActiveProject {
 

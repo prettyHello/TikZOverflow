@@ -54,6 +54,19 @@ public class Triangle extends LabelizableShape{
         this.thirdPoint = thirdPoint;
     }
 
+    /**
+     * Copy constructor
+     * @param other the Triangle to copy
+     * @param newId the id to assign this newly created Shape
+     */
+    public Triangle(Triangle other, int newId){
+        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getShapeThicknessKey(), newId);
+        this.originPoint = other.getOriginPoint();
+        this.secondPoint = other.getSecondPoint();
+        this.thirdPoint = other.getThirdPoint();
+        this.setLabel(other.getLabel());
+    }
+
     public String print() {
         String returnValue = super.print();
         returnValue += this.originPoint.print() + "-- " + this.secondPoint.print() + "-- " + this.thirdPoint.print() + "-- cycle";
@@ -76,5 +89,34 @@ public class Triangle extends LabelizableShape{
         Coordinates o1 = originPoint, o2 = secondPoint, o3 = thirdPoint;
         Coordinates centroid = new Coordinates((o1.getX() + o2.getX() + o3.getX()) / 3, (o1.getY() + o2.getY() + o3.getY()) / 3);
         return new Coordinates(centroid.getX() - o1.getX(), centroid.getY() - o1.getY());
+    }
+
+    public Coordinates getOriginPoint() {
+        return originPoint;
+    }
+
+    public Coordinates getSecondPoint() {
+        return secondPoint;
+    }
+
+    public Coordinates getThirdPoint() {
+        return thirdPoint;
+    }
+
+    public void setOriginPoint(Coordinates originPoint) {
+        this.originPoint = originPoint;
+    }
+
+    public void setSecondPoint(Coordinates secondPoint) {
+        this.secondPoint = secondPoint;
+    }
+
+    public void setThirdPoint(Coordinates thirdPoint) {
+        this.thirdPoint = thirdPoint;
+    }
+
+    @Override
+    public Coordinates getCoordinates() {
+        return this.getOriginPoint();
     }
 }

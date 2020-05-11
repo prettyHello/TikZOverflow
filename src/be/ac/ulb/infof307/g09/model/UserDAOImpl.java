@@ -4,10 +4,13 @@ import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
+import javafx.scene.control.Alert;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
 
 /**
  * {@inheritDoc}
@@ -46,6 +49,7 @@ public class UserDAOImpl implements UserDAO {
                 throw new BizzException("User : " + usrAuth.getEmail() + " does not exist");
             }
         } catch (SQLException exc) {
+            showAlert(Alert.AlertType.WARNING, "DB Error", "DataBase Connection error", exc.getMessage());
             exc.printStackTrace();
             throw new FatalException("An error occurred in getUser");
         }

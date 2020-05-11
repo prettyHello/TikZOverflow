@@ -22,6 +22,7 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +35,6 @@ public class ShapeHandler {
     protected double previouslySelectedX, previouslySelectedY; // a line needs 2 points so last choice is saved
     protected double thirdSelectedX, thirdSelectedY; // since a triangle need three points
     protected boolean waitingForMoreCoordinate = false;
-    protected boolean actionFromGUI = false;
 
     final ContextMenu shapeContextMenu;
     final Canvas canvas;
@@ -54,20 +54,21 @@ public class ShapeHandler {
     public void changeColorRightClick(Color color) {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            setFillColor(color,shape);
+            setFillColor(color, shape);
         }
     }
 
     /**
      * Change the shape color and update the view
+     *
      * @param color the new color
      * @param shape the shape to update
      */
-    public void setFillColor(Color color, Shape shape){
+    public void setFillColor(Color color, Shape shape) {
         shape.setFill(Color.valueOf(color.toString()));
         Color fillColor = (Color) shape.getFill();
         canvas.changeShapeFillColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(fillColor.getRed(), fillColor.getGreen(), fillColor.getBlue()));
-        actionFromGUI = true;
+        editorController.actionFromGUI = true;
         editorController.translateToTikz();
     }
 
@@ -77,12 +78,13 @@ public class ShapeHandler {
     public void changeStrokeColorRightClick(Color color) {
         if (shapeContextMenu.getOwnerNode() instanceof Shape) {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
-            setStrokeColor(color,shape);
+            setStrokeColor(color, shape);
         }
     }
 
     /**
      * Change the shape stroke color and update the view
+     *
      * @param color the new color
      * @param shape the shape to update
      */
@@ -90,7 +92,7 @@ public class ShapeHandler {
         shape.setStroke(Color.valueOf(color.toString()));
         Color drawColor = (Color) shape.getStroke();
         canvas.changeShapeDrawColor(Integer.parseInt(shape.getId()), getColorNameFromRgb(drawColor.getRed(), drawColor.getGreen(), drawColor.getBlue()));
-        actionFromGUI = true;
+        editorController.actionFromGUI = true;
         editorController.translateToTikz();
     }
 
@@ -106,13 +108,14 @@ public class ShapeHandler {
 
     /**
      * Change the shape stroke thickness and update the view
+     *
      * @param thickness
      * @param shape
      */
     public void setShapeThickness(Thickness thickness, Shape shape) {
         shape.setStrokeWidth(thickness.thicknessValue());
         canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(thickness.name());
-        actionFromGUI = true;
+        editorController.actionFromGUI = true;
         editorController.translateToTikz();
     }
 
@@ -125,7 +128,7 @@ public class ShapeHandler {
             int shapeId = Integer.parseInt(shape.getId());
 
             be.ac.ulb.infof307.g09.controller.shape.Shape modelShape = canvas.getShapeById(shapeId);
-            if (!(modelShape instanceof LabelizableShape)){
+            if (!(modelShape instanceof LabelizableShape)) {
                 return;
             }
 
@@ -135,7 +138,7 @@ public class ShapeHandler {
             String labelText = result.orElse("");
 
             canvas.setShapeLabel(shapeId, labelText, getColorNameFromRgb(labelColor.getRed(), labelColor.getGreen(), labelColor.getBlue()));
-            actionFromGUI = false;
+            editorController.actionFromGUI = false;
         }
         editorController.translateToTikz();
     }
@@ -150,10 +153,11 @@ public class ShapeHandler {
             canvas.rmShapeById(Integer.parseInt(shape.getId()));
             if (editorController.selectedShapes.contains(shape)) {
                 editorController.selectedShapes.remove(shape);
-                if (editorController.selectedShapes.isEmpty())
+                if (editorController.selectedShapes.isEmpty()) {
                     editorController.disableToolbar(false);
+                }
             }
-            actionFromGUI = false;
+            editorController.actionFromGUI = false;
         }
         editorController.translateToTikz();
     }
@@ -233,7 +237,7 @@ public class ShapeHandler {
             shape.setFill(Color.valueOf(editorController.fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(editorController.strokeColour.getValue().toString()));
             shape.setStrokeWidth(Thickness.valueOf(editorController.shapeThickness.getValue().toString()).thicknessValue());
-            actionFromGUI = true;
+            editorController.actionFromGUI = true;
             editorController.pane.getChildren().add(shape);
             editorController.notifyController(addToController, shape);
             shape.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected); //add a listener allowing us to know if a shape was selected
@@ -281,7 +285,7 @@ public class ShapeHandler {
                 break;
             }
             case "class be.ac.ulb.infof307.g09.controller.shape.Line": {
-                ArrayList<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Line) shape).getPathPoints();
+                List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Line) shape).getPathPoints();
                 Coordinates point1 = points.get(0);
                 Coordinates point2 = points.get(1);
 
@@ -289,7 +293,7 @@ public class ShapeHandler {
                 break;
             }
             case "class be.ac.ulb.infof307.g09.controller.shape.Arrow": {
-                ArrayList<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Arrow) shape).getPathPoints();
+                List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Arrow) shape).getPathPoints();
                 Coordinates point1 = points.get(0);
                 Coordinates point2 = points.get(1);
 
@@ -553,7 +557,7 @@ public class ShapeHandler {
             double rightOffset = Double.parseDouble(m.group(3));
             double aboveOffset = Double.parseDouble(m.group(4));
             String label = m.group(5);
-            node = new Node(drawColor,rightOffset, aboveOffset, label);
+            node = new Node(drawColor, rightOffset, aboveOffset, label);
         }
 
         return node;

@@ -6,6 +6,7 @@ import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
+import be.ac.ulb.infof307.g09.controller.shape.*;
 import be.ac.ulb.infof307.g09.controller.shape.Thickness;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
@@ -14,6 +15,7 @@ import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -83,7 +85,8 @@ public class EditorController {
     @FXML
     BorderPane bpRootpane;
 
-    public final ArrayList<Shape> selectedShapes = new ArrayList<>();
+    protected final List<Shape> selectedShapes = new ArrayList<>();
+    private Coordinates lastMousePos = new Coordinates(0, 0);
     protected String shapeToDraw = "";
     protected Canvas canvas;
     private String colorsPattern = "";
@@ -104,6 +107,7 @@ public class EditorController {
     protected String thicknessPattern;
     private String oldCode;
     private boolean writableOldCode = true;
+    protected boolean actionFromGUI = false;
 
     //TODO
     private ProjectDTO projectDTO;
@@ -118,9 +122,13 @@ public class EditorController {
         //add a column of numbers in front of each line of the text box
         tikzTA.setParagraphGraphicFactory(LineNumberFactory.get(tikzTA));
 
+        // 'canvas' can be focused to specify actions should happen on it
+        pane.setFocusTraversable(true);
+
         // Get coordinate of click in canvas and draw selected shape
         pane.setOnMouseClicked((MouseEvent event) ->
         {
+            pane.requestFocus();
             // No shapes must be selected and a drawing shape has to be selected
             if (selectedShapes.isEmpty() && !shapeToDraw.equals("")) {
                 shapeHandler.selectedX = event.getX();
@@ -160,10 +168,10 @@ public class EditorController {
         this.floatNumber = "[+-]?\\d+\\.\\d+";
         this.coordinatePattern = "\\((" + intNumber + "|" + floatNumber + "),[ ]*(" + intNumber + "|" + floatNumber + ")\\)";
         this.labelPattern = "(node\\[text=(" + colorsPattern + "),[ ]*align=center,[ ]*right=(" + intNumber + "|" + floatNumber + ")cm,[ ]*above=(" + intNumber + "|" + floatNumber + ")cm\\] \\{([\\w ]+)\\})";
-        this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) " + coordinatePattern + labelPattern + "?";
-        this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (\\w+) \\[radius=(" + intNumber + "|" + floatNumber + ")\\]" + labelPattern + "?";
+        this.squarePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (rectangle) " + coordinatePattern + labelPattern + "?";
+        this.circlePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " (circle) \\[radius=(" + intNumber + "|" + floatNumber + ")\\]" + labelPattern + "?";
         this.trianglePattern = "\\\\filldraw[ ]*\\[[ ]*fill=(" + colorsPattern + "),[ ]*draw=(" + colorsPattern + "),[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern + " -- " + coordinatePattern + " -- cycle" + labelPattern + "?";
-        this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*[ ]*,[ ]*("+ thicknessPattern +")\\] " + coordinatePattern + " -- " + coordinatePattern;
+        this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*[ ]*,[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern;
 
         // Set start value dropdown to black
         fillColour.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
@@ -184,21 +192,21 @@ public class EditorController {
         MenuItem setLabel = new MenuItem("Set label", contextMenuLabelColorPicker);
         setLabel.setOnAction(t -> shapeHandler.handleSetLabel(Color.valueOf(contextMenuLabelColorPicker.getValue().toString())));
         MenuItem shapeThicknessMenu = new MenuItem("Change thickness", contextMenuChangeThickness);
-        shapeThicknessMenu.setOnAction(t-> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
+        shapeThicknessMenu.setOnAction(t -> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
 
-        fillColour.setOnAction(t-> {
-            if(!selectedShapes.isEmpty()){
-                selectedShapes.forEach(shape -> shapeHandler.setFillColor(Color.valueOf(fillColour.getValue().toString()),shape));
+        fillColour.setOnAction(t -> {
+            if (!selectedShapes.isEmpty()) {
+                selectedShapes.forEach(shape -> shapeHandler.setFillColor(Color.valueOf(fillColour.getValue().toString()), shape));
             }
         });
-        strokeColour.setOnAction(t-> {
-            if(!selectedShapes.isEmpty()){
-                selectedShapes.forEach(shape -> shapeHandler.setStrokeColor(Color.valueOf(strokeColour.getValue().toString()),shape));
+        strokeColour.setOnAction(t -> {
+            if (!selectedShapes.isEmpty()) {
+                selectedShapes.forEach(shape -> shapeHandler.setStrokeColor(Color.valueOf(strokeColour.getValue().toString()), shape));
             }
         });
-        shapeThickness.setOnAction(t-> {
-            if(!selectedShapes.isEmpty()){
-                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(Thickness.valueOf(shapeThickness.getValue().toString()),shape));
+        shapeThickness.setOnAction(t -> {
+            if (!selectedShapes.isEmpty()) {
+                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(Thickness.valueOf(shapeThickness.getValue().toString()), shape));
             }
         });
 
@@ -210,13 +218,20 @@ public class EditorController {
         translateToTikz();
 
         pane.setOnMouseMoved(event ->
-                lbCoordinates.setText(String.format("x=%d, y=%d", (int) event.getX(), (int) event.getY())));
+        {
+            lbCoordinates.setText(String.format("x=%d, y=%d", (int) event.getX(), (int) event.getY()));
+            this.lastMousePos = new Coordinates(event.getX(), event.getY());
+        });
 
         bpRootpane.setOnKeyPressed(event -> {
             if (event.isControlDown() && event.getCode() == KeyCode.S) {
                 this.save();
             } else if (event.isControlDown() && event.getCode() == KeyCode.W) {
                 this.close();
+            } else if (event.isControlDown() && event.getCode() == KeyCode.C) {
+                this.handleCopy();
+            } else if (event.isControlDown() && event.getCode() == KeyCode.V) {
+                this.handlePaste();
             }
         });
     }
@@ -326,6 +341,27 @@ public class EditorController {
     }
 
     /**
+     * Copies the content of the shape selection into the 'clipboard' after clearing it
+     */
+    private void handleCopy() {
+        List<Integer> selectionIds = new ArrayList<>();
+        for (Shape s : selectedShapes){
+            selectionIds.add(Integer.parseInt(s.getId()));
+        }
+        canvas.copyToClipboard(selectionIds);
+    }
+
+    /**
+     * Pastes the content of the clipboard at the mouse position. Relative positioning between shapes will remain the
+     * same and the mouse position will be the mean position of the pasted selection
+     */
+    private void handlePaste() {
+        canvas.pasteClipBoard(lastMousePos);
+        this.actionFromGUI = false;
+        translateToTikz();
+    }
+
+    /**
      * Save the project
      */
     public void save() {
@@ -346,9 +382,6 @@ public class EditorController {
             showAlert(Alert.AlertType.WARNING, "Save", "Business Error", e.getMessage());
         }
     }
-
-
-
 
     /**
      * Close project and ask if it needs to be saved
@@ -406,103 +439,28 @@ public class EditorController {
      * Detects and handles changes in the TextArea
      */
     private final ChangeListener<? super String> handleCodeChange = (observableValue, oldValue, newValue) -> {
-        if (!shapeHandler.actionFromGUI) {
-            ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
+        if (!this.actionFromGUI) {
             List<String> newLines = new ArrayList<>(Arrays.asList(newValue.split("\\n")));
+            tidyLines(newLines);
 
-            // Only handle Tikz shape declarations not general headers/footers
-            List<String> blackList = new ArrayList<>(Arrays.asList(
-                    "\\documentclass{article}",
-                    "\\usepackage[utf8]{inputenc}",
-                    "\\usepackage{tikz}",
-                    "\\begin{document}",
-                    "\\begin{tikzpicture}",
-                    "\\end{tikzpicture}",
-                    "\\end{document}",
-                    ""));
-            newLines.removeIf(blackList::contains);
+            String incorrectLine = checkIfLinesCorrect(newLines);
 
-            boolean linesCorrect = true;
-            String incorrectLine = null;
-            Pattern p;
-            Matcher m;
-            for (String filteredLine : newLines) {
-                linesCorrect = false;
-                for (String pattern : patternsArray) {
-                    p = Pattern.compile(pattern);
-                    m = p.matcher(filteredLine);
-                    if (m.find())
-                        linesCorrect = true;
-                }
-                if (!linesCorrect) {
-                    incorrectLine = filteredLine;
-                    break;
-                }
-            }
-            if (linesCorrect) {
+            if (incorrectLine == null) {
                 tikzTA.setWrongLine(null);
-                ArrayList<Integer> selectedShapesIds = new ArrayList<>();
+
+                if (oldCode == null)
+                    oldCode = oldValue;
+
+                List<Integer> selectedShapesIds = new ArrayList<>();
                 if (!selectedShapes.isEmpty()) {
-                    if (oldCode == null)
-                        oldCode = oldValue;
-
                     List<String> oldLines = new ArrayList<>(Arrays.asList(oldCode.split("\\n")));
-                    oldLines.removeIf(blackList::contains);
-                    // Save the IDs of the shapes selected
-                    for (Shape selectedShape : selectedShapes)
-                        selectedShapesIds.add(Integer.parseInt(selectedShape.getId()));
+                    tidyLines(oldLines);
 
-                    Collections.sort(selectedShapesIds);
-
-                    if (newLines.size() < oldLines.size()) {
-                        // X lines have been removed. selectedShapesIds at some point is X ahead
-                        int nLinesChanged = oldLines.size() - newLines.size();
-
-                        // Find first line that changed
-                        int i;
-                        for (i = 0; i < newLines.size(); i++)
-                            if (!oldLines.get(i).equals(newLines.get(i)))
-                                break;
-                        i += 1;
-
-                        // If the shape selected was removed, remove it from selectedShapes.
-                        for (int j = 0; j < nLinesChanged; j++)
-                            if (selectedShapesIds.contains(i + j))
-                                selectedShapesIds.remove(Integer.valueOf(i + j));
-                        // Update the IDs of the selected shapes;
-                        for (int j = 0; j < selectedShapesIds.size(); j++)
-                            if (selectedShapesIds.get(j) > i)
-                                selectedShapesIds.set(j, selectedShapesIds.get(j) - nLinesChanged);
-
-                    }
-                    else if (newLines.size() > oldLines.size()) {
-                        // X lines have been added. selectedShapesIds at some point is X behind
-                        int nLinesChanged = newLines.size() - oldLines.size();
-                        // Find first line that changed
-                        int i;
-                        for (i = 0; i < oldLines.size(); i++)
-                            if (!newLines.get(i).equals(oldLines.get(i)))
-                                break;
-                        i += 1;
-
-                        // Update the IDs of the selected shapes;
-                        for (int j = 0; j < selectedShapesIds.size(); j++)
-                            if (selectedShapesIds.get(j) >= i)
-                                selectedShapesIds.set(j, selectedShapesIds.get(j) + nLinesChanged);
-                    }
+                    selectedShapesIds = this.adjustSelectedIds(newLines, oldLines);
                 }
 
-                canvas.clear();
-                selectedShapes.clear();
-                pane.getChildren().clear();
-                Shape shapeDrawn;
-                for (String line : newLines) {
-                    shapeDrawn = shapeHandler.sendTikZCode(line);
-                    if (selectedShapesIds.contains(Integer.parseInt(shapeDrawn.getId()))) {
-                       shapeDrawn = shapeHandler.highlightShape(shapeDrawn);
-                       selectedShapes.add(shapeDrawn);
-                   }
-                }
+                this.clear();
+                this.translateToDiagram(newLines, selectedShapesIds);
 
                 if (selectedShapes.isEmpty())
                     disableToolbar(false);
@@ -522,9 +480,133 @@ public class EditorController {
             }
 
         } else {
-            shapeHandler.actionFromGUI = false;
+            this.actionFromGUI = false;
         }
     };
+
+    /**
+     * Remove LaTeX and blank lines
+     * @param lines array with the lines of the code
+     */
+    private void tidyLines(List<String> lines) {
+        List<String> blackList = new ArrayList<>(Arrays.asList(
+                "\\documentclass{article}",
+                "\\usepackage[utf8]{inputenc}",
+                "\\usepackage{tikz}",
+                "\\begin{document}",
+                "\\begin{tikzpicture}",
+                "\\end{tikzpicture}",
+                "\\end{document}",
+                ""));
+        lines.removeIf(blackList::contains);
+    }
+
+    /**
+     * Check if all the lines of the code are corrects
+     * @param lines array with the lines of the code once useless lines have been removed
+     * @return the first line which syntax is not correct or null if all lines are correct.
+     */
+    private String checkIfLinesCorrect(List<String> lines) {
+        ArrayList<String> patternsArray = new ArrayList<>(Arrays.asList(squarePattern, circlePattern, trianglePattern, pathPattern));
+        boolean linesCorrect;
+        String incorrectLine = null;
+        Pattern p;
+        Matcher m;
+        for (String line : lines) {
+            linesCorrect = false;
+            for (String pattern : patternsArray) {
+                p = Pattern.compile(pattern);
+                m = p.matcher(line);
+                if (m.find())
+                    linesCorrect = true;
+            }
+            if (!linesCorrect) {
+                incorrectLine = line;
+                break;
+            }
+        }
+
+        return incorrectLine;
+    }
+
+    /**
+     * Adjust the IDs of the shapes that will be selected once the diagram is redrawn
+     * @param newLines array with the current lines of code
+     * @param oldLines array with the lines of code that were present before changes in code happened
+     * @return an array with the IDs that shapes selected will have once the diagram is redrawn
+     */
+    private List<Integer> adjustSelectedIds (List<String> newLines, List<String> oldLines) {
+        List<Integer> selectedShapesIds = new ArrayList<>();
+
+        // Save the IDs of the shapes selected
+        for (Shape selectedShape : selectedShapes)
+            selectedShapesIds.add(Integer.parseInt(selectedShape.getId()));
+
+        Collections.sort(selectedShapesIds);
+
+        if (newLines.size() < oldLines.size()) {
+            // X lines have been removed. selectedShapesIds at some point is X ahead
+            int nLinesChanged = oldLines.size() - newLines.size();
+
+            // Find first line that changed
+            int i;
+            for (i = 0; i < newLines.size(); i++)
+                if (!oldLines.get(i).equals(newLines.get(i)))
+                    break;
+            i += 1;
+
+            // If the shape selected was removed, remove it from selectedShapes.
+            for (int j = 0; j < nLinesChanged; j++)
+                if (selectedShapesIds.contains(i + j))
+                    selectedShapesIds.remove(Integer.valueOf(i + j));
+            // Update the IDs of the selected shapes;
+            for (int j = 0; j < selectedShapesIds.size(); j++)
+                if (selectedShapesIds.get(j) > i)
+                    selectedShapesIds.set(j, selectedShapesIds.get(j) - nLinesChanged);
+
+        } else if (newLines.size() > oldLines.size()) {
+            // X lines have been added. selectedShapesIds at some point is X behind
+            int nLinesChanged = newLines.size() - oldLines.size();
+            // Find first line that changed
+            int i;
+            for (i = 0; i < oldLines.size(); i++)
+                if (!newLines.get(i).equals(oldLines.get(i)))
+                    break;
+            i += 1;
+
+            // Update the IDs of the selected shapes;
+            for (int j = 0; j < selectedShapesIds.size(); j++)
+                if (selectedShapesIds.get(j) >= i)
+                    selectedShapesIds.set(j, selectedShapesIds.get(j) + nLinesChanged);
+        }
+
+        return selectedShapesIds;
+    }
+
+    /**
+     * Clear canvas, selectedShapes and pane content.
+     */
+    private void clear() {
+        canvas.clear();
+        selectedShapes.clear();
+        pane.getChildren().clear();
+    }
+
+    /**
+     * Translate TikZ code to diagram.
+     * @param lines array with the lines of code
+     * @param selectedShapesIds array with the IDs of the shapes that must be selected after redraw the diagram
+     */
+    private void translateToDiagram(List<String> lines, List<Integer> selectedShapesIds) {
+        Shape shapeDrawn;
+        for (String line : lines) {
+            shapeDrawn = shapeHandler.sendTikZCode(line);
+            if (selectedShapesIds.contains(Integer.parseInt(shapeDrawn.getId()))) {
+                shapeDrawn = shapeHandler.highlightShape(shapeDrawn);
+                selectedShapes.add(shapeDrawn);
+            }
+        }
+    }
 
     /**
      * Required to load view
