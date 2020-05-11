@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Pair of coordinates, with their respective units and options.
@@ -56,10 +57,25 @@ public class Coordinates implements Serializable {
 
     /**
      * Computes the vector substraction of this Coordinates and the provided one
+     *
      * @param other the Coordinates to subtract
      * @return the result of the other vector subtracted from this one, this object remains unchanged
      */
-    public Coordinates sub(Coordinates other){
+    public Coordinates sub(Coordinates other) {
         return new Coordinates(this.x - other.x, this.y - other.y);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Coordinates that = (Coordinates) o;
+        return Double.compare(that.getX(), getX()) == 0 &&
+                Double.compare(that.getY(), getY()) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getX(), getY());
     }
 }

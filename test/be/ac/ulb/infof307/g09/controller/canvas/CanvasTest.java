@@ -3,9 +3,12 @@ package be.ac.ulb.infof307.g09.controller.canvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.CanvasImpl;
 import be.ac.ulb.infof307.g09.controller.shape.*;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import be.ac.ulb.infof307.g09.exceptions.FatalException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +21,7 @@ public class CanvasTest {
     void setUp() {
         canvas = new CanvasImpl();
         id = canvas.getIdForNewShape();
-        shape = new Rectangle(new Coordinates(0, 0), new Coordinates(50, 50),Thickness.THIN.toString(), id);
+        shape = new Rectangle(new Coordinates(0, 0), new Coordinates(50, 50), Thickness.THIN.toString(), id);
     }
 
     @Test
@@ -56,7 +59,7 @@ public class CanvasTest {
     @Test
     void updateShape_sameType() {
         canvas.addShape(shape);
-        Shape newShape = new Rectangle(new Coordinates(0, 0), new Coordinates(0, 0),Thickness.VERY_THIN.toString(), id);
+        Shape newShape = new Rectangle(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.VERY_THIN.toString(), id);
         canvas.updateShape(newShape);
         assertEquals(canvas.getShapeById(id), shape);
         assertEquals(newShape, shape);
@@ -65,7 +68,7 @@ public class CanvasTest {
     @Test
     void updateShape_differentType() {
         canvas.addShape(shape);
-        Shape newShape = new Circle(new Coordinates(0, 0), 50,Thickness.SEMI_THICK.toString(), id);
+        Shape newShape = new Circle(new Coordinates(0, 0), 50, Thickness.SEMI_THICK.toString(), id);
         assertEquals(shape, canvas.getShapeById(id));
         assertEquals(newShape, canvas.getShapeById(id));
     }
@@ -119,7 +122,7 @@ public class CanvasTest {
 
     @Test
     void toTikz_expectedBehaviour() {
-        Shape toAdd = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.ULTRA_THIN.toString(),canvas.getIdForNewShape());
+        Shape toAdd = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.ULTRA_THIN.toString(), canvas.getIdForNewShape());
         canvas.addShape(toAdd);
 
         String control = "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n";
@@ -130,8 +133,8 @@ public class CanvasTest {
 
     @Test
     void toTikz_multipleShapes() {
-        Shape toAdd1 = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.VERY_THICK.toString(),canvas.getIdForNewShape());
-        Shape toAdd2 = new Circle(new Coordinates(0, 0), 50, Thickness.VERY_THICK.toString(),canvas.getIdForNewShape());
+        Shape toAdd1 = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.VERY_THICK.toString(), canvas.getIdForNewShape());
+        Shape toAdd2 = new Circle(new Coordinates(0, 0), 50, Thickness.VERY_THICK.toString(), canvas.getIdForNewShape());
         canvas.addShape(toAdd1);
         canvas.addShape(toAdd2);
 
@@ -143,27 +146,84 @@ public class CanvasTest {
         assertEquals(control, canvas.toTikZ());
     }
 
-/*    @Test
-    void toTikz_shapeWithLabel() {
-        int shapeId = canvas.getIdForNewShape();
-        Shape toAdd1 = new Square(new Coordinates(0, 0), new Coordinates(0, 0), Thickness.VERY_THICK.toString(),shapeId);
-
-        canvas.addShape(toAdd1);
-        canvas.setShapeLabel(shapeId,);
-
-
-        String control = "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n";
-        control += toAdd1.print() + "\n";
-
-        control += "\n\\end{tikzpicture}\n\\end{document}";
-
-        assertEquals(control, canvas.toTikZ());
-    }*/
-
     @Test
     void clear_expectedBehaviour() {
         canvas.clear();
         assertTrue(canvas.getShapes().isEmpty());
         assertEquals(canvas.getIdForNewShape(), 1);
+    }
+
+    @Test
+    void copyToClipboard_expectedBehaviour() {
+        int id1 = canvas.getIdForNewShape();
+        int id2 = canvas.getIdForNewShape();
+        Shape circle = new Circle(new Coordinates(50, 50), 40, "THICK", id1);
+        Shape line = new Line(new Coordinates(100, 100), new Coordinates(500, 500), "THIN", id2);
+        canvas.addShape(circle);
+        canvas.addShape(line);
+        List<Integer> toCopy = new ArrayList<>();
+        toCopy.add(1);
+
+        canvas.copyToClipboard(toCopy);
+        assertEquals(2, canvas.getShapes().size()); // unchanged ?
+        assertEquals(circle, canvas.getShapeById(id1));
+        assertEquals(line, canvas.getShapeById(id2));
+    }
+
+    @Test
+    void copyToClipboard_copyNothing() {
+        int id1 = canvas.getIdForNewShape();
+        int id2 = canvas.getIdForNewShape();
+        Shape circle = new Circle(new Coordinates(50, 50), 40, "THICK", id1);
+        Shape line = new Line(new Coordinates(100, 100), new Coordinates(500, 500), "THIN", id2);
+        canvas.addShape(circle);
+        canvas.addShape(line);
+
+        canvas.copyToClipboard(new ArrayList<>());
+        assertEquals(2, canvas.getShapes().size()); // unchanged ?
+        assertEquals(circle, canvas.getShapeById(id1));
+        assertEquals(line, canvas.getShapeById(id2));
+    }
+
+    @Test
+    void paste_expectedBehaviour() {
+        int id1 = canvas.getIdForNewShape();
+        int id2 = canvas.getIdForNewShape();
+        Shape circle = new Circle(new Coordinates(50, 50), 40, "THICK", id1);
+        Shape line = new Line(new Coordinates(100, 100), new Coordinates(500, 500), "THIN", id2);
+        canvas.addShape(circle);
+        canvas.addShape(line);
+        List<Integer> toCopy = new ArrayList<>();
+        toCopy.add(id1);
+
+        canvas.copyToClipboard(toCopy);
+        Coordinates pasteLoc = new Coordinates(300, 300);
+        canvas.pasteClipBoard(pasteLoc);
+
+        assertEquals(3, canvas.getShapes().size());
+        for (Shape s : canvas.getShapes()) {
+            if (s.getId() != id1 && s.getId() != id2) {
+                Circle pastedCircle = (Circle) s;
+                assertEquals(pasteLoc, pastedCircle.getCoordinates());
+                return;
+            }
+        }
+
+        fail("canvas didn't contain the pasted circle");
+    }
+
+    @Test
+    void paste_emptyClipboard() {
+        int id1 = canvas.getIdForNewShape();
+        int id2 = canvas.getIdForNewShape();
+        Shape circle = new Circle(new Coordinates(50, 50), 40, "THICK", id1);
+        Shape line = new Line(new Coordinates(100, 100), new Coordinates(500, 500), "THIN", id2);
+        canvas.addShape(circle);
+        canvas.addShape(line);
+
+        canvas.copyToClipboard(new ArrayList<>());
+
+        canvas.pasteClipBoard(new Coordinates(100, 100));
+        assertEquals(2, canvas.getShapes().size());
     }
 }
