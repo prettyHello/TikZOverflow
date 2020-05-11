@@ -94,7 +94,7 @@ public class Path extends Shape {
      * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
-        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().value + ", " + super.getShapeThicknessKeyFormatted() + "] ");
+        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().getValue() + ", " + super.getShapeThicknessKeyFormatted() + "] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
         returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {

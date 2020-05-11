@@ -97,12 +97,10 @@ public class ProjectItemView extends HBox {
 
         editBtn.setOnAction(event -> {
             String password = ViewUtility.askProjectPassword();
+            if(password==null)return;
             try {
-                if(password != null){
-                    this.projectUCC.setActive(this.projectDTO, password);
-                    viewSwitcher.switchView(ViewName.EDITOR);
-                }
-
+                this.projectUCC.setActive(this.projectDTO, password);
+                viewSwitcher.switchView(ViewName.EDITOR);
             } catch (BizzException e){
                 showAlert(Alert.AlertType.WARNING, "Project opening", "Business Error", e.getMessage());
             }

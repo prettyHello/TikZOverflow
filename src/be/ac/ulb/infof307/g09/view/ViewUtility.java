@@ -179,8 +179,11 @@ public class ViewUtility {
         pd.setHeaderText("Please enter your password to unlock your project");
         pd.setContentText("Password:");
         Optional<String> password = pd.showAndWait();
-
-        if (password.isPresent() && password.get().matches(ViewUtility.ALLOWED_CHARACTERS_PATTERN)) {
+        if(!password.isPresent()){
+            //If the user cancel the action
+            return null;
+        }
+        else if (password.get().matches(ViewUtility.ALLOWED_CHARACTERS_PATTERN)) {
             return password.get();
         } else {
             showAlert(Alert.AlertType.WARNING, "Project", "Please enter a valid password", "Please enter a valid password");

@@ -29,7 +29,7 @@ public abstract class LabelizableShape extends Shape {
     public String printLabel() {
         if (this.label != null && this.label.getValue().length() > 0){
             Coordinates labelOffset = this.calcLabelOffset();
-            return " node[text=" + this.label.getColor().value +", align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.label.getValue() + "}";
+            return " node[text=" + this.label.getColor().getValue() +", align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.label.getValue() + "}";
         }else{
             return "";
         }
