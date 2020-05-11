@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
 
 /**
  * {@inheritDoc}
