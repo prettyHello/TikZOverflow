@@ -113,7 +113,22 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void checkEncryptedFile(){
+    void load_wrongPassword(){
+        UserDTO userDTO = generateBasicUserDTO();
+        userDTO.setUserId(Integer.MAX_VALUE);
+        userDAO.create(userDTO);
+        ProjectDTO projectDTO = generateBasicProjectDTO();
+        projectDTO.setProjectName("test");
+        projectDTO.setProjectPassword("test1");
+        File archive = new File(generateExportedFilledProject(generateBasicProjectDTO2()));
+        projectDTO.setProjectPassword("test");
+        assertThrows(FatalException.class, () -> {
+            projectDAO.load(archive,projectDTO,userDTO);
+        }, "wrong password used");
+    }
+
+    @Test
+    void encryptDirectory_createEncryptedFile(){
         ProjectDTO projectDTO = generateBasicProjectDTO();
         Canvas c = generateDummyCanvas();
         projectDAO.create(projectDTO);
@@ -123,7 +138,7 @@ class ProjectDAOImplTest {
     }
 
     @Test
-    void checkDecryptedFile(){
+    void decryptDirectory_createBinFile(){
         ProjectDTO projectDTO = generateBasicProjectDTO();
         projectDTO.setProjectPassword("test");
         Canvas c = generateDummyCanvas();
