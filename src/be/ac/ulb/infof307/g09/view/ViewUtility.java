@@ -2,10 +2,10 @@ package be.ac.ulb.infof307.g09.view;
 
 import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.view.editor.PasswordDialog;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextInputDialog;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -170,22 +170,21 @@ public class ViewUtility {
 
     /**
      * Used to ask the user the project password
-     * @return
+     *
+     * @return the entered password or null if the input wasn't valid
      */
     public static String askProjectPassword() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Project password");
-        dialog.setHeaderText("Please enter password to unlock your project");
-        dialog.setContentText("Password:");
+        PasswordDialog pd = new PasswordDialog();
+        pd.setTitle("Project password");
+        pd.setHeaderText("Please enter your password to unlock your project");
+        pd.setContentText("Password:");
+        Optional<String> password = pd.showAndWait();
 
-        Optional<String> password = dialog.showAndWait();
-        if (password.isPresent() && password.get().matches(ViewUtility.ALLOWED_CHARACTERS_PATTERN)){
-            System.out.println("Your password: " + password.get());
+        if (password.isPresent() && password.get().matches(ViewUtility.ALLOWED_CHARACTERS_PATTERN)) {
             return password.get();
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Project", "Please enter a valid password", "Please enter a valid password");
+            return null;
         }
-        else{
-            showAlert(Alert.AlertType.WARNING, "newProject", "Please enter a valid password", "Please enter a valid password");
-        }
-        return null;
     }
 }

@@ -6,16 +6,15 @@ import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
-import be.ac.ulb.infof307.g09.controller.shape.*;
+import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
 import be.ac.ulb.infof307.g09.controller.shape.Thickness;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
-import be.ac.ulb.infof307.g09.view.ViewUtility;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
+import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -366,16 +365,14 @@ public class EditorController {
      */
     public void save() {
         try {
-            //TODO
             String password = ViewUtility.askProjectPassword();
-            if(password != null){
-
+            if (password != null) {
                 this.projectDTO = ActiveProject.getActiveProject();
                 this.projectDTO.setProjectPassword(password);
+                this.projectUcc.save();
+                ViewUtility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
             }
 
-            this.projectUcc.save();
-            ViewUtility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
         } catch (FatalException e) {
             showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
         }catch (BizzException e){
