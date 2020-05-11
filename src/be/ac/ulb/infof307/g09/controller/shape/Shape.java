@@ -144,15 +144,15 @@ public abstract class Shape implements Serializable {
         String returnValue = "";
         if (this.fill && this.draw) {
             returnValue += "\\filldraw";
-            returnValue += "[fill=" + this.fillColor.value + ", draw=" + this.drawColor.value + ", " + this.getShapeThicknessKeyFormatted() + "] ";
+            returnValue += "[fill=" + this.fillColor.getValue() + ", draw=" + this.drawColor.getValue() + ", " + this.getShapeThicknessKeyFormatted() + "] ";
         } else {
             if (this.fill) {
                 returnValue += "\\fill";
-                returnValue += "[fill=" + this.fillColor.value + ", " + this.getShapeThicknessKeyFormatted() + "] ";
+                returnValue += "[fill=" + this.fillColor.getValue() + ", " + this.getShapeThicknessKeyFormatted() + "] ";
             }
             if (this.draw) {
                 returnValue += "\\draw";
-                returnValue += "[draw=" + this.drawColor.value + ", " + this.getShapeThicknessKeyFormatted() + "] ";
+                returnValue += "[draw=" + this.drawColor.getValue() + ", " + this.getShapeThicknessKeyFormatted() + "] ";
             }
         }
         return returnValue;
