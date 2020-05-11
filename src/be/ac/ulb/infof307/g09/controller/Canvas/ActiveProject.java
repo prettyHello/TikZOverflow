@@ -12,6 +12,12 @@ public class ActiveProject {
      */
     private static ProjectDTO activeProject = null;
 
+    /**
+     * private constructor to prevent instantiation
+     */
+    private ActiveProject() {
+    }
+
     public static void setActiveProject(ProjectDTO project) {
         activeProject = project;
     }
