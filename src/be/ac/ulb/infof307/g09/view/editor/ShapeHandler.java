@@ -2,7 +2,7 @@ package be.ac.ulb.infof307.g09.view.editor;
 
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.shape.*;
-import be.ac.ulb.infof307.g09.view.Utility;
+import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextInputDialog;
@@ -227,7 +227,7 @@ public class ShapeHandler {
         if (waitingForMoreCoordinate) {
             return;
         } else if (shape == null) { //No shape was previously selected
-            Utility.showAlert(Alert.AlertType.INFORMATION, "Select a shape",
+            ViewUtility.showAlert(Alert.AlertType.INFORMATION, "Select a shape",
                     "You need to select a shape", "You need to select a shape first!");
         } else {
             shape.setFill(Color.valueOf(editorController.fillColour.getValue().toString()));

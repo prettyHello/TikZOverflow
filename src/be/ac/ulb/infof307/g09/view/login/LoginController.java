@@ -12,13 +12,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
-import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
 
 /**
  * This class handles the process of login of a user.
@@ -62,8 +62,8 @@ public class LoginController {
         String password = passwordTF.getText();
 
         try {
-            Utility.checkString(usernameTF.getText(), "username");
-            Utility.checkString(passwordTF.getText(), "password");
+            ControllerUtility.checkString(usernameTF.getText(), "username");
+            ControllerUtility.checkString(passwordTF.getText(), "password");
             UserDTO user = userFactory.createUser(username, password);
             userUcc.login(user);
 

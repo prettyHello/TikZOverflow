@@ -6,7 +6,7 @@ import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.view.Utility;
+import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
 
 public class ProjectItemView extends HBox {
 
@@ -96,7 +96,7 @@ public class ProjectItemView extends HBox {
         });
 
         editBtn.setOnAction(event -> {
-            String password = Utility.askProjectPassword();
+            String password = ViewUtility.askProjectPassword();
             try {
                 if(password != null){
                     this.projectUCC.setActive(this.projectDTO, password);

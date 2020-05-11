@@ -49,7 +49,7 @@ class ProjectDAOImplTest {
     @AfterEach
     void tearDown() {
         dalServices.deleteDB("dao_test");
-        be.ac.ulb.infof307.g09.model.Utility.deleteFileSilent(new File(rootFolder)); // zip folder
+        ModelUtility.deleteFileSilent(new File(rootFolder)); // zip folder
     }
 
 
@@ -298,6 +298,6 @@ class ProjectDAOImplTest {
      * @param userId name of the dummy folder
      */
     private void cleanImport(int userId){
-        Utility.deleteFileSilent(new File(System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator +"userid_"+ userId));
+        ModelUtility.deleteFileSilent(new File(System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator +"userid_"+ userId));
     }
 }

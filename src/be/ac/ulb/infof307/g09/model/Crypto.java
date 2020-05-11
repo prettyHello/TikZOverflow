@@ -31,7 +31,7 @@ public final class Crypto {
             if (file.isFile()) {
                 if (file.getName().substring(file.getName().lastIndexOf(".")).equals(".bin"))
                     encrypt(password, file.getPath());
-                    Utility.deleteFileSilent(file);
+                    ModelUtility.deleteFileSilent(file);
             }
         }
     }
@@ -51,7 +51,7 @@ public final class Crypto {
             if (file.isFile()) {
                 if (file.getName().substring(file.getName().lastIndexOf(".")).equals(".enc")) {
                         decrypt(password, file);
-                        Utility.deleteFileSilent(file);
+                        ModelUtility.deleteFileSilent(file);
                 }
             }
         }
@@ -243,7 +243,7 @@ public final class Crypto {
                 //if the password is incorrect we need to remove the output file
                 if(out != null) {
                     out.close();
-                    Utility.deleteFileSilent(new File(path + File.separator + newFilename));
+                    ModelUtility.deleteFileSilent(new File(path + File.separator + newFilename));
                 }
                 throw new BizzException("Invalid password!");
             } catch (IllegalBlockSizeException | NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException e) {

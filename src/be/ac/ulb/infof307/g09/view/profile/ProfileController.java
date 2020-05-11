@@ -4,18 +4,19 @@ import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
+import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
-import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
 
 /**
  * This class shows the connected user's profile and allows to modify user's data.
@@ -87,7 +88,7 @@ public class ProfileController {
      * Show EULA when requested.
      */
     public void handleReadEulaButton() {
-        be.ac.ulb.infof307.g09.view.Utility.showEula();
+        ViewUtility.showEula();
     }
 
     /**
@@ -109,14 +110,14 @@ public class ProfileController {
                 passwordTF.setText("random");
                 secondPasswordTF.setText("random");
             }
-            be.ac.ulb.infof307.g09.view.Utility.checkUserData(firstnameTF.getText().replaceAll(be.ac.ulb.infof307.g09.view.Utility.WHITE_SPACES_PATTERN, ""), lastnameTF.getText().replaceAll(be.ac.ulb.infof307.g09.view.Utility.WHITE_SPACES_PATTERN, ""), emailTF.getText(), passwordTF.getText(), secondPasswordTF.getText(), phoneTF.getText());
+            ViewUtility.checkUserData(firstnameTF.getText().replaceAll(ViewUtility.WHITE_SPACES_PATTERN, ""), lastnameTF.getText().replaceAll(ViewUtility.WHITE_SPACES_PATTERN, ""), emailTF.getText(), passwordTF.getText(), secondPasswordTF.getText(), phoneTF.getText());
             String phoneText = phoneTF.getText();
             String emailText = emailTF.getText();
 
-            String lastnameText = lastnameTF.getText().replaceAll(be.ac.ulb.infof307.g09.view.Utility.WHITE_SPACES_PATTERN, "");
-            String firstnameText = firstnameTF.getText().replaceAll(be.ac.ulb.infof307.g09.view.Utility.WHITE_SPACES_PATTERN, "");
+            String lastnameText = lastnameTF.getText().replaceAll(ViewUtility.WHITE_SPACES_PATTERN, "");
+            String firstnameText = firstnameTF.getText().replaceAll(ViewUtility.WHITE_SPACES_PATTERN, "");
 
-            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, Utility.getTimeStamp());
+            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, ControllerUtility.getTimeStamp());
             userUcc.updateUserInfo(user);
             showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information successfully updated");
         } catch (BizzException e) {
@@ -137,7 +138,7 @@ public class ProfileController {
      * Filter for the phone number field to only allow integers.
      */
     public void allowIntegersOnly() {
-        TextFormatter<String> textFormatter = new TextFormatter<>(be.ac.ulb.infof307.g09.view.Utility.textFormatterUnary());
+        TextFormatter<String> textFormatter = new TextFormatter<>(ViewUtility.textFormatterUnary());
         phoneTF.setTextFormatter(textFormatter);
     }
 

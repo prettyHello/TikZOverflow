@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 /**
@@ -21,7 +21,7 @@ public class Rectangle extends LabelizableShape {
      */
     public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) throws FatalException {
         super(true, false, shapeThickness, id);
-        Utility.checkObjects(originCoordinates, endCoordinates);
+        ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;
     }
@@ -38,7 +38,7 @@ public class Rectangle extends LabelizableShape {
      */
     public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThickness, id);
-        Utility.checkObjects(originCoordinates, endCoordinates);
+        ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;
     }

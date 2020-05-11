@@ -6,7 +6,7 @@ import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
-import be.ac.ulb.infof307.g09.view.Utility;
+import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
 
 /**
  * This class handles the main screen of the program and allows the user to manage through their projects.
@@ -127,7 +127,7 @@ public class DashboardController {
         ProjectDTO projectDTO = null;
         File selectedFile = fc.showOpenDialog(null);
         if (selectedFile == null) return;
-        String password = Utility.askProjectPassword();
+        String password = ViewUtility.askProjectPassword();
         if(password==null)return;
         String projectName = askProjectName();
         if (projectName == null) return;
@@ -193,7 +193,7 @@ public class DashboardController {
         dialog.setContentText("Name :");
         projectName = dialog.showAndWait();
 
-        if (projectName.isPresent() && projectName.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)) {
+        if (projectName.isPresent() && projectName.get().matches(ViewUtility.ALLOWED_CHARACTERS_PATTERN)) {
             return projectName.get();
         } else {
             if (this.useAskedName) {

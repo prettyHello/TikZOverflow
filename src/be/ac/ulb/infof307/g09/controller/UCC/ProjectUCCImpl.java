@@ -9,15 +9,15 @@ import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.model.DALServices;
 import be.ac.ulb.infof307.g09.model.DAO;
 import be.ac.ulb.infof307.g09.model.ProjectDAO;
-import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import static be.ac.ulb.infof307.g09.controller.Utility.checkObjects;
-import static be.ac.ulb.infof307.g09.controller.Utility.checkString;
+import static be.ac.ulb.infof307.g09.controller.ControllerUtility.checkObjects;
+import static be.ac.ulb.infof307.g09.controller.ControllerUtility.checkString;
 
 /**
  * {@inheritDoc}
@@ -55,8 +55,8 @@ public class ProjectUCCImpl implements ProjectUCC {
         checkString(projectName, "project Name");
         UserDTO owner = ConnectedUser.getConnectedUser();
         dto.setProjectOwnerId(owner.getUserId());
-        dto.setCreateDate(Utility.getTimeStamp());
-        dto.setModificationDate(Utility.getTimeStamp());
+        dto.setCreateDate(ControllerUtility.getTimeStamp());
+        dto.setModificationDate(ControllerUtility.getTimeStamp());
         String projectPath = System.getProperty("user.home") + rootFolder +"userid_" +owner.getUserId() + File.separator + projectName;
         dto.setProjectPath(projectPath);
         ProjectDTO updatedDTO = this.projectDAO.create(dto);
@@ -78,10 +78,10 @@ public class ProjectUCCImpl implements ProjectUCC {
      */
     @Override
     public ProjectDTO load(File selectedFile, ProjectDTO projectDTO) throws FatalException {
-        Utility.checkObjects(projectDTO);
-        Utility.checkObjects(selectedFile);
-        projectDTO.setCreateDate(Utility.getTimeStamp());
-        projectDTO.setModificationDate(Utility.getTimeStamp());
+        ControllerUtility.checkObjects(projectDTO);
+        ControllerUtility.checkObjects(selectedFile);
+        projectDTO.setCreateDate(ControllerUtility.getTimeStamp());
+        projectDTO.setModificationDate(ControllerUtility.getTimeStamp());
         projectDTO.setProjectOwnerId(this.userUcc.getConnectedUser().getUserId());
         UserDTO userDTO = ConnectedUser.getConnectedUser();
         return this.projectDAO.load(selectedFile,projectDTO, userDTO);

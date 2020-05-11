@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class Triangle extends LabelizableShape{
      */
     public Triangle(Coordinates originPoint,String shapeThickness, int id) {
         super(true, false, shapeThickness, id);
-        Utility.checkObjects(originPoint);
+        ControllerUtility.checkObjects(originPoint);
         this.originPoint = originPoint;
         this.secondPoint = new Coordinates(originPoint.getX() + 1, originPoint.getY());
         this.thirdPoint = new Coordinates(originPoint.getX(), originPoint.getY() + 1);
@@ -34,7 +34,7 @@ public class Triangle extends LabelizableShape{
      */
     public Triangle(Coordinates pt1, Coordinates pt2, Coordinates pt3, String shapeThickness, int id) {
         super(true, false, shapeThickness, id);
-        Utility.checkObjects(pt1, pt2, pt3);
+        ControllerUtility.checkObjects(pt1, pt2, pt3);
         this.originPoint = pt1;
         this.secondPoint = pt2;
         this.thirdPoint = pt3;
@@ -48,7 +48,7 @@ public class Triangle extends LabelizableShape{
      */
     public Triangle(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, Coordinates originPoint, Coordinates secondPoint, Coordinates thirdPoint, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThickness, id);
-        Utility.checkObjects(originPoint, secondPoint, thirdPoint);
+        ControllerUtility.checkObjects(originPoint, secondPoint, thirdPoint);
         this.originPoint = originPoint;
         this.secondPoint = secondPoint;
         this.thirdPoint = thirdPoint;

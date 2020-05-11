@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
@@ -34,7 +34,7 @@ public class Circle extends LabelizableShape {
      */
     public Circle(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, Coordinates coordinates, float radius, int id) throws FatalException, BizzException {
         super(draw, fill, drawColor, fillColor, shapeThickness, id);
-        Utility.checkObjects(coordinates);
+        ControllerUtility.checkObjects(coordinates);
         if (radius <= 0) {
             throw new BizzException("Radius is negative or null");
         }
@@ -59,7 +59,7 @@ public class Circle extends LabelizableShape {
     }
 
     public void setCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObjects(coordinates);
+        ControllerUtility.checkObjects(coordinates);
         this.coordinates = coordinates;
     }
 

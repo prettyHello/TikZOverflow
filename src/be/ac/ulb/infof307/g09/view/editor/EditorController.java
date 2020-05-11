@@ -6,11 +6,10 @@ import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
-import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
 import be.ac.ulb.infof307.g09.controller.shape.Thickness;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
-import be.ac.ulb.infof307.g09.view.Utility;
+import be.ac.ulb.infof307.g09.view.ViewUtility;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import javafx.beans.value.ChangeListener;
@@ -30,7 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static be.ac.ulb.infof307.g09.view.ColorUtils.getColorNameFromRgb;
-import static be.ac.ulb.infof307.g09.view.Utility.showAlert;
+import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
 
 /**
  * This class is used to handle drawings and their corresponding tikz translation.
@@ -332,7 +331,7 @@ public class EditorController {
     public void save() {
         try {
             //TODO
-            String password = Utility.askProjectPassword();
+            String password = ViewUtility.askProjectPassword();
             if(password != null){
 
                 this.projectDTO = ActiveProject.getActiveProject();
@@ -340,7 +339,7 @@ public class EditorController {
             }
 
             this.projectUcc.save();
-            be.ac.ulb.infof307.g09.view.Utility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
+            ViewUtility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
         } catch (FatalException e) {
             showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
         }catch (BizzException e){
@@ -385,7 +384,7 @@ public class EditorController {
      */
     private boolean checkIfMoreCoordinateRequired() {
         if (shapeHandler.waitingForMoreCoordinate) {
-            be.ac.ulb.infof307.g09.view.Utility.showAlert(Alert.AlertType.INFORMATION, "Finish your action",
+            ViewUtility.showAlert(Alert.AlertType.INFORMATION, "Finish your action",
                     "You need to select a second point", "You need to select a second point to finish the last shape!");
             disableButtonOverlay();
             return true;

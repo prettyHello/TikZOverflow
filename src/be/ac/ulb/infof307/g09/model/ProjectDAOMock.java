@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static java.util.Objects.isNull;
-import static be.ac.ulb.infof307.g09.controller.Utility.checkObjects;
+import static be.ac.ulb.infof307.g09.controller.ControllerUtility.checkObjects;
 
 /**
  * Implementation used for the tests of the controllers

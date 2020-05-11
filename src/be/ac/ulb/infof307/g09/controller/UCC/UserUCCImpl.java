@@ -10,7 +10,7 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.File;
 
-import static be.ac.ulb.infof307.g09.controller.Utility.checkObjects;
+import static be.ac.ulb.infof307.g09.controller.ControllerUtility.checkObjects;
 
 /**
  * {@inheritDoc}

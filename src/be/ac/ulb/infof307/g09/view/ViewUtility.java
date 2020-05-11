@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g09.view;
 
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * Collection of utility functions used in the view and related to javaFX
  */
-public class Utility {
+public class ViewUtility {
     public static final String ALLOWED_CHARACTERS_PATTERN = "^[_,A-Z|a-z|0-9]+";
     public static final String UNALLOWED_CHARACTERS_PATTERN = "[\\\\|@#~€¬\\[\\]{}!\"·$%&\\/()=?¿^*¨;:_`\\+´,.-]";
     public static final String WHITE_SPACES_PATTERN = "^[\\s]+|[\\s]+$";
@@ -93,7 +94,7 @@ public class Utility {
      * @throws BizzException
      */
     public static void checkPhone(String phone) throws BizzException {
-        be.ac.ulb.infof307.g09.controller.Utility.checkString(phone, "phone");
+        ControllerUtility.checkString(phone, "phone");
         if (phone.length() < 9)
             throw new BizzException("The PhoneNumber is too short");
         if (phone.length() > 11)
@@ -107,7 +108,7 @@ public class Utility {
      * @throws BizzException
      */
     public static void checkEmail(String email) throws BizzException {
-        be.ac.ulb.infof307.g09.controller.Utility.checkString(email, "email");
+        ControllerUtility.checkString(email, "email");
         if (!email.matches(EMAIL_PATTERN))
             throw new BizzException("The email is wrong");
     }
@@ -119,7 +120,7 @@ public class Utility {
      * @throws BizzException
      */
     public static void checkFirstName(String firstname) throws BizzException {
-        be.ac.ulb.infof307.g09.controller.Utility.checkString(firstname, "firstname");
+        ControllerUtility.checkString(firstname, "firstname");
         if (firstname.isEmpty() || firstname.matches(UNALLOWED_CHARACTERS_PATTERN))
             throw new BizzException("The firstname has unallowed characters");
     }
@@ -131,7 +132,7 @@ public class Utility {
      * @throws BizzException
      */
     public static void checkLastName(String lastname) throws BizzException {
-        be.ac.ulb.infof307.g09.controller.Utility.checkString(lastname, "lastname");
+        ControllerUtility.checkString(lastname, "lastname");
         if (lastname.isEmpty() || lastname.matches(UNALLOWED_CHARACTERS_PATTERN))
             throw new BizzException("The lastname has unallowed characters");
     }
@@ -146,12 +147,12 @@ public class Utility {
     public static void comparePasswords(String password1, String password2) throws BizzException {
         if (!password1.equals(password2))
             throw new BizzException("The passwords are not the sames");
-        be.ac.ulb.infof307.g09.controller.Utility.checkString(password1, "password");
-        be.ac.ulb.infof307.g09.controller.Utility.checkString(password2, "password");
+        ControllerUtility.checkString(password1, "password");
+        ControllerUtility.checkString(password2, "password");
     }
 
     /**
-     * Used to format textFields in the be.ac.ulb.infof307.g09.view
+     * Used to format textFields in the view
      *
      * @return a unary operator that applies a transformation to text
      */
@@ -178,7 +179,7 @@ public class Utility {
         dialog.setContentText("Password:");
 
         Optional<String> password = dialog.showAndWait();
-        if (password.isPresent() && password.get().matches(Utility.ALLOWED_CHARACTERS_PATTERN)){
+        if (password.isPresent() && password.get().matches(ViewUtility.ALLOWED_CHARACTERS_PATTERN)){
             System.out.println("Your password: " + password.get());
             return password.get();
         }

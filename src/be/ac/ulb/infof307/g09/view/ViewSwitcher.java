@@ -59,7 +59,7 @@ public class ViewSwitcher {
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("couldn't change be.ac.ulb.infof307.g09.view");
-            Utility.showAlert(Alert.AlertType.ERROR, "Fatal error", "Unable to switch be.ac.ulb.infof307.g09.view", "The application is unable to change the current be.ac.ulb.infof307.g09.view. Exiting.");
+            ViewUtility.showAlert(Alert.AlertType.ERROR, "Fatal error", "Unable to switch be.ac.ulb.infof307.g09.view", "The application is unable to change the current be.ac.ulb.infof307.g09.view. Exiting.");
             Platform.exit();
         }
     }

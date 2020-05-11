@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 public class Square extends Rectangle{
@@ -43,7 +43,7 @@ public class Square extends Rectangle{
      */
     public Square (boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor,  shapeThickness, originCoordinates, endCoordinates, id);
-        Utility.checkObjects(originCoordinates, endCoordinates);
+        ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.size = endCoordinates.getX() - originCoordinates.getX();
     }
 

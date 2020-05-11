@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.Serializable;
@@ -51,11 +51,11 @@ public abstract class Shape implements Serializable {
         this.fill = fill;
 
         if (fill) {
-            Utility.checkObjects(fillColor);
+            ControllerUtility.checkObjects(fillColor);
             this.fillColor = fillColor;
         }
         if (draw) {
-            Utility.checkObjects(drawColor);
+            ControllerUtility.checkObjects(drawColor);
             this.drawColor = drawColor;
         }
         setShapeThicknessKey(shapeThicknessKey);

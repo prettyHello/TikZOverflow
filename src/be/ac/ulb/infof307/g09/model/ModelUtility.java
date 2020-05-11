@@ -19,7 +19,7 @@ import java.util.zip.GZIPOutputStream;
  * Collection of utility functions used by the model
  * Functions easily imported from project to project and related to file handling
  */
-public class Utility {
+public class ModelUtility {
     /**
      * Decompress file ".tar.gz"
      *

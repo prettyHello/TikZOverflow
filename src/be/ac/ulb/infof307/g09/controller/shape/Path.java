@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.controller.Utility;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, String shapeThickness, int id) throws FatalException {
         super(true, false, shapeThickness, id);
-        Utility.checkObjects(pathPoints);
+        ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
@@ -45,7 +45,7 @@ import java.util.Iterator;
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
         pathPoints.add(origin);
         pathPoints.add(end);
-        Utility.checkObjects(pathPoints);
+        ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
 
     }
@@ -62,7 +62,7 @@ import java.util.Iterator;
      */
     public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
         super(true, false, drawColor, Color.WHITE, shapeThickness, id);
-        Utility.checkObjects(pathPoints);
+        ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
@@ -81,7 +81,7 @@ import java.util.Iterator;
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
         pathPoints.add(origin);
         pathPoints.add(end);
-        Utility.checkObjects(pathPoints);
+        ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
@@ -106,12 +106,12 @@ import java.util.Iterator;
     }
 
     public void addCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObjects(coordinates);
+        ControllerUtility.checkObjects(coordinates);
         this.pathPoints.add(coordinates);
     }
 
     public void rmCoordinates(Coordinates coordinates) throws FatalException {
-        Utility.checkObjects(coordinates);
+        ControllerUtility.checkObjects(coordinates);
         this.pathPoints.remove(coordinates);
     }
 
