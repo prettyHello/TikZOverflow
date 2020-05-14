@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,11 +8,11 @@ import java.util.Objects;
  * only work with default units for now (cm).
  * https://en.wikibooks.org/wiki/LaTeX/PGF/TikZ#Specifying_Coordinates
  */
-public class Coordinates implements Serializable {
+public class CoordinatesDTO implements Serializable {
     private double x = 0;
     private double y = 0;
 
-    public Coordinates(double x, double y) {
+    public CoordinatesDTO(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -21,7 +21,7 @@ public class Coordinates implements Serializable {
      * Copy constructor
      * @param other
      */
-    public Coordinates(Coordinates other){
+    public CoordinatesDTO(CoordinatesDTO other){
         this.x = other.x;
         this.y = other.y;
     }
@@ -51,8 +51,8 @@ public class Coordinates implements Serializable {
      * @param other the Coordinates to add from this one
      * @return the addition, this object remains unchanged
      */
-    public Coordinates add(Coordinates other) {
-        return new Coordinates(this.x + other.x, this.y + other.y);
+    public CoordinatesDTO add(CoordinatesDTO other) {
+        return new CoordinatesDTO(this.x + other.x, this.y + other.y);
     }
 
     /**
@@ -61,15 +61,15 @@ public class Coordinates implements Serializable {
      * @param other the Coordinates to subtract
      * @return the result of the other vector subtracted from this one, this object remains unchanged
      */
-    public Coordinates sub(Coordinates other) {
-        return new Coordinates(this.x - other.x, this.y - other.y);
+    public CoordinatesDTO sub(CoordinatesDTO other) {
+        return new CoordinatesDTO(this.x - other.x, this.y - other.y);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Coordinates that = (Coordinates) o;
+        CoordinatesDTO that = (CoordinatesDTO) o;
         return Double.compare(that.getX(), getX()) == 0 &&
                 Double.compare(that.getY(), getY()) == 0;
     }

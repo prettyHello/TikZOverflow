@@ -1,24 +1,24 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
-public abstract class LabelizableShape extends Shape {
+public abstract class LabelizableShapeDTO extends ShapeDTO {
 
-    private Label label;
+    private LabelDTO label;
 
-    public LabelizableShape(boolean draw, boolean fill, String shapeThicknessKey, int id) {
+    public LabelizableShapeDTO(boolean draw, boolean fill, String shapeThicknessKey, int id) {
         super(draw, fill, shapeThicknessKey, id);
     }
 
-    public LabelizableShape(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
+    public LabelizableShapeDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThicknessKey, id);
     }
 
-    public Label getLabel() {
+    public LabelDTO getLabel() {
         return label;
     }
 
-    public void setLabel(Label label) {
+    public void setLabel(LabelDTO label) {
         this.label = label;
     }
 
@@ -28,12 +28,12 @@ public abstract class LabelizableShape extends Shape {
 
     public String printLabel() {
         if (this.label != null && this.label.getValue().length() > 0){
-            Coordinates labelOffset = this.calcLabelOffset();
+            CoordinatesDTO labelOffset = this.calcLabelOffset();
             return " node[text=" + this.label.getColor().getValue() +", align=center, right=" + labelOffset.getX() + "cm, above=" + labelOffset.getY() + "cm] {" + this.label.getValue() + "}";
         }else{
             return "";
         }
     }
 
-    public abstract Coordinates calcLabelOffset();
+    public abstract CoordinatesDTO calcLabelOffset();
 }

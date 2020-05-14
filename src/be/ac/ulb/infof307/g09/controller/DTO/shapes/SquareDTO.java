@@ -1,9 +1,9 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
-public class Square extends Rectangle{
+public class SquareDTO extends RectangleDTO {
     private double size;
 
     /**
@@ -13,7 +13,7 @@ public class Square extends Rectangle{
      * @param endCoordinates    the second defining corner of the square
      * @param id                the id of the shape to create
      */
-    public Square(Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) {
+    public SquareDTO(CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, String shapeThickness, int id) {
         super(originCoordinates, endCoordinates, shapeThickness, id);
         this.size = endCoordinates.getX() - originCoordinates.getX();
     }
@@ -25,8 +25,8 @@ public class Square extends Rectangle{
      * @param size              the size of the sides of the square
      * @param id                the id the shape to create
      */
-    public Square(Coordinates originCoordinates, double size, String shapeThickness, int id) {
-        this(originCoordinates, new Coordinates(originCoordinates.getX() + size, originCoordinates.getY() + size), shapeThickness, id);
+    public SquareDTO(CoordinatesDTO originCoordinates, double size, String shapeThickness, int id) {
+        this(originCoordinates, new CoordinatesDTO(originCoordinates.getX() + size, originCoordinates.getY() + size), shapeThickness, id);
         this.size = size;
     }
 
@@ -40,7 +40,7 @@ public class Square extends Rectangle{
      * @param fillColor         Color to fill the shape with, color list in Color enum.
      * @param drawColor         Outer line color, color list in Color enum.
      */
-    public Square(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) throws FatalException {
+    public SquareDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, String shapeThickness, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThickness, originCoordinates, endCoordinates, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.size = endCoordinates.getX() - originCoordinates.getX();
@@ -52,9 +52,9 @@ public class Square extends Rectangle{
      * @param other the Square to copy
      * @param newId the id to give to the newly created shape
      */
-    public Square(Square other, int newId) {
+    public SquareDTO(SquareDTO other, int newId) {
         super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getShapeThicknessKey(),
-                new Coordinates(other.getOriginCoordinates()), new Coordinates(other.getEndCoordinates()), newId);
+                new CoordinatesDTO(other.getOriginCoordinates()), new CoordinatesDTO(other.getEndCoordinates()), newId);
         this.setLabel(other.getLabel());
         this.size = getOriginCoordinates().getX() - getEndCoordinates().getX();
     }

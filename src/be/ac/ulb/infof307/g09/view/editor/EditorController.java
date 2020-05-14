@@ -6,8 +6,9 @@ import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
-import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
-import be.ac.ulb.infof307.g09.controller.shape.Thickness;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.CoordinatesDTO;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ShapeDTO;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.Thickness;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
@@ -70,11 +71,11 @@ public class EditorController {
     @FXML
     Button delete;
     @FXML
-    ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> fillColour;
+    ChoiceBox<be.ac.ulb.infof307.g09.controller.DTO.shapes.Color> fillColour;
     @FXML
-    ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> strokeColour;
+    ChoiceBox<be.ac.ulb.infof307.g09.controller.DTO.shapes.Color> strokeColour;
     @FXML
-    ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Thickness> shapeThickness;
+    ChoiceBox<Thickness> shapeThickness;
     @FXML
     SplitPane mainSplitPane;
     @FXML
@@ -85,15 +86,15 @@ public class EditorController {
     BorderPane bpRootpane;
 
     protected final List<Shape> selectedShapes = new ArrayList<>();
-    private Coordinates lastMousePos = new Coordinates(0, 0);
+    private CoordinatesDTO lastMousePos = new CoordinatesDTO(0, 0);
     protected String shapeToDraw = "";
     protected Canvas canvas;
     private String colorsPattern = "";
     private ContextMenu shapeContextMenu;
-    private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuFillColorPicker;
-    private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuDrawColorPicker;
-    private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Thickness> contextMenuChangeThickness;
-    private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuLabelColorPicker;
+    private ChoiceBox<be.ac.ulb.infof307.g09.controller.DTO.shapes.Color> contextMenuFillColorPicker;
+    private ChoiceBox<be.ac.ulb.infof307.g09.controller.DTO.shapes.Color> contextMenuDrawColorPicker;
+    private ChoiceBox<Thickness> contextMenuChangeThickness;
+    private ChoiceBox<be.ac.ulb.infof307.g09.controller.DTO.shapes.Color> contextMenuLabelColorPicker;
 
     protected String intNumber;
     protected String floatNumber;
@@ -143,7 +144,7 @@ public class EditorController {
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
         ArrayList<String> colors = new ArrayList<>();
-        for (be.ac.ulb.infof307.g09.controller.shape.Color colour : be.ac.ulb.infof307.g09.controller.shape.Color.values()) {
+        for (be.ac.ulb.infof307.g09.controller.DTO.shapes.Color colour : be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.values()) {
             fillColour.getItems().add(colour);
             strokeColour.getItems().add(colour);
             contextMenuFillColorPicker.getItems().add(colour);
@@ -154,7 +155,7 @@ public class EditorController {
 
         //Fill the thickness ChoiceBox on contextMenu
         ArrayList<String> thicknessKeys = new ArrayList<>();
-        for (be.ac.ulb.infof307.g09.controller.shape.Thickness thickness : be.ac.ulb.infof307.g09.controller.shape.Thickness.values()) {
+        for (Thickness thickness : Thickness.values()) {
             shapeThickness.getItems().add(thickness);
             contextMenuChangeThickness.getItems().add(thickness);
             thicknessKeys.add(thickness.toString().toLowerCase().replace('_', ' '));
@@ -173,12 +174,12 @@ public class EditorController {
         this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*[ ]*,[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern;
 
         // Set start value dropdown to black
-        fillColour.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
-        strokeColour.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
+        fillColour.setValue(be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.BLACK);
+        strokeColour.setValue(be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.BLACK);
         shapeThickness.setValue(Thickness.THIN);
-        contextMenuFillColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
-        contextMenuDrawColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
-        contextMenuLabelColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
+        contextMenuFillColorPicker.setValue(be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.BLACK);
+        contextMenuDrawColorPicker.setValue(be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.BLACK);
+        contextMenuLabelColorPicker.setValue(be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.BLACK);
         contextMenuChangeThickness.setValue(Thickness.THIN);
 
 
@@ -219,7 +220,7 @@ public class EditorController {
         pane.setOnMouseMoved(event ->
         {
             lbCoordinates.setText(String.format("x=%d, y=%d", (int) event.getX(), (int) event.getY()));
-            this.lastMousePos = new Coordinates(event.getX(), event.getY());
+            this.lastMousePos = new CoordinatesDTO(event.getX(), event.getY());
         });
 
         bpRootpane.setOnKeyPressed(event -> {
@@ -290,12 +291,12 @@ public class EditorController {
     }
 
     /**
-     * Notify Shape controller of javafx shape creation
+     * Notify ShapeDTO controller of javafx shape creation
      *
      * @param addToController the shape that will be added to the model
      * @param shape           JavaFX shape
      */
-    public void notifyController(be.ac.ulb.infof307.g09.controller.shape.Shape addToController, Shape shape) {
+    public void notifyController(ShapeDTO addToController, Shape shape) {
         Color fillColor = (Color) shape.getFill();
         Color drawColor = (Color) shape.getStroke();
         shape.setId(Integer.toString(addToController.getId()));

@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
@@ -7,9 +7,9 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
  * eg : \draw (0,0) rectangle (1,1);
  * 0,0 is the origin coordinate, 1,1 is the end coordinate.
  */
-public class Rectangle extends LabelizableShape {
-    private Coordinates originCoordinates = null;
-    private Coordinates endCoordinates = null;
+public class RectangleDTO extends LabelizableShapeDTO {
+    private CoordinatesDTO originCoordinates = null;
+    private CoordinatesDTO endCoordinates = null;
 
 
     /**
@@ -18,7 +18,7 @@ public class Rectangle extends LabelizableShape {
      * @param originCoordinates the first defining corner of the rectangle
      * @param endCoordinates    the second defining corner of the rectangle
      */
-    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) {
+    public RectangleDTO(CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, String shapeThickness, int id) {
         super(true, false, shapeThickness, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
@@ -35,7 +35,7 @@ public class Rectangle extends LabelizableShape {
      * @param fillColor         Color to fill the shape with, color list in Color enum.
      * @param drawColor         Outer line color, color list in Color enum.
      */
-    public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
+    public RectangleDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThickness, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
@@ -57,34 +57,34 @@ public class Rectangle extends LabelizableShape {
     /**
      * @return the origin coordinates of the rectangle.
      */
-    public Coordinates getOriginCoordinates() {
+    public CoordinatesDTO getOriginCoordinates() {
         return this.originCoordinates;
     }
 
     /**
      * @return the end coordinates of the rectangle.
      */
-    public Coordinates getEndCoordinates() {
+    public CoordinatesDTO getEndCoordinates() {
         return this.endCoordinates;
     }
 
-    public void setOriginCoordinates(Coordinates originCoordinates) {
+    public void setOriginCoordinates(CoordinatesDTO originCoordinates) {
         this.originCoordinates = originCoordinates;
     }
 
-    public void setEndCoordinates(Coordinates endCoordinates) {
+    public void setEndCoordinates(CoordinatesDTO endCoordinates) {
         this.endCoordinates = endCoordinates;
     }
 
     @Override
-    public Coordinates calcLabelOffset() {
+    public CoordinatesDTO calcLabelOffset() {
         double xDiff = endCoordinates.getX() - originCoordinates.getX();
         double yDiff = endCoordinates.getY() - originCoordinates.getY();
-        return new Coordinates(xDiff / 2, yDiff / 2);
+        return new CoordinatesDTO(xDiff / 2, yDiff / 2);
     }
 
     @Override
-    public Coordinates getCoordinates() {
+    public CoordinatesDTO getCoordinates() {
         return this.getOriginCoordinates();
     }
 }

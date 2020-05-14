@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
@@ -6,7 +6,7 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import java.io.Serializable;
 
 /**
- * Shape is the representation of a line of tikz code, eg :
+ * ShapeDTO is the representation of a line of tikz code, eg :
  * \draw[thick,rounded corners=8pt] (0,0) -- (0,2) -- (1,3.25)
  * -- (2,2) -- (2,0) -- (0,2) -- (2,2) -- (0,0) -- (2,0);
  * In order to avoid confusion with an actual line (the shape line, who is called a path in tikz, still following ?)
@@ -15,7 +15,7 @@ import java.io.Serializable;
  * Since it's an abstract class it's only intended to extend actual shape class, like Path.java,
  * that should be used to represent the code line above.
  */
-public abstract class Shape implements Serializable {
+public abstract class ShapeDTO implements Serializable {
 
     private boolean draw;
     private boolean fill;
@@ -30,7 +30,7 @@ public abstract class Shape implements Serializable {
      * @param fill              Is the shape filled with a color, can be combined with draw.
      * @param shapeThicknessKey Thickness starting value.
      */
-    public Shape(boolean draw, boolean fill, String shapeThicknessKey, int id) {
+    public ShapeDTO(boolean draw, boolean fill, String shapeThicknessKey, int id) {
         this.draw = draw;
         this.fill = fill;
         this.shapeThicknessKey = shapeThicknessKey;
@@ -45,7 +45,7 @@ public abstract class Shape implements Serializable {
      * @param drawColor         Outer line color, color list in Color enum.
      * @param shapeThicknessKey Thickness starting value.
      */
-    public Shape(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
+    public ShapeDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
         this.draw = draw;
         this.fill = fill;
 
@@ -70,8 +70,8 @@ public abstract class Shape implements Serializable {
     @Override
     public boolean equals(Object obj) {
         boolean retVal = false;
-        if (obj instanceof Shape) {
-            Shape ptr = (Shape) obj;
+        if (obj instanceof ShapeDTO) {
+            ShapeDTO ptr = (ShapeDTO) obj;
             retVal = ptr.getId() == this.id;
         }
         return retVal;
@@ -125,7 +125,7 @@ public abstract class Shape implements Serializable {
         return shapeThicknessKey.toLowerCase().replace("_", " ");
     }
 
-    public Shape setShapeThicknessKey(String shapeThicknessKey) {
+    public ShapeDTO setShapeThicknessKey(String shapeThicknessKey) {
         this.shapeThicknessKey = shapeThicknessKey.toUpperCase();
         this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
         return this;
@@ -134,7 +134,7 @@ public abstract class Shape implements Serializable {
     /**
      * @return the Coordinates that is considered to be the shape's anchor point
      */
-    abstract public Coordinates getCoordinates();
+    abstract public CoordinatesDTO getCoordinates();
 
     public double getShapeThicknessValue() {
         return shapeThicknessValue;

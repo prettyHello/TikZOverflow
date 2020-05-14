@@ -220,7 +220,7 @@ extends java.lang.Object</pre>
                             </tr>
                             <tr class="altColor">
                                 <td class="colFirst"><code>protected
-                                    java.util.List&lt;javafx.scene.shape.Shape&gt;</code></td>
+                                    java.util.List&lt;javafx.scene.shapeDTO.Shape&gt;</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
                                         href="../../../../../../../be/ac/ulb/infof307/g09/view/editor/EditorController.html#selectedShapes">selectedShapes</a></span></code>&nbsp;
                                 </td>
@@ -342,7 +342,7 @@ extends java.lang.Object</pre>
                                 <td class="colLast"><code><span class="memberNameLink"><a
                                         href="../../../../../../../be/ac/ulb/infof307/g09/view/editor/EditorController.html#disableToolbar-boolean-">disableToolbar</a></span>(boolean&nbsp;isDisabled)</code>
                                     <div class="block">Disables all the buttons except delete and edits buttons when
-                                        shape is selected
+                                        shapeDTO is selected
                                     </div>
                                 </td>
                             </tr>
@@ -355,11 +355,11 @@ extends java.lang.Object</pre>
                             <tr id="i4" class="altColor">
                                 <td class="colFirst"><code>void</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/view/editor/EditorController.html#notifyController-be.ac.ulb.infof307.g09.controller.shape.Shape-javafx.scene.shape.Shape-">notifyController</a></span>(<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html"
-                                        title="class in be.ac.ulb.infof307.g09.controller.shape">Shape</a>&nbsp;addToController,
-                                    javafx.scene.shape.Shape&nbsp;shape)</code>
-                                    <div class="block">Notify Shape controller of javafx shape creation</div>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/view/editor/EditorController.html#notifyController-be.ac.ulb.infof307.g09.controller.shapeDTO.Shape-javafx.scene.shapeDTO.Shape-">notifyController</a></span>(<a
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html"
+                                        title="class in be.ac.ulb.infof307.g09.controller.shapeDTO">Shape</a>&nbsp;addToController,
+                                    javafx.scene.shapeDTO.Shape&nbsp;shapeDTO)</code>
+                                    <div class="block">Notify Shape controller of javafx shapeDTO creation</div>
                                 </td>
                             </tr>
                             <tr id="i5" class="rowColor">
@@ -569,7 +569,7 @@ extends java.lang.Object</pre>
                         <ul class="blockList">
                             <li class="blockList">
                                 <h4>selectedShapes</h4>
-                                <pre>protected final&nbsp;java.util.List&lt;javafx.scene.shape.Shape&gt; selectedShapes</pre>
+                                <pre>protected final&nbsp;java.util.List&lt;javafx.scene.shapeDTO.Shape&gt; selectedShapes</pre>
                             </li>
                         </ul>
                         <a name="shapeToDraw">
@@ -716,21 +716,21 @@ extends java.lang.Object</pre>
                                 <pre>public&nbsp;void&nbsp;initialize()</pre>
                             </li>
                         </ul>
-                        <a name="notifyController-be.ac.ulb.infof307.g09.controller.shape.Shape-javafx.scene.shape.Shape-">
+                        <a name="notifyController-be.ac.ulb.infof307.g09.controller.shapeDTO.Shape-javafx.scene.shapeDTO.Shape-">
                             <!--   -->
                         </a>
                         <ul class="blockList">
                             <li class="blockList">
                                 <h4>notifyController</h4>
                                 <pre>public&nbsp;void&nbsp;notifyController(<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html"
-                                        title="class in be.ac.ulb.infof307.g09.controller.shape">Shape</a>&nbsp;addToController,
-                             javafx.scene.shape.Shape&nbsp;shape)</pre>
-                                <div class="block">Notify Shape controller of javafx shape creation</div>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html"
+                                        title="class in be.ac.ulb.infof307.g09.controller.shapeDTO">Shape</a>&nbsp;addToController,
+                             javafx.scene.shapeDTO.Shape&nbsp;shapeDTO)</pre>
+                                <div class="block">Notify Shape controller of javafx shapeDTO creation</div>
                                 <dl>
                                     <dt><span class="paramLabel">Parameters:</span></dt>
-                                    <dd><code>addToController</code> - the shape that will be added to the model</dd>
-                                    <dd><code>shape</code> - JavaFX shape</dd>
+                                    <dd><code>addToController</code> - the shapeDTO that will be added to the model</dd>
+                                    <dd><code>shapeDTO</code> - JavaFX shapeDTO</dd>
                                 </dl>
                             </li>
                         </ul>
@@ -741,7 +741,7 @@ extends java.lang.Object</pre>
                             <li class="blockList">
                                 <h4>disableToolbar</h4>
                                 <pre>public&nbsp;void&nbsp;disableToolbar(boolean&nbsp;isDisabled)</pre>
-                                <div class="block">Disables all the buttons except delete and edits buttons when shape
+                                <div class="block">Disables all the buttons except delete and edits buttons when shapeDTO
                                     is selected
                                 </div>
                                 <dl>

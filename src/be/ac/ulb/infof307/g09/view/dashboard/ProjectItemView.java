@@ -75,6 +75,7 @@ public class ProjectItemView extends HBox {
             fc.setInitialDirectory(new File(System.getProperty("user.home") + this.rootFolder));
             fc.setInitialFileName(this.projectDTO.getProjectName());
             File selectedFile = fc.showSaveDialog(null);
+            if(selectedFile == null) return;
             try {
                 this.projectUCC.export(selectedFile,this.projectDTO);
             }catch (FatalException e){

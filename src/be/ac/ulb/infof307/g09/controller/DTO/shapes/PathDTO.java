@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
@@ -15,8 +15,8 @@ import java.util.List;
  * eg : \draw [<->]
  * for now, we only support one type of arrow.
  */
-public class Path extends Shape {
-    private List<Coordinates> pathPoints = null;
+public class PathDTO extends ShapeDTO {
+    private List<CoordinatesDTO> pathPoints = null;
     private boolean arrowStart = false;
     private boolean arrowEnd = false;
 
@@ -26,7 +26,7 @@ public class Path extends Shape {
      * @param pathPoints List of points the path goes trough.
      * @throws FatalException
      */
-    public Path(ArrayList<Coordinates> pathPoints, String shapeThickness, int id) throws FatalException {
+    public PathDTO(ArrayList<CoordinatesDTO> pathPoints, String shapeThickness, int id) throws FatalException {
         super(true, false, shapeThickness, id);
         ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
@@ -40,13 +40,13 @@ public class Path extends Shape {
      * @param id
      * @throws FatalException
      */
-    public Path(Coordinates origin, Coordinates end, String shapeThickness, int id, boolean arrowStart, boolean arrowEnd) throws FatalException {
+    public PathDTO(CoordinatesDTO origin, CoordinatesDTO end, String shapeThickness, int id, boolean arrowStart, boolean arrowEnd) throws FatalException {
         super(true, false, shapeThickness, id);
         this.arrowStart = arrowStart;
         this.arrowEnd = arrowEnd;
-        ArrayList<Coordinates> pathPoints = new ArrayList<>();
-        pathPoints.add(new Coordinates(origin));
-        pathPoints.add(new Coordinates(end));
+        ArrayList<CoordinatesDTO> pathPoints = new ArrayList<>();
+        pathPoints.add(new CoordinatesDTO(origin));
+        pathPoints.add(new CoordinatesDTO(end));
         ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -60,7 +60,7 @@ public class Path extends Shape {
      * @param drawColor
      * @throws FatalException
      */
-    public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
+    public PathDTO(ArrayList<CoordinatesDTO> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
         super(true, false, drawColor, Color.WHITE, shapeThickness, id);
         ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
@@ -76,16 +76,16 @@ public class Path extends Shape {
      * @param drawColor
      * @throws FatalException
      */
-    public Path(Coordinates origin, Coordinates end, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
+    public PathDTO(CoordinatesDTO origin, CoordinatesDTO end, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
         super(true, false, drawColor, Color.WHITE, shapeThickness, id);
-        ArrayList<Coordinates> pathPoints = new ArrayList<>();
-        pathPoints.add(new Coordinates(origin));
-        pathPoints.add(new Coordinates(end));
+        ArrayList<CoordinatesDTO> pathPoints = new ArrayList<>();
+        pathPoints.add(new CoordinatesDTO(origin));
+        pathPoints.add(new CoordinatesDTO(end));
         ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
 
-    public Iterator<Coordinates> getCoordinatesIterator() {
+    public Iterator<CoordinatesDTO> getCoordinatesIterator() {
         return pathPoints.iterator();
     }
 
@@ -95,7 +95,7 @@ public class Path extends Shape {
      */
     public String print() {
         StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().getValue() + ", " + super.getShapeThicknessKeyFormatted() + "] ");
-        Iterator<Coordinates> iterator = this.getCoordinatesIterator();
+        Iterator<CoordinatesDTO> iterator = this.getCoordinatesIterator();
         returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {
             returnValue.append("-- ");
@@ -105,12 +105,12 @@ public class Path extends Shape {
         return returnValue.toString();
     }
 
-    public void addCoordinates(Coordinates coordinates) throws FatalException {
+    public void addCoordinates(CoordinatesDTO coordinates) throws FatalException {
         ControllerUtility.checkObjects(coordinates);
         this.pathPoints.add(coordinates);
     }
 
-    public void rmCoordinates(Coordinates coordinates) throws FatalException {
+    public void rmCoordinates(CoordinatesDTO coordinates) throws FatalException {
         ControllerUtility.checkObjects(coordinates);
         this.pathPoints.remove(coordinates);
     }
@@ -134,30 +134,30 @@ public class Path extends Shape {
     /**
      * @return origin and end of Path.
      */
-    public List<Coordinates> getPathPoints() {
+    public List<CoordinatesDTO> getPathPoints() {
         return this.pathPoints;
     }
 
-    public Coordinates getStartCoordinates() {
+    public CoordinatesDTO getStartCoordinates() {
         return this.getPathPoints().get(0);
     }
 
-    public Coordinates getEndCoordinates() {
-        List<Coordinates> points = getPathPoints();
+    public CoordinatesDTO getEndCoordinates() {
+        List<CoordinatesDTO> points = getPathPoints();
         return points.get(points.size() - 1);
     }
 
-    public void setStartCoordinates(Coordinates val) {
+    public void setStartCoordinates(CoordinatesDTO val) {
         this.getPathPoints().set(0, val);
     }
 
-    public void setEndCoordinates(Coordinates val) {
-        List<Coordinates> points = this.getPathPoints();
+    public void setEndCoordinates(CoordinatesDTO val) {
+        List<CoordinatesDTO> points = this.getPathPoints();
         points.set(points.size() - 1, val);
     }
 
     @Override
-    public Coordinates getCoordinates() {
+    public CoordinatesDTO getCoordinates() {
         return this.getStartCoordinates();
     }
 }

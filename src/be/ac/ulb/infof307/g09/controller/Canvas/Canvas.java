@@ -1,8 +1,8 @@
 package be.ac.ulb.infof307.g09.controller.Canvas;
 
-import be.ac.ulb.infof307.g09.controller.shape.Color;
-import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
-import be.ac.ulb.infof307.g09.controller.shape.Shape;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.Color;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.CoordinatesDTO;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ShapeDTO;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.Serializable;
@@ -15,7 +15,7 @@ public interface Canvas extends Serializable {
      *
      * @return the list of shapes on the canvas
      */
-    List<Shape> getShapes();
+    List<ShapeDTO> getShapes();
 
     /**
      * Returns the shape in the canvas with the specified id
@@ -24,21 +24,21 @@ public interface Canvas extends Serializable {
      * @return the shape
      * @throws IllegalArgumentException if the canvas does not contain the shape
      */
-    Shape getShapeById(int id) throws IllegalArgumentException;
+    ShapeDTO getShapeById(int id) throws IllegalArgumentException;
 
     /**
      * Adds a shape to the canvas
      *
      * @param shape the shape to add
      */
-    void addShape(Shape shape) throws FatalException;
+    void addShape(ShapeDTO shape) throws FatalException;
 
     /**
      * update a shape to the canvas
      *
      * @param shape the shape to update
      */
-    void updateShape(Shape shape) throws FatalException;
+    void updateShape(ShapeDTO shape) throws FatalException;
 
     /**
      * Change the draw color of a shape
@@ -75,7 +75,7 @@ public interface Canvas extends Serializable {
      *
      * @param shape the shape to remove
      */
-    void rmShape(Shape shape);
+    void rmShape(ShapeDTO shape);
 
     /**
      * Removes a shape from the canvas
@@ -108,5 +108,5 @@ public interface Canvas extends Serializable {
      * Paste the content of the clipboard. If the clipboard is empty, nothing is done.
      * @param destinationPos the position at which to paste the shapes
      */
-    void pasteClipBoard(Coordinates destinationPos);
+    void pasteClipBoard(CoordinatesDTO destinationPos);
 }

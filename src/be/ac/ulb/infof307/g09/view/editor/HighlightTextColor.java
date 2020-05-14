@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g09.view.editor;
 
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ShapeDTO;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Shape;
@@ -122,10 +123,10 @@ public class HighlightTextColor extends CodeArea {
             for (int z = 0; z < selectedShapes.size(); z++) { // Loop for every shape selected.
                 String myShape = selectedShapes.get(selectedShapes.size() - (z + 1)).toString(); // Selection of the actual selected shape.
                 int id = Integer.parseInt(printMatches(myShape, "(id=)[0-9]*").substring(3)); // Take the id of the shape from the var selectedShapes.
-                be.ac.ulb.infof307.g09.controller.shape.Shape mySelectedShape = ActiveCanvas.getActiveCanvas().getShapeById(id);   // Take the shape with the id.
-                List<Integer> positions = findWordUpgrade(ActiveCanvas.getActiveCanvas().toTikZ(), mySelectedShape.print()); // Get the line position in the canvas of the selected shape.
+                ShapeDTO mySelectedShapeDTO = ActiveCanvas.getActiveCanvas().getShapeById(id);   // Take the shape with the id.
+                List<Integer> positions = findWordUpgrade(ActiveCanvas.getActiveCanvas().toTikZ(), mySelectedShapeDTO.print()); // Get the line position in the canvas of the selected shape.
                 for (Integer position : positions) {
-                    setStyleClass(position, position + mySelectedShape.print().length(), "highlight"); // Highlight the position of the shape.
+                    setStyleClass(position, position + mySelectedShapeDTO.print().length(), "highlight"); // Highlight the position of the shape.
                 }
             }
     }

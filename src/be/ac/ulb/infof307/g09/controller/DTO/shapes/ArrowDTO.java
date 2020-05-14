@@ -1,16 +1,16 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.Iterator;
 
-public class Arrow extends Path {
+public class ArrowDTO extends PathDTO {
 
-    public Arrow(Coordinates origin, Coordinates end, String shapeThickness, int id) throws FatalException {
+    public ArrowDTO(CoordinatesDTO origin, CoordinatesDTO end, String shapeThickness, int id) throws FatalException {
         super(origin, end, shapeThickness, id, false, true);
     }
 
-    public Arrow(Coordinates origin, Coordinates end, Color drawColor, String shapeThickness, int id) throws FatalException {
+    public ArrowDTO(CoordinatesDTO origin, CoordinatesDTO end, Color drawColor, String shapeThickness, int id) throws FatalException {
         super(origin, end,false,true, drawColor, shapeThickness, id);
     }
 
@@ -19,8 +19,8 @@ public class Arrow extends Path {
      * @param other the Arrow to copy
      * @param newId the id to give to the newly created Arraow
      */
-    public Arrow(Arrow other, int newId){
-        super(new Coordinates(other.getStartCoordinates()), new Coordinates(other.getEndCoordinates()), other.getShapeThicknessKey(), newId, other.isArrowStart(), other.isArrowEnd());
+    public ArrowDTO(ArrowDTO other, int newId){
+        super(new CoordinatesDTO(other.getStartCoordinates()), new CoordinatesDTO(other.getEndCoordinates()), other.getShapeThicknessKey(), newId, other.isArrowStart(), other.isArrowEnd());
         this.setDraw(other.isDraw());
         this.setFill(other.isFill());
         this.setFillColor(other.getFillColor());
@@ -29,7 +29,7 @@ public class Arrow extends Path {
 
     public String print() {
         StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().getValue() + ",->, "+super.getShapeThicknessKeyFormatted()+"] ");
-        Iterator<Coordinates> iterator = this.getCoordinatesIterator();
+        Iterator<CoordinatesDTO> iterator = this.getCoordinatesIterator();
         returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {
             returnValue.append("-- ");

@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 /**
  * All different shape thickness in TikZ.

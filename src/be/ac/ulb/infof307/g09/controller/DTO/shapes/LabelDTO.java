@@ -1,11 +1,11 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import java.io.Serializable;
 
 /**
  * Represents the label that can be added to shapes
  */
-public class Label implements Serializable {
+public class LabelDTO implements Serializable {
 
     /**
      * The text of the label
@@ -17,7 +17,7 @@ public class Label implements Serializable {
      */
     private Color color;
 
-    public Label(String value, Color color) {
+    public LabelDTO(String value, Color color) {
         this.value = value;
         this.color = color;
     }

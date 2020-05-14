@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
@@ -6,10 +6,10 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Triangle extends LabelizableShape{
-    private Coordinates originPoint;
-    private Coordinates secondPoint;
-    private Coordinates thirdPoint;
+public class TriangleDTO extends LabelizableShapeDTO {
+    private CoordinatesDTO originPoint;
+    private CoordinatesDTO secondPoint;
+    private CoordinatesDTO thirdPoint;
 
     /**
      * Simple triangle, only set one point, who is the bottom left of
@@ -17,12 +17,12 @@ public class Triangle extends LabelizableShape{
      *
      * @param originPoint
      */
-    public Triangle(Coordinates originPoint,String shapeThickness, int id) {
+    public TriangleDTO(CoordinatesDTO originPoint, String shapeThickness, int id) {
         super(true, false, shapeThickness, id);
         ControllerUtility.checkObjects(originPoint);
         this.originPoint = originPoint;
-        this.secondPoint = new Coordinates(originPoint.getX() + 1, originPoint.getY());
-        this.thirdPoint = new Coordinates(originPoint.getX(), originPoint.getY() + 1);
+        this.secondPoint = new CoordinatesDTO(originPoint.getX() + 1, originPoint.getY());
+        this.thirdPoint = new CoordinatesDTO(originPoint.getX(), originPoint.getY() + 1);
     }
 
     /**
@@ -33,7 +33,7 @@ public class Triangle extends LabelizableShape{
      * @param pt3 the third point of the triangle
      * @param id  the id of the shape
      */
-    public Triangle(Coordinates pt1, Coordinates pt2, Coordinates pt3, String shapeThickness, int id) {
+    public TriangleDTO(CoordinatesDTO pt1, CoordinatesDTO pt2, CoordinatesDTO pt3, String shapeThickness, int id) {
         super(true, false, shapeThickness, id);
         ControllerUtility.checkObjects(pt1, pt2, pt3);
         this.originPoint = pt1;
@@ -47,7 +47,7 @@ public class Triangle extends LabelizableShape{
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public Triangle(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, Coordinates originPoint, Coordinates secondPoint, Coordinates thirdPoint, int id) throws FatalException {
+    public TriangleDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, CoordinatesDTO originPoint, CoordinatesDTO secondPoint, CoordinatesDTO thirdPoint, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThickness, id);
         ControllerUtility.checkObjects(originPoint, secondPoint, thirdPoint);
         this.originPoint = originPoint;
@@ -58,9 +58,9 @@ public class Triangle extends LabelizableShape{
     /**
      * Copy constructor
      * @param other the Triangle to copy
-     * @param newId the id to assign this newly created Shape
+     * @param newId the id to assign this newly created ShapeDTO
      */
-    public Triangle(Triangle other, int newId){
+    public TriangleDTO(TriangleDTO other, int newId){
         super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getShapeThicknessKey(), newId);
         this.originPoint = other.getOriginPoint();
         this.secondPoint = other.getSecondPoint();
@@ -76,8 +76,8 @@ public class Triangle extends LabelizableShape{
         return returnValue;
     }
 
-    public List<Coordinates> getPoints() {
-        List<Coordinates> points = new ArrayList<>();
+    public List<CoordinatesDTO> getPoints() {
+        List<CoordinatesDTO> points = new ArrayList<>();
         points.add(this.originPoint);
         points.add(this.secondPoint);
         points.add(this.thirdPoint);
@@ -86,38 +86,38 @@ public class Triangle extends LabelizableShape{
     }
 
     @Override
-    public Coordinates calcLabelOffset() {
-        Coordinates o1 = originPoint, o2 = secondPoint, o3 = thirdPoint;
-        Coordinates centroid = new Coordinates((o1.getX() + o2.getX() + o3.getX()) / 3, (o1.getY() + o2.getY() + o3.getY()) / 3);
-        return new Coordinates(centroid.getX() - o1.getX(), centroid.getY() - o1.getY());
+    public CoordinatesDTO calcLabelOffset() {
+        CoordinatesDTO o1 = originPoint, o2 = secondPoint, o3 = thirdPoint;
+        CoordinatesDTO centroid = new CoordinatesDTO((o1.getX() + o2.getX() + o3.getX()) / 3, (o1.getY() + o2.getY() + o3.getY()) / 3);
+        return new CoordinatesDTO(centroid.getX() - o1.getX(), centroid.getY() - o1.getY());
     }
 
-    public Coordinates getOriginPoint() {
+    public CoordinatesDTO getOriginPoint() {
         return originPoint;
     }
 
-    public Coordinates getSecondPoint() {
+    public CoordinatesDTO getSecondPoint() {
         return secondPoint;
     }
 
-    public Coordinates getThirdPoint() {
+    public CoordinatesDTO getThirdPoint() {
         return thirdPoint;
     }
 
-    public void setOriginPoint(Coordinates originPoint) {
+    public void setOriginPoint(CoordinatesDTO originPoint) {
         this.originPoint = originPoint;
     }
 
-    public void setSecondPoint(Coordinates secondPoint) {
+    public void setSecondPoint(CoordinatesDTO secondPoint) {
         this.secondPoint = secondPoint;
     }
 
-    public void setThirdPoint(Coordinates thirdPoint) {
+    public void setThirdPoint(CoordinatesDTO thirdPoint) {
         this.thirdPoint = thirdPoint;
     }
 
     @Override
-    public Coordinates getCoordinates() {
+    public CoordinatesDTO getCoordinates() {
         return this.getOriginPoint();
     }
 }

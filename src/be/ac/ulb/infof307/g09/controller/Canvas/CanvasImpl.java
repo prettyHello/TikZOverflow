@@ -1,14 +1,14 @@
 package be.ac.ulb.infof307.g09.controller.Canvas;
 
-import be.ac.ulb.infof307.g09.controller.shape.*;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.*;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasImpl implements Canvas {
-    final List<Shape> shapes;
-    final List<Shape> clipboard;
+    final List<ShapeDTO> shapes;
+    final List<ShapeDTO> clipboard;
     private int idCounter = 0;
 
     /**
@@ -25,7 +25,7 @@ public class CanvasImpl implements Canvas {
      * @return returns a defensive copy of the list
      */
     @Override
-    public List<Shape> getShapes() {
+    public List<ShapeDTO> getShapes() {
         return new ArrayList<>(this.shapes);
     }
 
@@ -33,8 +33,8 @@ public class CanvasImpl implements Canvas {
      * {@inheritDoc}
      */
     @Override
-    public Shape getShapeById(int id) throws IllegalArgumentException {
-        for (Shape shape : this.shapes) {
+    public ShapeDTO getShapeById(int id) throws IllegalArgumentException {
+        for (ShapeDTO shape : this.shapes) {
             if (shape.getId() == id) {
                 return shape;
             }
@@ -49,9 +49,9 @@ public class CanvasImpl implements Canvas {
      * @throws IllegalArgumentException if the shape is already present on the canvas
      */
     @Override
-    public void addShape(Shape shape) throws FatalException {
+    public void addShape(ShapeDTO shape) throws FatalException {
         if (this.shapes.contains(shape)) {
-            throw new FatalException("Shape already exists on the canvas. Need to be able to differentiate between shapes");
+            throw new FatalException("ShapeDTO already exists on the canvas. Need to be able to differentiate between shapes");
         }
         this.shapes.add(shape);
     }
@@ -63,9 +63,9 @@ public class CanvasImpl implements Canvas {
      * @throws IllegalArgumentException if the shape is not present on the canvas
      */
     @Override
-    public void updateShape(Shape shape) throws FatalException {
+    public void updateShape(ShapeDTO shape) throws FatalException {
         if (!this.shapes.contains(shape)) {
-            throw new FatalException("Shape doesn't exists on the canvas.");
+            throw new FatalException("ShapeDTO doesn't exists on the canvas.");
         }
         this.shapes.remove(shape);
         this.shapes.add(shape);
@@ -78,7 +78,7 @@ public class CanvasImpl implements Canvas {
      * @param fillColor color to fill whit
      */
     public void changeShapeFillColor(int id, Color fillColor) {
-        for (Shape shape : shapes) {
+        for (ShapeDTO shape : shapes) {
             if (shape.getId() == id) {
                 shape.setFill(true);
                 shape.setFillColor(fillColor);
@@ -91,8 +91,8 @@ public class CanvasImpl implements Canvas {
      */
     @Override
     public void setShapeLabel(int shapeId, String label, Color labelColor) {
-        Shape toChange = null;
-        for (Shape shape : shapes) {
+        ShapeDTO toChange = null;
+        for (ShapeDTO shape : shapes) {
             if (shape.getId() == shapeId) {
                 toChange = shape;
                 break;
@@ -101,12 +101,12 @@ public class CanvasImpl implements Canvas {
 
         if (toChange == null) {
             throw new IllegalArgumentException("canvas does not contain a shape with the specified id");
-        } else if (!(toChange instanceof LabelizableShape)) {
+        } else if (!(toChange instanceof LabelizableShapeDTO)) {
             return;
         }
 
-        LabelizableShape toChangeLabelizable = (LabelizableShape) toChange;
-        Label shapeLabel = new Label(label, labelColor);
+        LabelizableShapeDTO toChangeLabelizable = (LabelizableShapeDTO) toChange;
+        LabelDTO shapeLabel = new LabelDTO(label, labelColor);
         toChangeLabelizable.setLabel(shapeLabel);
     }
 
@@ -117,7 +117,7 @@ public class CanvasImpl implements Canvas {
      * @param drawColor color to draw whit
      */
     public void changeShapeDrawColor(int id, Color drawColor) {
-        for (Shape shape : shapes) {
+        for (ShapeDTO shape : shapes) {
             if (shape.getId() == id) {
                 shape.setDraw(true);
                 shape.setDrawColor(drawColor);
@@ -141,7 +141,7 @@ public class CanvasImpl implements Canvas {
      * @param shape the shape to remove
      */
     @Override
-    public void rmShape(Shape shape) {
+    public void rmShape(ShapeDTO shape) {
         this.shapes.remove(shape);
     }
 
@@ -153,7 +153,7 @@ public class CanvasImpl implements Canvas {
     @Override
     public void rmShapeById(int id) {
         //We need to create a temporary shape for the array to find the one in the list, shape are only compared on their id, nothing else mather for the list.
-        Shape tmpShape = new Square(new Coordinates(0, 0), 0, "THIN", id);
+        ShapeDTO tmpShape = new SquareDTO(new CoordinatesDTO(0, 0), 0, "THIN", id);
         this.shapes.remove(tmpShape);
     }
 
@@ -164,7 +164,7 @@ public class CanvasImpl implements Canvas {
     public String toTikZ() {
         StringBuilder tikz = new StringBuilder();
         tikz.append("\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n");
-        for (Shape shape : shapes) {
+        for (ShapeDTO shape : shapes) {
             tikz.append(shape.print()).append("\n");
         }
         tikz.append("\n\\end{tikzpicture}\n\\end{document}");
@@ -187,7 +187,7 @@ public class CanvasImpl implements Canvas {
     public void copyToClipboard(List<Integer> shapeIds) {
         this.clipboard.clear();
         for (Integer id : shapeIds){
-            for (Shape s : this.shapes){
+            for (ShapeDTO s : this.shapes){
                 if (s.getId() == id){
                     this.clipboard.add(s);
                     break;
@@ -200,55 +200,55 @@ public class CanvasImpl implements Canvas {
      * {@inheritDoc}
      */
     @Override
-    public void pasteClipBoard(Coordinates destinationPos) {
+    public void pasteClipBoard(CoordinatesDTO destinationPos) {
         if (this.clipboard.isEmpty()) {
             return;
         }
 
         // calc mean position of shapes in clipboard
-        Coordinates meanPos = new Coordinates(0,0);
-        for (Shape s : clipboard){
+        CoordinatesDTO meanPos = new CoordinatesDTO(0,0);
+        for (ShapeDTO s : clipboard){
             meanPos = meanPos.add(s.getCoordinates());
         }
-        meanPos = new Coordinates(meanPos.getX() / clipboard.size(), meanPos.getY() / clipboard.size());
+        meanPos = new CoordinatesDTO(meanPos.getX() / clipboard.size(), meanPos.getY() / clipboard.size());
 
         // new shape relative to mean pos
-        for (Shape shape : clipboard){
-            Shape toAdd = null;
+        for (ShapeDTO shape : clipboard){
+            ShapeDTO toAdd = null;
 
-            if (shape instanceof Circle){
-                Circle c = new Circle((Circle) shape, getIdForNewShape());
-                Coordinates offsetToMean = new Coordinates(meanPos.sub(c.getCoordinates()));
+            if (shape instanceof CircleDTO){
+                CircleDTO c = new CircleDTO((CircleDTO) shape, getIdForNewShape());
+                CoordinatesDTO offsetToMean = new CoordinatesDTO(meanPos.sub(c.getCoordinates()));
                 c.setCoordinates(destinationPos.sub(offsetToMean));
                 toAdd = c;
-            }else if (shape instanceof Triangle){
-                Triangle t = new Triangle((Triangle) shape, getIdForNewShape());
-                Coordinates offsetToMean = new Coordinates(meanPos.sub(t.getCoordinates()));
+            }else if (shape instanceof TriangleDTO){
+                TriangleDTO t = new TriangleDTO((TriangleDTO) shape, getIdForNewShape());
+                CoordinatesDTO offsetToMean = new CoordinatesDTO(meanPos.sub(t.getCoordinates()));
                 t.setOriginPoint(destinationPos.sub(offsetToMean));
-                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(t.getSecondPoint()));
+                CoordinatesDTO offsetMeanToSec = new CoordinatesDTO(meanPos.sub(t.getSecondPoint()));
                 t.setSecondPoint(destinationPos.sub(offsetMeanToSec));
-                Coordinates offsetMeanToThi = new Coordinates(meanPos.sub(t.getThirdPoint()));
+                CoordinatesDTO offsetMeanToThi = new CoordinatesDTO(meanPos.sub(t.getThirdPoint()));
                 t.setThirdPoint(destinationPos.sub(offsetMeanToThi));
                 toAdd = t;
-            }else if (shape instanceof Square){
-                Square s = new Square((Square) shape, getIdForNewShape());
-                Coordinates offsetToMean = new Coordinates(meanPos.sub(s.getCoordinates()));
+            }else if (shape instanceof SquareDTO){
+                SquareDTO s = new SquareDTO((SquareDTO) shape, getIdForNewShape());
+                CoordinatesDTO offsetToMean = new CoordinatesDTO(meanPos.sub(s.getCoordinates()));
                 s.setOriginCoordinates(destinationPos.sub(offsetToMean));
-                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(s.getEndCoordinates()));
+                CoordinatesDTO offsetMeanToSec = new CoordinatesDTO(meanPos.sub(s.getEndCoordinates()));
                 s.setEndCoordinates(destinationPos.sub(offsetMeanToSec));
                 toAdd = s;
-            }else if (shape instanceof Line){
-                Line l = new Line((Line) shape, getIdForNewShape());
-                Coordinates offsetToMean = new Coordinates(meanPos.sub(l.getCoordinates()));
+            }else if (shape instanceof LineDTO){
+                LineDTO l = new LineDTO((LineDTO) shape, getIdForNewShape());
+                CoordinatesDTO offsetToMean = new CoordinatesDTO(meanPos.sub(l.getCoordinates()));
                 l.setStartCoordinates(destinationPos.sub(offsetToMean));
-                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(l.getEndCoordinates()));
+                CoordinatesDTO offsetMeanToSec = new CoordinatesDTO(meanPos.sub(l.getEndCoordinates()));
                 l.setEndCoordinates(destinationPos.sub(offsetMeanToSec));
                 toAdd = l;
-            }else if (shape instanceof Arrow){
-                Arrow a = new Arrow((Arrow) shape, getIdForNewShape());
-                Coordinates offsetToMean = new Coordinates(meanPos.sub(a.getCoordinates()));
+            }else if (shape instanceof ArrowDTO){
+                ArrowDTO a = new ArrowDTO((ArrowDTO) shape, getIdForNewShape());
+                CoordinatesDTO offsetToMean = new CoordinatesDTO(meanPos.sub(a.getCoordinates()));
                 a.setStartCoordinates(destinationPos.sub(offsetToMean));
-                Coordinates offsetMeanToSec = new Coordinates(meanPos.sub(a.getEndCoordinates()));
+                CoordinatesDTO offsetMeanToSec = new CoordinatesDTO(meanPos.sub(a.getEndCoordinates()));
                 a.setEndCoordinates(destinationPos.sub(offsetMeanToSec));
                 toAdd = a;
             }

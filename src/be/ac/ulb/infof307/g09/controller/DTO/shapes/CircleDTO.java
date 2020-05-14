@@ -1,4 +1,4 @@
-package be.ac.ulb.infof307.g09.controller.shape;
+package be.ac.ulb.infof307.g09.controller.DTO.shapes;
 
 import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
@@ -7,15 +7,15 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 /**
  * eg : \draw (0,0) circle [radius=1.5];
  */
-public class Circle extends LabelizableShape {
-    private Coordinates coordinates;
+public class CircleDTO extends LabelizableShapeDTO {
+    private CoordinatesDTO coordinates;
     private float radius = 1;
 
     /**
      * @param coordinates
      * @param radius
      */
-    public Circle(Coordinates coordinates, float radius, String shapeThickness, int id) throws FatalException {
+    public CircleDTO(CoordinatesDTO coordinates, float radius, String shapeThickness, int id) throws FatalException {
         super(true, false, shapeThickness, id);
         if (radius <= 0) {
             throw new BizzException("Radius is negative or null");
@@ -32,7 +32,7 @@ public class Circle extends LabelizableShape {
      * @param coordinates
      * @param radius
      */
-    public Circle(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, Coordinates coordinates, float radius, int id) throws FatalException, BizzException {
+    public CircleDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, CoordinatesDTO coordinates, float radius, int id) throws FatalException, BizzException {
         super(draw, fill, drawColor, fillColor, shapeThickness, id);
         ControllerUtility.checkObjects(coordinates);
         if (radius <= 0) {
@@ -47,9 +47,9 @@ public class Circle extends LabelizableShape {
      * @param other the circle to copy
      * @param newId the id to give to the newly created circle
      */
-    public Circle(Circle other, int newId){
+    public CircleDTO(CircleDTO other, int newId){
         super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getShapeThicknessKey(), newId);
-        this.coordinates = new Coordinates(other.getCoordinates().getX(), other.getCoordinates().getY());
+        this.coordinates = new CoordinatesDTO(other.getCoordinates().getX(), other.getCoordinates().getY());
         this.radius = other.getRadius();
         this.setLabel(other.getLabel());
     }
@@ -67,11 +67,11 @@ public class Circle extends LabelizableShape {
     }
 
     @Override
-    public Coordinates getCoordinates() {
+    public CoordinatesDTO getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(Coordinates coordinates) throws FatalException {
+    public void setCoordinates(CoordinatesDTO coordinates) throws FatalException {
         ControllerUtility.checkObjects(coordinates);
         this.coordinates = coordinates;
     }
@@ -88,7 +88,7 @@ public class Circle extends LabelizableShape {
     }
 
     @Override
-    public Coordinates calcLabelOffset() {
-        return new Coordinates(0, 0);
+    public CoordinatesDTO calcLabelOffset() {
+        return new CoordinatesDTO(0, 0);
     }
 }

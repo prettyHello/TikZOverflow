@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g09.view.editor;
 
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
-import be.ac.ulb.infof307.g09.controller.shape.*;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.*;
 import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
@@ -127,8 +127,8 @@ public class ShapeHandler {
             Shape shape = (Shape) shapeContextMenu.getOwnerNode();
             int shapeId = Integer.parseInt(shape.getId());
 
-            be.ac.ulb.infof307.g09.controller.shape.Shape modelShape = canvas.getShapeById(shapeId);
-            if (!(modelShape instanceof LabelizableShape)) {
+            ShapeDTO modelShapeDTO = canvas.getShapeById(shapeId);
+            if (!(modelShapeDTO instanceof LabelizableShapeDTO)) {
                 return;
             }
 
@@ -167,7 +167,7 @@ public class ShapeHandler {
      */
     public void handleDrawCall() {
         Shape shape = null;
-        be.ac.ulb.infof307.g09.controller.shape.Shape addToController = null;
+        ShapeDTO addToController = null;
 
         switch (editorController.shapeToDraw) {
             case EditorController.TRIANGLE:
@@ -183,10 +183,10 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case EditorController.TRIANGLE_POINT3:
-                Coordinates pt1 = new Coordinates(thirdSelectedX, thirdSelectedY);
-                Coordinates pt2 = new Coordinates(previouslySelectedX, previouslySelectedY);
-                Coordinates pt3 = new Coordinates(selectedX, selectedY);
-                addToController = new be.ac.ulb.infof307.g09.controller.shape.Triangle(pt1, pt2, pt3, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                CoordinatesDTO pt1 = new CoordinatesDTO(thirdSelectedX, thirdSelectedY);
+                CoordinatesDTO pt2 = new CoordinatesDTO(previouslySelectedX, previouslySelectedY);
+                CoordinatesDTO pt3 = new CoordinatesDTO(selectedX, selectedY);
+                addToController = new TriangleDTO(pt1, pt2, pt3, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
@@ -196,7 +196,7 @@ public class ShapeHandler {
                 circle.setCenterX(selectedX);
                 circle.setCenterY(selectedY);
                 circle.setRadius(radius);
-                addToController = new be.ac.ulb.infof307.g09.controller.shape.Circle(new Coordinates(selectedX, selectedY), radius, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new CircleDTO(new CoordinatesDTO(selectedX, selectedY), radius, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = circle;
                 break;
             case EditorController.ARROW:
@@ -206,7 +206,7 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case EditorController.ARROW_POINT2:
-                addToController = new be.ac.ulb.infof307.g09.controller.shape.Arrow(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new ArrowDTO(new CoordinatesDTO(previouslySelectedX, previouslySelectedY), new CoordinatesDTO(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = constructArrow();
                 waitingForMoreCoordinate = false;
                 break;
@@ -217,7 +217,7 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case EditorController.LINE_POINT2:
-                addToController = new be.ac.ulb.infof307.g09.controller.shape.Line(new Coordinates(previouslySelectedX, previouslySelectedY), new Coordinates(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new LineDTO(new CoordinatesDTO(previouslySelectedX, previouslySelectedY), new CoordinatesDTO(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 shape = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
                 shape.setStroke(Color.valueOf(editorController.fillColour.getValue().toString()));
                 waitingForMoreCoordinate = false;
@@ -225,7 +225,7 @@ public class ShapeHandler {
             case EditorController.SQUARE:
                 int size = 75;
                 shape = new Rectangle(selectedX, selectedY, 75, 75);
-                addToController = new Square(new Coordinates(selectedX, selectedY), size, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new SquareDTO(new CoordinatesDTO(selectedX, selectedY), size, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 break;
         }
         if (waitingForMoreCoordinate) {
@@ -247,46 +247,46 @@ public class ShapeHandler {
     }
 
     /**
-     * Draw be.ac.ulb.infof307.g09.controller shape in diagram.
+     * Draw be.ac.ulb.infof307.g09.controller shapeDTO in diagram.
      *
-     * @param shape the shape to draw
+     * @param shapeDTO the shapeDTO to draw
      */
-    public Shape handleDraw(be.ac.ulb.infof307.g09.controller.shape.Shape shape) {
+    public Shape handleDraw(ShapeDTO shapeDTO) {
         Shape shapeDrawing = null;
         Text label = null;
 
-        if (shape instanceof be.ac.ulb.infof307.g09.controller.shape.Circle) {
-            be.ac.ulb.infof307.g09.controller.shape.Circle circle = (be.ac.ulb.infof307.g09.controller.shape.Circle) shape;
-            Coordinates circleCenter = circle.getCoordinates();
+        if (shapeDTO instanceof CircleDTO) {
+            CircleDTO circle = (CircleDTO) shapeDTO;
+            CoordinatesDTO circleCenter = circle.getCoordinates();
             double circleRadius = circle.getRadius();
             shapeDrawing = new Circle(circleCenter.getX(), circleCenter.getY(), circleRadius);
-            label = createLabel((LabelizableShape) shape, circleCenter.getX(), circleCenter.getY());
-        } else if (shape instanceof Square) {
-            Square square = (Square) shape;
-            Coordinates squareCoords = square.getOriginCoordinates();
+            label = createLabel((LabelizableShapeDTO) shapeDTO, circleCenter.getX(), circleCenter.getY());
+        } else if (shapeDTO instanceof SquareDTO) {
+            SquareDTO square = (SquareDTO) shapeDTO;
+            CoordinatesDTO squareCoords = square.getOriginCoordinates();
             shapeDrawing = new Rectangle(squareCoords.getX(), squareCoords.getY(), square.getSize(), square.getSize());
 
-            label = createLabel((LabelizableShape) shape, squareCoords.getX(), squareCoords.getY());
-        } else if (shape instanceof Triangle) {
-            List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Triangle) shape).getPoints();
-            Coordinates point1 = points.get(0);
-            Coordinates point2 = points.get(1);
-            Coordinates point3 = points.get(2);
+            label = createLabel((LabelizableShapeDTO) shapeDTO, squareCoords.getX(), squareCoords.getY());
+        } else if (shapeDTO instanceof TriangleDTO) {
+            List<CoordinatesDTO> points = ((TriangleDTO) shapeDTO).getPoints();
+            CoordinatesDTO point1 = points.get(0);
+            CoordinatesDTO point2 = points.get(1);
+            CoordinatesDTO point3 = points.get(2);
 
             Polygon polygon = new Polygon();
             polygon.getPoints().addAll(point1.getX(), point1.getY(), point2.getX(), point2.getY(), point3.getX(), point3.getY());
             shapeDrawing = polygon;
-            label = createLabel((LabelizableShape) shape, point1.getX(), point1.getY());
-        } else if (shape instanceof be.ac.ulb.infof307.g09.controller.shape.Line) {
-            List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Line) shape).getPathPoints();
-            Coordinates point1 = points.get(0);
-            Coordinates point2 = points.get(1);
+            label = createLabel((LabelizableShapeDTO) shapeDTO, point1.getX(), point1.getY());
+        } else if (shapeDTO instanceof LineDTO) {
+            List<CoordinatesDTO> points = ((LineDTO) shapeDTO).getPathPoints();
+            CoordinatesDTO point1 = points.get(0);
+            CoordinatesDTO point2 = points.get(1);
 
             shapeDrawing = new Line(point1.getX(), point1.getY(), point2.getX(), point2.getY());
-        } else if (shape instanceof Arrow) {
-            List<Coordinates> points = ((be.ac.ulb.infof307.g09.controller.shape.Arrow) shape).getPathPoints();
-            Coordinates point1 = points.get(0);
-            Coordinates point2 = points.get(1);
+        } else if (shapeDTO instanceof ArrowDTO) {
+            List<CoordinatesDTO> points = ((ArrowDTO) shapeDTO).getPathPoints();
+            CoordinatesDTO point1 = points.get(0);
+            CoordinatesDTO point2 = points.get(1);
 
             previouslySelectedX = point1.getX();
             previouslySelectedY = point1.getY();
@@ -297,10 +297,10 @@ public class ShapeHandler {
         }
 
         if (shapeDrawing != null) {
-            shapeDrawing.setId(Integer.toString(shape.getId()));
-            shapeDrawing.setFill(Color.valueOf(shape.getFillColor().toString()));
-            shapeDrawing.setStroke(Color.valueOf(shape.getDrawColor().toString()));
-            shapeDrawing.setStrokeWidth(shape.getShapeThicknessValue());
+            shapeDrawing.setId(Integer.toString(shapeDTO.getId()));
+            shapeDrawing.setFill(Color.valueOf(shapeDTO.getFillColor().toString()));
+            shapeDrawing.setStroke(Color.valueOf(shapeDTO.getDrawColor().toString()));
+            shapeDrawing.setStrokeWidth(shapeDTO.getShapeThicknessValue());
             editorController.pane.getChildren().add(shapeDrawing);
             shapeDrawing.toFront();
             shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
@@ -320,14 +320,14 @@ public class ShapeHandler {
      * @param shapeY the y-coordinate of the shape
      * @return the constructed label
      */
-    private Text createLabel(be.ac.ulb.infof307.g09.controller.shape.LabelizableShape shape, double shapeX, double shapeY) {
+    private Text createLabel(LabelizableShapeDTO shape, double shapeX, double shapeY) {
         Text label = null;
         if (shape.getLabel() != null) {
             label = new Text(shape.getLabel().getValue());
             label.setDisable(true);
             label.setStyle("-fx-font-weight: bold");
             label.setFill(Color.valueOf(shape.getLabel().getColor().toString()));
-            final Coordinates offset = shape.calcLabelOffset();
+            final CoordinatesDTO offset = shape.calcLabelOffset();
             label.setX(shapeX + offset.getX());
             label.setY(shapeY + offset.getY());
             label.setTextAlignment(TextAlignment.CENTER);
@@ -468,48 +468,48 @@ public class ShapeHandler {
         }
 
         if (shapeType != null) {
-            be.ac.ulb.infof307.g09.controller.shape.Color fillColor = null, drawColor = null;
+            be.ac.ulb.infof307.g09.controller.DTO.shapes.Color fillColor = null, drawColor = null;
             String thickness = null;
             if (shapeType.equals(EditorController.SQUARE) || shapeType.equals(EditorController.CIRCLE) || shapeType.equals(EditorController.TRIANGLE)) {
-                fillColor = be.ac.ulb.infof307.g09.controller.shape.Color.get(m.group(1));
-                drawColor = be.ac.ulb.infof307.g09.controller.shape.Color.get(m.group(2));
+                fillColor = be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.get(m.group(1));
+                drawColor = be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.get(m.group(2));
             } else if (shapeType.equals("PATH")) {
-                drawColor = be.ac.ulb.infof307.g09.controller.shape.Color.get(m.group(1));
+                drawColor = be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.get(m.group(1));
             }
             thickness = m.group(3).toUpperCase().replace(' ', '_');
 
             // Process new shape
-            be.ac.ulb.infof307.g09.controller.shape.Shape shapeToDraw = null;
+            ShapeDTO shapeToDraw = null;
             switch (shapeType) {
                 case EditorController.SQUARE: {
-                    Coordinates origin = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
-                    Coordinates end = new Coordinates(Double.parseDouble(m.group(7)), Double.parseDouble(m.group(8)));
+                    CoordinatesDTO origin = new CoordinatesDTO(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
+                    CoordinatesDTO end = new CoordinatesDTO(Double.parseDouble(m.group(7)), Double.parseDouble(m.group(8)));
 
-                    shapeToDraw = new Square(true, true, drawColor, fillColor, origin, end, thickness, canvas.getIdForNewShape());
+                    shapeToDraw = new SquareDTO(true, true, drawColor, fillColor, origin, end, thickness, canvas.getIdForNewShape());
                     break;
                 }
                 case EditorController.CIRCLE: {
-                    Coordinates center = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
+                    CoordinatesDTO center = new CoordinatesDTO(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
                     float radius = Float.parseFloat(m.group(7));
-                    shapeToDraw = new be.ac.ulb.infof307.g09.controller.shape.Circle(true, true, drawColor, fillColor, thickness, center, radius, canvas.getIdForNewShape());
+                    shapeToDraw = new CircleDTO(true, true, drawColor, fillColor, thickness, center, radius, canvas.getIdForNewShape());
                     break;
                 }
                 case EditorController.TRIANGLE: {
-                    Coordinates p1 = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
-                    Coordinates p2 = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
-                    Coordinates p3 = new Coordinates(Double.parseDouble(m.group(8)), Double.parseDouble(m.group(9)));
+                    CoordinatesDTO p1 = new CoordinatesDTO(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
+                    CoordinatesDTO p2 = new CoordinatesDTO(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
+                    CoordinatesDTO p3 = new CoordinatesDTO(Double.parseDouble(m.group(8)), Double.parseDouble(m.group(9)));
 
-                    shapeToDraw = new be.ac.ulb.infof307.g09.controller.shape.Triangle(true, true, drawColor, fillColor, thickness, p1, p2, p3, canvas.getIdForNewShape());
+                    shapeToDraw = new TriangleDTO(true, true, drawColor, fillColor, thickness, p1, p2, p3, canvas.getIdForNewShape());
                     break;
                 }
                 case "PATH": {
-                    Coordinates begin = new Coordinates(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
-                    Coordinates end = new Coordinates(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
+                    CoordinatesDTO begin = new CoordinatesDTO(Double.parseDouble(m.group(4)), Double.parseDouble(m.group(5)));
+                    CoordinatesDTO end = new CoordinatesDTO(Double.parseDouble(m.group(6)), Double.parseDouble(m.group(7)));
 
                     if (m.group(2) == null) {
-                        shapeToDraw = new be.ac.ulb.infof307.g09.controller.shape.Line(begin, end, drawColor, thickness, canvas.getIdForNewShape());
+                        shapeToDraw = new LineDTO(begin, end, drawColor, thickness, canvas.getIdForNewShape());
                     } else {
-                        shapeToDraw = new be.ac.ulb.infof307.g09.controller.shape.Arrow(begin, end, drawColor, thickness, canvas.getIdForNewShape());
+                        shapeToDraw = new ArrowDTO(begin, end, drawColor, thickness, canvas.getIdForNewShape());
                     }
                     break;
                 }
@@ -519,7 +519,7 @@ public class ShapeHandler {
 
             Node node = getNodeInfo(line);
             if (node != null) {
-                ((LabelizableShape) shapeToDraw).setLabel(new Label(node.label, node.color));
+                ((LabelizableShapeDTO) shapeToDraw).setLabel(new LabelDTO(node.label, node.color));
             }
 
             shape = handleDraw(shapeToDraw);
@@ -541,7 +541,7 @@ public class ShapeHandler {
 
         Node node = null;
         if (m.find()) {
-            be.ac.ulb.infof307.g09.controller.shape.Color drawColor = be.ac.ulb.infof307.g09.controller.shape.Color.get(m.group(2));
+            be.ac.ulb.infof307.g09.controller.DTO.shapes.Color drawColor = be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.get(m.group(2));
 
             double rightOffset = Double.parseDouble(m.group(3));
             double aboveOffset = Double.parseDouble(m.group(4));
@@ -553,12 +553,12 @@ public class ShapeHandler {
     }
 
     static class Node {
-        be.ac.ulb.infof307.g09.controller.shape.Color color;
+        be.ac.ulb.infof307.g09.controller.DTO.shapes.Color color;
         double rightOffset;
         double aboveOffset;
         String label;
 
-        public Node(be.ac.ulb.infof307.g09.controller.shape.Color color, double rightOffset, double aboveOffset, String label) {
+        public Node(be.ac.ulb.infof307.g09.controller.DTO.shapes.Color color, double rightOffset, double aboveOffset, String label) {
             this.color = color;
             this.rightOffset = rightOffset;
             this.aboveOffset = aboveOffset;
