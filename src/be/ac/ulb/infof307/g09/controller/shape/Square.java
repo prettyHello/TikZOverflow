@@ -13,8 +13,8 @@ public class Square extends Rectangle{
      * @param endCoordinates    the second defining corner of the square
      * @param id                the id of the shape to create
      */
-    public Square(Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) {
-        super(originCoordinates, endCoordinates, shapeThickness, id);
+    public Square(Coordinates originCoordinates, Coordinates endCoordinates, Thickness thickness, int id) {
+        super(originCoordinates, endCoordinates, thickness, id);
         this.size = endCoordinates.getX() - originCoordinates.getX();
     }
 
@@ -25,8 +25,8 @@ public class Square extends Rectangle{
      * @param size              the size of the sides of the square
      * @param id                the id the shape to create
      */
-    public Square(Coordinates originCoordinates, double size, String shapeThickness, int id) {
-        this(originCoordinates, new Coordinates(originCoordinates.getX() + size, originCoordinates.getY() + size), shapeThickness, id);
+    public Square(Coordinates originCoordinates, double size, Thickness thickness, int id) {
+        this(originCoordinates, new Coordinates(originCoordinates.getX() + size, originCoordinates.getY() + size), thickness, id);
         this.size = size;
     }
 
@@ -40,8 +40,8 @@ public class Square extends Rectangle{
      * @param fillColor         Color to fill the shape with, color list in Color enum.
      * @param drawColor         Outer line color, color list in Color enum.
      */
-    public Square(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) throws FatalException {
-        super(draw, fill, drawColor, fillColor, shapeThickness, originCoordinates, endCoordinates, id);
+    public Square(boolean draw, boolean fill, Color drawColor, Color fillColor, Coordinates originCoordinates, Coordinates endCoordinates, Thickness thickness, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, thickness, originCoordinates, endCoordinates, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.size = endCoordinates.getX() - originCoordinates.getX();
     }
@@ -53,7 +53,7 @@ public class Square extends Rectangle{
      * @param newId the id to give to the newly created shape
      */
     public Square(Square other, int newId) {
-        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getShapeThicknessKey(),
+        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getThickness(),
                 new Coordinates(other.getOriginCoordinates()), new Coordinates(other.getEndCoordinates()), newId);
         this.setLabel(other.getLabel());
         this.size = getOriginCoordinates().getX() - getEndCoordinates().getX();

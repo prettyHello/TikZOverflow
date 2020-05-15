@@ -191,7 +191,7 @@ public class EditorController {
         MenuItem setLabel = new MenuItem("Set label", contextMenuLabelColorPicker);
         setLabel.setOnAction(t -> shapeHandler.handleSetLabel(Color.valueOf(contextMenuLabelColorPicker.getValue().toString())));
         MenuItem shapeThicknessMenu = new MenuItem("Change thickness", contextMenuChangeThickness);
-        shapeThicknessMenu.setOnAction(t -> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
+        shapeThicknessMenu.setOnAction(t -> shapeHandler.updateShapeThickness(contextMenuChangeThickness.getValue()));
 
         fillColour.setOnAction(t -> {
             if (!selectedShapes.isEmpty()) {
@@ -205,7 +205,7 @@ public class EditorController {
         });
         shapeThickness.setOnAction(t -> {
             if (!selectedShapes.isEmpty()) {
-                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(Thickness.valueOf(shapeThickness.getValue().toString()), shape));
+                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(shapeThickness.getValue(), shape));
             }
         });
 
