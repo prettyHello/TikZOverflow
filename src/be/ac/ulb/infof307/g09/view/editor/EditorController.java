@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g09.view.editor;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
@@ -51,7 +52,7 @@ public class EditorController {
 
     private ViewSwitcher viewSwitcher;
     private ShapeHandler shapeHandler;
-    private final ProjectUCC projectUcc = ConfigurationSingleton.getProjectUCC();
+    private final ProjectUCC projectUcc = ConfigurationHolder.getProjectUCC();
 
     @FXML
     Pane toolbar;

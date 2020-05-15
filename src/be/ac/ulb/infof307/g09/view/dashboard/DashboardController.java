@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g09.view.dashboard;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
@@ -28,9 +29,9 @@ import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
  * This class handles the main screen of the program and allows the user to manage through their projects.
  */
 public class DashboardController {
-    private final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
-    private final ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
-    private final ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
+    final UserUCC userUcc = ConfigurationHolder.getUserUcc();
+    final ProjectUCC projectUCC = ConfigurationHolder.getProjectUCC();
+    final ProjectFactory projectFactory = ConfigurationHolder.getProjectFactory();
 
     private final DashboardController dbc = this;
     private boolean useAskedName;
@@ -122,13 +123,13 @@ public class DashboardController {
      * Untar a choose file to user home, show to the dashboard and save into the database
      */
     @FXML
-    public void importProject() {
+    public void ImportProject() {
         FileChooser fc = new FileChooser();
         ProjectDTO projectDTO = null;
         File selectedFile = fc.showOpenDialog(null);
         if (selectedFile == null) return;
         String password = ViewUtility.askProjectPassword();
-        if(password==null) return;
+        if(password==null)return;
         String projectName = askProjectName();
         if (projectName == null) return;
         try {

@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g09.controller.UCC;
 
-import be.ac.ulb.infof307.g09.config.TestBusinessConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,9 +16,9 @@ class UserUCCImplTest {
 
     @BeforeEach
     void setUp() {
-        TestBusinessConfigurationSingleton.getInstance();
-        this.userFactory = TestBusinessConfigurationSingleton.getUserFactory();
-        this.userUcc = TestBusinessConfigurationSingleton.getUserUcc();
+        ConfigurationHolder.loadConfiguration("TestBusiness");
+        this.userFactory = ConfigurationHolder.getUserFactory();
+        this.userUcc = ConfigurationHolder.getUserUcc();
     }
 
     @Test

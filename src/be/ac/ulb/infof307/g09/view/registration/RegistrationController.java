@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g09.view.registration;
 
-import be.ac.ulb.infof307.g09.config.AbstractConfigurationSingleton;
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
@@ -55,8 +55,8 @@ public class RegistrationController {
     private final UserUCC userUcc;
 
     public RegistrationController() {
-        this.userFactory = ConfigurationSingleton.getUserFactory();
-        this.userUcc = ConfigurationSingleton.getUserUcc();
+        this.userFactory = ConfigurationHolder.getUserFactory();
+        this.userUcc = ConfigurationHolder.getUserUcc();
     }
 
     @FXML

@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g09.view.login;
 
-import be.ac.ulb.infof307.g09.config.AbstractConfigurationSingleton;
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
@@ -40,8 +40,8 @@ public class LoginController {
     @FXML
     public BorderPane bpRootPane;
 
-    final UserFactory userFactory = ConfigurationSingleton.getUserFactory();
-    final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
+    final UserFactory userFactory = ConfigurationHolder.getUserFactory();
+    final UserUCC userUcc = ConfigurationHolder.getUserUcc();
 
     private ViewSwitcher viewSwitcher;
 

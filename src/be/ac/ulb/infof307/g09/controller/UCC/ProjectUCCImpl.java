@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g09.controller.UCC;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
@@ -25,7 +26,7 @@ import static be.ac.ulb.infof307.g09.controller.ControllerUtility.checkString;
 public class ProjectUCCImpl implements ProjectUCC {
     private final String rootFolder = File.separator + "ProjectTikZ" + File.separator;
 
-    private final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
+    private final UserUCC userUcc = ConfigurationHolder.getUserUcc();
     private final DALServices dal;
     private final ProjectDAO projectDAO;
 

@@ -10,8 +10,8 @@ import java.util.logging.Logger;
  * It is used by AbstractConfigurationSingleton to instanciate the implementations by introspection and make them avaible
  * everywhere in the app.
  */
-public class Configuration {
-    private static Properties properties;
+class Configuration {
+    public static Properties properties;
     public static final String DEV = "dev";
     public static final String PROD = "prod";
     public static final String TEST_DAO = "TestDAO";

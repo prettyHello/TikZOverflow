@@ -17,7 +17,6 @@ import java.util.logging.Logger;
  * - the tests, in order to instantiate the configuration and Mocks only once
  * - the Main class in order to build the application only once
  * - The getters are used by every class to access the implementation hiding behind the interface
- * This is done through a singleton pattern
  *
  * The properties files (key - values) are read by Configuration and stored inside it
  * AbstractConfigurationSingleton will use this configuration file to instanciate through introspection
@@ -25,11 +24,10 @@ import java.util.logging.Logger;
  *  Those implementations will be availble through getter and setters.
  * Everything is static since each instances must be unique for the entire application.
  *
- * This class is abstract so that we can have classes that use the args given in arguments to the main, or load specific configuration,
- *  just based on the name of the class. For easier use.
+ * This class is abstract as everything is static, no need to instanciate it
  */
-public abstract class AbstractConfigurationSingleton {
-    private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
+public abstract class ConfigurationHolder {
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
     private static String confName;
     private static Configuration configuration;
@@ -80,11 +78,11 @@ public abstract class AbstractConfigurationSingleton {
     /**
      * Load the specified configuration, used in testing
      *
-     * @param confName the name of the configuration to load
+     * @param conf_name the name of the configuration to load
      */
-    protected void loadConfiguration(String confName) {
-        AbstractConfigurationSingleton.confName = confName;
-        String[] args = {AbstractConfigurationSingleton.confName};
+    public static void loadConfiguration(String conf_name) {
+        ConfigurationHolder.confName = conf_name;
+        String[] args = {ConfigurationHolder.confName};
         loadConfiguration(args);
     }
 
@@ -95,7 +93,7 @@ public abstract class AbstractConfigurationSingleton {
      *
      * @param args the command line arguments passed
      */
-    protected void loadConfiguration(String[] args) {
+    public static void loadConfiguration(String[] args) {
         try {
             configuration = (Configuration) Class.forName("be.ac.ulb.infof307.g09.config.Configuration").getDeclaredConstructor().newInstance();
             configuration.initProperties(args);
@@ -110,7 +108,7 @@ public abstract class AbstractConfigurationSingleton {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
             //The reason behind this error handling is that this method is called before JavaFX is launched
             LOG.severe("Unable to set up configuration singleton");
-            LOG.severe(exc.getMessage());
+            exc.printStackTrace();
             System.exit(1);
         }
     }
