@@ -11,7 +11,7 @@ class LineDTOTest {
 
     @Test
     void print_expectedBehaviour() {
-        LineDTO line = new LineDTO(new CoordinatesDTO(0,0),new CoordinatesDTO(2,2), Thickness.ULTRA_THIN.toString(),1);
+        LineDTO line = new LineDTO(new CoordinatesDTO(0,0),new CoordinatesDTO(2,2), Thickness.ULTRA_THIN,1);
         assertEquals("\\draw [black, ultra thin] (0.0,0.0) -- (2.0,2.0) ;",line.print());
     }
 }

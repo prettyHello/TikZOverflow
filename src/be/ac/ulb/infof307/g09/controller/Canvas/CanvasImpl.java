@@ -153,7 +153,7 @@ public class CanvasImpl implements Canvas {
     @Override
     public void rmShapeById(int id) {
         //We need to create a temporary shape for the array to find the one in the list, shape are only compared on their id, nothing else mather for the list.
-        ShapeDTO tmpShape = new SquareDTO(new CoordinatesDTO(0, 0), 0, "THIN", id);
+        ShapeDTO tmpShape = new SquareDTO(new CoordinatesDTO(0, 0), 0, Thickness.THIN, id);
         this.shapes.remove(tmpShape);
     }
 
@@ -227,7 +227,7 @@ public class CanvasImpl implements Canvas {
                 t.setOriginPoint(destinationPos.sub(offsetToMean));
                 CoordinatesDTO offsetMeanToSec = new CoordinatesDTO(meanPos.sub(t.getSecondPoint()));
                 t.setSecondPoint(destinationPos.sub(offsetMeanToSec));
-                Coordinates offsetMeanToThi = new Coordinates(meanPos.sub(t.getThirdPoint()));
+                CoordinatesDTO offsetMeanToThi = new CoordinatesDTO(meanPos.sub(t.getThirdPoint()));
                 t.setThirdPoint(destinationPos.sub(offsetMeanToThi));
                 toAdd = t;
             }else if (shape instanceof SquareDTO){

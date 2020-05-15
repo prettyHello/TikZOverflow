@@ -24,7 +24,7 @@ import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
  * This class shows the connected user's profile and allows to modify user's data.
  */
 public class ProfileController {
-    private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
     @FXML
     TextField firstnameTF;

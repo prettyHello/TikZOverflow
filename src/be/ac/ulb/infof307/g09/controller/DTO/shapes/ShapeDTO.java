@@ -29,7 +29,7 @@ public abstract class ShapeDTO implements Serializable {
      * @param fill      Is the shape filled with a color, can be combined with draw.
      * @param thickness Thickness starting value.
      */
-    public Shape(boolean draw, boolean fill, Thickness thickness, int id) {
+    public ShapeDTO(boolean draw, boolean fill, Thickness thickness, int id) {
         this.draw = draw;
         this.fill = fill;
         this.thickness = thickness;
@@ -41,9 +41,9 @@ public abstract class ShapeDTO implements Serializable {
      * @param fill              Is the shape filled with a color, can be combined with draw.
      * @param fillColor         Color to fill the shape with, color list in Color enum.
      * @param drawColor         Outer line color, color list in Color enum.
-     * @param shapeThicknessKey Thickness starting value.
+     * @param thickness Thickness starting value.
      */
-    public ShapeDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThicknessKey, int id) throws FatalException {
+    public ShapeDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, Thickness thickness, int id) throws FatalException {
         this.draw = draw;
         this.fill = fill;
 
@@ -55,8 +55,7 @@ public abstract class ShapeDTO implements Serializable {
             ControllerUtility.checkObjects(drawColor);
             this.drawColor = drawColor;
         }
-        this.shapeThicknessKey = shapeThicknessKey;
-        this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
+        this.thickness = thickness;
         this.id = id;
     }
 
@@ -68,8 +67,8 @@ public abstract class ShapeDTO implements Serializable {
     @Override
     public boolean equals(Object obj) {
         boolean retVal = false;
-        if (obj instanceof Shape) {
-            Shape ptr = (Shape) obj;
+        if (obj instanceof ShapeDTO) {
+            ShapeDTO ptr = (ShapeDTO) obj;
             retVal = ptr.getId() == this.id;
         }
         return retVal;
@@ -99,19 +98,19 @@ public abstract class ShapeDTO implements Serializable {
         this.fill = fill;
     }
 
-    public Color getFillColor() {
+    public ColorDTO getFillColor() {
         return fillColor;
     }
 
-    public void setFillColor(Color fillColor) {
+    public void setFillColor(ColorDTO fillColor) {
         this.fillColor = fillColor;
     }
 
-    public Color getDrawColor() {
+    public ColorDTO getDrawColor() {
         return drawColor;
     }
 
-    public void setDrawColor(Color drawColor) {
+    public void setDrawColor(ColorDTO drawColor) {
         this.drawColor = drawColor;
     }
 

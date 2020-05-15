@@ -12,13 +12,13 @@ class RectangleDTOTest {
 
     @Test
     void print_SimpleRectangle() {
-        RectangleDTO rectangle = new RectangleDTO(new CoordinatesDTO(0,0), new CoordinatesDTO(1,2), Thickness.ULTRA_THIN.toString(),1);
+        RectangleDTO rectangle = new RectangleDTO(new CoordinatesDTO(0,0), new CoordinatesDTO(1,2), Thickness.ULTRA_THIN,1);
         assertEquals("\\draw[draw=black, ultra thin] (0.0,0.0) rectangle (1.0,2.0) ;",rectangle.print());
     }
 
     @Test
     void print_ComplexRectangle() {
-        RectangleDTO rectangle = new RectangleDTO(true,true, ColorDTO.BLUE, ColorDTO.RED,Thickness.VERY_THICK.toString(), new CoordinatesDTO(0,0), new CoordinatesDTO(1,2),1);
+        RectangleDTO rectangle = new RectangleDTO(true,true, ColorDTO.BLUE, ColorDTO.RED,Thickness.VERY_THICK, new CoordinatesDTO(0,0), new CoordinatesDTO(1,2),1);
         assertEquals("\\filldraw[fill=red, draw=blue, very thick] (0.0,0.0) rectangle (1.0,2.0) ;",rectangle.print());
     }
 

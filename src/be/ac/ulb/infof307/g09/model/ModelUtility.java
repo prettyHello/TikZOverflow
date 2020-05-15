@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.model;
 
-import be.ac.ulb.infof307.g09.config.AbstractConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -25,7 +25,7 @@ import java.util.zip.GZIPOutputStream;
  * Functions easily imported from project to project and related to file handling
  */
 public class ModelUtility {
-    private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
     /**
      * Decompress file ".tar.gz"
      *

@@ -25,7 +25,7 @@ import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
  * This class handles the process of register a new user.
  */
 public class RegistrationController {
-    private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
     @FXML
     TextField firstnameTF;

@@ -15,8 +15,8 @@ public class CircleDTO extends LabelizableShapeDTO {
      * @param coordinates
      * @param radius
      */
-    public CircleDTO(CoordinatesDTO coordinates, float radius, String shapeThickness, int id) throws FatalException {
-        super(true, false, shapeThickness, id);
+    public CircleDTO(CoordinatesDTO coordinates, float radius, Thickness thickness, int id) throws FatalException {
+        super(true, false, thickness, id);
         if (radius <= 0) {
             throw new BizzException("Radius is negative or null");
         }
@@ -32,8 +32,8 @@ public class CircleDTO extends LabelizableShapeDTO {
      * @param coordinates
      * @param radius
      */
-    public CircleDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThickness, CoordinatesDTO coordinates, float radius, int id) throws FatalException, BizzException {
-        super(draw, fill, drawColor, fillColor, shapeThickness, id);
+    public CircleDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, Thickness thickness, CoordinatesDTO coordinates, float radius, int id) throws FatalException, BizzException {
+        super(draw, fill, drawColor, fillColor, thickness, id);
         ControllerUtility.checkObjects(coordinates);
         if (radius <= 0) {
             throw new BizzException("Radius is negative or null");
@@ -48,7 +48,7 @@ public class CircleDTO extends LabelizableShapeDTO {
      * @param newId the id to give to the newly created circle
      */
     public CircleDTO(CircleDTO other, int newId){
-        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getShapeThicknessKey(), newId);
+        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getThickness(), newId);
         this.coordinates = new CoordinatesDTO(other.getCoordinates().getX(), other.getCoordinates().getY());
         this.radius = other.getRadius();
         this.setLabel(other.getLabel());

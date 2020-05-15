@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.view;
 
-import be.ac.ulb.infof307.g09.config.AbstractConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * Class that handles the switching from one screen to another during interaction with the application
  */
 public class ViewSwitcher {
-    private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
     /**
      * The stage containing the different scenes

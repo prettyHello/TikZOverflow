@@ -14,27 +14,27 @@ class CircleDTOTest {
 
     @Test
     void print_simpleCircle() {
-        CircleDTO circle = new CircleDTO(new CoordinatesDTO(1,2),3, Thickness.ULTRA_THIN.toString(),1);
+        CircleDTO circle = new CircleDTO(new CoordinatesDTO(1,2),3, Thickness.ULTRA_THIN,1);
         assertEquals("\\draw[draw=black, ultra thin] (1.0,2.0) circle [radius=3.0] ;",circle.print());
     }
 
     @Test
     void print_complexCircle() {
-        CircleDTO circle = new CircleDTO(true,true, ColorDTO.BLUE, ColorDTO.RED, Thickness.VERY_THICK.toString(), new CoordinatesDTO(1,2),3,1);
+        CircleDTO circle = new CircleDTO(true,true, ColorDTO.BLUE, ColorDTO.RED, Thickness.VERY_THICK, new CoordinatesDTO(1,2),3,1);
         assertEquals("\\filldraw[fill=red, draw=blue, very thick] (1.0,2.0) circle [radius=3.0] ;",circle.print());
     }
 
     @Test
     void constructor_NegativeRadius() {
         assertThrows(BizzException.class, () -> {
-            new CircleDTO(new CoordinatesDTO(1,1),-1,"THIN",1);
+            new CircleDTO(new CoordinatesDTO(1,1),-1,Thickness.THIN,1);
         }, "Error if a negative radius is passed");
     }
 
     @Test
     void constructor_ZeroRadius() {
         assertThrows(BizzException.class, () -> {
-            new CircleDTO(new CoordinatesDTO(1,1),0,"THIN",1);
+            new CircleDTO(new CoordinatesDTO(1,1),0,Thickness.THIN,1);
         }, "Error if a zero value radius is passed");
     }
 }

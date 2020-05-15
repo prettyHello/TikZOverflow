@@ -11,7 +11,7 @@ class ArrowDTOTest {
 
     @Test
     void print_expectedBehaviour() {
-        ArrowDTO arrow = new ArrowDTO(new CoordinatesDTO(0,0),new CoordinatesDTO(2,2), Thickness.VERY_THIN.toString(), 1);
+        ArrowDTO arrow = new ArrowDTO(new CoordinatesDTO(0,0),new CoordinatesDTO(2,2), Thickness.VERY_THIN, 1);
         assertEquals("\\draw [black,->, very thin] (0.0,0.0) -- (2.0,2.0) ;",arrow.print());
     }
 }

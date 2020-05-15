@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.UCC;
 
-import be.ac.ulb.infof307.g09.config.AbstractConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.User;
 import be.ac.ulb.infof307.g09.model.DALServices;
@@ -18,7 +18,7 @@ import static be.ac.ulb.infof307.g09.controller.ControllerUtility.checkObjects;
  * {@inheritDoc}
  */
 public class UserUCCImpl implements UserUCC {
-    private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
     private final DALServices dal;
     private final DAO<UserDTO> userDAO;

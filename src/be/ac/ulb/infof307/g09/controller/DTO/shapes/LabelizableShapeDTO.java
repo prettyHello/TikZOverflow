@@ -6,12 +6,12 @@ public abstract class LabelizableShapeDTO extends ShapeDTO {
 
     private LabelDTO label;
 
-    public LabelizableShapeDTO(boolean draw, boolean fill, String shapeThicknessKey, int id) {
-        super(draw, fill, shapeThicknessKey, id);
+    public LabelizableShapeDTO(boolean draw, boolean fill, Thickness thickness, int id) {
+        super(draw, fill, thickness, id);
     }
 
-    public LabelizableShapeDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThicknessKey, int id) throws FatalException {
-        super(draw, fill, drawColor, fillColor, shapeThicknessKey, id);
+    public LabelizableShapeDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, Thickness thickness, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, thickness, id);
     }
 
     public LabelDTO getLabel() {

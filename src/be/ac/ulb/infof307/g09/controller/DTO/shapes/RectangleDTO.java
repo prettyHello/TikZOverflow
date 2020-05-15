@@ -18,8 +18,8 @@ public class RectangleDTO extends LabelizableShapeDTO {
      * @param originCoordinates the first defining corner of the rectangle
      * @param endCoordinates    the second defining corner of the rectangle
      */
-    public RectangleDTO(CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, String shapeThickness, int id) {
-        super(true, false, shapeThickness, id);
+    public RectangleDTO(CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, Thickness thickness, int id) {
+        super(true, false, thickness, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;
@@ -35,8 +35,8 @@ public class RectangleDTO extends LabelizableShapeDTO {
      * @param fillColor         Color to fill the shape with, color list in Color enum.
      * @param drawColor         Outer line color, color list in Color enum.
      */
-    public RectangleDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThickness, CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, int id) throws FatalException {
-        super(draw, fill, drawColor, fillColor, shapeThickness, id);
+    public RectangleDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, Thickness thickness, CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, thickness, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;

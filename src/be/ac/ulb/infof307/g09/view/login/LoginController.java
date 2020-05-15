@@ -27,7 +27,7 @@ import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
  * This class handles the process of login of a user.
  */
 public class LoginController {
-    private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
     @FXML
     public TextField usernameTF;

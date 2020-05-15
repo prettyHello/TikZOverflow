@@ -123,7 +123,7 @@ public class DashboardController {
      * Untar a choose file to user home, show to the dashboard and save into the database
      */
     @FXML
-    public void ImportProject() {
+    public void importProject() {
         FileChooser fc = new FileChooser();
         ProjectDTO projectDTO = null;
         File selectedFile = fc.showOpenDialog(null);

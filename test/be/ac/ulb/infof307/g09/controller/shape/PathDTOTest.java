@@ -18,7 +18,7 @@ class PathDTOTest {
         coordinates.add(new CoordinatesDTO(0,0));
         coordinates.add(new CoordinatesDTO(2,2));
         coordinates.add(new CoordinatesDTO(0,4));
-        PathDTO path = new PathDTO(coordinates, Thickness.THIN.toString(),1);
+        PathDTO path = new PathDTO(coordinates, Thickness.THIN,1);
         assertEquals("\\draw [black, thin] (0.0,0.0) -- (2.0,2.0) -- (0.0,4.0) ;",path.print());
     }
 
@@ -27,7 +27,7 @@ class PathDTOTest {
         ArrayList<CoordinatesDTO> coordinates = new ArrayList<>();
         coordinates.add(new CoordinatesDTO(0,0));
         coordinates.add(new CoordinatesDTO(2,2));
-        PathDTO path = new PathDTO(new CoordinatesDTO(0,0),new CoordinatesDTO(2,2),Thickness.SEMI_THICK.toString(),1,false, false);
+        PathDTO path = new PathDTO(new CoordinatesDTO(0,0),new CoordinatesDTO(2,2),Thickness.SEMI_THICK,1,false, false);
         assertEquals("\\draw [black, semi thick] (0.0,0.0) -- (2.0,2.0) ;",path.print());
     }
 
@@ -37,7 +37,7 @@ class PathDTOTest {
         coordinates.add(new CoordinatesDTO(0,0));
         coordinates.add(new CoordinatesDTO(2,2));
         coordinates.add(new CoordinatesDTO(0,4));
-        PathDTO path = new PathDTO(coordinates,false,false, ColorDTO.RED,Thickness.ULTRA_THICK.toString(), 1);
+        PathDTO path = new PathDTO(coordinates,false,false, ColorDTO.RED,Thickness.ULTRA_THICK, 1);
         assertEquals("\\draw [red, ultra thick] (0.0,0.0) -- (2.0,2.0) -- (0.0,4.0) ;",path.print());
     }
 

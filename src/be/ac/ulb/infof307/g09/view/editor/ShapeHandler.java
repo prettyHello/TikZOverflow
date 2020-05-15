@@ -167,7 +167,7 @@ public class ShapeHandler {
      */
     public void handleDrawCall() {
         Shape shape = null;
-        be.ac.ulb.infof307.g09.controller.shape.Shape addToController = null;
+        be.ac.ulb.infof307.g09.controller.DTO.shapes.ShapeDTO addToController = null;
 
         switch (editorController.shapeToDraw) {
             case EditorController.TRIANGLE:
@@ -217,7 +217,7 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case EditorController.LINE_POINT2:
-                addToController = new LineDTO(new CoordinatesDTO(previouslySelectedX, previouslySelectedY), new CoordinatesDTO(selectedX, selectedY),editorController.shapeThickness.getValue(), canvas.getIdForNewShape());
+                addToController = new LineDTO(new CoordinatesDTO(previouslySelectedX, previouslySelectedY), new CoordinatesDTO(selectedX, selectedY), editorController.shapeThickness.getValue(), canvas.getIdForNewShape());
                 shape = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
                 shape.setStroke(Color.valueOf(editorController.fillColour.getValue().toString()));
                 waitingForMoreCoordinate = false;
@@ -225,7 +225,7 @@ public class ShapeHandler {
             case EditorController.SQUARE:
                 int size = 75;
                 shape = new Rectangle(selectedX, selectedY, 75, 75);
-                addToController = new Square(new Coordinates(selectedX, selectedY), size, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new SquareDTO(new CoordinatesDTO(selectedX, selectedY), size, editorController.shapeThickness.getValue(), canvas.getIdForNewShape());
                 break;
         }
         if (waitingForMoreCoordinate) {
@@ -470,7 +470,6 @@ public class ShapeHandler {
 
         if (shapeType != null) {
             ColorDTO fillColor = null, drawColor = null;
-            String thickness = null;
             if (shapeType.equals(EditorController.SQUARE) || shapeType.equals(EditorController.CIRCLE) || shapeType.equals(EditorController.TRIANGLE)) {
                 fillColor = ColorDTO.get(m.group(1));
                 drawColor = ColorDTO.get(m.group(2));

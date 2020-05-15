@@ -26,8 +26,8 @@ public class PathDTO extends ShapeDTO {
      * @param pathPoints List of points the path goes trough.
      * @throws FatalException
      */
-    public PathDTO(ArrayList<CoordinatesDTO> pathPoints, String shapeThickness, int id) throws FatalException {
-        super(true, false, shapeThickness, id);
+    public PathDTO(ArrayList<CoordinatesDTO> pathPoints, Thickness thickness, int id) throws FatalException {
+        super(true, false, thickness, id);
         ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -40,8 +40,8 @@ public class PathDTO extends ShapeDTO {
      * @param id
      * @throws FatalException
      */
-    public PathDTO(CoordinatesDTO origin, CoordinatesDTO end, String shapeThickness, int id, boolean arrowStart, boolean arrowEnd) throws FatalException {
-        super(true, false, shapeThickness, id);
+    public PathDTO(CoordinatesDTO origin, CoordinatesDTO end, Thickness thickness, int id, boolean arrowStart, boolean arrowEnd) throws FatalException {
+        super(true, false, thickness, id);
         this.arrowStart = arrowStart;
         this.arrowEnd = arrowEnd;
         ArrayList<CoordinatesDTO> pathPoints = new ArrayList<>();
@@ -60,8 +60,8 @@ public class PathDTO extends ShapeDTO {
      * @param drawColor
      * @throws FatalException
      */
-    public PathDTO(ArrayList<CoordinatesDTO> pathPoints, boolean arrowStart, boolean arrowEnd, ColorDTO drawColor, String shapeThickness, int id) throws FatalException {
-        super(true, false, drawColor, ColorDTO.WHITE, shapeThickness, id);
+    public PathDTO(ArrayList<CoordinatesDTO> pathPoints, boolean arrowStart, boolean arrowEnd, ColorDTO drawColor,Thickness thickness, int id) throws FatalException {
+        super(true, false, drawColor, ColorDTO.WHITE, thickness, id);
         ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -76,8 +76,8 @@ public class PathDTO extends ShapeDTO {
      * @param drawColor
      * @throws FatalException
      */
-    public PathDTO(CoordinatesDTO origin, CoordinatesDTO end, boolean arrowStart, boolean arrowEnd, ColorDTO drawColor, String shapeThickness, int id) throws FatalException {
-        super(true, false, drawColor, ColorDTO.WHITE, shapeThickness, id);
+    public PathDTO(CoordinatesDTO origin, CoordinatesDTO end, boolean arrowStart, boolean arrowEnd, ColorDTO drawColor, Thickness thickness, int id) throws FatalException {
+        super(true, false, drawColor, ColorDTO.WHITE, thickness, id);
         ArrayList<CoordinatesDTO> pathPoints = new ArrayList<>();
         pathPoints.add(new CoordinatesDTO(origin));
         pathPoints.add(new CoordinatesDTO(end));
@@ -94,7 +94,7 @@ public class PathDTO extends ShapeDTO {
      * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
-        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().getValue() + ", " + super.getShapeThicknessKeyFormatted() + "] ");
+        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().getValue() + ", " + super.getThicknessFormatted() + "] ");
         Iterator<CoordinatesDTO> iterator = this.getCoordinatesIterator();
         returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {
