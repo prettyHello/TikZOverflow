@@ -6,12 +6,12 @@ public abstract class LabelizableShape extends Shape {
 
     private Label label;
 
-    public LabelizableShape(boolean draw, boolean fill, String shapeThicknessKey, int id) {
-        super(draw, fill, shapeThicknessKey, id);
+    public LabelizableShape(boolean draw, boolean fill, Thickness thickness, int id) {
+        super(draw, fill, thickness, id);
     }
 
-    public LabelizableShape(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
-        super(draw, fill, drawColor, fillColor, shapeThicknessKey, id);
+    public LabelizableShape(boolean draw, boolean fill, Color drawColor, Color fillColor, Thickness thickness, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, thickness, id);
     }
 
     public Label getLabel() {

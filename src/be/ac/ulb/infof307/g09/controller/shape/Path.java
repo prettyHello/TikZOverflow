@@ -26,8 +26,8 @@ public class Path extends Shape {
      * @param pathPoints List of points the path goes trough.
      * @throws FatalException
      */
-    public Path(ArrayList<Coordinates> pathPoints, String shapeThickness, int id) throws FatalException {
-        super(true, false, shapeThickness, id);
+    public Path(ArrayList<Coordinates> pathPoints, Thickness thickness, int id) throws FatalException {
+        super(true, false, thickness, id);
         ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -40,8 +40,8 @@ public class Path extends Shape {
      * @param id
      * @throws FatalException
      */
-    public Path(Coordinates origin, Coordinates end, String shapeThickness, int id, boolean arrowStart, boolean arrowEnd) throws FatalException {
-        super(true, false, shapeThickness, id);
+    public Path(Coordinates origin, Coordinates end, Thickness thickness, int id, boolean arrowStart, boolean arrowEnd) throws FatalException {
+        super(true, false, thickness, id);
         this.arrowStart = arrowStart;
         this.arrowEnd = arrowEnd;
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
@@ -60,8 +60,8 @@ public class Path extends Shape {
      * @param drawColor
      * @throws FatalException
      */
-    public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
-        super(true, false, drawColor, Color.WHITE, shapeThickness, id);
+    public Path(ArrayList<Coordinates> pathPoints, boolean arrowStart, boolean arrowEnd, Color drawColor, Thickness thickness, int id) throws FatalException {
+        super(true, false, drawColor, Color.WHITE, thickness, id);
         ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
     }
@@ -76,8 +76,8 @@ public class Path extends Shape {
      * @param drawColor
      * @throws FatalException
      */
-    public Path(Coordinates origin, Coordinates end, boolean arrowStart, boolean arrowEnd, Color drawColor, String shapeThickness, int id) throws FatalException {
-        super(true, false, drawColor, Color.WHITE, shapeThickness, id);
+    public Path(Coordinates origin, Coordinates end, boolean arrowStart, boolean arrowEnd, Color drawColor, Thickness thickness, int id) throws FatalException {
+        super(true, false, drawColor, Color.WHITE, thickness, id);
         ArrayList<Coordinates> pathPoints = new ArrayList<>();
         pathPoints.add(new Coordinates(origin));
         pathPoints.add(new Coordinates(end));
@@ -94,7 +94,7 @@ public class Path extends Shape {
      * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
      */
     public String print() {
-        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().getValue() + ", " + super.getShapeThicknessKeyFormatted() + "] ");
+        StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().getValue() + ", " + super.getThicknessFormatted() + "] ");
         Iterator<Coordinates> iterator = this.getCoordinatesIterator();
         returnValue.append(iterator.next().print());
         while (iterator.hasNext()) {

@@ -6,7 +6,7 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Triangle extends LabelizableShape{
+public class Triangle extends LabelizableShape {
     private Coordinates originPoint;
     private Coordinates secondPoint;
     private Coordinates thirdPoint;
@@ -17,8 +17,8 @@ public class Triangle extends LabelizableShape{
      *
      * @param originPoint
      */
-    public Triangle(Coordinates originPoint,String shapeThickness, int id) {
-        super(true, false, shapeThickness, id);
+    public Triangle(Coordinates originPoint, Thickness thickness, int id) {
+        super(true, false, thickness, id);
         ControllerUtility.checkObjects(originPoint);
         this.originPoint = originPoint;
         this.secondPoint = new Coordinates(originPoint.getX() + 1, originPoint.getY());
@@ -33,8 +33,8 @@ public class Triangle extends LabelizableShape{
      * @param pt3 the third point of the triangle
      * @param id  the id of the shape
      */
-    public Triangle(Coordinates pt1, Coordinates pt2, Coordinates pt3, String shapeThickness, int id) {
-        super(true, false, shapeThickness, id);
+    public Triangle(Coordinates pt1, Coordinates pt2, Coordinates pt3, Thickness thickness, int id) {
+        super(true, false, thickness, id);
         ControllerUtility.checkObjects(pt1, pt2, pt3);
         this.originPoint = pt1;
         this.secondPoint = pt2;
@@ -47,8 +47,8 @@ public class Triangle extends LabelizableShape{
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public Triangle(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, Coordinates originPoint, Coordinates secondPoint, Coordinates thirdPoint, int id) throws FatalException {
-        super(draw, fill, drawColor, fillColor, shapeThickness, id);
+    public Triangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Thickness thickness, Coordinates originPoint, Coordinates secondPoint, Coordinates thirdPoint, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, thickness, id);
         ControllerUtility.checkObjects(originPoint, secondPoint, thirdPoint);
         this.originPoint = originPoint;
         this.secondPoint = secondPoint;
@@ -57,11 +57,12 @@ public class Triangle extends LabelizableShape{
 
     /**
      * Copy constructor
+     *
      * @param other the Triangle to copy
      * @param newId the id to assign this newly created Shape
      */
-    public Triangle(Triangle other, int newId){
-        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getShapeThicknessKey(), newId);
+    public Triangle(Triangle other, int newId) {
+        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getThickness(), newId);
         this.originPoint = other.getOriginPoint();
         this.secondPoint = other.getSecondPoint();
         this.thirdPoint = other.getThirdPoint();

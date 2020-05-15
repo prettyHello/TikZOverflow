@@ -18,8 +18,8 @@ public class Rectangle extends LabelizableShape {
      * @param originCoordinates the first defining corner of the rectangle
      * @param endCoordinates    the second defining corner of the rectangle
      */
-    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, String shapeThickness, int id) {
-        super(true, false, shapeThickness, id);
+    public Rectangle(Coordinates originCoordinates, Coordinates endCoordinates, Thickness thickness, int id) {
+        super(true, false, thickness, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;
@@ -35,8 +35,8 @@ public class Rectangle extends LabelizableShape {
      * @param fillColor         Color to fill the shape with, color list in Color enum.
      * @param drawColor         Outer line color, color list in Color enum.
      */
-    public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
-        super(draw, fill, drawColor, fillColor, shapeThickness, id);
+    public Rectangle(boolean draw, boolean fill, Color drawColor, Color fillColor, Thickness thickness, Coordinates originCoordinates, Coordinates endCoordinates, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, thickness, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;
         this.endCoordinates = endCoordinates;

@@ -8,7 +8,7 @@ class ArrowTest {
 
     @Test
     void print_expectedBehaviour() {
-        Arrow arrow = new Arrow(new Coordinates(0,0),new Coordinates(2,2),Thickness.VERY_THIN.toString(), 1);
-        assertEquals("\\draw [black,->, very thin] (0.0,0.0) -- (2.0,2.0) ;",arrow.print());
+        Arrow arrow = new Arrow(new Coordinates(0, 0), new Coordinates(2, 2), Thickness.VERY_THIN, 1);
+        assertEquals("\\draw [black,->, very thin] (0.0,0.0) -- (2.0,2.0) ;", arrow.print());
     }
 }

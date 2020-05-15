@@ -153,7 +153,7 @@ public class CanvasImpl implements Canvas {
     @Override
     public void rmShapeById(int id) {
         //We need to create a temporary shape for the array to find the one in the list, shape are only compared on their id, nothing else mather for the list.
-        Shape tmpShape = new Square(new Coordinates(0, 0), 0, "THIN", id);
+        Shape tmpShape = new Square(new Coordinates(0, 0), 0, Thickness.THIN, id);
         this.shapes.remove(tmpShape);
     }
 
