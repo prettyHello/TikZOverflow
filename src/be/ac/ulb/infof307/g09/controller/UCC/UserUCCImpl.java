@@ -47,12 +47,15 @@ public class UserUCCImpl implements UserUCC {
      * @param userId the id of the user the projects will belong to
      */
     private void createUserFolder(String userId) throws FatalException {
+        File projectDirectory = new File(rootProject);
+        if(!projectDirectory.exists()){
+            if(!projectDirectory.mkdir()){
+                throw new FatalException("Unable to create PorjectTikz folder");
+            }
+        }
         File file = new File(rootProject + "userid_" + userId);
         if (!file.exists()) {
-            if (file.mkdir()) {
-                System.out.println("Directory is created!");
-            } else {
-                System.out.println("Failed to create directory!");
+            if (!file.mkdir()) {
                 throw new FatalException("Unable to create user folder");
             }
         }
