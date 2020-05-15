@@ -21,20 +21,18 @@ public abstract class ShapeDTO implements Serializable {
     private boolean fill;
     private ColorDTO fillColor = ColorDTO.BLACK;
     private ColorDTO drawColor = ColorDTO.BLACK;
-    private String shapeThicknessKey;
-    private double shapeThicknessValue;
+    private Thickness thickness;
     private int id;
 
     /**
-     * @param draw              Is the shape have a outer line, can be combined with fill.
-     * @param fill              Is the shape filled with a color, can be combined with draw.
-     * @param shapeThicknessKey Thickness starting value.
+     * @param draw      Is the shape have a outer line, can be combined with fill.
+     * @param fill      Is the shape filled with a color, can be combined with draw.
+     * @param thickness Thickness starting value.
      */
-    public ShapeDTO(boolean draw, boolean fill, String shapeThicknessKey, int id) {
+    public Shape(boolean draw, boolean fill, Thickness thickness, int id) {
         this.draw = draw;
         this.fill = fill;
-        this.shapeThicknessKey = shapeThicknessKey;
-        this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
+        this.thickness = thickness;
         this.id = id;
     }
 
@@ -70,8 +68,8 @@ public abstract class ShapeDTO implements Serializable {
     @Override
     public boolean equals(Object obj) {
         boolean retVal = false;
-        if (obj instanceof ShapeDTO) {
-            ShapeDTO ptr = (ShapeDTO) obj;
+        if (obj instanceof Shape) {
+            Shape ptr = (Shape) obj;
             retVal = ptr.getId() == this.id;
         }
         return retVal;
@@ -101,34 +99,32 @@ public abstract class ShapeDTO implements Serializable {
         this.fill = fill;
     }
 
-    public ColorDTO getFillColor() {
+    public Color getFillColor() {
         return fillColor;
     }
 
-    public void setFillColor(ColorDTO fillColor) {
+    public void setFillColor(Color fillColor) {
         this.fillColor = fillColor;
     }
 
-    public ColorDTO getDrawColor() {
+    public Color getDrawColor() {
         return drawColor;
     }
 
-    public void setDrawColor(ColorDTO drawColor) {
+    public void setDrawColor(Color drawColor) {
         this.drawColor = drawColor;
     }
 
-    public String getShapeThicknessKey() {
-        return this.shapeThicknessKey;
+    public Thickness getThickness() {
+        return this.thickness;
     }
 
-    public String getShapeThicknessKeyFormatted() {
-        return shapeThicknessKey.toLowerCase().replace("_", " ");
+    public String getThicknessFormatted() {
+        return thickness.name().toLowerCase().replace("_", " ");
     }
 
-    public ShapeDTO setShapeThicknessKey(String shapeThicknessKey) {
-        this.shapeThicknessKey = shapeThicknessKey.toUpperCase();
-        this.shapeThicknessValue = Thickness.valueOf(shapeThicknessKey).thicknessValue();
-        return this;
+    public void setThickness(Thickness thicknessKey) {
+        this.thickness = thicknessKey;
     }
 
     /**
@@ -136,23 +132,19 @@ public abstract class ShapeDTO implements Serializable {
      */
     public abstract CoordinatesDTO getCoordinates();
 
-    public double getShapeThicknessValue() {
-        return shapeThicknessValue;
-    }
-
     public String print() {
         String returnValue = "";
         if (this.fill && this.draw) {
             returnValue += "\\filldraw";
-            returnValue += "[fill=" + this.fillColor.getValue() + ", draw=" + this.drawColor.getValue() + ", " + this.getShapeThicknessKeyFormatted() + "] ";
+            returnValue += "[fill=" + this.fillColor.getValue() + ", draw=" + this.drawColor.getValue() + ", " + this.getThicknessFormatted() + "] ";
         } else {
             if (this.fill) {
                 returnValue += "\\fill";
-                returnValue += "[fill=" + this.fillColor.getValue() + ", " + this.getShapeThicknessKeyFormatted() + "] ";
+                returnValue += "[fill=" + this.fillColor.getValue() + ", " + this.getThicknessFormatted() + "] ";
             }
             if (this.draw) {
                 returnValue += "\\draw";
-                returnValue += "[draw=" + this.drawColor.getValue() + ", " + this.getShapeThicknessKeyFormatted() + "] ";
+                returnValue += "[draw=" + this.drawColor.getValue() + ", " + this.getThicknessFormatted() + "] ";
             }
         }
         return returnValue;

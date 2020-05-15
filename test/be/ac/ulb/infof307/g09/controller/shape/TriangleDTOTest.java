@@ -11,13 +11,13 @@ class TriangleDTOTest {
 
     @Test
     void print_SimpleTriangle() {
-        TriangleDTO triangle = new TriangleDTO(new CoordinatesDTO(0,0),"SEMI_THICK",1);
+        TriangleDTO triangle = new TriangleDTO(new CoordinatesDTO(0,0),Thickness.SEMI_THICK,1);
         assertEquals("\\draw[draw=black, semi thick] (0.0,0.0) -- (1.0,0.0) -- (0.0,1.0) -- cycle;",triangle.print());
     }
 
     @Test
     void print_ComplexComplex() {
-        TriangleDTO triangle = new TriangleDTO(true,true, ColorDTO.BLUE, ColorDTO.RED,"VERY_THIN", new CoordinatesDTO(0,0),new CoordinatesDTO(2,0),new CoordinatesDTO(0,3), 1);
+        TriangleDTO triangle = new TriangleDTO(true,true, ColorDTO.BLUE, ColorDTO.RED,Thickness.VERY_THIN, new CoordinatesDTO(0,0),new CoordinatesDTO(2,0),new CoordinatesDTO(0,3), 1);
         assertEquals("\\filldraw[fill=red, draw=blue, very thin] (0.0,0.0) -- (2.0,0.0) -- (0.0,3.0) -- cycle;",triangle.print());
     }
 }

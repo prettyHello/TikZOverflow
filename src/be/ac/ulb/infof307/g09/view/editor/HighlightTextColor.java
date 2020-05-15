@@ -8,6 +8,7 @@ import javafx.scene.shape.Shape;
 import org.fxmisc.richtext.CodeArea;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -177,9 +178,16 @@ public class HighlightTextColor extends CodeArea {
     }
 
     public void highLightWrongLine() {
-        List<Integer> positions = findWordUpgrade(this.getText(), this.wrongLine); // Get the line position in the canvas of the selected shape.
-        for (Integer position : positions) {
-            setStyleClass(position, position + this.wrongLine.length(), "wrong-line"); // Highlight the position of the shape.
+        List<String> lines = new ArrayList<>(Arrays.asList(this.getText().split("\\n")));
+        int offset = 0;
+        for (String line : lines) {
+            if (line.equals(this.wrongLine)) {
+                List<Integer> positions = findWordUpgrade(line, this.wrongLine);
+                for (Integer position : positions) {
+                    setStyleClass(position + offset, position + offset + this.wrongLine.length(), "wrong-line");
+                }
+            }
+            offset += line.length() + 1;
         }
     }
 

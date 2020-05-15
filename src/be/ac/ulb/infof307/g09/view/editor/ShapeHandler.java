@@ -114,7 +114,7 @@ public class ShapeHandler {
      */
     public void setShapeThickness(Thickness thickness, Shape shape) {
         shape.setStrokeWidth(thickness.thicknessValue());
-        canvas.getShapeById(Integer.parseInt(shape.getId())).setShapeThicknessKey(thickness.name());
+        canvas.getShapeById(Integer.parseInt(shape.getId())).setThickness(thickness);
         editorController.actionFromGUI = true;
         editorController.translateToTikz();
     }
@@ -167,7 +167,7 @@ public class ShapeHandler {
      */
     public void handleDrawCall() {
         Shape shape = null;
-        ShapeDTO addToController = null;
+        be.ac.ulb.infof307.g09.controller.shape.Shape addToController = null;
 
         switch (editorController.shapeToDraw) {
             case EditorController.TRIANGLE:
@@ -186,7 +186,7 @@ public class ShapeHandler {
                 CoordinatesDTO pt1 = new CoordinatesDTO(thirdSelectedX, thirdSelectedY);
                 CoordinatesDTO pt2 = new CoordinatesDTO(previouslySelectedX, previouslySelectedY);
                 CoordinatesDTO pt3 = new CoordinatesDTO(selectedX, selectedY);
-                addToController = new TriangleDTO(pt1, pt2, pt3, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new TriangleDTO(pt1, pt2, pt3, editorController.shapeThickness.getValue(), canvas.getIdForNewShape());
                 shape = constructTriangle();
                 waitingForMoreCoordinate = false;
                 break;
@@ -196,7 +196,7 @@ public class ShapeHandler {
                 circle.setCenterX(selectedX);
                 circle.setCenterY(selectedY);
                 circle.setRadius(radius);
-                addToController = new CircleDTO(new CoordinatesDTO(selectedX, selectedY), radius, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new CircleDTO(new CoordinatesDTO(selectedX, selectedY), radius, editorController.shapeThickness.getValue(), canvas.getIdForNewShape());
                 shape = circle;
                 break;
             case EditorController.ARROW:
@@ -206,7 +206,7 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case EditorController.ARROW_POINT2:
-                addToController = new ArrowDTO(new CoordinatesDTO(previouslySelectedX, previouslySelectedY), new CoordinatesDTO(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new ArrowDTO(new CoordinatesDTO(previouslySelectedX, previouslySelectedY), new CoordinatesDTO(selectedX, selectedY), editorController.shapeThickness.getValue(), canvas.getIdForNewShape());
                 shape = constructArrow();
                 waitingForMoreCoordinate = false;
                 break;
@@ -217,7 +217,7 @@ public class ShapeHandler {
                 waitingForMoreCoordinate = true;
                 break;
             case EditorController.LINE_POINT2:
-                addToController = new LineDTO(new CoordinatesDTO(previouslySelectedX, previouslySelectedY), new CoordinatesDTO(selectedX, selectedY), editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new LineDTO(new CoordinatesDTO(previouslySelectedX, previouslySelectedY), new CoordinatesDTO(selectedX, selectedY),editorController.shapeThickness.getValue(), canvas.getIdForNewShape());
                 shape = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
                 shape.setStroke(Color.valueOf(editorController.fillColour.getValue().toString()));
                 waitingForMoreCoordinate = false;
@@ -225,7 +225,7 @@ public class ShapeHandler {
             case EditorController.SQUARE:
                 int size = 75;
                 shape = new Rectangle(selectedX, selectedY, 75, 75);
-                addToController = new SquareDTO(new CoordinatesDTO(selectedX, selectedY), size, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
+                addToController = new Square(new Coordinates(selectedX, selectedY), size, editorController.shapeThickness.getValue().toString(), canvas.getIdForNewShape());
                 break;
         }
         if (waitingForMoreCoordinate) {
@@ -236,7 +236,7 @@ public class ShapeHandler {
         } else {
             shape.setFill(Color.valueOf(editorController.fillColour.getValue().toString()));
             shape.setStroke(Color.valueOf(editorController.strokeColour.getValue().toString()));
-            shape.setStrokeWidth(Thickness.valueOf(editorController.shapeThickness.getValue().toString()).thicknessValue());
+            shape.setStrokeWidth(editorController.shapeThickness.getValue().thicknessValue());
             editorController.actionFromGUI = true;
             editorController.pane.getChildren().add(shape);
             editorController.notifyController(addToController, shape);
@@ -300,7 +300,7 @@ public class ShapeHandler {
             shapeDrawing.setId(Integer.toString(shapeDTO.getId()));
             shapeDrawing.setFill(Color.valueOf(shapeDTO.getFillColor().toString()));
             shapeDrawing.setStroke(Color.valueOf(shapeDTO.getDrawColor().toString()));
-            shapeDrawing.setStrokeWidth(shapeDTO.getShapeThicknessValue());
+            shapeDrawing.setStrokeWidth(shapeDTO.getThickness().thicknessValue());
             editorController.pane.getChildren().add(shapeDrawing);
             shapeDrawing.toFront();
             shapeDrawing.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onShapeSelected);
@@ -427,7 +427,7 @@ public class ShapeHandler {
                     }
                 } else {                                 //if not selected => add to the list
                     editorController.disableToolbar(true);
-                    shape.setStrokeWidth(canvas.getShapeById(Integer.parseInt(shape.getId())).getShapeThicknessValue());
+                    shape.setStrokeWidth(canvas.getShapeById(Integer.parseInt(shape.getId())).getThickness().thicknessValue());
                     DropShadow borderEffect = new DropShadow(
                             BlurType.THREE_PASS_BOX, Color.GREEN, 2, 1, 0, 0
                     );
@@ -477,7 +477,8 @@ public class ShapeHandler {
             } else if (shapeType.equals("PATH")) {
                 drawColor = ColorDTO.get(m.group(1));
             }
-            thickness = m.group(3).toUpperCase().replace(' ', '_');
+            String thicknessStr = m.group(3).toUpperCase().replace(' ', '_');
+            Thickness thickness = Thickness.valueOf(thicknessStr);
 
             // Process new shape
             ShapeDTO shapeToDraw = null;

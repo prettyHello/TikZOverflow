@@ -17,8 +17,8 @@ public class TriangleDTO extends LabelizableShapeDTO {
      *
      * @param originPoint
      */
-    public TriangleDTO(CoordinatesDTO originPoint, String shapeThickness, int id) {
-        super(true, false, shapeThickness, id);
+    public TriangleDTO(CoordinatesDTO originPoint, Thickness thickness, int id) {
+        super(true, false, thickness, id);
         ControllerUtility.checkObjects(originPoint);
         this.originPoint = originPoint;
         this.secondPoint = new CoordinatesDTO(originPoint.getX() + 1, originPoint.getY());
@@ -33,8 +33,8 @@ public class TriangleDTO extends LabelizableShapeDTO {
      * @param pt3 the third point of the triangle
      * @param id  the id of the shape
      */
-    public TriangleDTO(CoordinatesDTO pt1, CoordinatesDTO pt2, CoordinatesDTO pt3, String shapeThickness, int id) {
-        super(true, false, shapeThickness, id);
+    public TriangleDTO(CoordinatesDTO pt1, CoordinatesDTO pt2, CoordinatesDTO pt3, Thickness thickness, int id) {
+        super(true, false, thickness, id);
         ControllerUtility.checkObjects(pt1, pt2, pt3);
         this.originPoint = pt1;
         this.secondPoint = pt2;
@@ -47,8 +47,8 @@ public class TriangleDTO extends LabelizableShapeDTO {
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public TriangleDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThickness, CoordinatesDTO originPoint, CoordinatesDTO secondPoint, CoordinatesDTO thirdPoint, int id) throws FatalException {
-        super(draw, fill, drawColor, fillColor, shapeThickness, id);
+    public TriangleDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, Thickness thickness, CoordinatesDTO originPoint, CoordinatesDTO secondPoint, CoordinatesDTO thirdPoint, int id) throws FatalException {
+        super(draw, fill, drawColor, fillColor, thickness, id);
         ControllerUtility.checkObjects(originPoint, secondPoint, thirdPoint);
         this.originPoint = originPoint;
         this.secondPoint = secondPoint;
@@ -61,7 +61,7 @@ public class TriangleDTO extends LabelizableShapeDTO {
      * @param newId the id to assign this newly created ShapeDTO
      */
     public TriangleDTO(TriangleDTO other, int newId){
-        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getShapeThicknessKey(), newId);
+        super(other.isDraw(), other.isFill(), other.getDrawColor(), other.getFillColor(), other.getThickness(), newId);
         this.originPoint = other.getOriginPoint();
         this.secondPoint = other.getSecondPoint();
         this.thirdPoint = other.getThirdPoint();

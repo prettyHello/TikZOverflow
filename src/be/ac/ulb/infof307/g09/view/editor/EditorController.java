@@ -193,7 +193,7 @@ public class EditorController {
         MenuItem setLabel = new MenuItem("Set label", contextMenuLabelColorPicker);
         setLabel.setOnAction(t -> shapeHandler.handleSetLabel(Color.valueOf(contextMenuLabelColorPicker.getValue().toString())));
         MenuItem shapeThicknessMenu = new MenuItem("Change thickness", contextMenuChangeThickness);
-        shapeThicknessMenu.setOnAction(t -> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
+        shapeThicknessMenu.setOnAction(t -> shapeHandler.updateShapeThickness(contextMenuChangeThickness.getValue()));
 
         fillColour.setOnAction(t -> {
             if (!selectedShapes.isEmpty()) {
@@ -207,7 +207,7 @@ public class EditorController {
         });
         shapeThickness.setOnAction(t -> {
             if (!selectedShapes.isEmpty()) {
-                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(Thickness.valueOf(shapeThickness.getValue().toString()), shape));
+                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(shapeThickness.getValue(), shape));
             }
         });
 
@@ -365,7 +365,7 @@ public class EditorController {
     /**
      * Save the project
      */
-    public void save() {
+    public boolean save() {
         try {
             String password = ViewUtility.askProjectPassword();
             if (password != null) {
@@ -373,13 +373,17 @@ public class EditorController {
                 this.projectDTO.setProjectPassword(password);
                 this.projectUcc.save();
                 ViewUtility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
+                return true;
             }
+
+
 
         } catch (FatalException e) {
             showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
         }catch (BizzException e){
             showAlert(Alert.AlertType.WARNING, "Save", "Business Error", e.getMessage());
         }
+        return false;
     }
 
     /**
@@ -402,7 +406,7 @@ public class EditorController {
         if (result.get() == buttonTypeCancel) {
             return;
         } else if (result.get() == buttonTypeOne) {
-            save();
+            if(!save())return;
         }
 
         ActiveCanvas.deleteActiveCanvas();

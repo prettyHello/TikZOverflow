@@ -51,7 +51,7 @@ public class CanvasImpl implements Canvas {
     @Override
     public void addShape(ShapeDTO shape) throws FatalException {
         if (this.shapes.contains(shape)) {
-            throw new FatalException("ShapeDTO already exists on the canvas. Need to be able to differentiate between shapes");
+            throw new FatalException("Shape already exists on the canvas. Need to be able to differentiate between shapes");
         }
         this.shapes.add(shape);
     }
@@ -65,7 +65,7 @@ public class CanvasImpl implements Canvas {
     @Override
     public void updateShape(ShapeDTO shape) throws FatalException {
         if (!this.shapes.contains(shape)) {
-            throw new FatalException("ShapeDTO doesn't exists on the canvas.");
+            throw new FatalException("Shape doesn't exists on the canvas.");
         }
         this.shapes.remove(shape);
         this.shapes.add(shape);
@@ -227,7 +227,7 @@ public class CanvasImpl implements Canvas {
                 t.setOriginPoint(destinationPos.sub(offsetToMean));
                 CoordinatesDTO offsetMeanToSec = new CoordinatesDTO(meanPos.sub(t.getSecondPoint()));
                 t.setSecondPoint(destinationPos.sub(offsetMeanToSec));
-                CoordinatesDTO offsetMeanToThi = new CoordinatesDTO(meanPos.sub(t.getThirdPoint()));
+                Coordinates offsetMeanToThi = new Coordinates(meanPos.sub(t.getThirdPoint()));
                 t.setThirdPoint(destinationPos.sub(offsetMeanToThi));
                 toAdd = t;
             }else if (shape instanceof SquareDTO){
