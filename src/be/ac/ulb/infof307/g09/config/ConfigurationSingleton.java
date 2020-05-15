@@ -16,7 +16,6 @@ public class ConfigurationSingleton extends AbstractConfigurationSingleton {
      * This should only be called one in the main function
      */
     public ConfigurationSingleton(String[] args) {
-
         this.loadConfiguration(args);
     }
 

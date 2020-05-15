@@ -23,9 +23,9 @@ Un point correspond à une heure de travail par binôme (approximatif).  Par it�
 |   | [9](#9-versioning) | Versioning | 2 | - | 8 | To do | - |
 |   | [11](#11-tikz-syntax-highlighting) | TikZ syntax highlighting | 2 | 6 | 20 | Done | 3 |
 |   | [12](#12-help Section) | Help Section | 3 | - | 13 | To do | - |
-|   | [13](#13-data-security) | Data security | 1 | - | 16 | To do | - |
-|   | [14](#14-data-integrity) | Data integrity | 1 | - | 8 | To do | - |
-|   | [15](#15-copy-paste) | Copy-paste | 2 | - | 10 | To do | - |
+|   | [13](#13-data-security) | Data security | 1 | 18 | 16 | Done | 4 |
+|   | [14](#14-data-integrity) | Data integrity | 1 | 11 | 8 | Done | 4 |
+|   | [15](#15-copy-paste) | Copy-paste | 2 | 8 | 10 | Done | 4 |
 
 
 ----------------------
