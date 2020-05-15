@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.model;
 
-import be.ac.ulb.infof307.g09.config.TestDAOConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.CanvasImpl;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
@@ -32,12 +32,12 @@ class ProjectDAOImplTest {
 
     @BeforeEach
     void setUp() {
-        TestDAOConfigurationSingleton holder = TestDAOConfigurationSingleton.getInstance();
-        this.dalServices = TestDAOConfigurationSingleton.getDalServices();
-        this.projectFactory = TestDAOConfigurationSingleton.getProjectFactory();
-        this.projectDAO = TestDAOConfigurationSingleton.getProjectDAO();
-        this.userFactory = TestDAOConfigurationSingleton.getUserFactory();
-        this.userDAO = TestDAOConfigurationSingleton.getUserDAO();
+        ConfigurationHolder.loadConfiguration("TestDAO");
+        this.dalServices = ConfigurationHolder.getDalServices();
+        this.projectFactory = ConfigurationHolder.getProjectFactory();
+        this.projectDAO = ConfigurationHolder.getProjectDAO();
+        this.userFactory = ConfigurationHolder.getUserFactory();
+        this.userDAO = ConfigurationHolder.getUserDAO();
 
         try {
             dalServices.createTables("dao_test");

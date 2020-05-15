@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.view.profile;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
@@ -50,8 +50,8 @@ public class ProfileController {
     private final UserUCC userUcc;
 
     public ProfileController() {
-        this.userFactory = ConfigurationSingleton.getUserFactory();
-        this.userUcc = ConfigurationSingleton.getUserUcc();
+        this.userFactory = ConfigurationHolder.getUserFactory();
+        this.userUcc = ConfigurationHolder.getUserUcc();
         this.connectedUser = userUcc.getConnectedUser();
     }
 

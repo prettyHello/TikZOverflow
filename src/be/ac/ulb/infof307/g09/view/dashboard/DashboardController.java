@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g09.view.dashboard;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
@@ -28,9 +29,9 @@ import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
  * This class handles the main screen of the program and allows the user to manage through their projects.
  */
 public class DashboardController {
-    final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
-    final ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
-    final ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
+    final UserUCC userUcc = ConfigurationHolder.getUserUcc();
+    final ProjectUCC projectUCC = ConfigurationHolder.getProjectUCC();
+    final ProjectFactory projectFactory = ConfigurationHolder.getProjectFactory();
 
     final DashboardController dbc = this;
     private boolean useAskedName;

@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.view.dashboard;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
@@ -45,10 +45,10 @@ public class ProjectItemView extends HBox {
 
     private String rootFolder = File.separator + "ProjectTikZ" + File.separator;
 
-    private ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
+    private ProjectUCC projectUCC = ConfigurationHolder.getProjectUCC();
     private DashboardController dashboard;
     private ProjectDTO projectDTO;
-    private ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
+    private ProjectFactory projectFactory = ConfigurationHolder.getProjectFactory();
 
     private UserDTO userDTO;
     private ViewSwitcher viewSwitcher;

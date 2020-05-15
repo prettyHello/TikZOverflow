@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.UCC;
 
-import be.ac.ulb.infof307.g09.config.TestBusinessConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
@@ -20,11 +20,11 @@ class ProjectUCCImplTest {
 
     @BeforeEach
     void setUpStart() {
-        TestBusinessConfigurationSingleton.getInstance();
-        this.projectFactory = TestBusinessConfigurationSingleton.getProjectFactory();
-        this.userFactory = TestBusinessConfigurationSingleton.getUserFactory();
-        this.projectUcc = TestBusinessConfigurationSingleton.getProjectUCC();
-        this.userUcc = TestBusinessConfigurationSingleton.getUserUcc();
+        ConfigurationHolder.loadConfiguration("TestBusiness");
+        this.projectFactory = ConfigurationHolder.getProjectFactory();
+        this.userFactory = ConfigurationHolder.getUserFactory();
+        this.projectUcc = ConfigurationHolder.getProjectUCC();
+        this.userUcc = ConfigurationHolder.getUserUcc();
     }
 
     @Test

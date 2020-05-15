@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -54,11 +54,11 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         //Initialize the pseudo-singleton holding the configuration, this should be only done here
-        ConfigurationSingleton prod = new ConfigurationSingleton(args);
-
+        //ConfigurationSingleton prod = new ConfigurationSingleton(args);
+        ConfigurationHolder.loadConfiguration(args);
         //Create the database if it doesn't exist
         try {
-            ConfigurationSingleton.getDalServices().createTables();
+            ConfigurationHolder.getDalServices().createTables();
         } catch (IOException e) {
             LOG.severe("Could not initialize the database");
             Platform.exit();
