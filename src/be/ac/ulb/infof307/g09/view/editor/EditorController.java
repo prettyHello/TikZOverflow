@@ -363,7 +363,7 @@ public class EditorController {
     /**
      * Save the project
      */
-    public void save() {
+    public boolean save() {
         try {
             String password = ViewUtility.askProjectPassword();
             if (password != null) {
@@ -371,13 +371,17 @@ public class EditorController {
                 this.projectDTO.setProjectPassword(password);
                 this.projectUcc.save();
                 ViewUtility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
+                return true;
             }
+
+
 
         } catch (FatalException e) {
             showAlert(Alert.AlertType.WARNING, "Save", "Unexpected Error", e.getMessage());
         }catch (BizzException e){
             showAlert(Alert.AlertType.WARNING, "Save", "Business Error", e.getMessage());
         }
+        return false;
     }
 
     /**
@@ -400,7 +404,7 @@ public class EditorController {
         if (result.get() == buttonTypeCancel) {
             return;
         } else if (result.get() == buttonTypeOne) {
-            save();
+            if(!save())return;
         }
 
         ActiveCanvas.deleteActiveCanvas();
