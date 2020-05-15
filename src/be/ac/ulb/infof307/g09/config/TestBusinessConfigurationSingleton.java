@@ -7,15 +7,15 @@ package be.ac.ulb.infof307.g09.config;
  * It tells AbstractConfigurationSingleton to use the configuration "TestBusiness"
  *  which will use it to instanciate the impelementations with introspection them and to make them avaible to the rest of the application.
  */
-public class TestBusinessConfigurationSingleton extends AbstractConfigurationSingleton {
+public final class TestBusinessConfigurationSingleton extends AbstractConfigurationSingleton {
     private static final TestBusinessConfigurationSingleton INSTANCE = new TestBusinessConfigurationSingleton("TestBusiness");
 
     /**
      * Constructeur privé
      */
-    private TestBusinessConfigurationSingleton(String conf_name) {
+    private TestBusinessConfigurationSingleton(String confName) {
 
-        this.loadConfiguration(conf_name);
+        this.loadConfiguration(confName);
     }
 
     /**

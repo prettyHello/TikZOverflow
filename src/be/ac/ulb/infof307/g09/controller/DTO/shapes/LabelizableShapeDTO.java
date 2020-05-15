@@ -10,7 +10,7 @@ public abstract class LabelizableShapeDTO extends ShapeDTO {
         super(draw, fill, shapeThicknessKey, id);
     }
 
-    public LabelizableShapeDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
+    public LabelizableShapeDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThicknessKey, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThicknessKey, id);
     }
 
@@ -20,10 +20,6 @@ public abstract class LabelizableShapeDTO extends ShapeDTO {
 
     public void setLabel(LabelDTO label) {
         this.label = label;
-    }
-
-    public String print(){
-        return super.print();
     }
 
     public String printLabel() {

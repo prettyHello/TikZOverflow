@@ -5,7 +5,7 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 /**
  * Class for the canvas that is currently being worked on
  */
-public class ActiveCanvas {
+public final class ActiveCanvas {
     private static Canvas INSTANCE = null;
 
     /**

@@ -48,7 +48,6 @@ public class ProjectItemView extends HBox {
     private ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
     private DashboardController dashboard;
     private ProjectDTO projectDTO;
-    private ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
 
     private UserDTO userDTO;
     private ViewSwitcher viewSwitcher;
@@ -98,7 +97,7 @@ public class ProjectItemView extends HBox {
 
         editBtn.setOnAction(event -> {
             String password = ViewUtility.askProjectPassword();
-            if(password==null)return;
+            if(password==null) return;
             try {
                 this.projectUCC.setActive(this.projectDTO, password);
                 viewSwitcher.switchView(ViewName.EDITOR);

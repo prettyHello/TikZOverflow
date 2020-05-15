@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * Collection of utility functions used across all layers
  */
-public class ControllerUtility {
+public final class ControllerUtility {
 
     private ControllerUtility() {
     }

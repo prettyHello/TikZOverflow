@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.controller.DTO.shapes.Color;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ColorDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.CoordinatesDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.PathDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.Thickness;
@@ -37,7 +37,7 @@ class PathDTOTest {
         coordinates.add(new CoordinatesDTO(0,0));
         coordinates.add(new CoordinatesDTO(2,2));
         coordinates.add(new CoordinatesDTO(0,4));
-        PathDTO path = new PathDTO(coordinates,false,false, Color.RED,Thickness.ULTRA_THICK.toString(), 1);
+        PathDTO path = new PathDTO(coordinates,false,false, ColorDTO.RED,Thickness.ULTRA_THICK.toString(), 1);
         assertEquals("\\draw [red, ultra thick] (0.0,0.0) -- (2.0,2.0) -- (0.0,4.0) ;",path.print());
     }
 

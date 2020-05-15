@@ -80,10 +80,10 @@ public abstract class AbstractConfigurationSingleton {
     /**
      * Load the specified configuration, used in testing
      *
-     * @param conf_name the name of the configuration to load
+     * @param confName the name of the configuration to load
      */
-    protected void loadConfiguration(String conf_name) {
-        AbstractConfigurationSingleton.confName = conf_name;
+    protected void loadConfiguration(String confName) {
+        AbstractConfigurationSingleton.confName = confName;
         String[] args = {AbstractConfigurationSingleton.confName};
         loadConfiguration(args);
     }
@@ -110,7 +110,7 @@ public abstract class AbstractConfigurationSingleton {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
             //The reason behind this error handling is that this method is called before JavaFX is launched
             LOG.severe("Unable to set up configuration singleton");
-            exc.printStackTrace();
+            LOG.severe(exc.getMessage());
             System.exit(1);
         }
     }

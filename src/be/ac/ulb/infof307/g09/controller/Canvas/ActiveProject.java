@@ -5,7 +5,7 @@ import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 /**
  * Class that contains the only active project.
  */
-public class ActiveProject {
+public final class ActiveProject {
 
     /**
      * Container for the connected user

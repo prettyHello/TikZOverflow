@@ -8,7 +8,7 @@ public class LineDTO extends PathDTO {
         super(origin, end, shapeThickness, id,false,false);
     }
 
-    public LineDTO(CoordinatesDTO origin, CoordinatesDTO end, Color drawColor, String shapeThickness, int id) throws FatalException {
+    public LineDTO(CoordinatesDTO origin, CoordinatesDTO end, ColorDTO drawColor, String shapeThickness, int id) throws FatalException {
         super(origin, end,false,false, drawColor, shapeThickness, id);
     }
 

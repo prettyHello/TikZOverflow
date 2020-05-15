@@ -50,8 +50,8 @@ public class ProjectDAOImpl implements ProjectDAO {
      */
     public ProjectDTO create(ProjectDTO dto) throws FatalException {
         checkObjects(dto);
-        PreparedStatement pr;
-        ResultSet rs;
+        PreparedStatement pr = null;
+        ResultSet rs = null;
         ProjectDTO result;
         try {
             pr = dal.prepareStatement(SQL_INSERT_PROJECT);
@@ -76,6 +76,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             throw new FatalException("Project already exists");
         } catch (IOException e){
             throw new FatalException("Couldn't create folder");
+        }finally {
+            ModelUtility.closeStatements(pr,rs);
         }
     }
 
@@ -85,8 +87,8 @@ public class ProjectDAOImpl implements ProjectDAO {
     @Override
     public ArrayList<ProjectDTO> getOwnedProjects(UserDTO dto) throws FatalException {
         checkObjects(dto);
-        PreparedStatement pr;
-        ResultSet rs;
+        PreparedStatement pr = null;
+        ResultSet rs = null;
         ArrayList<ProjectDTO> projects = new ArrayList<>();
         try {
             pr = this.dal.prepareStatement(SQL_SELECT_PROJECT);
@@ -98,6 +100,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             }
         } catch (SQLException e) {
             throw new FatalException("SQLException in projectDAOImpl: impossible to load the project list");
+        }finally {
+            ModelUtility.closeStatements(pr,rs);
         }
         return projects;
     }
@@ -126,8 +130,8 @@ public class ProjectDAOImpl implements ProjectDAO {
     @Override
     public ProjectDTO get(ProjectDTO dto) throws FatalException, BizzException {
         checkObjects(dto);
-        PreparedStatement pr;
-        ResultSet rs;
+        PreparedStatement pr = null;
+        ResultSet rs = null;
         ProjectDTO result;
 
         try {
@@ -141,6 +145,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             }
         } catch (SQLException e) {
             throw new FatalException("SQLException in projectDAOImpl:"+e.getMessage());
+        }finally {
+            ModelUtility.closeStatements(pr,rs);
         }
         return result;
     }
@@ -168,7 +174,7 @@ public class ProjectDAOImpl implements ProjectDAO {
      */
     @Override
     public void update(ProjectDTO dto) {
-        PreparedStatement pr;
+        PreparedStatement pr = null;
         try {
             pr = this.dal.prepareStatement(SQL_UPDATE_HASH);
             pr.setString(1, dto.getHash());
@@ -176,6 +182,8 @@ public class ProjectDAOImpl implements ProjectDAO {
             pr.executeUpdate();
         } catch (SQLException e) {
             throw new FatalException("SQLException in projectDAOImpl: impossible to update the hash to the database");
+        }finally {
+            ModelUtility.closeStatements(pr,null);
         }
     }
 
@@ -204,8 +212,9 @@ public class ProjectDAOImpl implements ProjectDAO {
     public ProjectDTO save(Canvas canvas, ProjectDTO dto) throws FatalException {
         ControllerUtility.checkObjects(canvas);
         ControllerUtility.checkObjects(dto);
+        ObjectOutputStream objectOutputStream = null;
         try{
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
+            objectOutputStream = new ObjectOutputStream(new FileOutputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin"));
             objectOutputStream.writeObject(canvas);
             objectOutputStream.close();
             File uncryptedFile = new File(dto.getProjectPath() + File.separator + dto.getProjectName() + ".bin");
@@ -215,6 +224,14 @@ public class ProjectDAOImpl implements ProjectDAO {
             return dto;
         }catch (IOException e){
             throw new FatalException("Error while saving the project " + e.getMessage());
+        }finally {
+            if(objectOutputStream != null){
+                try {
+                    objectOutputStream.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couldn't close statement : " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -224,6 +241,7 @@ public class ProjectDAOImpl implements ProjectDAO {
     @Override
     public Canvas loadSavedCanvas(ProjectDTO dto, String password) throws FatalException {
         FileInputStream fileInputStream = null;
+        ObjectInputStream objectInputStream = null;
         Canvas canvas = null;
         dto = this.get(dto);
 
@@ -236,9 +254,9 @@ public class ProjectDAOImpl implements ProjectDAO {
                 }
             }
             fileInputStream = new FileInputStream(dto.getProjectPath()+ File.separator + dto.getProjectName() + ".bin");
-            ObjectInputStream in = new ObjectInputStream(fileInputStream);
-            canvas = (Canvas) in.readObject();
-            in.close();
+            objectInputStream = new ObjectInputStream(fileInputStream);
+            canvas = (Canvas) objectInputStream.readObject();
+            objectInputStream.close();
         } catch (FileNotFoundException e) {
             //There is no canvas in this project, this can happen in two case:
             // 1) the user might have quit without ever saving <= which used to create a bug
@@ -248,12 +266,27 @@ public class ProjectDAOImpl implements ProjectDAO {
             throw new FatalException("Error while opening the project " + e.getMessage());
         } catch (ClassNotFoundException e) {
             throw new FatalException("Error while loading the project " + e.getMessage());
+        }finally {
+            if(fileInputStream != null){
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couldn't close statement : " + e.getMessage());
+                }
+            }
+            if(objectInputStream != null){
+                try {
+                    objectInputStream.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couldn't close statement : " + e.getMessage());
+                }
+            }
         }
         return canvas;
     }
 
-    private void renameFolderProject(File projectName, File NewProjectName) {
-        projectName.renameTo(NewProjectName);
+    private void renameFolderProject(File projectName, File newProjectName) {
+        projectName.renameTo(newProjectName);
     }
 
     /**
@@ -278,7 +311,7 @@ public class ProjectDAOImpl implements ProjectDAO {
                 renameFolderProject(new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+destination+".bin.enc"), new File(folderDestination.toFile()+File.separator+ File.separator+projectName+File.separator+projectName+".bin.enc"));
 
                 //Create the hash before deleting all the files
-                String a = folderDestination.resolve("tmp"+ File.separator+ destination).toString();
+                folderDestination.resolve("tmp"+ File.separator+ destination).toString();
                 try{
                     Crypto.decryptDirectory(projectDTO.getProjectPassword(),folderDestination.resolve("tmp"+ File.separator+ destination).toString());
                 }catch (BizzException e){

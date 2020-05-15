@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasImpl implements Canvas {
-    final List<ShapeDTO> shapes;
-    final List<ShapeDTO> clipboard;
+    private final List<ShapeDTO> shapes;
+    private final List<ShapeDTO> clipboard;
     private int idCounter = 0;
 
     /**
@@ -77,7 +77,7 @@ public class CanvasImpl implements Canvas {
      * @param id        id of the shape
      * @param fillColor color to fill whit
      */
-    public void changeShapeFillColor(int id, Color fillColor) {
+    public void changeShapeFillColor(int id, ColorDTO fillColor) {
         for (ShapeDTO shape : shapes) {
             if (shape.getId() == id) {
                 shape.setFill(true);
@@ -90,7 +90,7 @@ public class CanvasImpl implements Canvas {
      * {@inheritDoc}
      */
     @Override
-    public void setShapeLabel(int shapeId, String label, Color labelColor) {
+    public void setShapeLabel(int shapeId, String label, ColorDTO labelColor) {
         ShapeDTO toChange = null;
         for (ShapeDTO shape : shapes) {
             if (shape.getId() == shapeId) {
@@ -116,7 +116,7 @@ public class CanvasImpl implements Canvas {
      * @param id        id of the shape
      * @param drawColor color to draw whit
      */
-    public void changeShapeDrawColor(int id, Color drawColor) {
+    public void changeShapeDrawColor(int id, ColorDTO drawColor) {
         for (ShapeDTO shape : shapes) {
             if (shape.getId() == id) {
                 shape.setDraw(true);

@@ -15,9 +15,9 @@ public class LabelDTO implements Serializable {
     /**
      * The color of the label
      */
-    private Color color;
+    private ColorDTO color;
 
-    public LabelDTO(String value, Color color) {
+    public LabelDTO(String value, ColorDTO color) {
         this.value = value;
         this.color = color;
     }
@@ -30,11 +30,11 @@ public class LabelDTO implements Serializable {
         this.value = value;
     }
 
-    public Color getColor() {
+    public ColorDTO getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(ColorDTO color) {
         this.color = color;
     }
 }

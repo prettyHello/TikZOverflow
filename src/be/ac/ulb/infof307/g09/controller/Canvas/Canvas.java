@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.Canvas;
 
-import be.ac.ulb.infof307.g09.controller.DTO.shapes.Color;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ColorDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.CoordinatesDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.ShapeDTO;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
@@ -46,7 +46,7 @@ public interface Canvas extends Serializable {
      * @param id        id of the shape
      * @param drawColor color to draw whit
      */
-    void changeShapeDrawColor(int id, Color drawColor);
+    void changeShapeDrawColor(int id, ColorDTO drawColor);
 
     /**
      * Change the fill color of a shape
@@ -54,14 +54,14 @@ public interface Canvas extends Serializable {
      * @param id        id of the shape
      * @param fillColor color to fill whit
      */
-    void changeShapeFillColor(int id, Color fillColor);
+    void changeShapeFillColor(int id, ColorDTO fillColor);
 
     /**
      * Sets the label of the shape with that id
      * @param shapeId the id of the shape
      * @param label the label to set
      */
-    void setShapeLabel(int shapeId, String label, Color labelColor);
+    void setShapeLabel(int shapeId, String label, ColorDTO labelColor);
 
     /**
      * Get the id for the next shape

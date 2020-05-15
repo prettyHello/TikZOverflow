@@ -54,7 +54,7 @@
                 <Menu mnemonicParsing="false" text="File">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Close"/>
-                        <MenuItem fx:id="import_project" mnemonicParsing="false" onAction="#ImportProject"
+                        <MenuItem fx:id="import_project" mnemonicParsing="false" onAction="#importProject"
                                   text="Import Project"/>
                         <MenuItem fx:id="newProject" mnemonicParsing="false" onAction="#newProject" text="New Project"/>
                     </items>

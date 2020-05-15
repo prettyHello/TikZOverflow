@@ -7,16 +7,16 @@ package be.ac.ulb.infof307.g09.config;
  * It tells AbstractConfigurationSingleton to use the configuration "TestDAO"
  *  which will use it to instanciate the impelementations with introspection them and to make them avaible to the rest of the application.
  */
-public class TestDAOConfigurationSingleton extends AbstractConfigurationSingleton {
+public final class TestDAOConfigurationSingleton extends AbstractConfigurationSingleton {
     private static final TestDAOConfigurationSingleton INSTANCE = new TestDAOConfigurationSingleton("TestDAO");
 
     /**
      * Private constructor
-     * @param conf_name
+     * @param confName
      */
-    private TestDAOConfigurationSingleton(String conf_name) {
+    private TestDAOConfigurationSingleton(String confName) {
 
-        this.loadConfiguration(conf_name);
+        this.loadConfiguration(confName);
     }
 
     /**

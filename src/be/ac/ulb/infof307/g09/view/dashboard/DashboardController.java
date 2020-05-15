@@ -28,11 +28,11 @@ import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
  * This class handles the main screen of the program and allows the user to manage through their projects.
  */
 public class DashboardController {
-    final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
-    final ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
-    final ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
+    private final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
+    private final ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
+    private final ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
 
-    final DashboardController dbc = this;
+    private final DashboardController dbc = this;
     private boolean useAskedName;
 
     private ViewSwitcher viewSwitcher;
@@ -122,13 +122,13 @@ public class DashboardController {
      * Untar a choose file to user home, show to the dashboard and save into the database
      */
     @FXML
-    public void ImportProject() {
+    public void importProject() {
         FileChooser fc = new FileChooser();
         ProjectDTO projectDTO = null;
         File selectedFile = fc.showOpenDialog(null);
         if (selectedFile == null) return;
         String password = ViewUtility.askProjectPassword();
-        if(password==null)return;
+        if(password==null) return;
         String projectName = askProjectName();
         if (projectName == null) return;
         try {

@@ -1,7 +1,7 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.CircleDTO;
-import be.ac.ulb.infof307.g09.controller.DTO.shapes.Color;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ColorDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.CoordinatesDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.Thickness;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ class CircleDTOTest {
 
     @Test
     void print_complexCircle() {
-        CircleDTO circle = new CircleDTO(true,true, Color.BLUE,Color.RED, Thickness.VERY_THICK.toString(), new CoordinatesDTO(1,2),3,1);
+        CircleDTO circle = new CircleDTO(true,true, ColorDTO.BLUE, ColorDTO.RED, Thickness.VERY_THICK.toString(), new CoordinatesDTO(1,2),3,1);
         assertEquals("\\filldraw[fill=red, draw=blue, very thick] (1.0,2.0) circle [radius=3.0] ;",circle.print());
     }
 

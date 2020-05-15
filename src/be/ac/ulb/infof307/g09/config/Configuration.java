@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  * everywhere in the app.
  */
 public class Configuration {
-    public static Properties properties;
+    private static Properties properties;
     public static final String DEV = "dev";
     public static final String PROD = "prod";
     public static final String TEST_DAO = "TestDAO";

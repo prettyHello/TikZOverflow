@@ -19,8 +19,8 @@ public abstract class ShapeDTO implements Serializable {
 
     private boolean draw;
     private boolean fill;
-    private Color fillColor = Color.BLACK;
-    private Color drawColor = Color.BLACK;
+    private ColorDTO fillColor = ColorDTO.BLACK;
+    private ColorDTO drawColor = ColorDTO.BLACK;
     private String shapeThicknessKey;
     private double shapeThicknessValue;
     private int id;
@@ -45,7 +45,7 @@ public abstract class ShapeDTO implements Serializable {
      * @param drawColor         Outer line color, color list in Color enum.
      * @param shapeThicknessKey Thickness starting value.
      */
-    public ShapeDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThicknessKey, int id) throws FatalException {
+    public ShapeDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThicknessKey, int id) throws FatalException {
         this.draw = draw;
         this.fill = fill;
 
@@ -101,19 +101,19 @@ public abstract class ShapeDTO implements Serializable {
         this.fill = fill;
     }
 
-    public Color getFillColor() {
+    public ColorDTO getFillColor() {
         return fillColor;
     }
 
-    public void setFillColor(Color fillColor) {
+    public void setFillColor(ColorDTO fillColor) {
         this.fillColor = fillColor;
     }
 
-    public Color getDrawColor() {
+    public ColorDTO getDrawColor() {
         return drawColor;
     }
 
-    public void setDrawColor(Color drawColor) {
+    public void setDrawColor(ColorDTO drawColor) {
         this.drawColor = drawColor;
     }
 
@@ -134,7 +134,7 @@ public abstract class ShapeDTO implements Serializable {
     /**
      * @return the Coordinates that is considered to be the shape's anchor point
      */
-    abstract public CoordinatesDTO getCoordinates();
+    public abstract CoordinatesDTO getCoordinates();
 
     public double getShapeThicknessValue() {
         return shapeThicknessValue;

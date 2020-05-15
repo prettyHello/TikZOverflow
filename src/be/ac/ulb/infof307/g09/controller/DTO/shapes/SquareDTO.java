@@ -40,7 +40,7 @@ public class SquareDTO extends RectangleDTO {
      * @param fillColor         Color to fill the shape with, color list in Color enum.
      * @param drawColor         Outer line color, color list in Color enum.
      */
-    public SquareDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, String shapeThickness, int id) throws FatalException {
+    public SquareDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, String shapeThickness, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThickness, originCoordinates, endCoordinates, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.size = endCoordinates.getX() - originCoordinates.getX();

@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.IvParameterSpec;
@@ -16,7 +17,10 @@ import javax.crypto.spec.IvParameterSpec;
  * Source: https://www.novixys.com/blog/aes-encryption-decryption-password-java/
  */
 public final class Crypto {
-    private static final SecureRandom srandom = new SecureRandom();
+
+    private Crypto(){}
+
+    private static final SecureRandom SRANDOM = new SecureRandom();
 
     /**
      * This method will encrypt the given .bin file with the given password
@@ -29,9 +33,10 @@ public final class Crypto {
 
         for (File file : filesOfDirectory) {
             if (file.isFile()) {
-                if (file.getName().substring(file.getName().lastIndexOf(".")).equals(".bin"))
+                if (file.getName().substring(file.getName().lastIndexOf(".")).equals(".bin")){
                     encrypt(password, file.getPath());
                     ModelUtility.deleteFileSilent(file);
+                }
             }
         }
     }
@@ -48,11 +53,9 @@ public final class Crypto {
         File[] filesOfDirectory = directory.listFiles();
 
         for (File file : filesOfDirectory) {
-            if (file.isFile()) {
-                if (file.getName().substring(file.getName().lastIndexOf(".")).equals(".enc")) {
-                        decrypt(password, file);
-                        ModelUtility.deleteFileSilent(file);
-                }
+            if (file.isFile() & file.getName().substring(file.getName().lastIndexOf(".")).equals(".enc")) {
+                decrypt(password, file);
+                ModelUtility.deleteFileSilent(file);
             }
         }
 
@@ -91,7 +94,9 @@ public final class Crypto {
         StringBuffer hexString = new StringBuffer();
         for (int i = 0; i < hash.length; i++) {
             String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) hexString.append('0');
+            if(hex.length() == 1){
+                hexString.append('0');
+            }
             hexString.append(hex);
         }
         return hexString.toString();
@@ -124,9 +129,9 @@ public final class Crypto {
      * This method generate a salt
      * @return the generated salt
      */
-    static private byte[] genSalt() {
+    private static byte[] genSalt() {
         byte[] salt = new byte[8];
-        srandom.nextBytes(salt);
+        SRANDOM.nextBytes(salt);
         return salt;
     }
 
@@ -134,9 +139,9 @@ public final class Crypto {
      * This method generate an initialization vector
      * @return the IV
      */
-    static private byte[] genIv() {
+    private static byte[] genIv() {
         byte[] iv = new byte[128 / 8];
-        srandom.nextBytes(iv);
+        SRANDOM.nextBytes(iv);
         return iv;
     }
 
@@ -147,15 +152,14 @@ public final class Crypto {
      * @param iv
      * @return
      */
-    static private FileOutputStream genOutputFile(String fileName, byte[] salt, byte[] iv) {
+    private static FileOutputStream genOutputFile(String fileName, byte[] salt, byte[] iv)throws FatalException {
         try {
             FileOutputStream out = new FileOutputStream(fileName + ".enc");
             out.write(salt);
             out.write(iv);
             return out;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (IOException e) {
+            throw new FatalException("Couln't encrypt file : " + e.getMessage());
         }
 
     }
@@ -166,19 +170,17 @@ public final class Crypto {
      * @param password
      * @return
      */
-    static private SecretKeySpec genAES(byte[] salt, String password) {
+    private static SecretKeySpec genAES(byte[] salt, String password) throws FatalException {
         try {
             SecretKeyFactory factory =
                     SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 10000, 128);
             SecretKey tmp = factory.generateSecret(spec);
-            SecretKeySpec skey = new SecretKeySpec(tmp.getEncoded(), "AES");
-            return skey;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-
+            return new SecretKeySpec(tmp.getEncoded(), "AES");
+        } catch (InvalidKeySpecException e) {
+            throw new FatalException("InvalidKeySpecException : " + e.getMessage());
+        } catch (NoSuchAlgorithmException e){
+            throw new FatalException("NoSuchAlgorithmException : " + e.getMessage());
         }
     }
 
@@ -188,14 +190,19 @@ public final class Crypto {
      * @param ivspec
      * @return
      */
-    private static Cipher cipherContent(SecretKeySpec skey, IvParameterSpec ivspec) {
+    private static Cipher cipherContent(SecretKeySpec skey, IvParameterSpec ivspec) throws FatalException {
         try {
             Cipher ci = Cipher.getInstance("AES/CBC/PKCS5Padding");
             ci.init(Cipher.ENCRYPT_MODE, skey, ivspec);
             return ci;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (NoSuchPaddingException e) {
+            throw new FatalException("NoSuchPaddingException : " + e.getMessage());
+        } catch (InvalidKeyException e){
+            throw new FatalException("InvalidKeyException : " + e.getMessage());
+        } catch (InvalidAlgorithmParameterException e){
+            throw new FatalException("InvalidKeyException : " + e.getMessage());
+        } catch (NoSuchAlgorithmException e){
+            throw new FatalException("InvalidKeyException : " + e.getMessage());
         }
     }
 
@@ -208,8 +215,12 @@ public final class Crypto {
     private static void writeToOutput(String fileName, Cipher ci, FileOutputStream out) {
         try (FileInputStream in = new FileInputStream(fileName)) {
             processFile(ci, in, out);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            throw new FatalException("BadPaddingException : " + e.getMessage());
+        } catch (IllegalBlockSizeException e) {
+            throw new FatalException("IllegalBlockSizeException : " + e.getMessage());
+        } catch (IOException e) {
+            throw new FatalException("IOException : " + e.getMessage());
         }
     }
 
@@ -272,7 +283,7 @@ public final class Crypto {
      * @throws javax.crypto.BadPaddingException
      * @throws java.io.IOException
      */
-    static private void processFile(Cipher ci, InputStream in, OutputStream out)
+    private static void processFile(Cipher ci, InputStream in, OutputStream out)
             throws
             javax.crypto.IllegalBlockSizeException,
             javax.crypto.BadPaddingException,
@@ -281,10 +292,14 @@ public final class Crypto {
         int len;
         while ((len = in.read(ibuf)) != -1) {
             byte[] obuf = ci.update(ibuf, 0, len);
-            if (obuf != null) out.write(obuf);
+            if (obuf != null){
+                out.write(obuf);
+            }
         }
         byte[] obuf = ci.doFinal();
-        if (obuf != null) out.write(obuf);
+        if (obuf != null){
+            out.write(obuf);
+        }
 
     }
 

@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.controller.DTO.shapes.Color;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ColorDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.CoordinatesDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.RectangleDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.Thickness;
@@ -18,7 +18,7 @@ class RectangleDTOTest {
 
     @Test
     void print_ComplexRectangle() {
-        RectangleDTO rectangle = new RectangleDTO(true,true, Color.BLUE,Color.RED,Thickness.VERY_THICK.toString(), new CoordinatesDTO(0,0), new CoordinatesDTO(1,2),1);
+        RectangleDTO rectangle = new RectangleDTO(true,true, ColorDTO.BLUE, ColorDTO.RED,Thickness.VERY_THICK.toString(), new CoordinatesDTO(0,0), new CoordinatesDTO(1,2),1);
         assertEquals("\\filldraw[fill=red, draw=blue, very thick] (0.0,0.0) rectangle (1.0,2.0) ;",rectangle.print());
     }
 

@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * All the colors in tikz.
  */
-public enum Color {
+public enum ColorDTO {
     RED("red"),
     GREEN("green"),
     BLUE("blue"),
@@ -30,15 +30,15 @@ public enum Color {
 
     private final String value;
 
-    Color(String value) {
+    ColorDTO(String value) {
         this.value = value;
     }
 
-    private static final Map<String, Color> lookup = new HashMap<>();
+    private static final Map<String, ColorDTO> LOOKUP = new HashMap<>();
 
     static {
-        for (Color c : Color.values()) {
-            lookup.put(c.getValue(), c);
+        for (ColorDTO c : ColorDTO.values()) {
+            LOOKUP.put(c.getValue(), c);
         }
     }
 
@@ -46,8 +46,8 @@ public enum Color {
         return value;
     }
 
-    public static Color get(String color) {
-        return lookup.get(color);
+    public static ColorDTO get(String color) {
+        return LOOKUP.get(color);
     }
 }
 

@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.controller.shape;
 
-import be.ac.ulb.infof307.g09.controller.DTO.shapes.Color;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ColorDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.CoordinatesDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.TriangleDTO;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ class TriangleDTOTest {
 
     @Test
     void print_ComplexComplex() {
-        TriangleDTO triangle = new TriangleDTO(true,true, Color.BLUE,Color.RED,"VERY_THIN", new CoordinatesDTO(0,0),new CoordinatesDTO(2,0),new CoordinatesDTO(0,3), 1);
+        TriangleDTO triangle = new TriangleDTO(true,true, ColorDTO.BLUE, ColorDTO.RED,"VERY_THIN", new CoordinatesDTO(0,0),new CoordinatesDTO(2,0),new CoordinatesDTO(0,3), 1);
         assertEquals("\\filldraw[fill=red, draw=blue, very thin] (0.0,0.0) -- (2.0,0.0) -- (0.0,3.0) -- cycle;",triangle.print());
     }
 }

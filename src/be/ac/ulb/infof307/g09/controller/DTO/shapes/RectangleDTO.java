@@ -35,7 +35,7 @@ public class RectangleDTO extends LabelizableShapeDTO {
      * @param fillColor         Color to fill the shape with, color list in Color enum.
      * @param drawColor         Outer line color, color list in Color enum.
      */
-    public RectangleDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, int id) throws FatalException {
+    public RectangleDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThickness, CoordinatesDTO originCoordinates, CoordinatesDTO endCoordinates, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThickness, id);
         ControllerUtility.checkObjects(originCoordinates, endCoordinates);
         this.originCoordinates = originCoordinates;

@@ -47,7 +47,7 @@ public class TriangleDTO extends LabelizableShapeDTO {
      * @param fillColor Color to fill the shape with, color list in Color enum.
      * @param drawColor Outer line color, color list in Color enum.
      */
-    public TriangleDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, CoordinatesDTO originPoint, CoordinatesDTO secondPoint, CoordinatesDTO thirdPoint, int id) throws FatalException {
+    public TriangleDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThickness, CoordinatesDTO originPoint, CoordinatesDTO secondPoint, CoordinatesDTO thirdPoint, int id) throws FatalException {
         super(draw, fill, drawColor, fillColor, shapeThickness, id);
         ControllerUtility.checkObjects(originPoint, secondPoint, thirdPoint);
         this.originPoint = originPoint;

@@ -11,7 +11,7 @@ public enum Thickness {
     THICK(1.6),
     VERY_THICK(2.4),
     ULTRA_THICK(3.2);
-    public final double value;
+    private final double value;
 
     Thickness(double value) {
         this.value = value;

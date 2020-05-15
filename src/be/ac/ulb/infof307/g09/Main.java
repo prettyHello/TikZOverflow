@@ -36,10 +36,10 @@ public class Main extends Application {
 
         primaryStage.setTitle("Groupe9");
         try {
-            Image logo_32 = new Image(Objects.requireNonNull(getClass().getClassLoader().getResource("images/logos/logo_32.png")).toExternalForm());
-            Image logo_64 = new Image(Objects.requireNonNull(getClass().getClassLoader().getResource("images/logos/logo_64.png")).toExternalForm());
-            Image logo_128 = new Image(Objects.requireNonNull(getClass().getClassLoader().getResource("images/logos/logo_128.png")).toExternalForm());
-            primaryStage.getIcons().addAll(logo_32, logo_64, logo_128);
+            Image logo32 = new Image(Objects.requireNonNull(getClass().getClassLoader().getResource("images/logos/logo_32.png")).toExternalForm());
+            Image logo64 = new Image(Objects.requireNonNull(getClass().getClassLoader().getResource("images/logos/logo_64.png")).toExternalForm());
+            Image logo128 = new Image(Objects.requireNonNull(getClass().getClassLoader().getResource("images/logos/logo_128.png")).toExternalForm());
+            primaryStage.getIcons().addAll(logo32, logo64, logo128);
         }catch (NullPointerException e){
             LOG.warning("Unable to load icons");
         }
@@ -54,7 +54,7 @@ public class Main extends Application {
     public static void main(String[] args) {
 
         //Initialize the pseudo-singleton holding the configuration, this should be only done here
-        ConfigurationSingleton prod = new ConfigurationSingleton(args);
+        new ConfigurationSingleton(args);
 
         //Create the database if it doesn't exist
         try {

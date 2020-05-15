@@ -75,19 +75,19 @@ public class CanvasTest {
 
     @Test
     void changeShapeDrawColor_expectedBehaviour() {
-        shape.setDrawColor(Color.BLUE);
+        shape.setDrawColor(ColorDTO.BLUE);
         canvas.addShape(shape);
-        canvas.changeShapeDrawColor(id, Color.BLACK);
-        assertEquals(canvas.getShapeById(id).getDrawColor(), Color.BLACK);
+        canvas.changeShapeDrawColor(id, ColorDTO.BLACK);
+        assertEquals(canvas.getShapeById(id).getDrawColor(), ColorDTO.BLACK);
     }
 
     @Test
     void changeShapeFillColor_expectedBehaviour() {
-        shape.setFillColor(Color.RED);
+        shape.setFillColor(ColorDTO.RED);
         canvas.addShape(shape);
         canvas.getShapeById(id);
-        canvas.changeShapeFillColor(id, Color.BLACK);
-        assertEquals(canvas.getShapeById(id).getFillColor(), Color.BLACK);
+        canvas.changeShapeFillColor(id, ColorDTO.BLACK);
+        assertEquals(canvas.getShapeById(id).getFillColor(), ColorDTO.BLACK);
     }
 
     @Test

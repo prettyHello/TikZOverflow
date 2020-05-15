@@ -356,7 +356,7 @@ public class ShapeHandler {
     private Shape constructArrow() {
         double arrowLength = 5;
         double arrowWidth = 3;
-        Line main_line = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
+        Line mainLine = new Line(previouslySelectedX, previouslySelectedY, selectedX, selectedY);
         Line arrow1 = new Line();
         Line arrow2 = new Line();
 
@@ -389,7 +389,7 @@ public class ShapeHandler {
             arrow2.setStartY(selectedY + dy - ox);
         }
 
-        return Shape.union(main_line, Shape.union(arrow1, arrow2));
+        return Shape.union(mainLine, Shape.union(arrow1, arrow2));
     }
 
     /**
@@ -422,8 +422,9 @@ public class ShapeHandler {
                     shape.setEffect(null);
                     editorController.selectedShapes.remove(shape);
                     editorController.translateToTikz();
-                    if (editorController.selectedShapes.isEmpty())
+                    if (editorController.selectedShapes.isEmpty()){
                         editorController.disableToolbar(false);
+                    }
                 } else {                                 //if not selected => add to the list
                     editorController.disableToolbar(true);
                     shape.setStrokeWidth(canvas.getShapeById(Integer.parseInt(shape.getId())).getShapeThicknessValue());
@@ -468,13 +469,13 @@ public class ShapeHandler {
         }
 
         if (shapeType != null) {
-            be.ac.ulb.infof307.g09.controller.DTO.shapes.Color fillColor = null, drawColor = null;
+            ColorDTO fillColor = null, drawColor = null;
             String thickness = null;
             if (shapeType.equals(EditorController.SQUARE) || shapeType.equals(EditorController.CIRCLE) || shapeType.equals(EditorController.TRIANGLE)) {
-                fillColor = be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.get(m.group(1));
-                drawColor = be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.get(m.group(2));
+                fillColor = ColorDTO.get(m.group(1));
+                drawColor = ColorDTO.get(m.group(2));
             } else if (shapeType.equals("PATH")) {
-                drawColor = be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.get(m.group(1));
+                drawColor = ColorDTO.get(m.group(1));
             }
             thickness = m.group(3).toUpperCase().replace(' ', '_');
 
@@ -541,7 +542,7 @@ public class ShapeHandler {
 
         Node node = null;
         if (m.find()) {
-            be.ac.ulb.infof307.g09.controller.DTO.shapes.Color drawColor = be.ac.ulb.infof307.g09.controller.DTO.shapes.Color.get(m.group(2));
+            ColorDTO drawColor = ColorDTO.get(m.group(2));
 
             double rightOffset = Double.parseDouble(m.group(3));
             double aboveOffset = Double.parseDouble(m.group(4));
@@ -553,12 +554,12 @@ public class ShapeHandler {
     }
 
     static class Node {
-        be.ac.ulb.infof307.g09.controller.DTO.shapes.Color color;
+        ColorDTO color;
         double rightOffset;
         double aboveOffset;
         String label;
 
-        public Node(be.ac.ulb.infof307.g09.controller.DTO.shapes.Color color, double rightOffset, double aboveOffset, String label) {
+        public Node(ColorDTO color, double rightOffset, double aboveOffset, String label) {
             this.color = color;
             this.rightOffset = rightOffset;
             this.aboveOffset = aboveOffset;

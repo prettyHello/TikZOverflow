@@ -32,7 +32,7 @@ public class CircleDTO extends LabelizableShapeDTO {
      * @param coordinates
      * @param radius
      */
-    public CircleDTO(boolean draw, boolean fill, Color drawColor, Color fillColor, String shapeThickness, CoordinatesDTO coordinates, float radius, int id) throws FatalException, BizzException {
+    public CircleDTO(boolean draw, boolean fill, ColorDTO drawColor, ColorDTO fillColor, String shapeThickness, CoordinatesDTO coordinates, float radius, int id) throws FatalException, BizzException {
         super(draw, fill, drawColor, fillColor, shapeThickness, id);
         ControllerUtility.checkObjects(coordinates);
         if (radius <= 0) {
@@ -66,20 +66,37 @@ public class CircleDTO extends LabelizableShapeDTO {
         return returnValue;
     }
 
+    /**
+     * @return the coordinates
+     */
     @Override
     public CoordinatesDTO getCoordinates() {
         return coordinates;
     }
 
+    /**
+     *
+     * @param coordinates
+     * @throws FatalException
+     */
     public void setCoordinates(CoordinatesDTO coordinates) throws FatalException {
         ControllerUtility.checkObjects(coordinates);
         this.coordinates = coordinates;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getRadius() {
         return radius;
     }
 
+    /**
+     *
+     * @param radius
+     * @throws BizzException
+     */
     public void setRadius(float radius) throws BizzException {
         if (radius <= 0) {
             throw new BizzException("Radius is negative or null");
@@ -87,6 +104,10 @@ public class CircleDTO extends LabelizableShapeDTO {
         this.radius = radius;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public CoordinatesDTO calcLabelOffset() {
         return new CoordinatesDTO(0, 0);

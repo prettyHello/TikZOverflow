@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g09.view.login;
 
+import be.ac.ulb.infof307.g09.config.AbstractConfigurationSingleton;
 import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
@@ -18,12 +19,15 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
+import java.util.logging.Logger;
+
 import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
 
 /**
  * This class handles the process of login of a user.
  */
 public class LoginController {
+    private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
 
     @FXML
     public TextField usernameTF;
@@ -72,12 +76,12 @@ public class LoginController {
 
         } catch (BizzException e) {
             //Update failed on dao lvl
-            System.out.println("Login Failed on business lvl");
+            LOG.severe("Login Failed on business lvl");
             showAlert(Alert.AlertType.WARNING, "Login", "Business Error", e.getMessage());
         } catch (FatalException e) {
             //Update failed on dao lvl
-            System.out.println("Login Failed on DAL/DAO lvl");
-            e.printStackTrace();
+            LOG.severe("Login Failed on DAL/DAO lvl");
+            LOG.severe(e.getMessage());
             showAlert(Alert.AlertType.WARNING, "Login", "Unexpected Error", e.getMessage());
         }
     }

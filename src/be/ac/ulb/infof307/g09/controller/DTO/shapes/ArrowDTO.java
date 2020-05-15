@@ -10,7 +10,7 @@ public class ArrowDTO extends PathDTO {
         super(origin, end, shapeThickness, id, false, true);
     }
 
-    public ArrowDTO(CoordinatesDTO origin, CoordinatesDTO end, Color drawColor, String shapeThickness, int id) throws FatalException {
+    public ArrowDTO(CoordinatesDTO origin, CoordinatesDTO end, ColorDTO drawColor, String shapeThickness, int id) throws FatalException {
         super(origin, end,false,true, drawColor, shapeThickness, id);
     }
 
@@ -27,6 +27,10 @@ public class ArrowDTO extends PathDTO {
         this.setDrawColor(other.getDrawColor());
     }
 
+    /**
+     * @return The Tikz code for these coordinates, intended to use in other print function of shapes, like rectangle.
+     * /!\ Print always add an extra " " empty character at the end, no need to add one if concatenating multiple Print result.
+     */
     public String print() {
         StringBuilder returnValue = new StringBuilder("\\draw [" + super.getDrawColor().getValue() + ",->, "+super.getShapeThicknessKeyFormatted()+"] ");
         Iterator<CoordinatesDTO> iterator = this.getCoordinatesIterator();

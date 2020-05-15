@@ -119,7 +119,7 @@ public class HighlightTextColor extends CodeArea {
             colorWord("digit", "digit");
         }
 
-        if (!selectedShapes.isEmpty()) // If user select a shape.{
+        if (!selectedShapes.isEmpty()) { // If user select a shape.{
             for (int z = 0; z < selectedShapes.size(); z++) { // Loop for every shape selected.
                 String myShape = selectedShapes.get(selectedShapes.size() - (z + 1)).toString(); // Selection of the actual selected shape.
                 int id = Integer.parseInt(printMatches(myShape, "(id=)[0-9]*").substring(3)); // Take the id of the shape from the var selectedShapes.
@@ -129,6 +129,7 @@ public class HighlightTextColor extends CodeArea {
                     setStyleClass(position, position + mySelectedShapeDTO.print().length(), "highlight"); // Highlight the position of the shape.
                 }
             }
+        }
     }
 
     /**
@@ -156,8 +157,9 @@ public class HighlightTextColor extends CodeArea {
                 colorWord("shapes", "shapes");
                 colorWord("digit", "digit");
                 highlightOnSelect();
-                if (this.wrongLine != null)
+                if (this.wrongLine != null) {
                     highLightWrongLine();
+                }
             }
 
             //allows to add a line number
@@ -166,7 +168,9 @@ public class HighlightTextColor extends CodeArea {
                 int currentParagraph = getCurrentParagraph();
                 if (currentParagraph != 0) {
                     Matcher lineNumber = whiteSpace.matcher(getParagraph(currentParagraph - 1).getSegments().get(0));
-                    if (lineNumber.find()) Platform.runLater(() -> insertText(caretPosition, lineNumber.group()));
+                    if (lineNumber.find()) {
+                        Platform.runLater(() -> insertText(caretPosition, lineNumber.group()));
+                    }
                 }
             }
         });

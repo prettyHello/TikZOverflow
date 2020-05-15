@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g09.model;
 
+import be.ac.ulb.infof307.g09.config.AbstractConfigurationSingleton;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -12,6 +13,10 @@ import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -20,6 +25,7 @@ import java.util.zip.GZIPOutputStream;
  * Functions easily imported from project to project and related to file handling
  */
 public class ModelUtility {
+    private static final Logger LOG = Logger.getLogger(AbstractConfigurationSingleton.class.getName());
     /**
      * Decompress file ".tar.gz"
      *
@@ -27,23 +33,24 @@ public class ModelUtility {
      * @param destFile destination directory of decompressed file
      */
     public static String untarfile(File tarFile, Path destFile) throws FatalException {
-        TarArchiveInputStream tis;
+        TarArchiveInputStream tis = null;
+        FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
         try {
-            FileOutputStream fos;
             String untaredNameFolder = null;
             TarArchiveEntry tarEntry;
             tis = new TarArchiveInputStream(new GZIPInputStream(new BufferedInputStream(new FileInputStream(tarFile))));
             tis.getNextTarEntry();
             while ((tarEntry = tis.getNextTarEntry()) != null) {
                 String name = tarEntry.getName();
-                untaredNameFolder = name.substring(0, name.indexOf("/"));
+                untaredNameFolder = name.substring(0, name.indexOf('/'));
                 if (!tarEntry.isDirectory()) {
                     File outputFile = new File(destFile.toFile(), tarEntry.getName());
                     outputFile.getParentFile().mkdirs();
                     fos = new FileOutputStream(outputFile);
 
                     byte[] fileRead = new byte[1024];
-                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
+                    bos = new BufferedOutputStream(new FileOutputStream(outputFile));
 
                     int len;
                     while ((len = tis.read(fileRead)) != -1) {
@@ -55,9 +62,31 @@ public class ModelUtility {
             }
             tis.close();
             return untaredNameFolder;
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            LOG.severe(e.getMessage());
             throw new FatalException("File decompression error");
+        }finally {
+            if(tis != null){
+                try {
+                    tis.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couln't close stream : " + e.getMessage());
+                }
+            }
+            if(fos != null){
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couln't close stream : " + e.getMessage());
+                }
+            }
+            if(bos != null){
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couln't close stream : " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -87,9 +116,11 @@ public class ModelUtility {
      * @throws FatalException if file was deleted or if I/O Exception
      */
     private static void copyFile(File dirSrc, File dirDest) throws FatalException {
+        InputStream in = null;
+        OutputStream out = null;
         try {
-            InputStream in = new FileInputStream(dirSrc);
-            OutputStream out = new FileOutputStream(dirDest);
+            in = new FileInputStream(dirSrc);
+            out = new FileOutputStream(dirDest);
             byte[] buffer = new byte[1024];
             int length;
             while ((length = in.read(buffer)) > 0) {
@@ -101,6 +132,21 @@ public class ModelUtility {
             throw new FatalException("Couldn't copy file");
         } catch (IOException e) {
             throw new FatalException("IOException in copyFile");
+        }finally {
+            if(in != null){
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couln't close stream : " + e.getMessage());
+                }
+            }
+            if(out != null){
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couln't close stream : " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -175,14 +221,61 @@ public class ModelUtility {
      */
     public static void createTarGz(String folderProject, String fileTarDestination) throws FatalException {
         TarArchiveOutputStream archiveTarGz = null;
+        FileOutputStream fileOutputStream = null;
+        GZIPOutputStream outputGZip = null;
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(new File(fileTarDestination));
-            GZIPOutputStream outputGZip = new GZIPOutputStream(new BufferedOutputStream(fileOutputStream));
+            fileOutputStream = new FileOutputStream(new File(fileTarDestination));
+            outputGZip = new GZIPOutputStream(new BufferedOutputStream(fileOutputStream));
             archiveTarGz = new TarArchiveOutputStream(outputGZip);
             addFileToArchiveTarGz(folderProject, "", archiveTarGz);
-            archiveTarGz.close();
         } catch (IOException e) {
             throw new FatalException("Impossible to export the project");
+        }finally {
+            if(archiveTarGz != null){
+                try {
+                    archiveTarGz.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couln't close stream : " + e.getMessage());
+                }
+            }
+            if(fileOutputStream != null){
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couln't close stream : " + e.getMessage());
+                }
+            }
+            if(outputGZip != null){
+                try {
+                    outputGZip.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couln't close stream : " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    /**
+     * Close PreparedStatement and ResultSet
+     * They should be automatically closed when the connection is closed, but it's best practice to close them manually to be sure.
+     * @param pr can be null
+     * @param rs can be null
+     * @throws FatalException
+     */
+    public static void closeStatements(PreparedStatement pr, ResultSet rs) throws FatalException {
+        if(pr != null){
+            try {
+                pr.close();
+            } catch (SQLException e) {
+                throw new FatalException("Couldn't close statement : "+e.getMessage());
+            }
+        }
+        if(rs != null){
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                throw new FatalException("Couldn't close statement : "+e.getMessage());
+            }
         }
     }
 
@@ -196,10 +289,11 @@ public class ModelUtility {
     private static void addFileToArchiveTarGz(String folderProject, String parent, TarArchiveOutputStream archiveTarGz) throws FatalException {
         File file = new File(folderProject);
         String entryName = parent + file.getName();
+        BufferedInputStream fileSelected = null;
         try {
             archiveTarGz.putArchiveEntry(new TarArchiveEntry(file, entryName));
             if (file.isFile()) {
-                BufferedInputStream fileSelected = new BufferedInputStream(new FileInputStream(file));
+                fileSelected = new BufferedInputStream(new FileInputStream(file));
                 IOUtils.copy(fileSelected, archiveTarGz);  // copy file in archive
                 archiveTarGz.closeArchiveEntry();
                 fileSelected.close();
@@ -211,6 +305,14 @@ public class ModelUtility {
             }
         } catch (IOException e) {
             throw new FatalException("Impossible to export the project");
+        } finally {
+            if(fileSelected != null){
+                try {
+                    fileSelected.close();
+                } catch (IOException e) {
+                    throw new FatalException("Couln't close stream : " + e.getMessage());
+                }
+            }
         }
     }
 }
