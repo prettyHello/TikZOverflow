@@ -31,6 +31,7 @@ public interface ProjectUCC {
 
     /**
      * Import the selected file as a project
+     * (and thus decrypt it)
      * @param selectedFile
      * @throws FatalException
      */
@@ -44,7 +45,7 @@ public interface ProjectUCC {
     void delete(ProjectDTO dto) throws FatalException;
 
     /**
-     * Save the ActiveCanvas
+     * Save the ActiveCanvas and encrypt it with the provided password
      * @throws FatalException
      */
     void save() throws FatalException;

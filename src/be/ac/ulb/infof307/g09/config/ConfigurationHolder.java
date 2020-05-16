@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * - The getters are used by every class to access the implementation hiding behind the interface
  *
  * The properties files (key - values) are read by Configuration and stored inside it
- * AbstractConfigurationSingleton will use this configuration file to instanciate through introspection
+ *  This class use use the configuration file to instanciate each implementations through introspection
  *  the  implementations of each interface and link them all (in loadConfiguration).
  *  Those implementations will be availble through getter and setters.
  * Everything is static since each instances must be unique for the entire application.
@@ -107,7 +107,7 @@ public abstract class ConfigurationHolder {
             projectUCC = (ProjectUCC) configuration.getClassFor("ProjectUCC").getDeclaredConstructor(DAO.class).newInstance(projectDAO);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
             //The reason behind this error handling is that this method is called before JavaFX is launched
-            LOG.severe("Unable to set up configuration singleton");
+            LOG.severe("Unable to set up configurationHolder");
             exc.printStackTrace();
             System.exit(1);
         }
