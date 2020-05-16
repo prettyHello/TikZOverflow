@@ -30,6 +30,31 @@ public class CanvasTest {
         assertEquals(shape, canvas.getShapeById(id));
     }
 
+    //return silently
+    @Test
+    void setShapeLabel_notLabelizable(){
+        LineDTO line = new LineDTO(new CoordinatesDTO(206,283),new CoordinatesDTO(466,262),Thickness.THICK,1);
+        canvas.addShape(line);
+        canvas.setShapeLabel(line.getId(),"Label",ColorDTO.BLACK);
+    }
+
+    @Test
+    void setShapeLabel_notPresent(){
+        canvas.addShape(shape);
+        assertThrows(IllegalArgumentException.class, () -> { ;
+            canvas.setShapeLabel(-1,"Label",ColorDTO.BLACK);
+        },"canvas does not contain a shape with the specified id");
+    }
+
+    @Test
+    void setShapeLabel(){
+        LabelizableShapeDTO shapeWithLabel = new RectangleDTO(new CoordinatesDTO(0, 0), new CoordinatesDTO(50, 50), Thickness.THIN, 1);
+        canvas.addShape(shapeWithLabel);
+        canvas.setShapeLabel(shapeWithLabel.getId(),"Label",ColorDTO.BLACK);
+        assertEquals("Label",shapeWithLabel.getLabel().getValue());
+    }
+
+
     @Test
     void getShapeById() {
         canvas.addShape(shape);
