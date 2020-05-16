@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.view.profile;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
@@ -16,12 +16,15 @@ import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
 import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
+import java.util.logging.Logger;
+
 import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
 
 /**
  * This class shows the connected user's profile and allows to modify user's data.
  */
 public class ProfileController {
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
     @FXML
     TextField firstnameTF;
@@ -50,8 +53,8 @@ public class ProfileController {
     private final UserUCC userUcc;
 
     public ProfileController() {
-        this.userFactory = ConfigurationSingleton.getUserFactory();
-        this.userUcc = ConfigurationSingleton.getUserUcc();
+        this.userFactory = ConfigurationHolder.getUserFactory();
+        this.userUcc = ConfigurationHolder.getUserUcc();
         this.connectedUser = userUcc.getConnectedUser();
     }
 
@@ -98,14 +101,14 @@ public class ProfileController {
     public void handleModifyButton() {
         try {
             String salt;
-            String pw_hash;
+            String pwHash;
             if (passwordTF.getText() != null && !passwordTF.getText().trim().isEmpty()) {
                 String passwordText = passwordTF.getText();
                 salt = BCrypt.gensalt(12);
-                pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
+                pwHash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
             } else {
                 salt = connectedUser.getSalt();
-                pw_hash = connectedUser.getPassword();
+                pwHash = connectedUser.getPassword();
                 //add temp password to fields for user data check
                 passwordTF.setText("random");
                 secondPasswordTF.setText("random");
@@ -117,17 +120,17 @@ public class ProfileController {
             String lastnameText = lastnameTF.getText().replaceAll(ViewUtility.WHITE_SPACES_PATTERN, "");
             String firstnameText = firstnameTF.getText().replaceAll(ViewUtility.WHITE_SPACES_PATTERN, "");
 
-            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, ControllerUtility.getTimeStamp());
+            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pwHash, salt, ControllerUtility.getTimeStamp());
             userUcc.updateUserInfo(user);
             showAlert(Alert.AlertType.CONFIRMATION, "Account update", "Success", "Information successfully updated");
         } catch (BizzException e) {
             //Update failed on dao lvl
-            System.out.println("Update Failed on business lvl");
+            LOG.severe("Update Failed on business lvl");
             showAlert(Alert.AlertType.WARNING, "Account update", "Business Error", e.getMessage());
         } catch (FatalException e) {
             //Update failed on dao lvl
-            System.out.println("Update Failed on DAL/DAO lvl");
-            e.printStackTrace();
+            LOG.severe("Update Failed on DAL/DAO lvl");
+            LOG.severe(e.getMessage());
             showAlert(Alert.AlertType.WARNING, "Account update", "Unexpected Error", e.getMessage());
         } finally {
             viewSwitcher.switchView(ViewName.DASHBOARD);

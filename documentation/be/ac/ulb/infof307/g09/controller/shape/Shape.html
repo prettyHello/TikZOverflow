@@ -71,15 +71,15 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
     <ul class="navList">
-        <li><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Rectangle.html"
-               title="class in be.ac.ulb.infof307.g09.controller.shape"><span
+        <li><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Rectangle.html"
+               title="class in be.ac.ulb.infof307.g09.controller.shapeDTO"><span
                 class="typeNameLink">Prev&nbsp;Class</span></a></li>
-        <li><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Square.html"
-               title="class in be.ac.ulb.infof307.g09.controller.shape"><span
+        <li><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Square.html"
+               title="class in be.ac.ulb.infof307.g09.controller.shapeDTO"><span
                 class="typeNameLink">Next&nbsp;Class</span></a></li>
     </ul>
     <ul class="navList">
-        <li><a href="../../../../../../../index.html?be/ac/ulb/infof307/g09/controller/shape/Shape.html" target="_top">Frames</a>
+        <li><a href="../../../../../../../index.html?be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html" target="_top">Frames</a>
         </li>
         <li><a href="Shape.html" target="_top">No&nbsp;Frames</a></li>
     </ul>
@@ -118,7 +118,7 @@ var activeTableTab = "activeTableTab";
 <!-- ========= END OF TOP NAVBAR ========= -->
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-    <div class="subTitle">be.ac.ulb.infof307.g09.controller.shape</div>
+    <div class="subTitle">be.ac.ulb.infof307.g09.controller.shapeDTO</div>
     <h2 title="Class Shape" class="title">Class Shape</h2>
 </div>
 <div class="contentContainer">
@@ -126,7 +126,7 @@ var activeTableTab = "activeTableTab";
         <li>java.lang.Object</li>
         <li>
             <ul class="inheritance">
-                <li>be.ac.ulb.infof307.g09.controller.shape.Shape</li>
+                <li>be.ac.ulb.infof307.g09.controller.shapeDTO.ShapeDTO</li>
             </ul>
         </li>
     </ul>
@@ -139,10 +139,10 @@ var activeTableTab = "activeTableTab";
                 </dl>
                 <dl>
                     <dt>Direct Known Subclasses:</dt>
-                    <dd><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/LabelizableShape.html"
-                           title="class in be.ac.ulb.infof307.g09.controller.shape">LabelizableShape</a>, <a
-                            href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Path.html"
-                            title="class in be.ac.ulb.infof307.g09.controller.shape">Path</a></dd>
+                    <dd><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/LabelizableShape.html"
+                           title="class in be.ac.ulb.infof307.g09.controller.shapeDTO">LabelizableShape</a>, <a
+                            href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Path.html"
+                            title="class in be.ac.ulb.infof307.g09.controller.shapeDTO">Path</a></dd>
                 </dl>
                 <hr>
                 <br>
@@ -152,16 +152,16 @@ implements java.io.Serializable</pre>
                 <div class="block">Shape is the representation of a line of tikz code, eg :
                     \draw[thick,rounded corners=8pt] (0,0) -- (0,2) -- (1,3.25)
                     -- (2,2) -- (2,0) -- (0,2) -- (2,2) -- (0,0) -- (2,0);
-                    In order to avoid confusion with an actual line (the shape line, who is called a path in tikz, still
+                    In order to avoid confusion with an actual line (the shapeDTO line, who is called a path in tikz, still
                     following ?)
-                    , it's called a shape here.
+                    , it's called a shapeDTO here.
                     <p>
-                        Since it's an abstract class it's only intended to extend actual shape class, like Path.java,
+                        Since it's an abstract class it's only intended to extend actual shapeDTO class, like Path.java,
                         that should be used to represent the code line above.</div>
                 <dl>
                     <dt><span class="seeLabel">See Also:</span></dt>
                     <dd>
-                        <a href="../../../../../../../serialized-form.html#be.ac.ulb.infof307.g09.controller.shape.Shape">Serialized
+                        <a href="../../../../../../../serialized-form.html#be.ac.ulb.infof307.g09.controller.shapeDTO.Shape">Serialized
                             Form</a></dd>
                 </dl>
             </li>
@@ -184,19 +184,19 @@ implements java.io.Serializable</pre>
                             </tr>
                             <tr class="altColor">
                                 <td class="colOne"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#Shape-boolean-boolean-be.ac.ulb.infof307.g09.controller.shape.Color-be.ac.ulb.infof307.g09.controller.shape.Color-java.lang.String-int-">Shape</a></span>(boolean&nbsp;draw,
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#Shape-boolean-boolean-be.ac.ulb.infof307.g09.controller.shapeDTO.Color-be.ac.ulb.infof307.g09.controller.shapeDTO.Color-java.lang.String-int-">Shape</a></span>(boolean&nbsp;draw,
                                     boolean&nbsp;fill,
-                                    <a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                       title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;drawColor,
-                                    <a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                       title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;fillColor,
+                                    <a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                       title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;drawColor,
+                                    <a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                       title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;fillColor,
                                     java.lang.String&nbsp;shapeThicknessKey,
                                     int&nbsp;id)</code>&nbsp;
                                 </td>
                             </tr>
                             <tr class="rowColor">
                                 <td class="colOne"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#Shape-boolean-boolean-java.lang.String-int-">Shape</a></span>(boolean&nbsp;draw,
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#Shape-boolean-boolean-java.lang.String-int-">Shape</a></span>(boolean&nbsp;draw,
                                     boolean&nbsp;fill,
                                     java.lang.String&nbsp;shapeThicknessKey,
                                     int&nbsp;id)</code>&nbsp;
@@ -228,122 +228,122 @@ implements java.io.Serializable</pre>
                             <tr id="i0" class="altColor">
                                 <td class="colFirst"><code>boolean</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#equals-java.lang.Object-">equals</a></span>(java.lang.Object&nbsp;obj)</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#equals-java.lang.Object-">equals</a></span>(java.lang.Object&nbsp;obj)</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i1" class="rowColor">
                                 <td class="colFirst"><code>abstract <a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Coordinates.html"
-                                        title="class in be.ac.ulb.infof307.g09.controller.shape">Coordinates</a></code>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Coordinates.html"
+                                        title="class in be.ac.ulb.infof307.g09.controller.shapeDTO">Coordinates</a></code>
                                 </td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#getCoordinates--">getCoordinates</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#getCoordinates--">getCoordinates</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i2" class="altColor">
                                 <td class="colFirst"><code><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                        title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a></code></td>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                        title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a></code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#getDrawColor--">getDrawColor</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#getDrawColor--">getDrawColor</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i3" class="rowColor">
                                 <td class="colFirst"><code><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                        title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a></code></td>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                        title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a></code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#getFillColor--">getFillColor</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#getFillColor--">getFillColor</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i4" class="altColor">
                                 <td class="colFirst"><code>int</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#getId--">getId</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#getId--">getId</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i5" class="rowColor">
                                 <td class="colFirst"><code>java.lang.String</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#getShapeThicknessKey--">getShapeThicknessKey</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#getShapeThicknessKey--">getShapeThicknessKey</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i6" class="altColor">
                                 <td class="colFirst"><code>java.lang.String</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#getShapeThicknessKeyFormatted--">getShapeThicknessKeyFormatted</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#getShapeThicknessKeyFormatted--">getShapeThicknessKeyFormatted</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i7" class="rowColor">
                                 <td class="colFirst"><code>double</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#getShapeThicknessValue--">getShapeThicknessValue</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#getShapeThicknessValue--">getShapeThicknessValue</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i8" class="altColor">
                                 <td class="colFirst"><code>int</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#hashCode--">hashCode</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#hashCode--">hashCode</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i9" class="rowColor">
                                 <td class="colFirst"><code>boolean</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#isDraw--">isDraw</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#isDraw--">isDraw</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i10" class="altColor">
                                 <td class="colFirst"><code>boolean</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#isFill--">isFill</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#isFill--">isFill</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i11" class="rowColor">
                                 <td class="colFirst"><code>java.lang.String</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#print--">print</a></span>()</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#print--">print</a></span>()</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i12" class="altColor">
                                 <td class="colFirst"><code>void</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#setDraw-boolean-">setDraw</a></span>(boolean&nbsp;draw)</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#setDraw-boolean-">setDraw</a></span>(boolean&nbsp;draw)</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i13" class="rowColor">
                                 <td class="colFirst"><code>void</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#setDrawColor-be.ac.ulb.infof307.g09.controller.shape.Color-">setDrawColor</a></span>(<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                        title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;drawColor)</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#setDrawColor-be.ac.ulb.infof307.g09.controller.shapeDTO.Color-">setDrawColor</a></span>(<a
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                        title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;drawColor)</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i14" class="altColor">
                                 <td class="colFirst"><code>void</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#setFill-boolean-">setFill</a></span>(boolean&nbsp;fill)</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#setFill-boolean-">setFill</a></span>(boolean&nbsp;fill)</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i15" class="rowColor">
                                 <td class="colFirst"><code>void</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#setFillColor-be.ac.ulb.infof307.g09.controller.shape.Color-">setFillColor</a></span>(<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                        title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;fillColor)</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#setFillColor-be.ac.ulb.infof307.g09.controller.shapeDTO.Color-">setFillColor</a></span>(<a
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                        title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;fillColor)</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i16" class="altColor">
                                 <td class="colFirst"><code>void</code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#setId-int-">setId</a></span>(int&nbsp;id)</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#setId-int-">setId</a></span>(int&nbsp;id)</code>&nbsp;
                                 </td>
                             </tr>
                             <tr id="i17" class="rowColor">
                                 <td class="colFirst"><code><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html"
-                                        title="class in be.ac.ulb.infof307.g09.controller.shape">Shape</a></code></td>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html"
+                                        title="class in be.ac.ulb.infof307.g09.controller.shapeDTO">Shape</a></code></td>
                                 <td class="colLast"><code><span class="memberNameLink"><a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html#setShapeThicknessKey-java.lang.String-">setShapeThicknessKey</a></span>(java.lang.String&nbsp;shapeThicknessKey)</code>&nbsp;
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html#setShapeThicknessKey-java.lang.String-">setShapeThicknessKey</a></span>(java.lang.String&nbsp;shapeThicknessKey)</code>&nbsp;
                                 </td>
                             </tr>
                         </table>
@@ -381,15 +381,15 @@ implements java.io.Serializable</pre>
              int&nbsp;id)</pre>
                                 <dl>
                                     <dt><span class="paramLabel">Parameters:</span></dt>
-                                    <dd><code>draw</code> - Is the shape have a outer line, can be combined with fill.
+                                    <dd><code>draw</code> - Is the shapeDTO have a outer line, can be combined with fill.
                                     </dd>
-                                    <dd><code>fill</code> - Is the shape filled with a color, can be combined with draw.
+                                    <dd><code>fill</code> - Is the shapeDTO filled with a color, can be combined with draw.
                                     </dd>
                                     <dd><code>shapeThicknessKey</code> - Thickness starting value.</dd>
                                 </dl>
                             </li>
                         </ul>
-                        <a name="Shape-boolean-boolean-be.ac.ulb.infof307.g09.controller.shape.Color-be.ac.ulb.infof307.g09.controller.shape.Color-java.lang.String-int-">
+                        <a name="Shape-boolean-boolean-be.ac.ulb.infof307.g09.controller.shapeDTO.Color-be.ac.ulb.infof307.g09.controller.shapeDTO.Color-java.lang.String-int-">
                             <!--   -->
                         </a>
                         <ul class="blockListLast">
@@ -397,21 +397,21 @@ implements java.io.Serializable</pre>
                                 <h4>Shape</h4>
                                 <pre>public&nbsp;Shape(boolean&nbsp;draw,
              boolean&nbsp;fill,
-             <a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;drawColor,
-             <a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;fillColor,
+             <a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;drawColor,
+             <a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;fillColor,
              java.lang.String&nbsp;shapeThicknessKey,
              int&nbsp;id)
       throws <a href="../../../../../../../be/ac/ulb/infof307/g09/exceptions/FatalException.html"
                 title="class in be.ac.ulb.infof307.g09.exceptions">FatalException</a></pre>
                                 <dl>
                                     <dt><span class="paramLabel">Parameters:</span></dt>
-                                    <dd><code>draw</code> - Is the shape have a outer line, can be combined with fill.
+                                    <dd><code>draw</code> - Is the shapeDTO have a outer line, can be combined with fill.
                                     </dd>
-                                    <dd><code>fill</code> - Is the shape filled with a color, can be combined with draw.
+                                    <dd><code>fill</code> - Is the shapeDTO filled with a color, can be combined with draw.
                                     </dd>
-                                    <dd><code>fillColor</code> - Color to fill the shape with, color list in Color enum.
+                                    <dd><code>fillColor</code> - Color to fill the shapeDTO with, color list in Color enum.
                                     </dd>
                                     <dd><code>drawColor</code> - Outer line color, color list in Color enum.</dd>
                                     <dd><code>shapeThicknessKey</code> - Thickness starting value.</dd>
@@ -518,19 +518,19 @@ implements java.io.Serializable</pre>
                             <li class="blockList">
                                 <h4>getFillColor</h4>
                                 <pre>public&nbsp;<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                        title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;getFillColor()</pre>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                        title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;getFillColor()</pre>
                             </li>
                         </ul>
-                        <a name="setFillColor-be.ac.ulb.infof307.g09.controller.shape.Color-">
+                        <a name="setFillColor-be.ac.ulb.infof307.g09.controller.shapeDTO.Color-">
                             <!--   -->
                         </a>
                         <ul class="blockList">
                             <li class="blockList">
                                 <h4>setFillColor</h4>
                                 <pre>public&nbsp;void&nbsp;setFillColor(<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                        title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;fillColor)</pre>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                        title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;fillColor)</pre>
                             </li>
                         </ul>
                         <a name="getDrawColor--">
@@ -540,19 +540,19 @@ implements java.io.Serializable</pre>
                             <li class="blockList">
                                 <h4>getDrawColor</h4>
                                 <pre>public&nbsp;<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                        title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;getDrawColor()</pre>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                        title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;getDrawColor()</pre>
                             </li>
                         </ul>
-                        <a name="setDrawColor-be.ac.ulb.infof307.g09.controller.shape.Color-">
+                        <a name="setDrawColor-be.ac.ulb.infof307.g09.controller.shapeDTO.Color-">
                             <!--   -->
                         </a>
                         <ul class="blockList">
                             <li class="blockList">
                                 <h4>setDrawColor</h4>
                                 <pre>public&nbsp;void&nbsp;setDrawColor(<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Color.html"
-                                        title="enum in be.ac.ulb.infof307.g09.controller.shape">Color</a>&nbsp;drawColor)</pre>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Color.html"
+                                        title="enum in be.ac.ulb.infof307.g09.controller.shapeDTO">Color</a>&nbsp;drawColor)</pre>
                             </li>
                         </ul>
                         <a name="getShapeThicknessKey--">
@@ -580,8 +580,8 @@ implements java.io.Serializable</pre>
                             <li class="blockList">
                                 <h4>setShapeThicknessKey</h4>
                                 <pre>public&nbsp;<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Shape.html"
-                                        title="class in be.ac.ulb.infof307.g09.controller.shape">Shape</a>&nbsp;setShapeThicknessKey(java.lang.String&nbsp;shapeThicknessKey)</pre>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html"
+                                        title="class in be.ac.ulb.infof307.g09.controller.shapeDTO">Shape</a>&nbsp;setShapeThicknessKey(java.lang.String&nbsp;shapeThicknessKey)</pre>
                             </li>
                         </ul>
                         <a name="getCoordinates--">
@@ -591,11 +591,11 @@ implements java.io.Serializable</pre>
                             <li class="blockList">
                                 <h4>getCoordinates</h4>
                                 <pre>public abstract&nbsp;<a
-                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Coordinates.html"
-                                        title="class in be.ac.ulb.infof307.g09.controller.shape">Coordinates</a>&nbsp;getCoordinates()</pre>
+                                        href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Coordinates.html"
+                                        title="class in be.ac.ulb.infof307.g09.controller.shapeDTO">Coordinates</a>&nbsp;getCoordinates()</pre>
                                 <dl>
                                     <dt><span class="returnLabel">Returns:</span></dt>
-                                    <dd>the Coordinates that is considered to be the shape's anchor point</dd>
+                                    <dd>the Coordinates that is considered to be the shapeDTO's anchor point</dd>
                                 </dl>
                             </li>
                         </ul>
@@ -644,15 +644,15 @@ implements java.io.Serializable</pre>
 </div>
 <div class="subNav">
     <ul class="navList">
-        <li><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Rectangle.html"
-               title="class in be.ac.ulb.infof307.g09.controller.shape"><span
+        <li><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Rectangle.html"
+               title="class in be.ac.ulb.infof307.g09.controller.shapeDTO"><span
                 class="typeNameLink">Prev&nbsp;Class</span></a></li>
-        <li><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shape/Square.html"
-               title="class in be.ac.ulb.infof307.g09.controller.shape"><span
+        <li><a href="../../../../../../../be/ac/ulb/infof307/g09/controller/shapeDTO/Square.html"
+               title="class in be.ac.ulb.infof307.g09.controller.shapeDTO"><span
                 class="typeNameLink">Next&nbsp;Class</span></a></li>
     </ul>
     <ul class="navList">
-        <li><a href="../../../../../../../index.html?be/ac/ulb/infof307/g09/controller/shape/Shape.html" target="_top">Frames</a>
+        <li><a href="../../../../../../../index.html?be/ac/ulb/infof307/g09/controller/shapeDTO/Shape.html" target="_top">Frames</a>
         </li>
         <li><a href="Shape.html" target="_top">No&nbsp;Frames</a></li>
     </ul>

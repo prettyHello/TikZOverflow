@@ -1,20 +1,23 @@
 package be.ac.ulb.infof307.g09.view.registration;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.view.ViewName;
+import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import be.ac.ulb.infof307.g09.controller.ControllerUtility;
-import be.ac.ulb.infof307.g09.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.exceptions.FatalException;
-import be.ac.ulb.infof307.g09.view.ViewName;
-import be.ac.ulb.infof307.g09.view.ViewSwitcher;
+
+import java.util.logging.Logger;
 
 import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
 
@@ -22,6 +25,7 @@ import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
  * This class handles the process of register a new user.
  */
 public class RegistrationController {
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
     @FXML
     TextField firstnameTF;
@@ -51,8 +55,8 @@ public class RegistrationController {
     private final UserUCC userUcc;
 
     public RegistrationController() {
-        this.userFactory = ConfigurationSingleton.getUserFactory();
-        this.userUcc = ConfigurationSingleton.getUserUcc();
+        this.userFactory = ConfigurationHolder.getUserFactory();
+        this.userUcc = ConfigurationHolder.getUserUcc();
     }
 
     @FXML
@@ -64,11 +68,7 @@ public class RegistrationController {
         });
         checkboxEula.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if (checkboxEula.isSelected()) {
-                    checkboxEula.setSelected(false);
-                } else {
-                    checkboxEula.setSelected(true);
-                }
+                checkboxEula.setSelected(!checkboxEula.isSelected());
                 event.consume();
             }
         });
@@ -115,8 +115,8 @@ public class RegistrationController {
             String passwordText = this.passwordTF.getText();
             String lastnameText = this.lastnameTF.getText().replaceAll(ViewUtility.WHITE_SPACES_PATTERN, "");
             String firstnameText = this.firstnameTF.getText().replaceAll(ViewUtility.WHITE_SPACES_PATTERN, "");
-            String pw_hash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
-            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pw_hash, salt, ControllerUtility.getTimeStamp());
+            String pwHash = BCrypt.hashpw(passwordText, BCrypt.gensalt());
+            UserDTO user = userFactory.createUser(0, firstnameText, lastnameText, emailText, phoneText, pwHash, salt, ControllerUtility.getTimeStamp());
             userUcc.register(user);
             showAlert(Alert.AlertType.CONFIRMATION, "Account registration", "Success", "Account successfully created");
             viewSwitcher.switchView(ViewName.LOGIN);
@@ -124,12 +124,12 @@ public class RegistrationController {
             showAlert(Alert.AlertType.WARNING, "User registration", "Incomplete form", "You must read and accept the EULA in order to register");
         } catch (BizzException e) {
             //Update failed on dao lvl
-            System.out.println("Registration Failed on business lvl");
+            LOG.severe("Registration Failed on business lvl");
             showAlert(Alert.AlertType.WARNING, "Account registration", "Business Error", e.getMessage());
         } catch (FatalException e) {
             //Update failed on dao lvl
-            System.out.println("Update Failed on DAL/DAO lvl");
-            e.printStackTrace();
+            LOG.severe("Update Failed on DAL/DAO lvl");
+            LOG.severe(e.getMessage());
             showAlert(Alert.AlertType.WARNING, "Account registration", "Unexpected Error", e.getMessage());
         }
     }

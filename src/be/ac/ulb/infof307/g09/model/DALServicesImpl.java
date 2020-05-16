@@ -13,8 +13,8 @@ import java.sql.*;
  */
 public class DALServicesImpl implements DALServices, DALBackEndServices {
     private static Connection connection;
-    private static String databaseName = "database";
-    private static String databasePath;
+    private String databaseName = "database";
+    private String databasePath;
 
     public DALServicesImpl() {
 
@@ -101,6 +101,13 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
             // close file reader
             if (reader != null) {
                 reader.close();
+            }
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new FatalException("Statement close impossible: \n\t" + e.getMessage());
+                }
             }
             this.closeConnection();
         }

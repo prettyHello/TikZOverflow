@@ -36,8 +36,8 @@ public class UserDAOImpl implements UserDAO {
      */
     @Override
     public UserDTO get(UserDTO usrAuth) throws FatalException, BizzException {
-        PreparedStatement pr;
-        ResultSet rs;
+        PreparedStatement pr = null;
+        ResultSet rs = null;
         UserDTO usr = null;
         try {
             pr = dal.prepareStatement(SQL_LOGIN_USER);
@@ -50,8 +50,9 @@ public class UserDAOImpl implements UserDAO {
             }
         } catch (SQLException exc) {
             showAlert(Alert.AlertType.WARNING, "DB Error", "DataBase Connection error", exc.getMessage());
-            exc.printStackTrace();
-            throw new FatalException("An error occurred in getUser");
+            throw new FatalException("An error occurred in getUser : " + exc.getMessage());
+        }finally {
+            ModelUtility.closeStatements(pr,rs);
         }
         return usr;
 
@@ -92,6 +93,8 @@ public class UserDAOImpl implements UserDAO {
             }
             throw new FatalException("An error occurred in create of UserDAO " + exc.getMessage());
 
+        }finally {
+            ModelUtility.closeStatements(ps,rs);
         }
         return updatedDTO;
     }
@@ -116,23 +119,6 @@ public class UserDAOImpl implements UserDAO {
     }
 
     /**
-     * Extracted method that fills a prepared statement with all the content of a UserDTO object
-     *
-     * @param ps      the SQL prepared statement that will need all the information of the DTO
-     * @param userDTO the DTO containing the info of a user
-     * @throws SQLException if an index is invalid for the statement
-     */
-    private void fullyFillPreparedStatement(PreparedStatement ps, UserDTO userDTO) throws SQLException {
-        ps.setString(1, userDTO.getFirstName());
-        ps.setString(2, userDTO.getLastName());
-        ps.setString(3, userDTO.getEmail());
-        ps.setString(4, userDTO.getPhone());
-        ps.setString(5, userDTO.getPassword());
-        ps.setString(6, userDTO.getSalt());
-        ps.setString(7, userDTO.getRegisterDate());
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -149,10 +135,11 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(6, userDTO.getSalt());
             ps.setString(7, userDTO.getEmail());
             ps.executeUpdate();
-            System.out.println(ps);
         } catch (SQLException exc) {
             //exc.printStackTrace();
             throw new FatalException("An error occurred in updateUser");
+        }finally {
+            ModelUtility.closeStatements(ps,null);
         }
     }
 
@@ -167,8 +154,9 @@ public class UserDAOImpl implements UserDAO {
             ps.setString(1, userDTO.getEmail());
             ps.executeUpdate();
         } catch (SQLException exc) {
-            exc.printStackTrace();
-            throw new FatalException("An error occurred in deleteUSer");
+            throw new FatalException("An error occurred in deleteUSer : " + exc.getMessage());
+        }finally {
+            ModelUtility.closeStatements(ps,null);
         }
     }
 }

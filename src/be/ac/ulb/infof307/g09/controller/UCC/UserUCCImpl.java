@@ -1,14 +1,16 @@
 package be.ac.ulb.infof307.g09.controller.UCC;
 
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.User;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.model.DALServices;
 import be.ac.ulb.infof307.g09.model.DAO;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import be.ac.ulb.infof307.g09.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import static be.ac.ulb.infof307.g09.controller.ControllerUtility.checkObjects;
 
@@ -16,13 +18,12 @@ import static be.ac.ulb.infof307.g09.controller.ControllerUtility.checkObjects;
  * {@inheritDoc}
  */
 public class UserUCCImpl implements UserUCC {
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
-    private final DALServices dal;
     private final DAO<UserDTO> userDAO;
     private final String rootProject = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator;
 
     public UserUCCImpl(DALServices dalServices, DAO<UserDTO> userDAO) {
-        this.dal = dalServices;
         this.userDAO = userDAO;
     }
 
@@ -56,6 +57,7 @@ public class UserUCCImpl implements UserUCC {
         File file = new File(rootProject + "userid_" + userId);
         if (!file.exists()) {
             if (!file.mkdir()) {
+                LOG.severe("Failed to create directory!");
                 throw new FatalException("Unable to create user folder");
             }
         }

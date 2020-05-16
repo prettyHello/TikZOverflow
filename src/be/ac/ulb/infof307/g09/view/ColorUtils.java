@@ -1,6 +1,7 @@
 package be.ac.ulb.infof307.g09.view;
 
-import java.awt.*;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ColorDTO;
+
 import java.util.ArrayList;
 
 /**
@@ -10,29 +11,30 @@ import java.util.ArrayList;
  */
 public class ColorUtils {
 
-    static final ArrayList<ColorUtils.ColorName> colorList = new ArrayList<>();
+    static final ArrayList<ColorUtils.ColorName> COLOR_LIST = new ArrayList<>();
 
     // Initialize the color list that we have.
+
     static {
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.RED, 0xFF, 0x00, 0x00));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.GREEN, 0x00, 0x80, 0x00));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.BLUE, 0x00, 0x00, 0xFF));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.CYAN, 0x00, 0xFF, 0xFF));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.MAGENTA, 0xFF, 0x00, 0xFF));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.YELLOW, 0xFF, 0xFF, 0x00));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK, 0x00, 0x00, 0x00));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.GRAY, 0x80, 0x80, 0x80));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.DARKGRAY, 0xA9, 0xA9, 0xA9));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.LIGHTGRAY, 0xD3, 0xD3, 0xD3));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.BROWN, 0xA5, 0x2A, 0x2A));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.LIME, 0x00, 0xFF, 0x00));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.OLIVE, 0x80, 0x80, 0x00));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.ORANGE, 0xFF, 0xA5, 0x00));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.PINK, 0xFF, 0xC0, 0xCB));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.PURPLE, 0x80, 0x00, 0x80));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.TEAL, 0x00, 0x80, 0x80));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.VIOLET, 0xEE, 0x82, 0xEE));
-        colorList.add(new ColorUtils.ColorName(be.ac.ulb.infof307.g09.controller.shape.Color.WHITE, 0xFF, 0xFF, 0xFF));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.RED, 0xFF, 0x00, 0x00));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.GREEN, 0x00, 0x80, 0x00));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.BLUE, 0x00, 0x00, 0xFF));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.CYAN, 0x00, 0xFF, 0xFF));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.MAGENTA, 0xFF, 0x00, 0xFF));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.YELLOW, 0xFF, 0xFF, 0x00));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.BLACK, 0x00, 0x00, 0x00));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.GRAY, 0x80, 0x80, 0x80));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.DARKGRAY, 0xA9, 0xA9, 0xA9));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.LIGHTGRAY, 0xD3, 0xD3, 0xD3));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.BROWN, 0xA5, 0x2A, 0x2A));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.LIME, 0x00, 0xFF, 0x00));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.OLIVE, 0x80, 0x80, 0x00));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.ORANGE, 0xFF, 0xA5, 0x00));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.PINK, 0xFF, 0xC0, 0xCB));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.PURPLE, 0x80, 0x00, 0x80));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.TEAL, 0x00, 0x80, 0x80));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.VIOLET, 0xEE, 0x82, 0xEE));
+        COLOR_LIST.add(new ColorUtils.ColorName(ColorDTO.WHITE, 0xFF, 0xFF, 0xFF));
     }
 
     /**
@@ -43,7 +45,7 @@ public class ColorUtils {
      * @param blue  blue component
      * @return the closest color
      */
-    public static be.ac.ulb.infof307.g09.controller.shape.Color getColorNameFromRgb(double red, double green, double blue) {
+    public static ColorDTO getColorNameFromRgb(double red, double green, double blue) {
         int r = (int) Math.floor(red * 255 + 0.5d);
         int g = (int) Math.floor(green * 255 + 0.5d);
         int b = (int) Math.floor(blue * 255 + 0.5d);
@@ -51,18 +53,15 @@ public class ColorUtils {
         ColorName closestMatch = null;
         int minMSE = Integer.MAX_VALUE;
         int mse;
-        for (ColorName c : colorList) {
+        for (ColorName c : COLOR_LIST) {
             mse = c.computeMSE(r, g, b);
             if (mse < minMSE) {
                 minMSE = mse;
                 closestMatch = c;
             }
         }
+        assert (closestMatch != null);
         return closestMatch.getName();
-    }
-
-    public be.ac.ulb.infof307.g09.controller.shape.Color getColorNameFromColor(Color color) {
-        return getColorNameFromRgb(color.getRed(), color.getGreen(), color.getBlue());
     }
 
     /**
@@ -71,10 +70,10 @@ public class ColorUtils {
      * @author Xiaoxiao Li
      */
     public static class ColorName {
-        public int r, g, b;
-        public final be.ac.ulb.infof307.g09.controller.shape.Color name;
+        private final int r, g, b;
+        private final ColorDTO name;
 
-        public ColorName(be.ac.ulb.infof307.g09.controller.shape.Color name, int r, int g, int b) {
+        public ColorName(ColorDTO name, int r, int g, int b) {
             this.r = r;
             this.g = g;
             this.b = b;
@@ -97,7 +96,7 @@ public class ColorUtils {
             return b;
         }
 
-        public be.ac.ulb.infof307.g09.controller.shape.Color getName() {
+        public ColorDTO getName() {
             return name;
         }
     }

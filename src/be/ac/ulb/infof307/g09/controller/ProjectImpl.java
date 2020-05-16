@@ -2,7 +2,7 @@ package be.ac.ulb.infof307.g09.controller;
 
 
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
-import be.ac.ulb.infof307.g09.controller.shape.Shape;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ShapeDTO;
 
 /**
  * The project DTO contains all the data related to the project and is serializable
@@ -115,8 +115,8 @@ public class ProjectImpl implements ProjectDTO {
     @Override
     public boolean equals(Object obj) {
         boolean retVal = false;
-        if (obj instanceof Shape){
-            Shape ptr = (Shape) obj;
+        if (obj instanceof ShapeDTO){
+            ShapeDTO ptr = (ShapeDTO) obj;
             retVal = ptr.getId() == this.projectId;
         }
         return retVal;

@@ -1,5 +1,6 @@
 package be.ac.ulb.infof307.g09.view;
 
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,11 +15,13 @@ import be.ac.ulb.infof307.g09.view.profile.ProfileController;
 import be.ac.ulb.infof307.g09.view.registration.RegistrationController;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Class that handles the switching from one screen to another during interaction with the application
  */
 public class ViewSwitcher {
+    private static final Logger LOG = Logger.getLogger(ConfigurationHolder.class.getName());
 
     /**
      * The stage containing the different scenes
@@ -57,8 +60,8 @@ public class ViewSwitcher {
                     throw new IllegalArgumentException("Unhandled be.ac.ulb.infof307.g09.view");
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("couldn't change be.ac.ulb.infof307.g09.view");
+            LOG.severe(e.getMessage());
+            LOG.severe("couldn't change be.ac.ulb.infof307.g09.view");
             ViewUtility.showAlert(Alert.AlertType.ERROR, "Fatal error", "Unable to switch be.ac.ulb.infof307.g09.view", "The application is unable to change the current be.ac.ulb.infof307.g09.view. Exiting.");
             Platform.exit();
         }

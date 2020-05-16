@@ -1,11 +1,16 @@
 package be.ac.ulb.infof307.g09.view.dashboard;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.view.ViewName;
+import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,10 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-import be.ac.ulb.infof307.g09.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.exceptions.FatalException;
-import be.ac.ulb.infof307.g09.view.ViewName;
-import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,11 +29,11 @@ import static be.ac.ulb.infof307.g09.view.ViewUtility.showAlert;
  * This class handles the main screen of the program and allows the user to manage through their projects.
  */
 public class DashboardController {
-    final UserUCC userUcc = ConfigurationSingleton.getUserUcc();
-    final ProjectUCC projectUCC = ConfigurationSingleton.getProjectUCC();
-    final ProjectFactory projectFactory = ConfigurationSingleton.getProjectFactory();
+    final UserUCC userUcc = ConfigurationHolder.getUserUcc();
+    final ProjectUCC projectUCC = ConfigurationHolder.getProjectUCC();
+    final ProjectFactory projectFactory = ConfigurationHolder.getProjectFactory();
 
-    final DashboardController dbc = this;
+    private final DashboardController dbc = this;
     private boolean useAskedName;
 
     private ViewSwitcher viewSwitcher;
@@ -44,8 +45,6 @@ public class DashboardController {
     @FXML
     private ListView<String> optionList;
 
-    private ObservableList<String> itemList;
-
     private ObservableList<ProjectDTO> projectObsList;
 
     private UserDTO user;
@@ -55,7 +54,7 @@ public class DashboardController {
 
     public void initialize() {
         UserDTO userDto = userUcc.getConnectedUser();
-        itemList = FXCollections.observableArrayList();
+        ObservableList<String> itemList = FXCollections.observableArrayList();
         itemList.add("Your projects");
         itemList.add("Shared with you");
         optionList.setItems(itemList);
@@ -122,7 +121,7 @@ public class DashboardController {
      * Untar a choose file to user home, show to the dashboard and save into the database
      */
     @FXML
-    public void ImportProject() {
+    public void importProject() {
         FileChooser fc = new FileChooser();
         ProjectDTO projectDTO = null;
         File selectedFile = fc.showOpenDialog(null);

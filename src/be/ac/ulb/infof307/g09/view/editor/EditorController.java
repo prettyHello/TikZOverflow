@@ -1,13 +1,16 @@
 package be.ac.ulb.infof307.g09.view.editor;
 
-import be.ac.ulb.infof307.g09.config.ConfigurationSingleton;
+
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ColorDTO;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.CoordinatesDTO;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.ShapeDTO;
+import be.ac.ulb.infof307.g09.controller.DTO.shapes.Thickness;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
-import be.ac.ulb.infof307.g09.controller.shape.Coordinates;
-import be.ac.ulb.infof307.g09.controller.shape.Thickness;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
@@ -49,7 +52,7 @@ public class EditorController {
 
     private ViewSwitcher viewSwitcher;
     private ShapeHandler shapeHandler;
-    private final ProjectUCC projectUcc = ConfigurationSingleton.getProjectUCC();
+    private final ProjectUCC projectUcc = ConfigurationHolder.getProjectUCC();
 
     @FXML
     Pane toolbar;
@@ -70,11 +73,11 @@ public class EditorController {
     @FXML
     Button delete;
     @FXML
-    ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> fillColour;
+    ChoiceBox<ColorDTO> fillColour;
     @FXML
-    ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> strokeColour;
+    ChoiceBox<ColorDTO> strokeColour;
     @FXML
-    ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Thickness> shapeThickness;
+    ChoiceBox<Thickness> shapeThickness;
     @FXML
     SplitPane mainSplitPane;
     @FXML
@@ -85,15 +88,13 @@ public class EditorController {
     BorderPane bpRootpane;
 
     protected final List<Shape> selectedShapes = new ArrayList<>();
-    private Coordinates lastMousePos = new Coordinates(0, 0);
+    private CoordinatesDTO lastMousePos = new CoordinatesDTO(0, 0);
     protected String shapeToDraw = "";
     protected Canvas canvas;
-    private String colorsPattern = "";
-    private ContextMenu shapeContextMenu;
-    private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuFillColorPicker;
-    private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuDrawColorPicker;
-    private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Thickness> contextMenuChangeThickness;
-    private ChoiceBox<be.ac.ulb.infof307.g09.controller.shape.Color> contextMenuLabelColorPicker;
+    private ChoiceBox<ColorDTO> contextMenuFillColorPicker;
+    private ChoiceBox<ColorDTO> contextMenuDrawColorPicker;
+    private ChoiceBox<Thickness> contextMenuChangeThickness;
+    private ChoiceBox<ColorDTO> contextMenuLabelColorPicker;
 
     protected String intNumber;
     protected String floatNumber;
@@ -107,9 +108,6 @@ public class EditorController {
     private String oldCode;
     private boolean writableOldCode = true;
     protected boolean actionFromGUI = false;
-
-    //TODO
-    private ProjectDTO projectDTO;
 
 
     public EditorController() {
@@ -143,7 +141,7 @@ public class EditorController {
 
         // Fill dropdowns (fill & stroke & context) with appropriate colors
         ArrayList<String> colors = new ArrayList<>();
-        for (be.ac.ulb.infof307.g09.controller.shape.Color colour : be.ac.ulb.infof307.g09.controller.shape.Color.values()) {
+        for (ColorDTO colour : ColorDTO.values()) {
             fillColour.getItems().add(colour);
             strokeColour.getItems().add(colour);
             contextMenuFillColorPicker.getItems().add(colour);
@@ -154,14 +152,14 @@ public class EditorController {
 
         //Fill the thickness ChoiceBox on contextMenu
         ArrayList<String> thicknessKeys = new ArrayList<>();
-        for (be.ac.ulb.infof307.g09.controller.shape.Thickness thickness : be.ac.ulb.infof307.g09.controller.shape.Thickness.values()) {
+        for (Thickness thickness : Thickness.values()) {
             shapeThickness.getItems().add(thickness);
             contextMenuChangeThickness.getItems().add(thickness);
             thicknessKeys.add(thickness.toString().toLowerCase().replace('_', ' '));
         }
 
         // Initialize TikZ regex patterns
-        this.colorsPattern = String.join("|", colors);
+        String colorsPattern = String.join("|", colors);
         this.thicknessPattern = String.join("|", thicknessKeys);
         this.intNumber = "[+-]?\\d+";
         this.floatNumber = "[+-]?\\d+\\.\\d+";
@@ -173,12 +171,12 @@ public class EditorController {
         this.pathPattern = "\\\\draw[ ]*\\[(" + colorsPattern + ")(,[ ]*->)*[ ]*,[ ]*(" + thicknessPattern + ")\\] " + coordinatePattern + " -- " + coordinatePattern;
 
         // Set start value dropdown to black
-        fillColour.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
-        strokeColour.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
+        fillColour.setValue(ColorDTO.BLACK);
+        strokeColour.setValue(ColorDTO.BLACK);
         shapeThickness.setValue(Thickness.THIN);
-        contextMenuFillColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
-        contextMenuDrawColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
-        contextMenuLabelColorPicker.setValue(be.ac.ulb.infof307.g09.controller.shape.Color.BLACK);
+        contextMenuFillColorPicker.setValue(ColorDTO.BLACK);
+        contextMenuDrawColorPicker.setValue(ColorDTO.BLACK);
+        contextMenuLabelColorPicker.setValue(ColorDTO.BLACK);
         contextMenuChangeThickness.setValue(Thickness.THIN);
 
 
@@ -191,7 +189,7 @@ public class EditorController {
         MenuItem setLabel = new MenuItem("Set label", contextMenuLabelColorPicker);
         setLabel.setOnAction(t -> shapeHandler.handleSetLabel(Color.valueOf(contextMenuLabelColorPicker.getValue().toString())));
         MenuItem shapeThicknessMenu = new MenuItem("Change thickness", contextMenuChangeThickness);
-        shapeThicknessMenu.setOnAction(t -> shapeHandler.updateShapeThickness(Thickness.valueOf(contextMenuChangeThickness.getValue().toString())));
+        shapeThicknessMenu.setOnAction(t -> shapeHandler.updateShapeThickness(contextMenuChangeThickness.getValue()));
 
         fillColour.setOnAction(t -> {
             if (!selectedShapes.isEmpty()) {
@@ -205,11 +203,11 @@ public class EditorController {
         });
         shapeThickness.setOnAction(t -> {
             if (!selectedShapes.isEmpty()) {
-                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(Thickness.valueOf(shapeThickness.getValue().toString()), shape));
+                selectedShapes.forEach(shape -> shapeHandler.setShapeThickness(shapeThickness.getValue(), shape));
             }
         });
 
-        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu, setLabel);
+        ContextMenu shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu, setLabel);
         shapeHandler = new ShapeHandler(shapeContextMenu, canvas, this);
 
         // show shapes at the start(don't have to interact to have them show up)
@@ -219,7 +217,7 @@ public class EditorController {
         pane.setOnMouseMoved(event ->
         {
             lbCoordinates.setText(String.format("x=%d, y=%d", (int) event.getX(), (int) event.getY()));
-            this.lastMousePos = new Coordinates(event.getX(), event.getY());
+            this.lastMousePos = new CoordinatesDTO(event.getX(), event.getY());
         });
 
         bpRootpane.setOnKeyPressed(event -> {
@@ -290,12 +288,12 @@ public class EditorController {
     }
 
     /**
-     * Notify Shape controller of javafx shape creation
+     * Notify ShapeDTO controller of javafx shape creation
      *
      * @param addToController the shape that will be added to the model
      * @param shape           JavaFX shape
      */
-    public void notifyController(be.ac.ulb.infof307.g09.controller.shape.Shape addToController, Shape shape) {
+    public void notifyController(ShapeDTO addToController, Shape shape) {
         Color fillColor = (Color) shape.getFill();
         Color drawColor = (Color) shape.getStroke();
         shape.setId(Integer.toString(addToController.getId()));
@@ -367,8 +365,8 @@ public class EditorController {
         try {
             String password = ViewUtility.askProjectPassword();
             if (password != null) {
-                this.projectDTO = ActiveProject.getActiveProject();
-                this.projectDTO.setProjectPassword(password);
+                ProjectDTO projectDTO = ActiveProject.getActiveProject();
+                projectDTO.setProjectPassword(password);
                 this.projectUcc.save();
                 ViewUtility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
                 return true;
@@ -449,8 +447,9 @@ public class EditorController {
             if (incorrectLine == null) {
                 tikzTA.setWrongLine(null);
 
-                if (oldCode == null)
+                if (oldCode == null) {
                     oldCode = oldValue;
+                }
 
                 List<Integer> selectedShapesIds = new ArrayList<>();
                 if (!selectedShapes.isEmpty()) {
@@ -463,8 +462,9 @@ public class EditorController {
                 this.clear();
                 this.translateToDiagram(newLines, selectedShapesIds);
 
-                if (selectedShapes.isEmpty())
+                if (selectedShapes.isEmpty()) {
                     disableToolbar(false);
+                }
 
                 this.oldCode = null;
                 writableOldCode = true;
@@ -518,8 +518,9 @@ public class EditorController {
             for (String pattern : patternsArray) {
                 p = Pattern.compile(pattern);
                 m = p.matcher(line);
-                if (m.find())
+                if (m.find()) {
                     linesCorrect = true;
+                }
             }
             if (!linesCorrect) {
                 incorrectLine = line;
@@ -540,9 +541,9 @@ public class EditorController {
         List<Integer> selectedShapesIds = new ArrayList<>();
 
         // Save the IDs of the shapes selected
-        for (Shape selectedShape : selectedShapes)
+        for (Shape selectedShape : selectedShapes) {
             selectedShapesIds.add(Integer.parseInt(selectedShape.getId()));
-
+        }
         Collections.sort(selectedShapesIds);
 
         if (newLines.size() < oldLines.size()) {
@@ -551,34 +552,46 @@ public class EditorController {
 
             // Find first line that changed
             int i;
-            for (i = 0; i < newLines.size(); i++)
-                if (!oldLines.get(i).equals(newLines.get(i)))
+            for (i = 0; i < newLines.size(); i++){
+                if (!oldLines.get(i).equals(newLines.get(i))){
                     break;
+                }
+            }
             i += 1;
 
             // If the shape selected was removed, remove it from selectedShapes.
-            for (int j = 0; j < nLinesChanged; j++)
-                if (selectedShapesIds.contains(i + j))
+            for (int j = 0; j < nLinesChanged; j++){
+                if (selectedShapesIds.contains(i + j)){
                     selectedShapesIds.remove(Integer.valueOf(i + j));
+                }
+            }
+
             // Update the IDs of the selected shapes;
-            for (int j = 0; j < selectedShapesIds.size(); j++)
-                if (selectedShapesIds.get(j) > i)
+            for (int j = 0; j < selectedShapesIds.size(); j++){
+                if (selectedShapesIds.get(j) > i){
                     selectedShapesIds.set(j, selectedShapesIds.get(j) - nLinesChanged);
+                }
+            }
+
 
         } else if (newLines.size() > oldLines.size()) {
             // X lines have been added. selectedShapesIds at some point is X behind
             int nLinesChanged = newLines.size() - oldLines.size();
             // Find first line that changed
             int i;
-            for (i = 0; i < oldLines.size(); i++)
-                if (!newLines.get(i).equals(oldLines.get(i)))
+            for (i = 0; i < oldLines.size(); i++){
+                if (!newLines.get(i).equals(oldLines.get(i))){
                     break;
+                }
+            }
             i += 1;
 
             // Update the IDs of the selected shapes;
-            for (int j = 0; j < selectedShapesIds.size(); j++)
-                if (selectedShapesIds.get(j) >= i)
+            for (int j = 0; j < selectedShapesIds.size(); j++){
+                if (selectedShapesIds.get(j) >= i){
                     selectedShapesIds.set(j, selectedShapesIds.get(j) + nLinesChanged);
+                }
+            }
         }
 
         return selectedShapesIds;

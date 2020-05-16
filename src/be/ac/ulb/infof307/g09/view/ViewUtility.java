@@ -51,9 +51,10 @@ public class ViewUtility {
         TextArea ta = new TextArea();
         ta.setWrapText(true);
         ta.setEditable(false);
+        InputStream is = null;
         try {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-            InputStream is = classloader.getResourceAsStream("eula.txt");
+            is = classloader.getResourceAsStream("eula.txt");
             if (is == null) {
                 throw new IOException("file not found");
             }
@@ -62,6 +63,15 @@ public class ViewUtility {
         } catch (IOException e) {
             alert.setAlertType(Alert.AlertType.ERROR);
             ta.setText("An error occurred. Unable to find eula.txt file.");
+        }finally {
+            if(is != null){
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    alert.getDialogPane().setContent(ta);
+                    alert.showAndWait();
+                }
+            }
         }
 
         alert.getDialogPane().setContent(ta);

@@ -1,6 +1,6 @@
 package be.ac.ulb.infof307.g09.model;
 
-import be.ac.ulb.infof307.g09.config.TestDAOConfigurationSingleton;
+import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -25,10 +25,10 @@ class UserDAOImplTest {
 
     @BeforeEach
     void setUp() {
-        TestDAOConfigurationSingleton holder = TestDAOConfigurationSingleton.getInstance();
-        this.dalServices = TestDAOConfigurationSingleton.getDalServices();
-        this.userFactory = TestDAOConfigurationSingleton.getUserFactory();
-        this.userDAO = TestDAOConfigurationSingleton.getUserDAO();
+        ConfigurationHolder.loadConfiguration("TestDAO");
+        this.dalServices = ConfigurationHolder.getDalServices();
+        this.userFactory = ConfigurationHolder.getUserFactory();
+        this.userDAO = ConfigurationHolder.getUserDAO();
         dalServices.deleteDB("dao_test");
         try {
             dalServices.createTables("dao_test");
