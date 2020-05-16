@@ -25,6 +25,7 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
 
     /**
      * compress and export a selected project
+     * No specific encryption is done, since the files are already encrypted
      * @param dto use the id in dto to get the values through the model
      */
     void export(File selectedFile, ProjectDTO dto) throws FatalException;
@@ -42,7 +43,8 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
 
     /**
      * Load a canvas previously saved into a .bin file
-     * If the .bin file has been deleted or never saved, a new Canvas is created
+     * If the .bin.enc file has been deleted or never saved, a new Canvas is created
+     * This method will also decrypt the file .bin.enc to readable .bin
      * @param dto of project concerned
      * @param password the password of the file
      * @return the Canvas
@@ -52,7 +54,7 @@ public interface ProjectDAO extends DAO<ProjectDTO> {
 
     /**
      * Load a project previously exported in a tar.gz
-     *
+     * It will ask the user the project password, decrypt the project to store the hash in the database
      * @param selectedArchive The archive to import
      * @param projectDTO      DTO with the name of the new project once imported
      * @param userDTO         Active user

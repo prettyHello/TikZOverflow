@@ -53,8 +53,7 @@ public class Main extends Application {
      */
     public static void main(String[] args) {
 
-        //Initialize the pseudo-singleton holding the configuration, this should be only done here
-        //ConfigurationSingleton prod = new ConfigurationSingleton(args);
+        //Initialize the ConfigurationHolder by reading one of the .properties files , this should be only done here
         ConfigurationHolder.loadConfiguration(args);
         //Create the database if it doesn't exist
         try {
