@@ -1,6 +1,5 @@
 package be.ac.ulb.infof307.g09.model;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +13,6 @@ class DALServicesImplTest {
     @BeforeEach
     void setUp() {
         dal = new DALServicesImpl();
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test

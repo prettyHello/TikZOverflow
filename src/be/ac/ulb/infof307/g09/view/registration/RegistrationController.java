@@ -2,20 +2,20 @@ package be.ac.ulb.infof307.g09.view.registration;
 
 
 import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.view.ViewName;
+import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import be.ac.ulb.infof307.g09.controller.ControllerUtility;
-import be.ac.ulb.infof307.g09.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.exceptions.FatalException;
-import be.ac.ulb.infof307.g09.view.ViewName;
-import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
 import java.util.logging.Logger;
 
@@ -68,11 +68,7 @@ public class RegistrationController {
         });
         checkboxEula.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if (checkboxEula.isSelected()) {
-                    checkboxEula.setSelected(false);
-                } else {
-                    checkboxEula.setSelected(true);
-                }
+                checkboxEula.setSelected(!checkboxEula.isSelected());
                 event.consume();
             }
         });

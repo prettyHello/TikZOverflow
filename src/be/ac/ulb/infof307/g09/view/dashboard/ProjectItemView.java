@@ -92,7 +92,7 @@ public class ProjectItemView extends HBox {
             alert.setHeaderText("once deleted, the "+ this.projectDTO.getProjectName()+" project can no longer be restored");
             alert.setContentText("are you sure you want to delete");
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
+            if (result.isPresent() && result.get() == ButtonType.OK) {
                 this.projectUCC.delete(this.projectDTO);
                 this.dashboard.delete(this.projectDTO);
             }

@@ -37,7 +37,7 @@ class PathDTOTest {
         coordinates.add(new CoordinatesDTO(0,0));
         coordinates.add(new CoordinatesDTO(2,2));
         coordinates.add(new CoordinatesDTO(0,4));
-        PathDTO path = new PathDTO(coordinates,false,false, ColorDTO.RED,Thickness.ULTRA_THICK, 1);
+        PathDTO path = new PathDTO(coordinates, ColorDTO.RED, Thickness.ULTRA_THICK, 1);
         assertEquals("\\draw [red, ultra thick] (0.0,0.0) -- (2.0,2.0) -- (0.0,4.0) ;",path.print());
     }
 

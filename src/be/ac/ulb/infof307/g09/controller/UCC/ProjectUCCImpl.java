@@ -5,14 +5,13 @@ import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveCanvas;
 import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
-import be.ac.ulb.infof307.g09.model.DALServices;
-import be.ac.ulb.infof307.g09.model.DAO;
-import be.ac.ulb.infof307.g09.model.ProjectDAO;
-import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.model.DAO;
+import be.ac.ulb.infof307.g09.model.ProjectDAO;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,11 +26,9 @@ public class ProjectUCCImpl implements ProjectUCC {
     private final String rootFolder = File.separator + "ProjectTikZ" + File.separator;
 
     private final UserUCC userUcc = ConfigurationHolder.getUserUcc();
-    private final DALServices dal;
     private final ProjectDAO projectDAO;
 
-    public ProjectUCCImpl(DALServices dalServices, DAO<ProjectDTO> projectDAO) {
-        this.dal = dalServices;
+    public ProjectUCCImpl(DAO<ProjectDTO> projectDAO) {
         this.projectDAO = (ProjectDAO) projectDAO;
     }
 

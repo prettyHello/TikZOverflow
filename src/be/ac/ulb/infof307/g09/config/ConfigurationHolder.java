@@ -104,7 +104,7 @@ public abstract class ConfigurationHolder {
             userUcc = (UserUCC) configuration.getClassFor("UserUCC").getConstructor(DALServices.class, DAO.class).newInstance(dalServices, userDAO);
             projectFactory = (ProjectFactory) configuration.getClassFor("ProjectFactory").getConstructor().newInstance();
             projectDAO = (ProjectDAO) configuration.getClassFor("ProjectDAO").getDeclaredConstructor(DALServices.class, ProjectFactory.class).newInstance(dalServices, projectFactory);
-            projectUCC = (ProjectUCC) configuration.getClassFor("ProjectUCC").getDeclaredConstructor(DALServices.class, DAO.class).newInstance(dalServices, projectDAO);
+            projectUCC = (ProjectUCC) configuration.getClassFor("ProjectUCC").getDeclaredConstructor(DAO.class).newInstance(projectDAO);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc) {
             //The reason behind this error handling is that this method is called before JavaFX is launched
             LOG.severe("Unable to set up configuration singleton");

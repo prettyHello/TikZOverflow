@@ -11,7 +11,7 @@ public class ArrowDTO extends PathDTO {
     }
 
     public ArrowDTO(CoordinatesDTO origin, CoordinatesDTO end, ColorDTO drawColor, Thickness thickness, int id) throws FatalException {
-        super(origin, end,false,true, drawColor, thickness, id);
+        super(origin, end, drawColor, thickness, id);
     }
 
     /**

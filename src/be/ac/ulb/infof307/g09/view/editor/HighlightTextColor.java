@@ -41,10 +41,10 @@ public class HighlightTextColor extends CodeArea {
      */
     public void colorWord(String wordListOption, String color) {
         String[] wordList = getWordList(wordListOption);
-        for (int x = 0; x < wordList.length; x++) {
-            List<Integer> positions = findWordUpgrade(this.getText(), wordList[x]);
-            for (int y = 0; y < positions.size(); y++) {
-                this.setStyleClass(positions.get(y), positions.get(y) + wordList[x].length(), color);
+        for (String s : wordList) {
+            List<Integer> positions = findWordUpgrade(this.getText(), s);
+            for (Integer position : positions) {
+                this.setStyleClass(position, position + s.length(), color);
             }
         }
     }
@@ -105,6 +105,10 @@ public class HighlightTextColor extends CodeArea {
     private static String printMatches(String text, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(text);
+        // Check all occurrences
+        while (matcher.find()) {
+            break;
+        }
         return matcher.group();
     }
 

@@ -101,6 +101,11 @@ public class ModelUtility {
             dirDest.mkdir();
         }
         String[] files = dirSrc.list();
+
+        if (files == null) {
+            throw new FatalException("specified folder does not exist");
+        }
+
         for (String f : files) {
             File srcF = new File(dirSrc, f);
             File destF = new File(dirDest, f);

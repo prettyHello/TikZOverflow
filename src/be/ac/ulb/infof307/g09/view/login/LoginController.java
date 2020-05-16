@@ -2,10 +2,14 @@ package be.ac.ulb.infof307.g09.view.login;
 
 
 import be.ac.ulb.infof307.g09.config.ConfigurationHolder;
+import be.ac.ulb.infof307.g09.controller.ControllerUtility;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.UserUCC;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
-import javafx.event.ActionEvent;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.view.ViewName;
+import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -13,11 +17,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import be.ac.ulb.infof307.g09.controller.ControllerUtility;
-import be.ac.ulb.infof307.g09.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.exceptions.FatalException;
-import be.ac.ulb.infof307.g09.view.ViewName;
-import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
 import java.util.logging.Logger;
 
@@ -88,11 +87,9 @@ public class LoginController {
 
     /**
      * Switch to registration be.ac.ulb.infof307.g09.view when the create account button is pressed.
-     *
-     * @param event the event fired by the user
      */
     @FXML
-    public void handleCreateAccountButton(ActionEvent event) {
+    public void handleCreateAccountButton() {
         viewSwitcher.switchView(ViewName.REGISTRATION);
     }
 

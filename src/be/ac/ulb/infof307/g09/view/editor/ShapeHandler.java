@@ -11,10 +11,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -520,6 +516,7 @@ public class ShapeHandler {
 
             Node node = getNodeInfo(line);
             if (node != null) {
+                assert (shapeToDraw instanceof LabelizableShapeDTO);
                 ((LabelizableShapeDTO) shapeToDraw).setLabel(new LabelDTO(node.label, node.color));
             }
 
@@ -554,10 +551,10 @@ public class ShapeHandler {
     }
 
     static class Node {
-        ColorDTO color;
-        double rightOffset;
-        double aboveOffset;
-        String label;
+        final ColorDTO color;
+        final double rightOffset;
+        final double aboveOffset;
+        final String label;
 
         public Node(ColorDTO color, double rightOffset, double aboveOffset, String label) {
             this.color = color;

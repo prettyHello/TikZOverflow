@@ -55,12 +55,10 @@ public class PathDTO extends ShapeDTO {
      * Personalised path with multiple points, with arrows and specified color.
      *
      * @param pathPoints
-     * @param arrowStart
-     * @param arrowEnd
      * @param drawColor
      * @throws FatalException
      */
-    public PathDTO(ArrayList<CoordinatesDTO> pathPoints, boolean arrowStart, boolean arrowEnd, ColorDTO drawColor,Thickness thickness, int id) throws FatalException {
+    public PathDTO(ArrayList<CoordinatesDTO> pathPoints, ColorDTO drawColor, Thickness thickness, int id) throws FatalException {
         super(true, false, drawColor, ColorDTO.WHITE, thickness, id);
         ControllerUtility.checkObjects(pathPoints);
         this.pathPoints = pathPoints;
@@ -71,12 +69,10 @@ public class PathDTO extends ShapeDTO {
      *
      * @param origin
      * @param end
-     * @param arrowStart
-     * @param arrowEnd
      * @param drawColor
      * @throws FatalException
      */
-    public PathDTO(CoordinatesDTO origin, CoordinatesDTO end, boolean arrowStart, boolean arrowEnd, ColorDTO drawColor, Thickness thickness, int id) throws FatalException {
+    public PathDTO(CoordinatesDTO origin, CoordinatesDTO end, ColorDTO drawColor, Thickness thickness, int id) throws FatalException {
         super(true, false, drawColor, ColorDTO.WHITE, thickness, id);
         ArrayList<CoordinatesDTO> pathPoints = new ArrayList<>();
         pathPoints.add(new CoordinatesDTO(origin));

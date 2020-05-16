@@ -9,7 +9,7 @@ public class LineDTO extends PathDTO {
     }
 
     public LineDTO(CoordinatesDTO origin, CoordinatesDTO end, ColorDTO drawColor, Thickness thickness, int id) throws FatalException {
-        super(origin, end,false,false, drawColor, thickness, id);
+        super(origin, end, drawColor, thickness, id);
     }
 
     /**

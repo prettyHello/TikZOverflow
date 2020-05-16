@@ -98,8 +98,7 @@ public class ProjectDAOMock implements ProjectDAO {
         ActiveCanvas.setNewCanvas();
         this.activeCanvas = ActiveCanvas.getActiveCanvas();
         ActiveProject.setActiveProject(dto);
-        ProjectDTO projectDTO = ActiveProject.getActiveProject();
-        return projectDTO;
+        return ActiveProject.getActiveProject();
     }
 
     @Override

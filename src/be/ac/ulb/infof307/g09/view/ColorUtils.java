@@ -60,6 +60,7 @@ public class ColorUtils {
                 closestMatch = c;
             }
         }
+        assert (closestMatch != null);
         return closestMatch.getName();
     }
 
