@@ -124,7 +124,7 @@ class ProjectDAOImplTest {
         projectDTO.setProjectPassword("test1");
         File archive = new File(generateExportedFilledProject(generateBasicProjectDTO2()));
         projectDTO.setProjectPassword("test");
-        assertThrows(FatalException.class, () -> {
+        assertThrows(BizzException.class, () -> {
             projectDAO.load(archive,projectDTO,userDTO);
         }, "wrong password used");
     }
