@@ -116,6 +116,16 @@ public class CanvasTest {
     }
 
     @Test
+    void rmShapeByID() {
+        canvas.addShape(shape);
+        canvas.rmShapeById(id);
+        assertThrows(IllegalArgumentException.class, () -> {
+            canvas.getShapeById(id);
+        }, "Was able to delete shape not existing");
+    }
+
+
+    @Test
     void toTikz_empty() {
         assertEquals(canvas.toTikZ(), "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage{tikz}\n\n\\begin{document}\n\\begin{tikzpicture}\n\n\n\\end{tikzpicture}\n\\end{document}");
     }
