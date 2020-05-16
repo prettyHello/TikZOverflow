@@ -16,8 +16,9 @@ public class ArrowDTO extends PathDTO {
 
     /**
      * Copy-constructor
+     *
      * @param other the Arrow to copy
-     * @param newId the id to give to the newly created Arraow
+     * @param newId the id to give to the newly created Arrow
      */
     public ArrowDTO(ArrowDTO other, int newId){
         super(new CoordinatesDTO(other.getStartCoordinates()), new CoordinatesDTO(other.getEndCoordinates()), other.getThickness(), newId, other.isArrowStart(), other.isArrowEnd());

@@ -119,7 +119,6 @@ public class DALServicesImpl implements DALServices, DALBackEndServices {
     @Override
     public void createTables() throws IOException, FatalException {
         createTables(databaseName);
-
     }
 
     /**

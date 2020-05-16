@@ -105,10 +105,8 @@ public class HighlightTextColor extends CodeArea {
     private static String printMatches(String text, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(text);
-        // Check all occurrences
-        while (matcher.find()) {
-            break;
-        }
+
+        matcher.find();
         return matcher.group();
     }
 
