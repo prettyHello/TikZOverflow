@@ -7,13 +7,16 @@ import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
 import be.ac.ulb.infof307.g09.controller.factories.UserFactory;
+import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import be.ac.ulb.infof307.g09.exceptions.BizzException;
-import be.ac.ulb.infof307.g09.exceptions.FatalException;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,7 +31,7 @@ class ProjectDAOImplTest {
     ProjectDAO projectDAO;
     UserFactory userFactory;
     DAO<UserDTO> userDAO;
-    private String rootFolder = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator + "tests" + File.separator ;
+    private final String rootFolder = System.getProperty("user.home") + File.separator + "ProjectTikZ" + File.separator + "tests" + File.separator;
 
     @BeforeEach
     void setUp() {

@@ -6,17 +6,20 @@ import be.ac.ulb.infof307.g09.controller.DTO.UserDTO;
 import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.factories.ProjectFactory;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
+import be.ac.ulb.infof307.g09.exceptions.FatalException;
+import be.ac.ulb.infof307.g09.view.ViewName;
+import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 import be.ac.ulb.infof307.g09.view.ViewUtility;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
-import be.ac.ulb.infof307.g09.exceptions.FatalException;
-import be.ac.ulb.infof307.g09.view.ViewName;
-import be.ac.ulb.infof307.g09.view.ViewSwitcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,14 +46,14 @@ public class ProjectItemView extends HBox {
     @FXML
     private HBox projectRowHbox = null;
 
-    private String rootFolder = File.separator + "ProjectTikZ" + File.separator;
+    private final String rootFolder = File.separator + "ProjectTikZ" + File.separator;
 
-    private ProjectUCC projectUCC = ConfigurationHolder.getProjectUCC();
-    private DashboardController dashboard;
+    private final ProjectUCC projectUCC = ConfigurationHolder.getProjectUCC();
+    private final DashboardController dashboard;
     private ProjectDTO projectDTO;
-    private ProjectFactory projectFactory = ConfigurationHolder.getProjectFactory();
+    private final ProjectFactory projectFactory = ConfigurationHolder.getProjectFactory();
 
-    private UserDTO userDTO;
+    private final UserDTO userDTO;
     private ViewSwitcher viewSwitcher;
 
     public ProjectItemView(DashboardController dashboard, UserDTO userDTO, ProjectDTO projectDto) {

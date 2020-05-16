@@ -7,10 +7,10 @@ import be.ac.ulb.infof307.g09.controller.Canvas.ActiveProject;
 import be.ac.ulb.infof307.g09.controller.Canvas.Canvas;
 import be.ac.ulb.infof307.g09.controller.DTO.ProjectDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.ColorDTO;
-import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.CoordinatesDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.ShapeDTO;
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.Thickness;
+import be.ac.ulb.infof307.g09.controller.UCC.ProjectUCC;
 import be.ac.ulb.infof307.g09.exceptions.BizzException;
 import be.ac.ulb.infof307.g09.exceptions.FatalException;
 import be.ac.ulb.infof307.g09.view.ViewName;
@@ -91,8 +91,6 @@ public class EditorController {
     private CoordinatesDTO lastMousePos = new CoordinatesDTO(0, 0);
     protected String shapeToDraw = "";
     protected Canvas canvas;
-    private String colorsPattern = "";
-    private ContextMenu shapeContextMenu;
     private ChoiceBox<ColorDTO> contextMenuFillColorPicker;
     private ChoiceBox<ColorDTO> contextMenuDrawColorPicker;
     private ChoiceBox<Thickness> contextMenuChangeThickness;
@@ -110,9 +108,6 @@ public class EditorController {
     private String oldCode;
     private boolean writableOldCode = true;
     protected boolean actionFromGUI = false;
-
-    //TODO
-    private ProjectDTO projectDTO;
 
 
     public EditorController() {
@@ -164,7 +159,7 @@ public class EditorController {
         }
 
         // Initialize TikZ regex patterns
-        this.colorsPattern = String.join("|", colors);
+        String colorsPattern = String.join("|", colors);
         this.thicknessPattern = String.join("|", thicknessKeys);
         this.intNumber = "[+-]?\\d+";
         this.floatNumber = "[+-]?\\d+\\.\\d+";
@@ -212,7 +207,7 @@ public class EditorController {
             }
         });
 
-        shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu, setLabel);
+        ContextMenu shapeContextMenu = new ContextMenu(delete, fillColorMenu, drawColorMenu, shapeThicknessMenu, setLabel);
         shapeHandler = new ShapeHandler(shapeContextMenu, canvas, this);
 
         // show shapes at the start(don't have to interact to have them show up)
@@ -370,8 +365,8 @@ public class EditorController {
         try {
             String password = ViewUtility.askProjectPassword();
             if (password != null) {
-                this.projectDTO = ActiveProject.getActiveProject();
-                this.projectDTO.setProjectPassword(password);
+                ProjectDTO projectDTO = ActiveProject.getActiveProject();
+                projectDTO.setProjectPassword(password);
                 this.projectUcc.save();
                 ViewUtility.showAlert(Alert.AlertType.INFORMATION, "Task completed", "Project was successfully saved", "");
                 return true;

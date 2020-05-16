@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import be.ac.ulb.infof307.g09.view.editor.HighlightTextColor?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shapeDTO.*?>
-<?import be.ac.ulb.infof307.g09.view.editor.HighlightTextColor?>
+<?import javafx.scene.shape.*?>
 <BorderPane fx:id="bp_rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="931.0" prefWidth="1267.0" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:be.ac.ulb.infof307.g09.controller="be.ac.ulb.infof307.g09.view.editor.EditorController">    <center>
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.ac.ulb.infof307.g09.view.editor.EditorController">
+    <center>
         <SplitPane fx:id="mainSplitPane" dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0"
                    BorderPane.alignment="CENTER">
             <items>

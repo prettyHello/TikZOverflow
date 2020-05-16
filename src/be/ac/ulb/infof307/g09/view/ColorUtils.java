@@ -2,7 +2,6 @@ package be.ac.ulb.infof307.g09.view;
 
 import be.ac.ulb.infof307.g09.controller.DTO.shapes.ColorDTO;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -70,7 +69,7 @@ public class ColorUtils {
      * @author Xiaoxiao Li
      */
     public static class ColorName {
-        private int r, g, b;
+        private final int r, g, b;
         private final ColorDTO name;
 
         public ColorName(ColorDTO name, int r, int g, int b) {
