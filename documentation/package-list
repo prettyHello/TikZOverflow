@@ -3,10 +3,10 @@ be.ac.ulb.infof307.g09.config
 be.ac.ulb.infof307.g09.controller
 be.ac.ulb.infof307.g09.controller.Canvas
 be.ac.ulb.infof307.g09.controller.DTO
+be.ac.ulb.infof307.g09.controller.DTO.shapes
 be.ac.ulb.infof307.g09.controller.UCC
 be.ac.ulb.infof307.g09.controller.canvas
 be.ac.ulb.infof307.g09.controller.factories
-be.ac.ulb.infof307.g09.controller.shapeDTO
 be.ac.ulb.infof307.g09.exceptions
 be.ac.ulb.infof307.g09.model
 be.ac.ulb.infof307.g09.view
